@@ -1278,7 +1278,7 @@ void party_booking_register(struct map_session_data *sd, short level, short mapi
 	pb_ad->p_detail.level = level;
 	pb_ad->p_detail.mapid = mapid;
 
-	for(i = 0; i < PARTY_BOOKING_JOBS; i++)
+	for(i = 0; i < MAX_PARTY_BOOKING_JOBS; i++)
 		if(job[i] != 0xFF)
 			pb_ad->p_detail.job[i] = job[i];
 		else pb_ad->p_detail.job[i] = -1;
@@ -1299,7 +1299,7 @@ void party_booking_update(struct map_session_data *sd, short* job)
 
 	pb_ad->starttime = (int)time(NULL);// Update time.
 
-	for(i = 0; i < PARTY_BOOKING_JOBS; i++)
+	for(i = 0; i < MAX_PARTY_BOOKING_JOBS; i++)
 		if(job[i] != 0xFF)
 			pb_ad->p_detail.job[i] = job[i];
 		else
@@ -1330,7 +1330,7 @@ void party_booking_search(struct map_session_data *sd, short level, short mapid,
 		if (mapid == 0 && job == -1)
 			result_list[count] = pb_ad;
 		else if (mapid == 0) {
-			for(i=0; i<PARTY_BOOKING_JOBS; i++)
+			for(i=0; i<MAX_PARTY_BOOKING_JOBS; i++)
 				if (pb_ad->p_detail.job[i] == job && job != -1)
 					result_list[count] = pb_ad;
 		} else if (job == -1) {

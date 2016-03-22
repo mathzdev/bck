@@ -630,7 +630,7 @@ extern struct Battle_Config
 	int mob_eye_range_bonus; //Vulture's Eye and Snake's Eye range bonus
 	int monster_atorado; // Muestra una advertencia cuando el mob se atora [DanielArt]
 	int skill_eightpath_algorithm; //Área de servidores oficiales basado de dónde se ataca.
-
+	int mvp_exp_reward_message;
 } battle_config;
 
 void do_init_battle(void);

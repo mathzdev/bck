@@ -87,6 +87,7 @@ static unsigned short status_calc_ematk(struct block_list *,struct status_change
 static int status_get_hpbonus(struct block_list *bl, enum e_status_bonus type);
 static int status_get_spbonus(struct block_list *bl, enum e_status_bonus type);
 static unsigned int status_calc_maxhpsp_pc(struct map_session_data* sd, unsigned int stat, bool isHP);
+static int status_get_sc_interval(enum sc_type type);
 
 static bool status_change_isDisabledOnMap_(sc_type type, bool mapIsVS, bool mapIsPVP, bool mapIsGVG, bool mapIsBG, unsigned int mapZone);
 #define status_change_isDisabledOnMap(type, m) ( status_change_isDisabledOnMap_((type), map_flag_vs((m)), map[(m)].flag.pvp, map_flag_gvg((m)), map[(m)].flag.battleground, map[(m)].zone << 3) )
@@ -2003,6 +2004,7 @@ bool status_check_skilluse(struct block_list *src, struct block_list *target, ui
 				(sc->data[SC_BASILICA] && (sc->data[SC_BASILICA]->val4 != src->id || skill_id != HP_BASILICA)) || // Only Basilica caster that can cast, and only Basilica to cancel it
 				(sc->data[SC_MARIONETTE] && skill_id != CG_MARIONETTE) || // Only skill you can use is marionette again to cancel it
 				(sc->data[SC_MARIONETTE2] && skill_id == CG_MARIONETTE) || // Cannot use marionette if you are being buffed by another
+				(sc->data[SC_ANKLE] && skill_block_check(src, SC_ANKLE, skill_id)) ||
 				(sc->data[SC_STASIS] && skill_block_check(src, SC_STASIS, skill_id)) ||
 				(sc->data[SC_BITE] && skill_block_check(src, SC_BITE, skill_id)) ||
 				(sc->data[SC_KAGEHUMI] && skill_block_check(src, SC_KAGEHUMI, skill_id))
@@ -7303,6 +7305,34 @@ void status_change_init(struct block_list *bl)
 	memset(sc, 0, sizeof (struct status_change));
 }
 
+/*========================================== [Playtester]
+* Returns the interval for status changes that iterate multiple times
+* through the timer (e.g. those that deal damage in regular intervals)
+* @param type: Status change (SC_*)
+*------------------------------------------*/
+static int status_get_sc_interval(enum sc_type type)
+{
+	switch (type) {
+		case SC_POISON:
+		case SC_DPOISON:
+		case SC_LEECHESEND:
+			return 1000;
+		case SC_BURNING:
+		case SC_PYREXIA:
+			return 3000;
+		case SC_MAGICMUSHROOM:
+			return 4000;
+		case SC_STONE:
+			return 5000;
+		case SC_BLEEDING:
+		case SC_TOXIN:
+			return 10000;
+		default:
+			break;
+	}
+	return 0;
+}
+
 /**
  * Applies SC defense to a given status change
  * This function also determines whether or not the status change will be applied
@@ -7869,8 +7899,11 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			return 0; // Cannot override other opt1 status changes. [Skotlex]
 		if((type == SC_FREEZE || type == SC_FREEZING || type == SC_CRYSTALIZE) && sc->data[SC_WARMER])
 			return 0; // Immune to Frozen and Freezing status if under Warmer status. [Jobbie]
-	break;
-
+		break;
+	case SC_BLIND:
+		if (sc->data[SC_FEAR])
+			return 0;
+		break;
 	case SC_ALL_RIDING:
 		if( !sd || !&sd->sc || sc->option&(OPTION_RIDING|OPTION_DRAGON|OPTION_WUGRIDER|OPTION_MADOGEAR) )
 			return 0;
@@ -7879,19 +7912,16 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			status_change_end(bl, SC_ALL_RIDING, INVALID_TIMER);
 			return 0;
 		}
-	break;
-
+		break;
 	// They're all like berserk, do not everlap each other
 	case SC_BERSERK:
 		if(sc->data[SC_SATURDAYNIGHTFEVER])
 			return 0;
 		break;
-
 	case SC_BURNING:
 		if(sc->opt1 || sc->data[SC_FREEZING])
 			return 0;
 	break;
-
 	case SC_SIGNUMCRUCIS:
 		// Only affects demons and undead element (but not players)
 		if((!undead_flag && status->race!=RC_DEMON) || bl->type == BL_PC)
@@ -8492,6 +8522,9 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 		status_change_end(bl, SC_FREEZING, INVALID_TIMER);
 		status_change_end(bl, SC_FREEZE, INVALID_TIMER);
 		status_change_end(bl, SC_STONE, INVALID_TIMER);
+		break;
+	case SC_FEAR:
+		status_change_end(bl, SC_BLIND, INVALID_TIMER);
 		break;
 	case SC_FREEZING:
 		status_change_end(bl, SC_BURNING, INVALID_TIMER);
@@ -9556,9 +9589,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 
 		/* General */
 		case SC_FEAR:
-			val2 = 2;
-			val4 = tick / 1000;
-			tick_time = 1000; // [GodLesZ] tick time
+			status_change_start(src,bl,SC_ANKLE,10000,val1,0,0,0,2000,SCSTART_NOAVOID|SCSTART_NOTICKDEF|SCSTART_NORATEDEF);
 			break;
 		case SC_BURNING:
 			val4 = tick / 2000; // Total Ticks to Burn!!
@@ -10438,7 +10469,6 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 		case SC_TINDER_BREAKER2:
 		case SC_BITE:
 		case SC_THORNSTRAP:
-		case SC_FEAR:
 		case SC_MEIKYOUSISUI:
 		case SC_KYOUGAKU:
 		case SC_PARALYSIS:
@@ -12240,15 +12270,6 @@ int status_change_timer(int tid, unsigned int tick, int id, intptr_t data)
 		}
 		break;
 
-	case SC_FEAR:
-		if( --(sce->val4) >= 0 ) {
-			if( sce->val2 > 0 )
-				sce->val2--;
-			sc_timer_next(1000 + tick, status_change_timer, bl->id, data);
-			return 0;
-		}
-		break;
-
 	case SC_SPHERE_1:
 	case SC_SPHERE_2:
 	case SC_SPHERE_3:
@@ -13004,6 +13025,7 @@ int status_change_spread(struct block_list *src, struct block_list *bl, bool typ
 			//case SC_STRIPHELM:
 			//case SC__STRIPACCESSORY:
 			//case SC_BITE:
+			case SC_FEAR:
 			case SC_FREEZING:
 			case SC_VENOMBLEED:
 				if( sc->data[i]->timer != INVALID_TIMER ) {
@@ -13022,9 +13044,6 @@ int status_change_spread(struct block_list *src, struct block_list *bl, bool typ
 			case SC_LEECHESEND:
 				if (type)
 					continue;
-			case SC_FEAR:
-				data.tick = sc->data[i]->val4 * 1000;
-				break;
 			case SC_BURNING:
 				data.tick = sc->data[i]->val4 * 2000;
 				break;

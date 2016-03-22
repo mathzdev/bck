@@ -22,3 +22,5 @@
 	BUILDIN_DEF(playertalk,"is"), // [Karmic]
 	BUILDIN_DEF(madoheal,"ii"),
 	BUILDIN_DEF(adopt,"vv"),
+	BUILDIN_DEF(navigateto,"s???????"),
+	

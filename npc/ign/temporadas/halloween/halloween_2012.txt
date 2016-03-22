@@ -1,0 +1,582 @@
+//      ______  __    __                                 
+//     /\  _  \/\ \__/\ \                                
+//     \ \ \_\ \ \ ,_\ \ \___      __    ___      __     
+// _____\ \  __ \ \ \/\ \  _ `\  /'__`\/' _ `\  /'__`\   
+///\  __\\ \ \/\ \ \ \_\ \ \ \ \/\  __//\ \/\ \/\ \_\.\_ 
+//\ \_\_/ \ \_\ \_\ \__\\ \_\ \_\ \____\ \_\ \_\ \__/.\_\
+// \/_/    \/_/\/_/\/__/ \/_/\/_/\/____/\/_/\/_/\/__/\/_/
+//
+//========================================================
+// ---            Halloween Instance (2012)            ---
+//========================================================
+// ---                  by DanielArt                   ---
+//========================================================
+Hallow01	mapflag	pvp	off
+Hallow01	mapflag	noteleport
+Hallow01	mapflag	nosave
+Hallow01	mapflag	nowarp
+//========================================================
+haunt_e,137,201,5	script	Guardia	456,{
+	set .@party_id,getcharid(1);
+	set .@ins_mas,getpartyleader(.@party_id,1);
+	set .@p_name$,getpartyname(.@party_id);
+	set .@p_leader$,rid2name(.@ins_mas);
+	set .@md_name$,"Halloween Dungeon";
+	set .@p_count,getpartymember(.@party_id,$@partymembercount);
+	set .@members,5;
+//================== Registro de Partys ==================
+
+//if (getgmlevel() < 99) { end; }//Debug Mode
+
+	if(.@p_count < .@members){
+		mes "[^ff0000Guardia^000000]";
+		mes "Lo siento, pero el grupo no cuenta con los requerimientos mínimos para accesar al instance, necesitas exactamente "+.@members+" miembros en tu equipo.";
+		close;
+	}
+		L_Crear:
+		if (.@ins_mas == getcharid(3)) {
+			if($halloween_dgn == 1 && $party_id == .@party_id) {
+				mes "[^ff0000Guardia^000000]";
+				mes "Toda tu party puede ingresar al Memorial Dungeon.";
+				switch(select("Entrar al Dungeon:^777777Cancelar^000000")) {
+				case 1:
+					if ($@FirstL1 == 1) {
+						warp "Hallow01",105,31;
+						announce "La party [" + .@p_name$ + "] ha entrado al ["+.@md_name$+"].",bc_all,"0x00ff99";
+						set $@FirstL1,0;
+						set $hallowQST1,0;
+						set $hallowQST1_1,0;
+						set $hallowQST2,0;
+						set $hallowQST2_1,0;
+						set $hallowQST3,0;
+						set $hallowQST3_1,0;
+						set $hallowQST3_2,0;
+						set $hallowQST3_3,0;
+						set $hallowQST4,0;
+						set $hallowQST4_1,0;
+						set $hallowQST5,0;
+						set $hallowQST5_1,0;
+						close;
+					} else if (getmapusers("Hallow01")  < 1) {
+						mes "[^ff0000Guardia^000000]";
+						mes "Lo siento pero si todos han muerto o salido del Instance este se reiniciará.";
+						callfunc "Hallow";
+						set $halloween_dgn,0;
+						set $party_id,0;
+						announce "El ["+.@md_name$+"] ha quedado nuevamente abierto.",bc_all,"0x00ff99";
+						close;
+					}
+					mapannounce "niflheim","[" + strcharinfo(0) + "] ha entrado al ["+.@md_name$+"].",bc_map,"0x00ff99";
+					warp "Hallow01",105,31;
+					close;
+				case 2:
+					close;
+				}
+			}
+			mes "[^ff0000Guardia^000000]";
+			mes "Estado de la party confirmado. ¿Deseas crear la instance ^ff8800"+.@md_name$+"^000000?";
+			next;
+			switch(select("Reservar el "+.@md_name$+":Entrar al Dungeon:^777777Cancelar^000000")) {
+			case 1:
+				if(getmapusers("Hallow01") < 1) {
+					set $halloween_dgn,0;
+					set $party_id,0;
+				}
+				if ($halloween_dgn == 1) {
+					mes "Nombre de Party: "+.@p_name$+"";
+					mes "Lider de Party: "+.@p_leader$+"";
+					mes "^ff8800"+.@md_name$+" ^000000 - Reservación fallida.";
+					close;
+				} else {
+					mes "[^ff0000Guardia^000000]";
+					mes "^ff8800"+.@md_name$+"^000000- Creando reservación.";
+					mes "Después de crear la reservación utiliza la opción 'Entrar al Dungeon' para poder entrar al "+.@md_name$+".";
+					set $halloween_dgn,1;
+					set $party_id,.@party_id;
+					set $@FirstL1,1;
+					setwall "Hallow01",115,47,21,2,0,"Hallow01_w1";
+					enablenpc "N1";
+					close;
+				}
+			case 2:
+				if ($halloween_dgn < 1) {
+					mes "[^ff0000Guardia^000000]";
+					mes "Memorial Dungeon ^ff8800"+.@md_name$+"^000000 no existe.";
+					mes "Tu lider de party no ha reservado el dungeon.";
+					next;
+					mes "[^ff0000Guardia^000000]";
+					mes "Cuando la reservación se haya completado, la entrada será abierta.";
+					close;
+				}
+				if ($party_id != .@party_id) {
+					mes "[^ff0000Guardia^000000]";
+					mes "Tu party no está registrada para accesar a este dungeon.";
+					close;
+				}
+				if($halloween_dgn == 1 && $party_id == .@party_id) {
+					if (getmapusers("Hallow01")  < 1) {
+						mes "[^ff0000Guardia^000000]";
+						mes "Lo siento pero si todos han muerto o salido del Instance este se reiniciará.";
+						callfunc "Hallow";
+						set $halloween_dgn,0;
+						set $party_id,0;
+						announce "El ["+.@md_name$+"] ha quedado nuevamente abierto.",bc_all,"0x00ff99";
+						close;
+					}
+					announce "La party [" + .@p_name$ + "] ha entrado al ["+.@md_name$+"].",bc_all,"0x00ff99";
+					warp "Hallow01",105,31;
+					end;
+				}
+			case 3:
+				close;
+			}
+		}
+		switch(select("Entrar a "+.@md_name$+":Cancelar")) {
+		case 1:
+				if ($halloween_dgn < 1) {
+					mes "[^ff0000Guardia^000000]";
+					mes "Memorial Dungeon ^ff8800"+.@md_name$+"^000000 no existe.";
+					mes "Tu lider de party no ha reservado el dungeon.";
+					next;
+					mes "[^ff0000Guardia^000000]";
+					mes "Cuando la reservación se haya completado, la entrada será abierta.";
+					close;
+				}
+				if ($party_id != .@party_id) {
+					mes "[^ff0000Guardia^000000]";
+					mes "Tu party no está registrada para accesar a este dungeon.";
+					close;
+				} else if($halloween_dgn == 1 && $party_id == .@party_id) {
+					if (getmapusers("Hallow01")  < 1) {
+						mes "[^ff0000Guardia^000000]";
+						mes "Lo siento pero si todos han muerto o salido del Instance este se reiniciará.";
+						callfunc "Hallow";
+						set $halloween_dgn,0;
+						set $party_id,0;
+						announce "El ["+.@md_name$+"] ha quedado nuevamente abierto.",bc_all,"0x00ff99";
+						close;
+					}
+					mapannounce "niflheim","[" + strcharinfo(0) + "] ha entrado al ["+.@md_name$+"].",bc_map,"0x00ff99";
+					warp "Hallow01",105,31;
+					end;
+				}
+		case 2:
+			close;
+		}
+
+	mes "[^ff0000Guardia^000000]";
+	mes "Para poder generar el Memorial Dungeon tu party debe contener al menos ^ff0000"+.@members+"^000000 miembros.";
+	close;
+OnWhisperGlobal:
+	if(getgmlevel() >= 80) {
+		mes "[^ff0000Guardia^000000]";
+		mes "Bienvenido GM "+strcharinfo(0);
+		mes "Por este menú usted podrá evitar el número de miembros en party.";
+			switch (select("Continuar:Letrero:Reiniciar variables")) {
+				case 1:
+					goto L_Crear;
+				case 2:
+					waitingroom "Halloween Dungeon",0;
+					close;
+				case 3:
+					set $halloween_dgn,0;
+					set $party_id,0;
+					callfunc "Hallow01";
+					announce "El ["+.@md_name$+"] ha quedado nuevamente abierto por un Game Master.",bc_all,"0x00ff99";
+					close;
+			}
+	}
+end;
+OnInit:
+waitingroom "Halloween Dungeon",0;
+end;
+}
+prontera,158,182,4	script	Niño Preocupado::N0	797,{
+mes "[^777777Niño Preocupado^000000]";
+mes "He estado buscando a mi hermana mucho tiempo, fuimos con mi tío que es un poderoso guerrero a ^ff0000Niflheim^000000.";
+next;
+mes "[^777777Niño Preocupado^000000]";
+mes "Pero al instante la perdí de vista, por favor ayúdame a buscarla.";
+next;
+mes "[^777777Niño Preocupado^000000]";
+mes "La última vez que la vi andaba rondando por el ^5533ffNoroeste^000000 de ^ff0000Niflheim^000000.";
+close;
+}
+//========================================================
+//--------               DUNGEON                    ------
+//========================================================
+//================= Primera Parte ========================
+Hallow01,111,36,4	script	Niño Perdido::N1	793,{
+set .@ins_mas,getpartyleader(getcharid(1),1);
+if(.@ins_mas) {
+	if ($hallowQST1 == 1) {
+		if($hallowQST1_1 && countitem(1062) >= 1) {
+			mes "[^5533ffNiño Perdido^000000]";
+			mes "Oh! Oh!...";
+			mes "Esa es la calabaza que estaba buscando.";
+			set $hallowQST1_1,1;
+			set quest_N1_1,0;
+			set $hallowQST1,2;
+			delitem 1062,1; // Jack o' pumpkin
+			close2;
+			emotion e_thx;
+			disablenpc "N1";
+			enablenpc "N2";
+			delwall "Hallow01_w1";
+			end;
+		}
+		mes "[^5533ffNiño Perdido^000000]";
+		mes "Por favor ayúdame.";
+		close2;
+		emotion e_sob;
+		end;
+	}
+	mes "[^5533ffNiño Perdido^000000]";
+	mes "^5533ff*sob*^000000 he perdido mi calabaza favorita, por favor ayúdame a encontrarla.";
+	emotion e_sob;
+	close2;
+	emotion e_sob;
+	set $hallowQST1,1;
+	enablenpc "#obj";
+	end;
+}
+mes "[^5533ffNiño Perdido^000000]";
+mes "^5533ff*sob*^000000 ¿quién eres? déjame solo ^5533ff*sob*^000000";
+emotion e_sob;
+close2;
+emotion e_sob;
+end;
+OnInit:
+disablenpc "N1";
+end;
+}
+Hallow01,99,40,4	script	#obj	111,{
+	if(!$hallowQST1 || $hallowQST1_1 == 1) {
+		end;
+	}
+	getitem 1062,1; // Jack o' Pumpkin
+	set $hallowQST1_1,1;
+	set questN1_1,1;
+	disablenpc "#obj";
+	end;
+OnInit:
+disablenpc "#obj";
+end;
+}
+//================ Segunda Parte =====================
+Hallow01,106,64,4	script	Niño::N2	793,{
+set .@ins_mas,getpartyleader(getcharid(1),1);
+mes "[^5533ffNiño Perdido^000000]";
+mes "¿Has observado esta ciudad?";
+mes "Esta es una ciudad secreta, se dice que sólo aparece en ciertas temporadas donde el mundo de los espiritus de libera.";
+next;
+mes "[^5533ffNiño Perdido^000000]";
+mes "Si has observado el norte de ^ff8800Niflheim^000000 es por donde llegaste.";
+next;
+mes "[^5533ffNiño Perdido^000000]";
+mes "Este pequeño pueblo está fuera de la imaginación humana, es una simple pesadilla.";
+next;
+mes "[^5533ffNiño Perdido^000000]";
+mes "¿Quieres saber más?";
+mes "Pues quiero que investigues esta ciudad y te llevaras una sorpresita.";
+	if(.@ins_mas != getcharid(3)) {
+		close;
+	}
+mapannounce "Hallow01","~ [ Encuentra una calabaza muy especial ] ~",bc_map,"0xFF8800";
+set $hallowQST2,1;
+set $hallowQST2_1,0;
+enablenpc "Calabaza";
+disablenpc "N2";
+close2;
+emotion e_gg;
+end;
+OnInit:
+disablenpc "N2";
+end;
+}
+Hallow01,78,117,4	script	Calabaza	111,{
+	if($hallowQST2 == 1) {
+		mapannounce "Hallow01","~ [ Se ha encontrado la calabaza ] ~",bc_map,"0xFF8800";
+		enablenpc "fantasma";
+		disablenpc "Calabaza";
+		end;
+	}
+OnInit:
+disablenpc "Calabaza";
+end;
+}
+//=========== Tercera Parte ====================
+Hallow01,94,109,4	script	Fantasma del Halloween::fantasma	739,{
+	if ($hallowQST3_1 == 1) {
+		if($hallowQST3_3 == 7) {
+			if($hallowQST4 == 1) {
+				mes "[^cc6600Fantasma del Halloween^000000]";
+				mes "Por favor caza a esos devoradores de almas.";
+				close;
+			}
+			mes "[^cc6600Fantasma del Halloween^000000]";
+			mes "Has hecho un estupendo trabajo.";
+			next;
+			atcommand "@effect 900";
+			mes "[^cc6600Fantasma del Halloween^000000]";
+			mes "Pero no es todo lo que necesito que hagas.";
+			next;
+			mes "[^cc6600Fantasma del Halloween^000000]";
+			mes "Aquellos seres que me arrancaron mis almas están vagando por allí.";
+			next;
+			mes "[^cc6600Fantasma del Halloween^000000]";
+			mes "Necesito que los elimines para poder traer a los espíritus de Halloween.";
+			next;
+			mes "[^cc6600Fantasma del Halloween^000000]";
+			mes "Te lo pido por el espiritu de Halloween.";
+			set .@ins_mas,getpartyleader(getcharid(1),1);
+				if(.@ins_mas == getcharid(3)) {
+					switch (select("Aceptar misión:^777777Negar^000000")) {
+						case 1:
+							mes "Muchas gracias, te lo encargo.";
+							set $hallowQST4,1;
+							monster "Hallow01",0,0,"Segador de Almas",1192,100,"#jakkss::OnMobDead";
+							close;
+						case 2:
+							mes "Es una desepción.";
+							close;
+					}
+				}
+		}
+		if($hallowQST3_2 == 1) {
+			mes "[^cc6600Fantasma del Halloween^000000]";
+			mes "Busca bien en este tétrico sitio, ten mucho cuidado.";
+			next;
+			mes "[^cc6600Fantasma del Halloween^000000]";
+			mes "Cuando las hayas encontrado todas ven conmigo.";
+			close;
+		}
+		mes "[^cc6600Fantasma del Halloween^000000]";
+		mes "Ayúdame por favor, he perdido todas mis almas en esta ciudad.";
+		next;
+		mes "[^cc6600Fantasma del Halloween^000000]";
+		mes "Se me hizo muy extraño ver un camino hacia el norte de Nifelheim y decidi venir a explorar";
+		next;
+		mes "[^cc6600Fantasma del Halloween^000000]";
+		mes "Pero estuve tanto tiempo aqui que creo que mi poder se dividió.";
+		next;
+		mes "[^cc6600Fantasma del Halloween^000000]";
+		mes "Por favor ve a cazar mis almas, pero ten mucho cuidado, son demaciado poderosas.";
+			set .@ins_mas,getpartyleader(getcharid(1),1);
+			if(.@ins_mas == getcharid(3)) {
+				if($hallowQST3_2 == 1) {
+					close;
+				}
+				set $hallowQST3_2,1;
+				monster "Hallow01",0,0,"Fantasma de Halloween",2226,1,"#fantasmas::OnMobDead";
+				disablenpc "fantasma";
+			}
+		close;
+	}
+mes "[^cc6600Fantasma del Halloween^000000]";
+mes "Oeiksk iiekkik owksiek oadk okok iwdij";
+next;
+mes "[^cc6600Fantasma del Halloween^000000]";
+mes "Owkaodok owak doa owk o owak odawkowak";
+next;
+mes "[^cc6600Fantasma del Halloween^000000]";
+mes "Waoskkd oijfjjf Okdjjwijij ijsa !!!";
+next;
+mes "[^cc6600Fantasma del Halloween^000000]";
+mes "Yususuu kijuiji kimi no todoke lmaoxd";
+next;
+mes "["+strcharinfo(0)+"]";
+mes "^777777Al parecer no puedo entender el idioma de este ser.^000000";
+next;
+mes "^777777Bus...ca...  un.... a-a-anillo....^000000";
+enablenpc "#anillo";
+set $hallowQST3,1;
+close;
+OnInit:
+disablenpc "fantasma";
+end;
+}
+
+
+Hallow01,79,75,4	script	#anillo	111,{
+	if (!$hallowQST3 || $hallowQST3_1 == 1) {
+		end;
+	}
+	disablenpc "#anillo";
+	mapannounce "Hallow01","~ [ "+strcharinfo(0)+" ha encontrado un misterioso Anillo ] ~",bc_map,0xFF8800;
+	sleep 1000;
+	mapannounce "Hallow01","~ [  Ahora el grupo podrá entender un misterioso lenguaje ] ~",bc_map,0xFF8800;
+	set $hallowQST3_1,1;
+	end;
+OnInit:
+disablenpc "#anillo";
+end;
+}
+//=============== Cuarta parte ===================
+-	script	#fantasmas	-1,{
+OnMobDead:
+	if ($hallowQST3_2 == 1) {
+		if($hallowQST3_3 < 1) {
+			set $hallowQST3_3,0;
+		}
+		switch ($hallowQST3_3) {
+			case 0:
+				mapannounce "Hallow01","~ [ El primer fantasma de halloween ha sido derrotado ] ~",bc_map,0xFF8800;
+				set $hallowQST3_3,1;
+				monster "Hallow01",0,0,"Fantasma de Halloween",2221,1,"#fantasmas::OnMobDead"; //FALTAN COORDENADAS!!!!
+				end;
+			case 1:
+				mapannounce "Hallow01","~ [ El segundo fantasma de halloween ha sido derrotado ] ~",bc_map,0xFF8800;
+				set $hallowQST3_3,2;
+				monster "Hallow01",0,0,"Fantasma de Halloween",2222,1,"#fantasmas::OnMobDead"; //FALTAN COORDENADAS!!!!
+				end;
+			case 2:
+				mapannounce "Hallow01","~ [ El tercer fantasma de halloween ha sido derrotado ] ~",bc_map,0xFF8800;
+				set $hallowQST3_3,3;
+				monster "Hallow01",0,0,"Fantasma de Halloween",2223,1,"#fantasmas::OnMobDead"; //FALTAN COORDENADAS!!!!
+				end;
+			case 3:
+				mapannounce "Hallow01","~ [ El cuarto fantasma de halloween ha sido derrotado] ~",bc_map,0xFF8800;
+				set $hallowQST3_3,4;
+				monster "Hallow01",0,0,"Fantasma de Halloween",2224,1,"#fantasmas::OnMobDead"; //FALTAN COORDENADAS!!!!
+				end;
+			case 4:
+				mapannounce "Hallow01","~ [ El quinto fantasma de halloween ha sido derrotado ] ~",bc_map,0xFF8800;
+				set $hallowQST3_3,5;
+				monster "Hallow01",0,0,"Fantasma de Halloween",2225,1,"#fantasmas::OnMobDead"; //FALTAN COORDENADAS!!!!
+				end;
+			case 5:
+				mapannounce "Hallow01","~ [ El sexto fantasma de halloween ha sido derrotado ] ~",bc_map,0xFF8800;
+				set $hallowQST3_3,6;
+				monster "Hallow01",0,0,"Fantasma de Halloween",2227,1,"#fantasmas::OnMobDead";
+				end;
+			case 6:
+				mapannounce "Hallow01","~ [ El séptimo y último fantasma de halloween ha sido derrotado ] ~",bc_map,0xFF8800;
+				set $hallowQST3_3,7;
+				enablenpc "fantasma";
+				end;
+		}
+	}
+}
+//=============== Quinta parte ===================
+-	script	#jakkss	-1,{
+OnMobDead:
+	if ($hallowQST4 == 1) {
+		monster "Hallow01",129,127,"Segador de Almas",1192,1,"#jakkss::OnMobDead";
+		set .dropeo,rand(1,30);
+			if (.dropeo <= 10) {
+				set $hallowQST4_1,$hallowQST4_1+1;
+				mapannounce "Hallow01","~ [ Almas recolectadas "+$hallowQST4_1+" / 27 ] ~",bc_map,0xFF8800;
+				if ($hallowQST4_1 >= 27 ) {
+					mapannounce "Hallow01","~ [ Una misteriosa tumba ha aparecido ] ~",bc_map,0xFF0000;
+					killmonsterall "Hallow01";
+					enablenpc "#tumba";
+					set $hallowQST5_1,1;
+					disablenpc "fantasma";
+					end;
+				}
+				end;
+			}
+	}
+}
+//=============== Séptima parte ==================
+Hallow01,81,122,4	script	#tumba	801,{
+if($hallowQST5_1 == 1) {
+	if ($hallowQST4_1 < 27) {
+		end;
+	} else if ($hallowQST4_1 >= 27) {
+		set $hallowQST4_1,1;
+		mapannounce "Hallow01","Demonio de Halloween: Te has atrevido a despertarme con insignificantes almas",bc_map,0xFF0000;
+		sleep 100;
+		mapannounce "Hallow01","Demonio de Halloween: ¡Me devoraré las almas de todos ustedes!",bc_map,0xFF0000;
+		sleep 100;
+		monster "Hallow01",105,98,"Demonio de Halloween",2107,1,"MVP_DIE::OnMVPDieEvent";
+		disablenpc "#tumba";
+		end;
+	}
+	end;
+}
+end;
+
+
+OnInit:
+disablenpc "#tumba";
+end;
+
+}
+
+//=============== Ultima parte ===================
+-	script	MVP_DIE	-1,{
+OnMVPDieEvent:
+	mapannounce "Hallow01","Demonio de Halloween: ¿Cómo es esto posible? ¡NOOO!",bc_map,0xFF0000;
+	set $hallowQST5,1;
+	enablenpc "N3";
+end;
+}
+Hallow01,105,102,4	script	Niño Halloween::N3	793,{
+		if ($hallowQST5 < 1) {
+			mes "[^5533ffNiño Halloween^000000]";
+			mes "Por intentar aprovecharte de un bug, has sido registrado en la Database.";
+			logmes strcharinfo(0)+" ha intentando aprovecharse de un bug en Halloween Dungeon.";
+			close;
+			emotion e_shy;
+			end;
+		}
+		mes "[^5533ffNiño Halloween^000000]";
+		mes "Muchas gracias por ayudarme.";
+		next;
+		mes "[^5533ffNiño Halloween^000000]";
+		mes "Ahora las festividades de Halloween se podran llevar a cabo.";
+		next;
+		mes "[^5533ffNiño Halloween^000000]";
+		mes "Te otorgo la bendición de Halloween ^777777*hug*^000000.";
+		getitem 7941,50; //Halloween Ticket
+		getexp 500000,500000;
+			if (#halloween_hat != 1) {
+				getitem 18656,1; //Witched Pumpkin's Hat
+				set #halloween_hat,1;
+				getexp 100000,100000;
+			}
+		close2;
+		warp "prontera",150,180;
+			set .@ins_mas,getpartyleader(getcharid(1),1);
+			if(.@ins_mas == getcharid(3)) {
+				set $hallowQST1,0;
+				set $hallowQST1_1,0;
+				announce "La party [" + getpartyname(getcharid(1)) + "] han vencido al Demonio de Halloween y completado el [Halloween Dungeon].",bc_all,"0x00ff99";
+			}
+		end;
+mes "[^5533ffNiño Halloween^000000]";
+mes "Waaa...";
+close;
+OnInit:
+disablenpc "N3";
+end;
+}
+
+//=========== FUNCIÓN DE REINICIO ==============
+function	script	Hallow	{
+	set $hallowQST1,0;
+	set $hallowQST1_1,0;
+	set $hallowQST2,0;
+	set $hallowQST2_1,0;
+	set $hallowQST3,0;
+	set $hallowQST3_1,0;
+	set $hallowQST3_2,0;
+	set $hallowQST3_3,0;
+	set $hallowQST4,0;
+	set $hallowQST4_1,0;
+	set $hallowQST5,0;
+	disablenpc "N1";
+	disablenpc "N2";
+	disablenpc "N3";
+	disablenpc "Calabaza";
+	disablenpc "fantasma";
+	disablenpc "#obj";
+	disablenpc "#anillo";
+	disablenpc "#tumba";
+	delwall "Hallow01_w1";
+	killmonsterall "Hallow01";
+	return;
+}
+//==============================================

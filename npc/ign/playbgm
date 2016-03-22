@@ -1,0 +1,11 @@
+-	script	nofear	-1,{
+OnCommand:
+	set .@musica$,.@atcmd_parameters$[0];
+	set .@c,40; //Número de Celdas.
+	getmapxy(.@mapa$,.@x,.@y,0);
+	playbgmall .@musica$,.@mapa$,.@x+.@c,.@y-.@c,.@x-.@c,.@y+.@c;
+	end;
+OnInit:
+	bindatcmd "playbgm","nofear::OnCommand",40,40;
+	end;
+}

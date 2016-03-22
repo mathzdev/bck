@@ -1,0 +1,35 @@
+moc_para01,109,23,4	script	Old Mighty Hammer	709,{
+	mes "[Old Mighty Hammer]";
+	mes "You have some Old Enriched Elunium or Oridecon?";
+	next;
+	mes "[Old Mighty Hammer]";
+	mes "I can change these for the new version.";
+	next;
+	mes "[Old Mighty Hammer]";
+	mes "You want it?";
+	next;
+	if(select("Yes, change please.","No, thanks") == 2) {
+		mes "[Old Mighty Hammer]";
+		mes "As you wish.";
+		close2;
+		emotion e_gasp;
+		end;
+	}
+	mes "[Old Mighty Hammer]";
+	mes "Ok, give me a second please.";
+	next;
+	setarray .@items[0],7619,7620,6291,6292;
+	setarray .@old[0],countitem(.@items[0]),countitem(.@items[1]);
+	if(countitem(.@old[0] < 1) && countitem(.@old[1] < 1)) {
+		mes "[Old Mighty Hammer]";
+		mes "I can't done anything for you.";
+		close;
+	}
+	delitem .@items[0],.@old[0];
+	delitem .@items[1],.@old[1];
+	getitem .@items[2],.@old[0];
+	getitem .@items[3],.@old[1];
+	mes "[Old Mighty Hammer]";
+	mes "Done.";
+	close;
+}

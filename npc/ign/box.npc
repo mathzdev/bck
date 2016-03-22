@@ -1,0 +1,61 @@
+function	script	BOX_IGN	{
+	switch (getarg(0)) {
+		case 1:
+			if(#box) {
+				atcommand "@request "+strcharinfo(0)+" ha intentado usar dos Box Preferenciales en una sola cuenta.";
+				logmes strcharinfo(0)+" ha intentado usar dos Box Preferenciales en una sola cuenta.";
+				mes "Haz intentado aprovecharte del paquete, se ha informado a los Game Master y haz sido registrado en la Base de Datos.";
+				close;
+			}
+			getitem 35028,1;
+			getitem 671,5;
+			getitem 7711,5;
+			set #box,1;
+			dispbottom "Disfruta tus objetos, gracias por tu preferencia.";
+			end;
+		case 2:
+			switch (rand(1,5)) {
+				case 1:
+					set Zeny,Zeny + rand(100000,500000);
+					dispbottom "Haz obtenido Zeny.";
+					end;
+				case 2:
+					getitem rand(19500,19570),1;
+					end;
+				case 3:
+					getitem rand(509,599),1;
+					end;
+				case 4:
+					getitem rand(12658,12664),10;
+					end;
+				case 5:
+					getitem rand(12900,12999),1;
+					end;
+				default:
+					end;
+			}
+			end;
+		case 3:
+			set warper_u,1;
+			dispbottom "Ahora puedes utilizar el warper con libertad.";
+			end;
+		case 4:
+			if(BaseLevel < 40)
+				setarray .@exp[0],70000,70000;
+			if(BaseLevel > 40 && BaseLevel < 70)
+				setarray .@exp[0],500000,500000;
+			if(BaseLevel > 70 && BaseLevel < 100)
+				setarray .@exp[0],800000,800000;
+			if(BaseLevel > 99 && BaseLevel < 120)
+				setarray .@exp[0],1000000,1000000;
+			if(BaseLevel > 120 && BaseLevel < 130)
+				setarray .@exp[0],3500000,3500000;
+			if(BaseLevel > 130 && BaseLevel < 150)
+				setarray .@exp[0],6000000,6000000;
+			if(BaseLEvel > 150)
+				setarray .@exp[0],13000000,13000000;
+			getexp .@exp[0],.@exp[1];
+			end;
+	}
+	end;
+}

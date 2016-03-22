@@ -1,0 +1,26 @@
+-	script	questcmd	-1,{
+OnDelQuest:
+	set @c,atoi(.@atcmd_parameters$[0]);
+	if(@c < 1) {
+		message strcharinfo(0),"@dquest ha fallado.";
+		message strcharinfo(0),"Usa el formato @dquest ID";
+		end;
+	}
+	message strcharinfo(0),"Quest borrada con éxito.";
+	erasequest @c;
+	end;
+OnGetQuest:
+	set @c,atoi(.@atcmd_parameters$[0]);
+	if(@c < 1) {
+		message strcharinfo(0),"@dquest ha fallado.";
+		message strcharinfo(0),"Usa el formato @cquest ID";
+		end;
+	}
+	message strcharinfo(0),"Quest otorgada con éxito.";
+	setquest @c;
+	end;
+OnInit:
+	bindatcmd "gquest","questcmd::OnGetQuest",99,99;
+	bindatcmd "dquest","questcmd::OnDelQuest",99,99;
+	end;
+}

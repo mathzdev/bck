@@ -22,7 +22,7 @@ enum elemental_skillmode {
 	EL_SKILLMODE_AGGRESSIVE = 0x4,
 };
 
-///Enum of Elemental ID
+///Enum of ELemental ID
 enum elemental_elementalid {
 	ELEMENTALID_AGNI_S = 2114,
 	ELEMENTALID_AGNI_M,

@@ -1,0 +1,541 @@
+// Custom Paradise Group Quest.
+// ============================
+// callfunc "Hunt_Q",HuntQuest,DelayQuest,"Name of the Mob",ExpReward,JobReward,IDItem,CuanItem;
+// ============================
+// by DanielArt
+// Fix By Celsius to take Exp even when you are higher level
+moc_para01,48,179,2	script	100-120 Mission Board::mis100	857,{
+	if (countitem(6219) < 1) {
+		mes "Wait a minute!";
+		mes "-You need to have an-";
+		mes "-^4d4dff'Eden Group Mark'^000000-";
+		mes "-to receive these missions.-";
+		next;
+		switch(select("Just walk away.:^0000FFEden Group^000000 missions?:How can I be a member of the ^0000FFEden Group^000000?")) {
+		case 1:
+			close;
+		case 2:
+			mes "::The Eden Group Missions";
+			mes "::are basically missions";
+			mes "::requested by";
+			mes "::people from all around the kingdom.";
+			mes "::We just categorize them.";
+			next;
+			mes "::In the Eden Group,";
+			mes "::we sorted out the missions";
+			mes "::according to the level of difficulty.";
+			mes "::According to this level,";
+			mes "::you can find";
+			mes "::missions that";
+			mes "::suit you.";
+			next;
+			mes "::When you are done,";
+			mes "::you can come back";
+			mes "::to the mission board.";
+			next;
+			mes "::Then you will be";
+			mes "::rewarded!!";
+			mes "::Simple, isn't it!!";
+			mes "::No commission required!!";
+			close;
+		case 3:
+			mes "::You can become a member";
+			mes "::of the Eden Group";
+			mes "::to ^0000FFLaime Evenor^000000,";
+			mes "::who is waiting on the 1st floor.";
+			next;
+			mes "::If you become a member,";
+			mes "::you will get an";
+			mes "::\"^006400Eden Group Mark^000000\".";
+			mes "::Then you will be able";
+			mes "::to see the mission board.";
+			close;
+		}
+	}
+/*
+	if(BaseLevel < 100 || BaseLevel > 120) {
+		mes "You must be within level 100-120 to accept these missions.";
+		close;
+	}
+*/
+	mes "Please select the quest you want to perform:";
+	next;
+	switch (select("Hunt Desert Wolf:Hunt Magmaring:Hunt Drosera:Hunt Nightmare & Deleter:Close")) {
+		case 1:
+			callfunc "Hunt_Q",14000,14001,"Desert Wolf",500000,200000,0,0,100,120;
+		case 2:
+			callfunc "Hunt_Q",14002,14003,"Magmaring",500000,200000,0,0,100,120;
+		case 3:
+			callfunc "Hunt_Q",14004,14005,"Drosera",500000,200000,0,0,100,120;
+		case 4:
+			callfunc "Hunt_Q",14006,14007,"Nightmare & Deleter",1000000,600000,0,0,100,120;
+		case 5:
+			close;
+	}
+}
+moc_para01,48,181,2	script	120-135 Mission Board::mis101	857,{
+	if (countitem(6219) < 1) {
+		mes "Wait a minute!";
+		mes "-You need to have an-";
+		mes "-^4d4dff'Eden Group Mark'^000000-";
+		mes "-to receive these missions.-";
+		next;
+		switch(select("Just walk away.:^0000FFEden Group^000000 missions?:How can I be a member of the ^0000FFEden Group^000000?")) {
+		case 1:
+			close;
+		case 2:
+			mes "::The Eden Group Missions";
+			mes "::are basically missions";
+			mes "::requested by";
+			mes "::people from all around the kingdom.";
+			mes "::We just categorize them.";
+			next;
+			mes "::In the Eden Group,";
+			mes "::we sorted out the missions";
+			mes "::according to the level of difficulty.";
+			mes "::According to this level,";
+			mes "::you can find";
+			mes "::missions that";
+			mes "::suit you.";
+			next;
+			mes "::When you are done,";
+			mes "::you can come back";
+			mes "::to the mission board.";
+			next;
+			mes "::Then you will be";
+			mes "::rewarded!!";
+			mes "::Simple, isn't it!!";
+			mes "::No commission required!!";
+			close;
+		case 3:
+			mes "::You can become a member";
+			mes "::of the Eden Group";
+			mes "::to ^0000FFLaime Evenor^000000,";
+			mes "::who is waiting on the 1st floor.";
+			next;
+			mes "::If you become a member,";
+			mes "::you will get an";
+			mes "::\"^006400Eden Group Mark^000000\".";
+			mes "::Then you will be able";
+			mes "::to see the mission board.";
+			close;
+		}
+	}
+	if(BaseLevel < 120 || BaseLevel > 135) {
+		mes "You must be within level 120-135 to accept these missions.";
+		close;
+	}
+	mes "These missions are located in one of the rooms of the Eden Group.";
+	mes "Want to be teleported there?";
+	next;
+		if(select("Teleport","Close") == 2)
+			close;
+		warp "moc_para01",20,78;
+		close;
+}
+moc_para01,38,184,4	script	136-145 Mission Board::mis102	857,{
+	if (countitem(6219) < 1) {
+		mes "Wait a minute!";
+		mes "-You need to have an-";
+		mes "-^4d4dff'Eden Group Mark'^000000-";
+		mes "-to receive these missions.-";
+		next;
+		switch(select("Just walk away.:^0000FFEden Group^000000 missions?:How can I be a member of the ^0000FFEden Group^000000?")) {
+		case 1:
+			close;
+		case 2:
+			mes "::The Eden Group Missions";
+			mes "::are basically missions";
+			mes "::requested by";
+			mes "::people from all around the kingdom.";
+			mes "::We just categorize them.";
+			next;
+			mes "::In the Eden Group,";
+			mes "::we sorted out the missions";
+			mes "::according to the level of difficulty.";
+			mes "::According to this level,";
+			mes "::you can find";
+			mes "::missions that";
+			mes "::suit you.";
+			next;
+			mes "::When you are done,";
+			mes "::you can come back";
+			mes "::to the mission board.";
+			next;
+			mes "::Then you will be";
+			mes "::rewarded!!";
+			mes "::Simple, isn't it!!";
+			mes "::No commission required!!";
+			close;
+		case 3:
+			mes "::You can become a member";
+			mes "::of the Eden Group";
+			mes "::to ^0000FFLaime Evenor^000000,";
+			mes "::who is waiting on the 1st floor.";
+			next;
+			mes "::If you become a member,";
+			mes "::you will get an";
+			mes "::\"^006400Eden Group Mark^000000\".";
+			mes "::Then you will be able";
+			mes "::to see the mission board.";
+			close;
+		}
+	}
+/*
+	if(BaseLevel < 136 || BaseLevel > 145) {
+		mes "You must be within level 136-145 to accept these missions.";
+		close;
+	}
+*/
+	mes "Please select the quest you want to perform:";
+	next;
+	switch (select("Bio Laboratory Clean:Mora Infection:So much Fatums:Close")) {
+		case 1:
+			callfunc "Hunt_Q",14008,14009,"Errende, Wickebine & Amaia",800000,400000,0,0,136,145;
+		case 2:
+			callfunc "Hunt_Q",14010,14011,"Miming, Pom Spider & Angra Mantis",800000,400000,0,0,136,145;
+		case 3:
+			callfunc "Hunt_Q",14012,14013,"Little Fatum",800000,400000,0,0,136,145;
+		case 4:
+			close;
+	}
+}
+moc_para01,36,184,4	script	146-160 Mission Board::mis103	857,{
+	if (countitem(6219) < 1) {
+		mes "Wait a minute!";
+		mes "-You need to have an-";
+		mes "-^4d4dff'Eden Group Mark'^000000-";
+		mes "-to receive these missions.-";
+		next;
+		switch(select("Just walk away.:^0000FFEden Group^000000 missions?:How can I be a member of the ^0000FFEden Group^000000?")) {
+		case 1:
+			close;
+		case 2:
+			mes "::The Eden Group Missions";
+			mes "::are basically missions";
+			mes "::requested by";
+			mes "::people from all around the kingdom.";
+			mes "::We just categorize them.";
+			next;
+			mes "::In the Eden Group,";
+			mes "::we sorted out the missions";
+			mes "::according to the level of difficulty.";
+			mes "::According to this level,";
+			mes "::you can find";
+			mes "::missions that";
+			mes "::suit you.";
+			next;
+			mes "::When you are done,";
+			mes "::you can come back";
+			mes "::to the mission board.";
+			next;
+			mes "::Then you will be";
+			mes "::rewarded!!";
+			mes "::Simple, isn't it!!";
+			mes "::No commission required!!";
+			close;
+		case 3:
+			mes "::You can become a member";
+			mes "::of the Eden Group";
+			mes "::to ^0000FFLaime Evenor^000000,";
+			mes "::who is waiting on the 1st floor.";
+			next;
+			mes "::If you become a member,";
+			mes "::you will get an";
+			mes "::\"^006400Eden Group Mark^000000\".";
+			mes "::Then you will be able";
+			mes "::to see the mission board.";
+			close;
+		}
+	}
+/*
+	if(BaseLevel < 146 || BaseLevel > 160) {
+		mes "You must be within level 146-160 to accept these missions.";
+		close;
+	}
+*/
+	mes "Please select the quest you want to perform:";
+	next;
+	switch (select("Explore Morroc Volcano:Eclage Bugs:Bifrost Linchtern:Close")) {
+		case 1:
+			callfunc "Hunt_Q",14014,14015,"Firepit, Fulbuk & Fire Condor",1400000,700000,0,0,146,160;
+		case 2:
+			callfunc "Hunt_Q",14016,14017,"Menblatt, Petal & Antique Book",1400000,700000,0,0,146,160;
+		case 3:
+			callfunc "Hunt_Q",14018,14019,"Blue, Yellow, Red Linchtern",1400000,800000,0,0,146,160;
+		case 4:
+			close;
+	}
+}
+moc_para01,34,184,4	script	161-175 Mission Board::mis104	857,{
+	if (countitem(6219) < 1) {
+		mes "Wait a minute!";
+		mes "-You need to have an-";
+		mes "-^4d4dff'Eden Group Mark'^000000-";
+		mes "-to receive these missions.-";
+		next;
+		switch(select("Just walk away.:^0000FFEden Group^000000 missions?:How can I be a member of the ^0000FFEden Group^000000?")) {
+		case 1:
+			close;
+		case 2:
+			mes "::The Eden Group Missions";
+			mes "::are basically missions";
+			mes "::requested by";
+			mes "::people from all around the kingdom.";
+			mes "::We just categorize them.";
+			next;
+			mes "::In the Eden Group,";
+			mes "::we sorted out the missions";
+			mes "::according to the level of difficulty.";
+			mes "::According to this level,";
+			mes "::you can find";
+			mes "::missions that";
+			mes "::suit you.";
+			next;
+			mes "::When you are done,";
+			mes "::you can come back";
+			mes "::to the mission board.";
+			next;
+			mes "::Then you will be";
+			mes "::rewarded!!";
+			mes "::Simple, isn't it!!";
+			mes "::No commission required!!";
+			close;
+		case 3:
+			mes "::You can become a member";
+			mes "::of the Eden Group";
+			mes "::to ^0000FFLaime Evenor^000000,";
+			mes "::who is waiting on the 1st floor.";
+			next;
+			mes "::If you become a member,";
+			mes "::you will get an";
+			mes "::\"^006400Eden Group Mark^000000\".";
+			mes "::Then you will be able";
+			mes "::to see the mission board.";
+			close;
+		}
+	}
+/*
+	if(BaseLevel < 161 || BaseLevel > 175) {
+		mes "You must be within level 161-175 to accept these missions.";
+		close;
+	}
+*/
+	mes "Please select the quest you want to perform:";
+	next;
+	switch (select("Frozen as Garm:Eddga the Badass:Atroce the tormentor:Close")) {
+		case 1:
+			callfunc "Hunt_Q",14020,14021,"Garm",3000000,1500000,0,0,161,175;
+		case 2:
+			callfunc "Hunt_Q",14022,14023,"Eddga",3000000,1500000,0,0,161,175;
+		case 3:
+			callfunc "Hunt_Q",14024,14025,"Atroce",3000000,1500000,0,0,161,175;
+		case 4:
+			close;
+	}
+}
+/*
+moc_para01,26,184,4	script	Epic Mission Board::mis105	857,{
+	if (countitem(6219) < 1) {
+		mes "Wait a minute!";
+		mes "-You need to have an-";
+		mes "-^4d4dff'Eden Group Mark'^000000-";
+		mes "-to receive these missions.-";
+		next;
+		switch(select("Just walk away.:^0000FFEden Group^000000 missions?:How can I be a member of the ^0000FFEden Group^000000?")) {
+		case 1:
+			close;
+		case 2:
+			mes "::The Eden Group Missions";
+			mes "::are basically missions";
+			mes "::requested by";
+			mes "::people from all around the kingdom.";
+			mes "::We just categorize them.";
+			next;
+			mes "::In the Eden Group,";
+			mes "::we sorted out the missions";
+			mes "::according to the level of difficulty.";
+			mes "::According to this level,";
+			mes "::you can find";
+			mes "::missions that";
+			mes "::suit you.";
+			next;
+			mes "::When you are done,";
+			mes "::you can come back";
+			mes "::to the mission board.";
+			next;
+			mes "::Then you will be";
+			mes "::rewarded!!";
+			mes "::Simple, isn't it!!";
+			mes "::No commission required!!";
+			close;
+		case 3:
+			mes "::You can become a member";
+			mes "::of the Eden Group";
+			mes "::to ^0000FFLaime Evenor^000000,";
+			mes "::who is waiting on the 1st floor.";
+			next;
+			mes "::If you become a member,";
+			mes "::you will get an";
+			mes "::\"^006400Eden Group Mark^000000\".";
+			mes "::Then you will be able";
+			mes "::to see the mission board.";
+			close;
+		}
+	}
+	if(BaseLevel < 100) {
+		mes "You must be within level 100 to accept these missions.";
+		close;
+	}
+	mes "Please select the quest you want to perform:";
+	next;
+	switch (select("Recuperando el trono:Rey de la muerte:Provocando a las multitudes:Close")) {
+		case 1:
+			callfunc "Hunt_Q",14026,14039,"King Poring",1500000,1500000,671,25,100,175;
+		case 2:
+			callfunc "Hunt_Q",14027,14040,"Grim Reaper",1500000,1500000,671,25,100,175;
+		case 3:
+			callfunc "Hunt_Q",14028,14041,"100 Poring",300000,300000,671,3,100,175;
+		case 4:
+			close;
+	}
+}
+*/
+moc_para01,24,184,4	script	Instance Mission Board::mis106	857,{
+	if (countitem(6219) < 1) {
+		mes "Wait a minute!";
+		mes "-You need to have an-";
+		mes "-^4d4dff'Eden Group Mark'^000000-";
+		mes "-to receive these missions.-";
+		next;
+		switch(select("Just walk away.:^0000FFEden Group^000000 missions?:How can I be a member of the ^0000FFEden Group^000000?")) {
+		case 1:
+			close;
+		case 2:
+			mes "::The Eden Group Missions";
+			mes "::are basically missions";
+			mes "::requested by";
+			mes "::people from all around the kingdom.";
+			mes "::We just categorize them.";
+			next;
+			mes "::In the Eden Group,";
+			mes "::we sorted out the missions";
+			mes "::according to the level of difficulty.";
+			mes "::According to this level,";
+			mes "::you can find";
+			mes "::missions that";
+			mes "::suit you.";
+			next;
+			mes "::When you are done,";
+			mes "::you can come back";
+			mes "::to the mission board.";
+			next;
+			mes "::Then you will be";
+			mes "::rewarded!!";
+			mes "::Simple, isn't it!!";
+			mes "::No commission required!!";
+			close;
+		case 3:
+			mes "::You can become a member";
+			mes "::of the Eden Group";
+			mes "::to ^0000FFLaime Evenor^000000,";
+			mes "::who is waiting on the 1st floor.";
+			next;
+			mes "::If you become a member,";
+			mes "::you will get an";
+			mes "::\"^006400Eden Group Mark^000000\".";
+			mes "::Then you will be able";
+			mes "::to see the mission board.";
+			close;
+		}
+	}
+	mes "Please select the quest you want to perform:";
+	next;
+	switch (select("Las profundidades del lago:Tocando el cielo:Arrancar desde la raíz:Asustar a Bakonawa:Rescata a los enfermos:Roba el tesoro de Malaya:El camino del laberinto:Destapa la cañería:Prepara Sushi:La Oscuridad de Glast Heim:Close")) {
+		case 1:
+			callfunc "Hunt_Q",14029,14042,"Cursed Baphomet",800000,800000,671,1,99,175;
+		case 2:
+			callfunc "Hunt_Q",14030,14043,"Naght Seiger",800000,800000,671,1,99,175;
+		case 3:
+			callfunc "Hunt_Q",14031,14044,"Nydhoggur",800000,800000,671,1,99,175;
+		case 4:
+			callfunc "Hunt_Q",14032,14045,"Bakonawa",800000,800000,671,1,99,175;
+		case 5:
+			callfunc "Hunt_Q",14033,14046,"Bangungot",800000,800000,671,1,99,175;
+		case 6:
+			callfunc "Hunt_Q",14034,14047,"Buwaya",800000,800000,671,1,99,175;
+		case 7:
+			callfunc "Hunt_Q",14035,14048,"Lost Dragon",800000,800000,671,1,99,175;
+		case 8:
+			callfunc "Hunt_Q",14036,14049,"Ceolacanth",800000,800000,671,1,99,175;
+		case 9:
+			callfunc "Hunt_Q",14037,14050,"Octopus",800000,800000,671,1,99,175;
+		case 10:
+			callfunc "Hunt_Q",14038,14051,"Amdarias",800000,800000,671,1,99,175;
+		case 11:
+			close;
+	}
+}
+
+function	script	Hunt_Q	{
+	if(checkquest(getarg(0),HUNTING) == -1) {
+			if (checkquest(getarg(1),PLAYTIME) == 2) {
+				mes "Are you sure for hunt "+getarg(2)+"?";
+				switch(select("Accept","Decline")) {
+					case 1:
+						next;
+						if( BaseLevel <= getarg(7) || BaseLevel > getarg(8) ){
+							mes "You must be within level "+getarg(7)+" - "+getarg(8)+" to accept these missions.";
+							close;
+							end;
+						}
+						mes "Good luck";
+						erasequest getarg(1);
+						setquest getarg(0);
+						close;
+					case 2:
+						close;
+				}
+			} else {
+				if (checkquest(getarg(1),PLAYTIME) == -1) {
+					mes "Are you sure for hunt "+getarg(2)+"?";
+					switch(select("Accept","Decline")) {
+						case 1:
+							next;
+								if( BaseLevel < getarg(7) || BaseLevel > getarg(8) ){
+									mes "You must be within level "+getarg(7)+" - "+getarg(8)+" to accept these missions.";
+									close;
+								end;
+								}
+							mes "Good luck";
+							setquest getarg(0);
+							close;
+						case 2:
+							close;
+					}
+				} else {
+					mes "I'm sorry but you have to wait 22 hours before obtaining this mission again.";
+					close;
+				}
+			}
+	}
+	if((checkquest(getarg(0),HUNTING) == 0) || (checkquest(getarg(0),HUNTING) == 1)) {
+		mes "The mission is'nt complete.";
+		close;
+	}
+	if(checkquest(getarg(0),HUNTING) == 2) {
+		mes "Good work, there is your reward.";
+		erasequest getarg(0);
+		setquest getarg(1);
+		getexp getarg(3),getarg(4);
+		if(getarg(5) > 0)
+			getitem getarg(5),getarg(6);
+		close;
+	}
+}
+
+// Extra Warps
+moc_para01,131,157,0	warp	mocparadise032	1,2,moc_para01,30,182
+moc_para01,30,187,0	warp	mocparadise032-1	1,1,moc_para01,131,162
+moc_para01,179,157,0	warp	mocparadise033	1,2,moc_para01,18,183
+moc_para01,18,187,0	warp	mocparadise033-1	1,1,moc_para01,179,162

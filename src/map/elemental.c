@@ -524,7 +524,6 @@ int elemental_change_mode(struct elemental_data *ed, enum e_mode mode) {
 	// Use a skill inmediately after every change mode.
 	if( skill_mode != EL_SKILLMODE_AGGRESSIVE )
 		return elemental_change_mode_ack(ed, skill_mode);
-
 	return 1;
 }
 

@@ -21,7 +21,7 @@
 // see conf/battle/client.conf for other version
 
 #ifndef PACKETVER
-	#define PACKETVER 20130807
+	#define PACKETVER 20150916
 	//#define PACKETVER 20120410
 #endif
 
@@ -45,11 +45,11 @@
 	#define MAX_HOTKEYS 38
 #endif
 
-#define MAX_MAP_PER_SERVER 1500 /// Increased to allow creation of Instance Maps
+#define MAX_MAP_PER_SERVER 3000 /// Increased to allow creation of Instance Maps
 #define MAX_INVENTORY 100 ///Maximum items in player inventory
 /** Max number of characters per account. Note that changing this setting alone is not enough if the client is not hexed to support more characters as well.
 * Max value tested was 265 */
-#define MAX_CHARS 9 
+#define MAX_CHARS 40 
 /** Number of slots carded equipment can have. Never set to less than 4 as they are also used to keep the data of forged items/equipment. [Skotlex]
 * Note: The client seems unable to receive data for more than 4 slots due to all related packets having a fixed size. */
 #define MAX_SLOTS 4
@@ -58,13 +58,13 @@
 #define MAX_BANK_ZENY SINT32_MAX ///Max zeny in Bank
 #define MAX_FAME 1000000000 ///Max fame points
 #define MAX_CART 100 ///Maximum item in cart
-#define MAX_SKILL 1200 ///Maximum skill can be hold by Player, Homunculus, & Mercenary (skill list) AND skill_db limit
+#define MAX_SKILL 5020 ///Maximum skill can be hold by Player, Homunculus, & Mercenary (skill list) AND skill_db limit
 #define DEFAULT_WALK_SPEED 150 ///Default walk speed
 #define MIN_WALK_SPEED 20 ///Min walk speed
 #define MAX_WALK_SPEED 1000 ///Max walk speed
 #define MAX_STORAGE 600 ///Max number of storage slots a player can have, (up to ~850 tested)
 #define MAX_GUILD_STORAGE 600 ///Max number of storage slots a guild
-#define MAX_PARTY 12 ///Max party member
+#define MAX_PARTY 14 ///Max party member
 #define MAX_GUILD 16+10*6	///Increased max guild members +6 per 1 extension levels [Lupus]
 #define MAX_GUILDPOSITION 20	///Increased max guild positions to accomodate for all members [Valaris] (removed) [PoW]
 #define MAX_GUILDEXPULSION 32 ///Max Guild expulsion
@@ -105,7 +105,7 @@
 #define MAX_SKILLCOOLDOWN 20
 
 //Size of the fame list arrays.
-#define MAX_FAME_LIST 10
+#define MAX_FAME_LIST 5
 
 //Limits to avoid ID collision with other game objects
 #define START_ACCOUNT_NUM 2000000
@@ -140,6 +140,10 @@
 #define MAX_ELEMENTAL_CLASS 12
 #define EL_CLASS_BASE 2114
 #define EL_CLASS_MAX (EL_CLASS_BASE+MAX_ELEMENTAL_CLASS-1)
+
+//Achievement System
+#define ACHIEVEMENT_MAX 50
+#define ACHIEVEMENT_OBJETIVE_MAX 5
 
 enum item_types {
 	IT_HEALING = 0,
@@ -378,6 +382,135 @@ struct hotkey {
 };
 #endif
 
+struct s_killrank {
+	unsigned short
+		kill_count,
+		death_count;
+	int score;
+};
+
+struct s_battleground_stats {
+	unsigned int
+		top_damage,
+		damage_done,
+		damage_received,
+		boss_damage;
+	unsigned short
+		// Triple Inferno
+		skulls,
+		ti_wins, ti_lost, ti_tie,
+		// Tierra EoS
+		eos_flags,
+		eos_bases,
+		eos_wins, eos_lost, eos_tie,
+		// Tierra Bossnia
+		boss_killed,
+		boss_flags,
+		boss_wins, boss_lost, boss_tie,
+		// Tierra Domination
+		dom_bases,
+		dom_off_kills,
+		dom_def_kills,
+		dom_wins, dom_lost, dom_tie,
+		// Flavius TD
+		td_kills,
+		td_deaths,
+		td_wins, td_lost, td_tie,
+		// Flavius SC
+		sc_stole,
+		sc_captured,
+		sc_droped,
+		sc_wins, sc_lost, sc_tie,
+		// Flavius CTF
+		ctf_taken,
+		ctf_captured,
+		ctf_droped,
+		ctf_wins, ctf_lost, ctf_tie,
+		// Conquest
+		emperium_kill,
+		barricade_kill,
+		gstone_kill,
+		cq_wins, cq_lost,
+		// Rush
+		ru_captures,
+		ru_wins, ru_lost;
+
+	unsigned int // Ammo
+		sp_heal_potions,
+		hp_heal_potions,
+		yellow_gemstones,
+		red_gemstones,
+		blue_gemstones,
+		poison_bottles,
+		acid_demostration,
+		acid_demostration_fail,
+		support_skills_used,
+		healing_done,
+		wrong_support_skills_used,
+		wrong_healing_done,
+		sp_used,
+		zeny_used,
+		spiritb_used,
+		ammo_used;
+	unsigned short
+		kill_count,
+		death_count,
+		win, lost, tie,
+		leader_win, leader_lost, leader_tie,
+		deserter, rank_games;
+
+	int score, points, rank_points;
+};
+
+struct s_woestats {
+	int score;
+	unsigned short
+		kill_count,
+		death_count;
+	unsigned int
+		top_damage,
+		damage_done,
+		damage_received;
+	unsigned int
+		emperium_damage,
+		guardian_damage,
+		barricade_damage,
+		gstone_damage;
+	unsigned short
+		emperium_kill,
+		guardian_kill,
+		barricade_kill,
+		gstone_kill;
+	unsigned int // Ammo
+		sp_heal_potions,
+		hp_heal_potions,
+		yellow_gemstones,
+		red_gemstones,
+		blue_gemstones,
+		poison_bottles,
+		acid_demostration,
+		acid_demostration_fail,
+		support_skills_used,
+		healing_done,
+		wrong_support_skills_used,
+		wrong_healing_done,
+		sp_used,
+		zeny_used,
+		spiritb_used,
+		ammo_used;
+};
+
+struct s_skillcount {
+	unsigned short id,count;
+};
+
+// Achievement System [Fix by DanielArt]
+struct s_achievement {
+	int id;
+	int count[ACHIEVEMENT_OBJETIVE_MAX];
+	bool completed;
+};
+
 struct mmo_charstatus {
 	uint32 char_id;
 	uint32 account_id;
@@ -404,6 +537,9 @@ struct mmo_charstatus {
 	int spear_faith, spear_calls;
 	int sword_faith, sword_calls;
 
+	time_t last_tick;
+	unsigned int playtime;
+
 	short weapon; // enum weapon_type
 	short shield; // view-id
 	short head_top,head_mid,head_bottom;
@@ -416,6 +552,13 @@ struct mmo_charstatus {
 
 	uint32 mapip;
 	uint16 mapport;
+
+	// Ranking Data
+/*	struct s_killrank pvp, pk;
+	struct s_battleground_stats bgstats;
+	struct s_skillcount bg_skillcount[MAX_SKILL]; // BG Limited
+	struct s_woestats wstats;
+	struct s_skillcount skillcount[MAX_SKILL]; // WoE Limited*/
 
 	struct point last_point,save_point,memo_point[MAX_MEMOPOINTS];
 	struct item inventory[MAX_INVENTORY],cart[MAX_CART];

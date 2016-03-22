@@ -1,0 +1,351 @@
+-	shop	vshop	-1,36008:500000,36009:500000,36046:600000,36021:800000,36022:650000
+-	shop	vshop1	-1,36008:500000,36009:500000,36046:600000,36021:800000,36022:650000,36042:2000000
+-	shop	vshop2	-1,36008:500000,36009:500000,36046:600000,36021:800000,36022:650000,36043:2000000
+vip,278,265,3	script	Vendedor de Libros	620,{
+	if( M_Oficio3 && getequipid(13) == 36028)
+		callshop "vshop1";
+	else if( M_Oficio5 && getequipid(13) == 36036)
+		callshop "vshop2";
+	else 
+		callshop "vshop";
+	end;
+}
+vip,68,270,4	script	Maestro Costurero::q_quest	621,{
+	cutin "ep14_robert1",1;
+	if(BaseLevel >= 120 && (Oficio > 0 && Oficio != 3) && Oficio2 < 1) {
+		mes "[Maestro Costurero]";
+		mes "Si estás en ésta posición, en éste tiempo, y con ésta experiencia, significa que quieres unirte y ser un Costurero.";
+		next;
+		mes "[Maestro Costurero]";
+		mes "Nosotros tenemos la habilidad de fabricar gorros y capas a partir de materiales que obtienen los demás oficios.";
+		next;
+		mes "[Maestro Costurero]";
+		mes "Si estás listo para establecer una comunicación con otros oficios para construir le mejor equipo, entonces éste es tu lugar.";
+		next;
+		if(select("Adios","Elegir Costurero como 2do Oficio") == 1) {
+			mes "[Maestro Costurero]";
+			mes "Entonces hasta luego.";
+			close2;
+			cutin "",255;
+			end;
+		}
+		mes "[Maestro Costurero]";
+		mes "¡De acuerdo!","Te aceptaré como un Costurero";
+		next;
+		mes "[Maestro Costurero]";
+		mes "Ten ésto.";
+		getitem 36013,1;
+		next;
+		mes "[Maestro Costurero]";
+		mes "Ocuparás tener la aguja equipada para poder usar la habilidad ^5533ffSewing^000000.";
+		next;
+		mes "[Maestro Costurero]";
+		mes "Con dicha habilidad, podrás fabricar diverso equipo.";
+		next;
+		mes "[Maestro Costurero]";
+		mes "Pero para ello ocuparás manuales.";
+		next;
+		mes "[Maestro Costurero]";
+		mes "Los manuales los puedes comprar con un tipo, en la habitación de al lado.";
+		next;
+		mes "[Maestro Costurero]";
+		mes "Te deseo mucha suerte en tu camino como costurero.";
+		close2;
+		set Oficio2,3;
+		cutin "",255;
+		achieve 12;
+		announce "¡"+strcharinfo(0)+", ha emprendido el camino del Costurero!",bc_all;
+		end;
+	}
+	if(BaseLevel >= 50 && Oficio != 3 && q_cos < 1 && callfunc("Oficio_Check",10,3) == 1) {
+		mes "[Maestro Costurero]";
+		mes "Si estás en ésta posición, en éste tiempo, y con ésta experiencia, significa que quieres unirte y ser un Costurero.";
+		next;
+		mes "[Maestro Costurero]";
+		mes "Nosotros tenemos la habilidad de fabricar gorros y capas a partir de materiales que obtienen los demás oficios.";
+		next;
+		mes "[Maestro Costurero]";
+		mes "Si estás listo para establecer una comunicación con otros oficios para construir le mejor equipo, entonces éste es tu lugar.";
+		next;
+		if(select("Adios","Deseo ser Costurero") == 1) {
+			mes "[Maestro Costurero]";
+			mes "Entonces hasta luego.";
+			close2;
+			cutin "",255;
+			end;
+		}
+		mes "[Maestro Costurero]";
+		mes "Para considerarte un verdadero costurero, quiero que vayas a Ayothaya y hables con los Costureros que allí viven.";
+		next;
+		mes "[Maestro Costurero]";
+		mes "Te estaré esperando aquí.";
+		close2;
+		cutin "",255;
+		set q_cos,1;
+		end;
+	}
+	if(q_cos == 1 && callfunc("Oficio_Check",11,3) == 1) {
+		mes "[Maestro Costurero]";
+		mes "Ve a buscar a los Costureros de Ayothaya, ellos te dirán que hacer si en verdad quieres ser un costurero.";
+		close2;
+		emotion e_no1;
+		cutin "",255;
+		end;
+	}
+	if(q_cos == 3 && callfunc("Oficio_Check",11,3) == 1) {
+		mes "[Maestro Costurero]";
+		mes "Veo que haz cumplido con la encomienda que te he dado.";
+		next;
+		mes "[Maestro Costurero]";
+		mes "¡De acuerdo!","Te aceptaré como un Costurero";
+		next;
+		mes "[Maestro Costurero]";
+		mes "Ten ésto.";
+		getitem 36013,1;
+		next;
+		mes "[Maestro Costurero]";
+		mes "Ocuparás tener la aguja equipada para poder usar la habilidad ^5533ffSewing^000000.";
+		next;
+		mes "[Maestro Costurero]";
+		mes "Con dicha habilidad, podrás fabricar diverso equipo.";
+		next;
+		mes "[Maestro Costurero]";
+		mes "Pero para ello ocuparás manuales.";
+		next;
+		mes "[Maestro Costurero]";
+		mes "Los manuales los puedes comprar con un tipo, en la habitación de al lado.";
+		next;
+		mes "[Maestro Costurero]";
+		mes "Te deseo mucha suerte en tu camino como costurero.";
+		close2;
+		set Oficio,3;
+		achieve 12;
+		set q_cos,4;
+		cutin "",255;
+		announce "¡"+strcharinfo(0)+", ha emprendido el camino del Costurero!",bc_all;
+		end;
+	}
+	if(q_cos == 4 && callfunc("Oficio_Check",11,3) == 1) {
+		mes "[Maestro Costurero]";
+		mes "Si buscas manuales los puedes comprar con un tipo, en la habitación de al lado.";
+		close2;
+		cutin "",255;
+		end;
+	}
+	mes "[Maestro Costurero]";
+	mes "Ser un costurero es estar casado con una aguja, nunca se apartará de ti en cualquier circunstancia.";
+	close2;
+	cutin "",255;
+	end;
+}
+ayo_in01,139,20,4	script	Costurera::q_quest1	771,{
+	mes "[Costurera]";
+	if(q_cos == 2 && callfunc("Oficio_Check",11,3) == 1) {
+		if(countitem(7038) < 40) {
+			mes "Lo siento, pero todavía te faltan Yarn.","Necesito 40.";
+			close2;
+			cutin "",255;
+			end;
+		}
+		delitem 7038,40;
+		mes "Muy buen trabajo.","Te haz ganado mi reconocimiento como Costurero.";
+		next;
+		mes "[Costurera]";
+		mes "Veamos, ahora vuelve con el Maestro Costurero, de seguro él estará conforme con tus resultados.";
+		close2;
+		set q_cos,3;
+		cutin "",255;
+		end;
+	}
+	if(q_cos == 3 && callfunc("Oficio_Check",11,3) == 1) {
+		mes "Vuelve con el Maestro Costurero.";
+		close2;
+		cutin "",255;
+		end;
+	}
+	mes "Ésta es una habitación privada, sabes.";
+	if(q_cos == 1 && callfunc("Oficio_Check",11,3) == 1) {
+		next;
+		select("Me han mandado a hablar contigo");
+	} else
+		close;
+	mes "[Costurera]";
+	mes "Ya veo, así que deseas convertirte en un Costurero, pues porque me pareces alguien encantador te lo dejaré fácil.";
+	next;
+	emotion e_hmm;
+	mes "[Costurera]";
+	mes "Traeme unos... 40 Yarn, y te daré mi recomendación.";
+	next;
+	mes "[Costurera]";
+	mes "Cuando los tengas contigo, vuelve aquí.";
+	close2;
+	cutin "",255;
+	set q_cos,2;
+	end;
+}
+vip,64,268,4	script	Maestro Carpintero::q_carp	832,{
+	cutin "3rd_ranger",2;
+	if(BaseLevel >= 120 && (Oficio > 0 && Oficio != 5) && Oficio2 < 1) {
+		mes "[Maestro Carpintero]";
+		mes "Si quieres dedicarte a la fabricación de Arcos y Báculos, éste es tu lugar ideal.";
+		next;
+		mes "[Maestro Carpintero]";
+		mes "Los carpinteros podemos hacer armas y fabricar objetos exclusivos para diversas utilidades.";
+		next;
+		mes "[Maestro Carpintero]";
+		mes "Dime, ¿quieres ser un Carpintero?";
+		next;
+		if(select("No, gracias","Elegir Carpintero como 2do Oficio") == 1) {
+			mes "[Maestro Carpintero]";
+			mes "Entonces supongo que no quieres ser carpintero.";
+			next;
+			mes "[Maestro Carpintero]";
+			mes "Pero no te preocupes, mientras no elijas algún otro oficio, puedes volver conmigo.";
+			close2;
+			cutin "",255;
+			end;
+		}
+		specialeffect 154;
+		mes "[Maestro Carpintero]";
+		mes "Perfecto, aquí tienes tu nueva sierra.";
+		next;
+		getitem 36006,1;
+		mes "[Maestro Carpintero]";
+		mes "Para producir nuevos objetos, necesitas equiparte la sierra y utilizar la skill ^ff8800Woodcraft^000000.";
+		next;
+		mes "[Maestro Carpintero]";
+		mes "Las armas se fabrican mediante dicha habilidad, y los objetos extras los podrás fabricar en la Mesa de Trabajo de la siguiente sala.";
+		next;
+		mes "[Maestro Carpintero]";
+		mes "Ten en cuenta que siempre debes de tener manuales a la mano para saber qué fabricar.";
+		next;
+		mes "[Maestro Carpintero]";
+		mes "Si ocupas los manuales, ve igual, a la siguiente sala, allí encontrarás a un hombre que los vende.";
+		next;
+		mes "[Maestro Carpintero]";
+		mes "Te deseo mucha suerte en tu camino como carpintero.";
+		close2;
+		cutin "",255;
+		set Oficio2,5;
+		achieve 13;
+		announce "¡"+strcharinfo(0)+", ha emprendido el camino del Carpintero!",bc_all;
+		end;
+	}
+	if(BaseLevel >= 50 && Oficio != 5 && q_carp < 1 && callfunc("Oficio_Check",10,5) == 1) {
+		mes "[Maestro Carpintero]";
+		mes "Si quieres dedicarte a la fabricación de Arcos y Báculos, éste es tu lugar ideal.";
+		next;
+		mes "[Maestro Carpintero]";
+		mes "Los carpinteros podemos hacer armas y fabricar objetos exclusivos para diversas utilidades.";
+		next;
+		mes "[Maestro Carpintero]";
+		mes "Dime, ¿quieres ser un Carpintero?";
+		next;
+		if(select("No, gracias","Deseo ser un Carpintero") == 1) {
+			mes "[Maestro Carpintero]";
+			mes "Entonces supongo que no quieres ser carpintero.";
+			next;
+			mes "[Maestro Carpintero]";
+			mes "Pero no te preocupes, mientras no elijas algún otro oficio, puedes volver conmigo.";
+			close2;
+			cutin "",255;
+			end;
+		}
+		mes "[Maestro Carpintero]";
+		mes "Bien, para convertirte en tu Carpintero, necesito materiales para fabricarte tu sierra, sí, materiales.";
+		next;
+		mes "[Maestro Carpintero]";
+		mes "Aquí tengo las cosas necesarias, pero me faltan algunas.";
+		next;
+		mes "[Maestro Carpintero]";
+		mes "Primeramente, ve y traeme 10 Elunium para hacer la montura de la sierra.";
+		close2;
+		set q_carp,1;
+		cutin "",255;
+		end;
+	}
+	if(callfunc("Oficio_Check",11,5) < 1)
+		set q_carp,0;
+	switch(q_carp) {
+		case 1:
+			if(countitem(985) < 10) {
+				mes "[Maestro Carpintero]";
+				mes "Lo siento, pero te hace falta más Elunium.","Traeme para poder fabricar tu sierra";
+				close2;
+				cutin "",255;
+				end;
+			}
+			specialeffect 154;
+			mes "[Maestro Carpintero]";
+			mes "Buen trabajo, ahora necesito que me traigas 10 Trunk para el mango de la sierra.";
+			close2;
+			set q_carp,2;
+			cutin "",255;
+			delitem 6241,10;
+			end;
+		case 2:
+			if(countitem(1019) < 10) {
+				mes "[Maestro Carpintero]";
+				mes "Necesito 10 Trunk para hacer el mango de tu sierra.";
+				close2;
+				cutin "",255;
+				end;
+			}
+			specialeffect 154;
+			mes "[Maestro Carpintero]";
+			mes "Bien, por último traeme 30 Peco Peco Feather para fabricar un trapo para poder pulir tu sierra.";
+			close2;
+			cutin "",255;
+			set q_carp,3;
+			delitem 1019,10;
+			end;
+		case 3:
+			if(countitem(7101) < 30) {
+				mes "[Maestro Carpintero]";
+				mes "Necesito 30 Peco Peco Feather, date prisa.";
+				close2;
+				cutin "",255;
+				end;
+			}
+			specialeffect 154;
+			mes "[Maestro Carpintero]";
+			mes "Perfecto, aquí tienes tu nueva sierra.";
+			next;
+			getitem 36006,1;
+			delitem 7101,30;
+			mes "[Maestro Carpintero]";
+			mes "Para producir nuevos objetos, necesitas equiparte la sierra y utilizar la skill ^ff8800Woodcraft^000000.";
+			next;
+			mes "[Maestro Carpintero]";
+			mes "Las armas se fabrican mediante dicha habilidad, y los objetos extras los podrás fabricar en la Mesa de Trabajo de la siguiente sala.";
+			next;
+			mes "[Maestro Carpintero]";
+			mes "Ten en cuenta que siempre debes de tener manuales a la mano para saber qué fabricar.";
+			next;
+			mes "[Maestro Carpintero]";
+			mes "Si ocupas los manuales, ve igual, a la siguiente sala, allí encontrarás a un hombre que los vende.";
+			next;
+			mes "[Maestro Carpintero]";
+			mes "Te deseo mucha suerte en tu camino como carpintero.";
+			close2;
+			cutin "",255;
+			set Oficio,5;
+			achieve 13;
+			announce "¡"+strcharinfo(0)+", ha emprendido el camino del Carpintero!",bc_all;
+			set q_carp,4;
+			end;
+		case 4:
+			mes "[Maestro Carpintero]";
+			mes "¡Recuerda que puedes encontrar la mesa de trabajo en la sala siguiente!";
+			close2;
+			cutin "",255;
+			end;
+		default:
+			mes "[Maestro Carpintero]";
+			mes "Un carpintero te puede hacer la mejor arma de madera que puedas imaginar.";
+			close2;
+			cutin "",255;
+			end;
+	}
+end;
+}

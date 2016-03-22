@@ -1,0 +1,519 @@
+-	script	eventolazoact	-1,{
+
+OnInit:
+disablenpc "evlaz01";
+disablenpc "evlaz02";
+disablenpc "evlaz03";
+disablenpc "evlaz04";
+disablenpc "evlaz05";
+disablenpc "evlaz06";
+disablenpc "evlaz07";
+disablenpc "evlaz08";
+end;}
+
+
+quiz_02.gat,357,72,4	script	Activador Evento Lazos	72,{
+mes "[^CC0000Abril^000000]";
+mes "¿Quieres activar el evento de lazos?";
+next;
+menu "Activar",activa,"Desactivar",desactiva,"Cancelar",cancela;
+
+activa:
+input @passlazos;
+if (@passlazos == 2508) goto activa2;
+close;
+
+activa2:
+close2;
+announce "En 30 minutos va a dar comienzo el Evento “Lazos y Vampiros” en la ciudad de Prontera.",bc_all,0xF7D358;
+sleep 900000;
+announce "En 15 minutos va a dar comienzo el Evento “Lazos y Vampiros” en la ciudad de Prontera.",bc_all,0xF7D358;
+sleep 600000;
+announce "En 5 minutos va a dar comienzo el Evento “Lazos y Vampiros” en la ciudad de Prontera. Buscad al NPC Abril cerca de la fuente de la ciudad",bc_all,0xF7D358;
+sleep 300000;
+announce "Abril: Prontera es una ciudad taaaaan linda, pero... ¡No hay sitio para ir de compras!",bc_all,0xF7D358;
+sleep 7000;
+announce "Abril: Una chica como yo necesita muchos complementos para sentirse a la moda, ¿Qué puedo hacer?",bc_all,0xF7D358;
+sleep 7000;
+announce "Abril: Quería adornar mi pelo y mis vestidos con algunos Ribbon y Sardonyx, pero no los encuentro por ningún lado.",bc_all,0xF7D358;
+sleep 7000;
+announce "Abril: Escuché que los Ribbon proceden de unos horribles murciélagos llamados Familiar… Y los Sardonyx de otros llamados Drainliar.",bc_all,0xF7D358;
+sleep 7000;
+announce "Abril: ¡Qué miedo! No, no... Yo no puedo ir a conseguirlos sola...Ojalá 7 aventureros me trajeran 10 Ribbon y 5 Sardonyx cada uno...",bc_all,0xF7D358;
+sleep 7000;
+announce "Abril: ¡Aquí vienen! ¡Están en la ciudad de Prontera!",bc_all,0xF7D358;
+monster "prontera",0,0,"Murciélago",1005,600;
+monster "prontera",0,0,"Murciélago",1111,400;
+enablenpc "evlaz01";
+enablenpc "evlaz02";
+enablenpc "evlaz03";
+enablenpc "evlaz04";
+enablenpc "evlaz05";
+enablenpc "evlaz06";
+enablenpc "evlaz07";
+enablenpc "evlaz08";
+set $EventoLazos,1;
+end;
+
+desactiva:
+input @passlazos;
+if (@passlazos == 2508) goto desactiva2;
+close;
+
+desactiva2:
+disablenpc "evlaz01";
+disablenpc "evlaz02";
+disablenpc "evlaz03";
+disablenpc "evlaz04";
+disablenpc "evlaz05";
+disablenpc "evlaz06";
+disablenpc "evlaz07";
+disablenpc "evlaz08";
+close;
+
+cancela:
+close;
+}
+
+
+
+
+
+
+prontera.gat,139,172,4	script	Abril::evlaz01	72,{
+
+if (.NumeroLazos == 7) {goto finlazos;}
+if ($EventoLazos == 1) {goto eventoactivo;}
+mes "[^CC0000Abril^000000]";
+mes "Me encanta Prontera, es una ciudad tan bonita...";
+next;
+mes "[^CC0000Abril^000000]";
+mes "¡Qué pena que casi no hay sitios para ir de tiendas!";
+next;
+mes "[^CC0000Abril^000000]";
+mes "No puedo vivir sin estar guapa.";
+close;
+
+eventoactivo:
+if(countitem(2209)<10)goto noitems;
+if(countitem(725)<5)goto noitems;
+
+
+mes "[^CC0000Abril^000000]";
+mes "¡Es justo lo que necesitaba! Unos preciosos Ribbon y mis gemas favoritas, Sardonyx"; 
+next; 
+mes "[^CC0000Abril^000000]";
+mes "¿Cómo podría pagar tu valentía? Déjame ver..."; 
+next; 
+delitem 2209,10;
+delitem 725,5;
+set .NumeroLazos,.NumeroLazos+1;
+if (.NumeroLazos == 1) {getitem 5191,1;announce "Abril: 1 valiente aventurero me ha traído 10 Ribbon y 5 Sardonyx, pero aún necesito la ayuda de 6 personas más.",bc_all,0xF7D358;}
+if (.NumeroLazos == 2) {getitem 5192,1;announce "Abril: 2 valientes aventureros me han traído 10 Ribbon y 5 Sardonyx, pero aún necesito la ayuda de 5 personas más.",bc_all,0xF7D358;}
+if (.NumeroLazos == 3) {getitem 5193,1;announce "Abril: 3 valientes aventureros me han traído 10 Ribbon y 5 Sardonyx, pero aún necesito la ayuda de 4 personas más.",bc_all,0xF7D358;}
+if (.NumeroLazos == 4) {getitem 5194,1;announce "Abril: 4 valientes aventureros me han traído 10 Ribbon y 5 Sardonyx, pero aún necesito la ayuda de 3 personas más.",bc_all,0xF7D358;}
+if (.NumeroLazos == 5) {getitem 5195,1;announce "Abril: 5 valientes aventureros me han traído 10 Ribbon y 5 Sardonyx, pero aún necesito la ayuda de 2 personas más.",bc_all,0xF7D358;}
+if (.NumeroLazos == 6) {getitem 5196,1;announce "Abril: 6 valientes aventureros me han traido 10 Ribbon y 5 Sardonyx, pero aún necesito la ayuda de 1 persona más.",bc_all,0xF7D358;}
+if (.NumeroLazos == 7) {getitem 5197,1;announce "Abril: ¡¡¡Por fin!!! Tengo todo lo que necesitaba, os lo agradezco a todos. Pero hay una cosa que me tiene preocupada....",bc_all,0xF7D358;
+close2;
+sleep 3000;
+announce "Abril: Estos objetos... ¿Cuántos murciélagos han tenido que morir para conseguirlos? Espero que el Señor de los Murciélagos no se enoje demasiado...",bc_all,0xF7D358;
+sleep 3000;
+announce "Abril: ¡¡¿¿Y ese ruido!!?? No puede ser... es... ess!! .... Es el Señor de los Murciélagos....  Ha venido a vengarse.... ¡¡ES DRÁCULA!!",bc_all,0xF7D358;
+monster "prontera",155,178,"Señor de los Murciélagos",1389,1,"evlaz01::OnMyMobDead";}
+close;
+
+
+noitems:
+mes "[^CC0000Abril^000000]";
+mes "¡No pienso ni acercarme a esos bichos!"; 
+next; 
+mes "[^CC0000Abril^000000]";
+mes "Ojala 7 aventureros me traigan 10 Ribbon y 5 Sardonyx para estar guapa"; 
+close;
+
+
+finlazos:
+mes "[^CC0000Abril^000000]";
+mes "Nnn... noo... no lo ppuuedo creer... Drácula ha venido a vengarse.... Tengo miedo"; 
+close;
+
+
+OnMyMobDead:
+announce "Abril: Drácula fue derrotado, pero... ¿en verdad esto estuvo bien? Tantos murciélagos asesinados...",bc_all,0xF7D358;
+sleep 7000;
+announce "Abril: Creo que los RIBBON DE COLORES que entregué como premio a los 7 aventureros estarán malditos.",bc_all,0xF7D358;
+sleep 7000;
+announce "Abril: La única solución es hablar con la Reina de Colores,  un poco más abajo.",bc_all,0xF7D358;
+sleep 7000;
+announce "Reina de Colores: ¿Así que necesitáis mi ayuda? Está bien... Pero no será fácil.",bc_all,0xF7D358;
+sleep 7000;
+announce "Reina de Colores: Cada portador de un RIBBON COLOREADO debe hablar con uno de mis sirvientes, EN FUNCION DEL COLOR de su Ribbon Maldito.",bc_all,0xF7D358;
+sleep 7000;
+announce "Reina de Colores: En primer lugar, el portador del GREEN RIBBON habla con mi fiel servidor Manzana.",bc_all,0xF7D358;
+set $EventoLazos,2;
+end;
+}
+
+
+
+prontera.gat,155,136,4	script	Reina de Colores::evlaz02	856,{
+
+if ($EventoLazos == 2) {goto eventoactivo;}
+mes "[^CC0000Reina de Colores^000000]";
+mes " Yo soy la Reina de Colores, ¿viste a mis aliados?"; 
+next;
+mes "[^CC0000Reina de Colores^000000]";
+mes "Además de leales son tan apetitosos.....";
+close;
+
+eventoactivo:
+if ($@LazInv == 3840) goto Invasion07;
+end;
+
+
+Invasion07:
+if ($EventoLazos == 4) {goto questacabada;}
+if ($EventoLazos == 3) {goto snakeactivo;}
+if (countitem(5195)<1) {goto noitems;}
+mes "[^CC0000Reina de Colores^000000]";
+mes "Por último, YO, la Reina de Colores represento al Rojo Fuego."; 
+next; 
+mes "[^CC0000Reina de Colores^000000]";
+mes "Acércate, portador del Red Ribbon, el final de esta maldición esta muy próximo."; 
+next; 
+mes "[^CC0000Reina de Colores^000000]";
+mes "Puedo sentirlo.... si.... Se acerca una fuerza poderosa..."; 
+next; 
+mes "[^CC0000Reina de Colores^000000]";
+mes "Adelante, ¡derrótadlo!";
+close2;
+monster "prontera",0,0,"Evil Snake Lord",1418,1,"evlaz02::OnMyMobDead";
+announce "Reina de Colores: Ha llegado la batalla final, ¡el Evil Snake Lord está en Prontera!.",bc_all,0xF7D358;
+set $EventoLazos,3;
+end;
+
+snakeactivo:
+mes "[^CC0000Reina de Colores^000000]";
+mes "Adelante, ¡derrótadlo!";
+end;
+
+questacabada:
+mes "[^CC0000Reina de Colores^000000]";
+mes "La maldición ha terminado, Prontera vuelve a la normalidad."; 
+next; 
+mes "[^CC0000Reina de Colores^000000]";
+mes "Me está dando un poco de hambre..."; 
+end;
+
+OnMyMobDead:
+announce "Reina de Colores: La maldición ha terminado, Prontera vuelve a la normalidad.",bc_all,0xF7D358;
+set $EventoLazos,0;
+disablenpc "evlaz01";
+disablenpc "evlaz02";
+disablenpc "evlaz03";
+disablenpc "evlaz04";
+disablenpc "evlaz05";
+disablenpc "evlaz06";
+disablenpc "evlaz07";
+disablenpc "evlaz08";
+end;
+
+
+noitem:
+mes "[^CC0000Reina de Colores^000000]";
+mes " Debemos acabar con esta maldición."; 
+close;
+
+}
+
+
+
+
+prontera.gat,153,147,4	script	Manzana::evlaz03	1031,{
+
+if ($EventoLazos == 2) {goto eventoactivo;}
+npctalk "Estamos al servicio de la Reina de Colores";
+end;
+
+eventoactivo:
+if ($@LazInv >1) {goto FinalInvasion;}
+if (countitem(5193)<1)goto noitems;
+
+mes "[^CC0000Manzana^000000]";
+Mes "Veo que eres el portador del Green Ribbon, bien, tráelo aquí."; 
+next; 
+mes "[^CC0000Manzana^000000]";
+mes "Sin duda, este Ribbon está maldito.... ¡Y ahora tú también lo estás!"; 
+next; 
+disguise 1717;
+mes "[^CC0000Manzana^000000]";
+mes "Derrota a todos los monstruos si quieres volver a la normalidad." ; 
+close2;
+monster "prontera",0,0,"Anolian",1206,200,"evlaz03::OnMyMobDead";
+monster "prontera",0,0,"Mavka",1884,200,"evlaz03::OnMyMobDead";
+monster "prontera",0,0,"Green Iguana",1687,200,"evlaz03::OnMyMobDead";
+monster "prontera",0,0,"Ferus",1717,100,"evlaz03::OnMyMobDead";
+announce "Coco: Para acabar con la maldición del Green Ribbon... ¡DERROTAD A TODOS ESTOS MONSTRUOS!",bc_all,0xF7D358;
+end;
+
+OnMyMobDead:
+set $@LazInv,$@LazInv+1;
+if ($@LazInv == 700) {announce "Reina de Colores: En segundo lugar, el portador del BLACK RIBBON, habla con mi fiel servidor Mora.",bc_all,0xF7D358;}
+end;
+
+FinalInvasion:
+mes "¡Derrotad a la invasión para acabar con la maldición!";
+close;
+
+noitems:
+mes "Nosotros os ayudaremos a deshacer la maldición, pero debemos ir uno por uno"; 
+close;
+}
+
+
+
+
+
+
+prontera.gat,153,143,4	script	Mora::evlaz04	1904,{
+
+if ($EventoLazos == 2) {goto eventoactivo;}
+npctalk "Estamos al servicio de la Reina de Colores";
+end;
+
+eventoactivo:
+if ($@LazInv >700) {goto FinalInvasion;}
+if ($@LazInv == 700) goto Inv02;
+mes "Nosotros os ayudaremos a deshacer la maldición, pero debemos ir uno por uno"; 
+close;
+
+Inv02:
+if (countitem(5191)<1)goto noitems;
+mes "[^CC0000Mora^000000]";
+Mes "Veo que eres el portador del Black Ribbon, bien, tráelo aquí."; 
+next; 
+mes "[^CC0000Mora^000000]";
+mes "Sin duda, este Ribbon está maldito.... ¡Y ahora tú también lo estás!"; 
+next; 
+disguise 1702;
+mes "[^CC0000Mora^000000]";
+mes "Derrota a todos los monstruos si quieres volver a la normalidad." ; 
+close2;
+monster "prontera",0,0,"Loli Ruri",1505,200,"evlaz04::OnMyMobDead";
+monster "prontera",0,0,"Skogul",1752,200,"evlaz04::OnMyMobDead";
+monster "prontera",0,0,"Skeggiold",1755,60,"evlaz04::OnMyMobDead";
+monster "prontera",0,0,"Retribution",1702,100,"evlaz04::OnMyMobDead";
+announce "Coco: Para acabar con la maldición del Black Ribbon... ¡DERROTAD A TODOS ESTOS MONSTRUOS!",bc_all,0xF7D358;
+end;
+
+OnMyMobDead:
+set $@LazInv,$@LazInv+1;
+if ($@LazInv == 1260) {announce "Reina de Colores: En tercer lugar, el portador del YELLOW RIBBON, habla con mi fiel servidor Plátano.",bc_all,0xF7D358;}
+end;
+
+FinalInvasion:
+mes "¡Derrotad a la invasión para acabar con la maldición!";
+close;
+
+noitems:
+mes "Nosotros os ayudaremos a deshacer la maldición, pero debemos ir 1 por 1"; 
+close;
+}
+
+
+
+
+
+
+prontera.gat,153,139,4	script	Plátano::evlaz05	1113,{
+
+if ($EventoLazos == 2) {goto eventoactivo;}
+npctalk "Estamos al servicio de la Reina de Colores";
+end;
+
+eventoactivo:
+if ($@LazInv >1260) {goto FinalInvasion;}
+if ($@LazInv == 1260) goto Inv03;
+mes "Nosotros os ayudaremos a deshacer la maldición, pero debemos ir uno por uno"; 
+close;
+
+Inv03:
+if(countitem(5192)<1)goto noitems;
+mes "[^CC0000Plátano^000000]";
+Mes "Veo que eres el portador del Yellow Ribbon, bien, tráelo aquí."; 
+next; 
+mes "[^CC0000Plátano^000000]";
+mes "Sin duda, este Ribbon está maldito.... ¡Y ahora tú también lo estás!"; 
+next; 
+disguise 2147;
+mes "[^CC0000Plátano^000000]";
+mes "Derrota a todos los monstruos si quieres volver a la normalidad." ; 
+close2;
+monster "prontera",0,0,"Fake Angel",1371,200,"evlaz05::OnMyMobDead";
+monster "prontera",0,0,"Harpy",1376,200,"evlaz05::OnMyMobDead";
+monster "prontera",0,0,"Mistress Of Shelter",1701,100,"evlaz05::OnMyMobDead";
+monster "prontera",0,0,"Miming",2137,60,"evlaz05::OnMyMobDead";
+announce "Coco: Para acabar con la maldición del Yellow Ribbon... ¡DERROTAD A TODOS ESTOS MONSTRUOS!",bc_all,0xF7D358;
+end;
+
+OnMyMobDead:
+set $@LazInv,$@LazInv+1;
+if ($@LazInv == 1820) {announce "Reina de Colores: En cuarto lugar, el portador del ORANGE RIBBON, habla con mi fiel servidor Mandarina.",bc_all,0xF7D358;}
+end;
+
+FinalInvasion:
+mes "¡Derrotad a la invasión para acabar con la maldición!";
+close;
+
+noitems:
+mes "Nosotros os ayudaremos a deshacer la maldición, pero debemos ir 1 por 1"; 
+close;
+}
+
+
+
+
+
+prontera.gat,158,139,4	script	Mandarina::evlaz06	1836,{
+
+if ($EventoLazos == 2) {goto eventoactivo;}
+npctalk "Estamos al servicio de la Reina de Colores";
+end;
+
+eventoactivo:
+if ($@LazInv >1820) {goto FinalInvasion;}
+if ($@LazInv == 1820) goto Inv04;
+mes "Nosotros os ayudaremos a deshacer la maldición, pero debemos ir uno por uno"; 
+close;
+
+Inv04:
+if(countitem(5196)<1)goto noitems;
+mes "[^CC0000Mandarina^000000]";
+Mes "Veo que eres el portador del Orange Ribbon, bien, tráelo aquí."; 
+next; 
+mes "[^CC0000Mandarina^000000]";
+mes "Sin duda, este Ribbon está maldito.... ¡Y ahora tú también lo estás!"; 
+next; 
+disguise 1837;
+mes "[^CC0000Mandarina^000000]";
+mes "Derrota a todos los monstruos si quieres volver a la normalidad." ; 
+close2;
+monster "prontera",0,0,"Siorava",2199,200,"evlaz06::OnMyMobDead";
+monster "prontera",0,0,"Deleter",1384,200,"evlaz06::OnMyMobDead";
+monster "prontera",0,0,"Grizzly",1381,200,"evlaz06::OnMyMobDead";
+monster "prontera",0,0,"Imp",1837,100,"evlaz06::OnMyMobDead";
+announce "Coco: Para acabar con la maldición del Orange Ribbon... ¡DERROTAD A TODOS ESTOS MONSTRUOS!",bc_all,0xF7D358;
+end;
+
+OnMyMobDead:
+set $@LazInv,$@LazInv+1;
+if ($@LazInv == 2520) {announce "Reina de Colores: En quinto lugar, el portador del PINK RIBBON, habla con mi fiel servidor Fresa.",bc_all,0xF7D358;}
+end;
+
+FinalInvasion:
+mes "¡Derrotad a la invasión para acabar con la maldición!";
+close;
+
+noitems:
+mes "Nosotros os ayudaremos a deshacer la maldición, pero debemos ir 1 por 1"; 
+close;
+}
+
+
+
+
+
+prontera.gat,158,143,4	script	Fresa::evlaz07	1096,{
+
+if ($EventoLazos == 2) {goto eventoactivo;}
+npctalk "Estamos al servicio de la Reina de Colores";
+end;
+
+eventoactivo:
+if ($@LazInv >2520) {goto FinalInvasion;}
+if ($@LazInv == 2520) goto Inv05;
+mes "Nosotros os ayudaremos a deshacer la maldición, pero debemos ir uno por uno"; 
+close;
+
+Inv05:
+if(countitem(5194)<1)goto noitems;
+mes "[^CC0000Fresa^000000]";
+Mes "Veo que eres el portador del Pink Ribbon, bien, tráelo aquí."; 
+next; 
+mes "[^CC0000Fresa^000000]";
+mes "Sin duda, este Ribbon está maldito.... ¡Y ahora tú también lo estás!"; 
+next; 
+disguise 1868;
+mes "[^CC0000Fresa^000000]";
+mes "Derrota a todos los monstruos si quieres volver a la normalidad." ; 
+close2;
+monster "prontera",0,0,"Banshee",1868,200,"evlaz07::OnMyMobDead";
+monster "prontera",0,0,"Deleter",1385,200,"evlaz07::OnMyMobDead";
+monster "prontera",0,0,"Raydric",1163,200,"evlaz07::OnMyMobDead";
+monster "prontera",0,0,"Ferus",1714,100,"evlaz07::OnMyMobDead";
+announce "Fresa: Para acabar con la maldición del Pink Ribbon... ¡DERROTAD A TODOS ESTOS MONSTRUOS!",bc_all,0xF7D358;
+end;
+
+OnMyMobDead:
+set $@LazInv,$@LazInv+1;
+if ($@LazInv == 3220) {announce "Reina de Colores: En sexto lugar, el portador del WHITE RIBBON, habla con mi fiel servidor Coco.",bc_all,0xF7D358;}
+end;
+
+FinalInvasion:
+mes "¡Derrotad a la invasión para acabar con la maldición!";
+close;
+
+noitems:
+mes "Nosotros os ayudaremos a deshacer la maldición, pero debemos ir uno por uno"; 
+close;
+}
+
+
+
+
+
+prontera.gat,158,147,4	script	Coco::evlaz08	1120,{
+
+if ($EventoLazos == 2) {goto eventoactivo;}
+npctalk "Estamos al servicio de la Reina de Colores";
+end;
+
+eventoactivo:
+if ($@LazInv >3220) {goto FinalInvasion;}
+if ($@LazInv == 3220) goto Inv06;
+mes "Nosotros os ayudaremos a deshacer la maldición, pero debemos ir uno por uno"; 
+close;
+
+Inv06:
+if(countitem(5197)<1)goto noitems;
+mes "[^CC0000Coco^000000]";
+Mes "Veo que eres el portador del Orange Ribbon, bien, tráelo aquí."; 
+next; 
+mes "[^CC0000Coco^000000]";
+mes "Sin duda, este Ribbon está maldito.... ¡Y ahora tú también lo estás!"; 
+next; 
+disguise 1736;
+mes "[^CC0000Coco^000000]";
+mes "Derrota a todos los monstruos si quieres volver a la normalidad." ; 
+close2;
+monster "prontera",0,0,"Aqua Elemental",2016,20,"evlaz08::OnMyMobDead";
+monster "prontera",0,0,"Disguise",1506,200,"evlaz08::OnMyMobDead";
+monster "prontera",0,0,"Garm Baby",1515,200,"evlaz08::OnMyMobDead";
+monster "prontera",0,0,"Aliot",1736,200,"evlaz08::OnMyMobDead";
+announce "Coco: Para acabar con la maldición del White Ribbon... ¡DERROTAD A TODOS ESTOS MONSTRUOS!",bc_all,0xF7D358;
+end;
+
+OnMyMobDead:
+set $@LazInv,$@LazInv+1;
+if ($@LazInv == 3840) {announce "Reina de Colores: Finalmente, el portador del RED RIBBON, ven a hablar conmigo.",bc_all,0xF7D358;}
+end;
+
+FinalInvasion:
+mes "¡Derrotad a la invasión para acabar con la maldición!";
+close;
+
+noitems:
+mes "Nosotros os ayudaremos a deshacer la maldición, pero debemos ir uno por uno"; 
+close;
+}

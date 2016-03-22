@@ -83,3 +83,4 @@
 71,13281,1000,10,1000	// En_White_PotZ_To_Throw
 72,13282,1000,10,1000	// Vitata500_To_Throw
 73,13283,1000,10,1000	// En_Cel_Juice_To_Throw
+74,1059,1000,10,1000	//Steel

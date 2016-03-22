@@ -1,0 +1,58 @@
+prontera,140,173,5	script	Canje de Cash::Cash	10005,{
+	query_sql("SELECT `balance` FROM `cp_credits` WHERE `account_id` = '" + getcharid(3) + "'",@p);
+	mes "[^ff8800Canje de Cash^000000]";
+	mes "Bienvenid"+(Sex?"o ^ff0000":"a ^0000ff")+strcharinfo(0);
+	if(.promocion > 0)
+		mes "^ff6060Promoción:^000000 Cash x"+.promocion;
+	mes "^5533ffWEB^000000: ^ff6060"+@p+"^000000 Cash.";
+	mes "^cc6600in-game^000000: ^ff6060"+#CASHPOINTS+"^000000 Cash.";
+	next;
+	switch(select("Canjear puntos ^5533ffWeb^000000 a ^cc6600in-game^000000:¿Cómo conseguir Cash?:^777777Salir^000000")) {
+		case 1:
+			break;
+		case 2:
+			mes "[^ff8800Canje de Cash^000000]";
+			mes "Para obtener Cash, puedes comprarlos por la página web dedicada a Ragnarok Online: ^0000ffwww.ign.do/ragnarok/^000000.";
+			next;
+			mes "[^ff8800Canje de Cash^000000]";
+			mes "Allí encontrarás una sección que por medio de PayPal podrás adquirir Cash por cierta cantidad de dinero.";
+			next;
+			mes "[^ff8800Canje de Cash^000000]";
+			mes "Te recordamos leer los Términos y Condiciones antes de continuar con tu compra, los puedes encontrar siempre al iniciar IGN Ragnarok Online.";
+			next;
+			mes "[^ff8800Canje de Cash^000000]";
+			mes "La forma gratuita de conseguir Cash Points es votando por el servidor, pero recuerda que las promociones no se aplican en éste caso.";
+			close2;
+			emotion e_no1;
+			end;
+		case 3:
+			emotion e_no1;
+			close;
+	}
+	if (@p == 0) {
+		mes "[^ff8800Canje de Cash^000000]";
+		mes "Lo siento "+strcharinfo(0)+", pero no tienes ningún Cash WEB.";
+		close2;
+		emotion e_sry;
+		end;
+	}
+	query_sql("UPDATE `cp_credits` SET `balance`='0' WHERE `account_id` = '" + getcharid(3) + "'");
+	if(.promocion > 0)
+		set #CASHPOINTS,#CASHPOINTS+(@p*.promocion);
+	else
+		set #CASHPOINTS,#CASHPOINTS+@p;
+	next;
+	mes "Proceso completado, tu nuevo balance es:";
+	if(.promocion > 0)
+		mes "^ff6060Promoción:^000000 Cash x"+.promocion;
+	mes "^5533ffWEB^000000: ^ff6060"+@p+"^000000 Cash.";
+	mes "^cc6600in-game^000000: ^ff6060"+#CASHPOINTS+"^000000 Cash.";
+	close2;
+	emotion e_thx;
+	end;
+OnInit:
+	set .promocion,2; // 2 >= ON | 0 = OFF
+	if(.promocion > 0)
+		waitingroom "Promo Cash X"+.promocion,0;
+	end;
+}

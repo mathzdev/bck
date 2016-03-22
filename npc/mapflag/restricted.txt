@@ -72,6 +72,9 @@ arug_cas05	mapflag	restricted	4
 1@nyd	mapflag	restricted	6
 2@nyd	mapflag	restricted	6
 
+//Jitterbug
+1@jtb	mapflag	restricted	6
+
 //Towns
 alberta	mapflag	restricted	7
 aldebaran	mapflag	restricted	7

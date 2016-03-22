@@ -1,0 +1,554 @@
+//      ______  __    __                                 
+//     /\  _  \/\ \__/\ \                                
+//     \ \ \_\ \ \ ,_\ \ \___      __    ___      __     
+// _____\ \  __ \ \ \/\ \  _ `\  /'__`\/' _ `\  /'__`\   
+///\  __\\ \ \/\ \ \ \_\ \ \ \ \/\  __//\ \/\ \/\ \_\.\_ 
+//\ \_\_/ \ \_\ \_\ \__\\ \_\ \_\ \____\ \_\ \_\ \__/.\_\
+// \/_/    \/_/\/_/\/__/ \/_/\/_/\/____/\/_/\/_/\/__/\/_/
+//
+//========================================================
+// ---              Toy Industry Instance              ---
+//========================================================
+// ---                  by DanielArt                   ---
+//========================================================
+force_4-1	mapflag	nodrop
+force_5-1	mapflag	nodrop
+force_4-1	mapflag	noteleport
+force_5-1	mapflag	noteleport
+force_4-1	mapflag	nosave	SavePoint
+force_5-1	mapflag	nosave	SavePoint
+force_4-1	mapflag	nomemo
+force_5-1	mapflag	nomemo
+force_4-1	mapflag	noicewall
+force_5-1	mapflag	noicewall
+-	script	#hidevariable	-1,{
+OnInit:
+	do {
+		if($toy_dng[0] < 1) {
+			disablenpc "NV1";
+			disablenpc "NV2";
+			disablenpc "#factory001";
+			disablenpc "#factory002";
+			disablenpc "#factory003";
+			disablenpc "#factory004";
+			disablenpc "#factory005";
+			disablenpc "#factory006";
+			disablenpc "#factory007";
+			disablenpc "#factory008";
+			disablenpc "#factory009";
+			disablenpc "#factory010";
+			disablenpc "#factory011";
+			disablenpc "#factory012";
+			disablenpc "#factory013";
+			disablenpc "#factory014";
+			disablenpc "#factory015";
+			disablenpc "#factory016";
+			disablenpc "#factory017";
+			disablenpc "#factory018";
+			disablenpc "#factory019";
+			killmonsterall "force_4-1";
+			killmonsterall "force_5-1";
+			atcommand "@request El Toy Industry dungeon se ha reiniciado.";
+		}
+		sleep 50;
+	} while(1);
+}
+
+// Quest para tener acceso al Dungeon.
+prontera,154,186,4	script	Fantasma de Navidad	950,{
+	if( q_navidad == 7 || instance_fab > 0) {
+		mes "[^cc6600Fantasma de Navidad^000000]";
+		mes "Necesitaras ayuda para rescatar la fabrica de navidad, busca un grupo.";
+		close;
+	}
+	if( q_navidad > 0 ) {
+		mes "[^cc6600Fantasma de Navidad^000000]";
+		mes "Dirigete a la fabrica de juguetes a Lutie para que nos ayudes a salvar la navidad.";
+		close;
+	}
+mes "[^cc6600Fantasma de Navidad^000000]";
+mes "Veo que buscas conocer los secretos del pasado, presente y futuro.";
+next;
+mes "[^cc6600Fantasma de Navidad^000000]";
+mes "Esta navidad esta en peligro, varios espiritus malvados han intentado conquistarla a traves de los años.";
+next;
+mes "[^cc6600Fantasma de Navidad^000000]";
+mes "Este año al parecer lo han conseguido, necesito que me ayudes a liberar el mal que asecha a esta navidad.";
+next;
+mes "[^cc6600Fantasma de Navidad^000000]";
+mes "Por favor busca a un guardian ubicado en la fabrica de juguetes de la ciudad de lutie.";
+close2;
+set q_navidad,1;
+end;
+}
+xmas,94,235,5	script	Director de Juguetes	713,{
+	if( instance_fab ) {
+		mes "[^5533ffDirector de Juguetes^000000]";
+		mes "Habla con el Encargado de la Puerta para que nos ayudes.";
+		close;
+	}
+	switch ( q_navidad ) {
+		case 1:
+			mes "[^5533ffDirector de Juguetes^000000]";
+			mes "Asi que deseas ayudarnos a salvar la navidad, me parece perfecto.";
+			sleep2 1000;
+			mes "Pero...";
+			next;
+			mes "[^5533ffDirector de Juguetes^000000]";
+			mes "Solo puedo permitirte entrar en la fabrica de juguetes si obtienes el permiso de hacerlo de parte del ^ff0000Gerente de la Fabrica^000000.";
+			next;
+			mes "[^5533ffDirector de Juguetes^000000]";
+			mes "Buscalo cuidadosamente en la ciudad.";
+			close2;
+			set q_navidad,2;
+			end;
+		case 2:
+			mes "[^5533ffDirector de Juguetes^000000]";
+			mes "Necesitas el permiso del Gerente de la Fabrica, buscalo en la ciudad.";
+			close;
+		case 3:
+		case 4:
+		case 5:
+		case 6:
+			mes "[^5533ffDirector de Juguetes^000000]";
+			mes "Aun no cuentas con el permiso del presidente.";
+			close;
+		case 7:
+			mes "[^5533ffDirector de Juguetes^000000]";
+			mes "Veo que ya cuentas con el permiso del presidente.";
+			set instance_fab,1;
+			next;
+			mes "[^5533ffDirector de Juguetes^000000]";
+			mes "Bien, he procesado tu registro, ahora ve a hablar con el encargado de la puerta para que logres entrar a la fabrica y nos ayudes con esta catastrofe.";
+			close;
+	}
+mes "[^5533ffDirector de Juguetes^000000]";
+mes "Hay muchos problemas en la fabrica de juguetes, necesitamos a la ayuda de varios valientes guerreros.";
+close;
+}
+xmas_in,105,98,2	script	Gerente de la Fabrica	712,{
+function Contar;
+	switch ( q_navidad ) {
+		case 2:
+			mes "[^008800Gerente de la Fabrica^000000]";
+			mes "Veo que buscas entrar a la fabrica de juguetes, pero lamentablemete no puedo abrirte la puerta.";
+			next;
+			mes "[^777777"+strcharinfo(0)+"^000000]";
+			mes "P-pero... ¿p-por que?";
+			next;
+			mes "[^008800Gerente de la Fabrica^000000]";
+			mes "Hmm...";
+			sleep2 1000;
+			mes "Bien, te abrire la puerta pero solo con una condicion.";
+			next;
+			mes "[^008800Gerente de la Fabrica^000000]";
+			mes "Consigueme 100 Jejellopy y te dejare entrar.";
+			close2;
+			set q_navidad,3;
+			end;
+		case 3:
+			if(Contar(6498,100,q_navidad) == 1) set q_navidad,4;
+			if(q_navidad != 4) break;
+		case 4:
+			mes "[^008800Gerente de la Fabrica^000000]";
+			mes "Bien hecho "+strcharinfo(0);
+			next;
+			mes "[^008800Gerente de la Fabrica^000000]";
+			mes "Pero no se si seas el indicado para entrar a la fabrica...";
+			next;
+			mes "[^008800Gerente de la Fabrica^000000]";
+			mes "Lo tengo!";
+			emotion e_no1;
+			sleep2 1000;
+			mes "Si me consigues una ^5533ffGemstone^000000 te dejare entrar a la Fabrica.";
+			close2;
+			set q_navidad,5;
+			end;
+		case 5:
+			if(Contar(7300,1,q_navidad) == 1) set q_navidad,6;
+			if(q_navidad != 6) break;
+		case 6:
+			mes "[^008800Gerente de la Fabrica^000000]";
+			mes "Has hecho un excelente trabajo.";
+			next;
+			mes "[^008800Gerente de la Fabrica^000000]";
+			mes "Muy bien, ahora tienes ^5533ffautorizacion de entrar^000000 a la fabrica de juguetes.";
+			close2;
+			set q_navidad,7;
+			end;
+		case 7:
+			mes "[^008800Gerente de la Fabrica^000000]";
+			mes "Bien, ahora vuelve con el Director de la Fábrica para que puedas accesar a la instance.";
+			close;
+	}
+mes "[^008800Gerente de la Fabrica^000000]";
+mes "La fabrica de navidad se encuentra en grandes aprietos, pero prefiero que la navidad se arruine a que alguien a quien no tenga confianza entre.";
+close;
+	function	Contar	{
+		switch (getarg(2)) {
+			case 3:
+			case 5:
+				if(countitem(getarg(0)) >= getarg(1)) {
+					delitem getarg(0),getarg(1);
+					getexp 250000,250000;
+					return 1;
+				}
+				mes "[^008800Gerente de la Fabrica^000000]";
+				mes "No cuentas con los ^5533ff"+getitemname(getarg(0))+"^000000 suficientes.";
+				close2;
+				emotion e_sry;
+				end;
+		}
+	}
+end;
+}
+
+// Registro de party.
+xmas,95,230,5	script	Encargado de la Puerta::edp	710,{
+function Instance;
+	if(tick_toy == 1) {
+		mes "[^cc6600Encargado de la Puerta^000000]";
+		mes "Por el momento no te necesitamos, vuelve despues.",
+		close;
+	}
+	if(!instance_fab) {
+		mes "[^cc6600Encargado de la Puerta^000000]";
+		mes "No tienes el permiso de entrar a la Fabrica de Juguetes.";
+		close;
+	} else {
+		mes "[^cc6600Encargado de la Puerta^000000]";
+		mes "Bienvenid"+(Sex?"o":"a")+" a la Fabrica de Juguetes";
+		next;
+		mes "[^cc6600Encargado de la Puerta^000000]";
+		mes "Esperamos tu ayuda para lograr salvar la navidad, ¿listo para entrar?";
+		next;
+			if(select("Si, sigamos","No deseo continuar") == 2) close;
+				Instance(getcharid(1),getpartyleader(getcharid(1),1),getpartyname(getcharid(1)),rid2name(getpartyleader(getcharid(1),1)),"Toy Industry Dungeon",getpartymember(getcharid(1),$@partymembercount),3,0);
+	}
+OnWhisperGlobal:
+function Instance;
+	if(getgmlevel() >= 80) {
+		mes "[^cc6600Encargado de la Puerta^000000]";
+		mes "Bienvenido GM "+strcharinfo(0);
+		mes "Por este menú usted podrá evitar el número de miembros en party.";
+			switch (select("Continuar:Letrero:Reiniciar variables")) {
+				case 1:
+					Instance(getcharid(1),getpartyleader(getcharid(1),1),getpartyname(getcharid(1)),rid2name(getpartyleader(getcharid(1),1)),"Toy Industry Dungeon",getpartymember(getcharid(1),$@partymembercount),1,1);
+				case 2:
+					waitingroom "Toy Industry",0;
+					close;
+				case 3:
+					deletearray $toy_dng[0],getarraysize($toy_dng);
+					announce "El ["+getarg(4)+"] ha quedado nuevamente abierto por un Game Master.",bc_all,"0x00ff99";
+					close;
+			}
+	}
+end;
+OnInit:
+waitingroom "Toy Industry",0;
+end;
+	function	Instance	{
+			if(getarg(5) < getarg(6)){
+				mes "[^cc6600Encargado de la Puerta^000000]";
+				mes "Lo siento, pero el grupo no cuenta con los requerimientos mínimos para accesar al instance, necesitas "+getarg(6)+" o mas miembros en tu equipo.";
+				close;
+			}
+			if (getarg(1) == getcharid(3)) {
+				if($toy_dng[0] == 1 && $toy_dng[1] == getarg(0)) {
+					mes "[^cc6600Encargado de la Puerta^000000]";
+					mes "Toda tu party puede ingresar al Memorial Dungeon.";
+					next;
+					switch(select("Entrar al Dungeon:^777777Cancelar^000000")) {
+						case 1:
+							if ($toy_dng[2] == 1) {
+								warp "force_4-1",100,12;
+								announce "La party [" + getarg(2) + "] ha entrado al ["+getarg(4)+"].",bc_all,"0x00ff99";
+								setarray $toy_dng[2],0;
+								close;
+							} else if (getmapusers("force_4-1")  < 1 && getmapusers("force_5-1")  < 1) {
+								mes "[^cc6600Encargado de la Puerta^000000]";
+								mes "Lo siento pero si todos han muerto o salido del Instance este se reiniciará.";
+								deletearray $toy_dng[0],getarraysize($toy_dng);
+								announce "El ["+getarg(4)+"] ha quedado nuevamente abierto.",bc_all,"0x00ff99";
+								close;
+							}
+							mapannounce "xmas","[" + strcharinfo(0) + "] ha entrado al ["+getarg(4)+"].",bc_map,"0x00ff99";
+							warp "force_4-1",100,12;
+							close;
+						case 2:
+							close;
+					}
+				}
+				mes "[^cc6600Encargado de la Puerta^000000]";
+				mes "Estado de la party confirmado. ¿Deseas crear la instance ^ff8800"+getarg(4)+"^000000?";
+				next;
+				switch(select("Reservar el "+getarg(4)+":Entrar al Dungeon:^777777Cancelar^000000")) {
+					case 1:
+						if(getmapusers("force_4-1") < 1 && getmapusers("force_5-1")  < 1) {
+							setarray $toy_dng[0],0,0;
+						}
+						if ($toy_dng[0] == 1) {
+							mes "Nombre de Party: "+getarg(2)+"";
+							mes "Lider de Party: "+getarg(3)+"";
+							mes "^ff8800"+getarg(4)+" ^000000 - Reservación fallida.";
+							close;
+						} else {
+							mes "[^cc6600Encargado de la Puerta^000000]";
+							mes "^ff8800"+getarg(4)+"^000000- Creando reservación.";
+							mes "Después de crear la reservación utiliza la opción 'Entrar al Dungeon' para poder entrar al "+getarg(4)+".";
+							setarray $toy_dng[0],1,getarg(0),1;
+							enablenpc "NV1";
+							close;
+						}
+					case 2:
+						if ($toy_dng[0] < 1) {
+							mes "[^cc6600Encargado de la Puerta^000000]";
+							mes "Memorial Dungeon ^ff8800"+getarg(4)+"^000000 no existe.";
+							mes "Tu lider de party no ha reservado el dungeon.";
+							next;
+							mes "[^cc6600Encargado de la Puerta^000000]";
+							mes "Cuando la reservación se haya completado, la entrada será abierta.";
+							close;
+						}
+						if ($toy_dng[1] != getarg(0)) {
+							mes "[^cc6600Encargado de la Puerta^000000]";
+							mes "Tu party no está registrada para accesar a este dungeon.";
+							close;
+						}
+						if($toy_dng[0] == 1 && $toy_dng[1] == getarg(0)) {
+							if (getmapusers("force_4-1")  < 1 && getmapusers("force_5-1")  < 1) {
+								mes "[^cc6600Encargado de la Puerta^000000]";
+								mes "Lo siento pero si todos han muerto o salido del Instance este se reiniciará.";
+								deletearray $toy_dng[0],getarraysize($toy_dng);
+								announce "El ["+getarg(4)+"] ha quedado nuevamente abierto.",bc_all,"0x00ff99";
+								close;
+							}
+							announce "La party [" + getarg(2) + "] ha entrado al ["+getarg(4)+"].",bc_all,"0x00ff99";
+							warp "force_4-1",100,12;
+							end;
+						}
+					case 3:
+						close;
+				}
+			}
+			switch(select("Entrar a "+getarg(4)+":Cancelar")) {
+			next;
+				case 1:
+						if ($toy_dng[0] < 1) {
+							mes "[^cc6600Encargado de la Puerta^000000]";
+							mes "Memorial Dungeon ^ff8800"+getarg(4)+"^000000 no existe.";
+							mes "Tu lider de party no ha reservado el dungeon.";
+							next;
+							mes "[^cc6600Encargado de la Puerta^000000]";
+							mes "Cuando la reservación se haya completado, la entrada será abierta.";
+							close;
+						}
+						if ($toy_dng[1] != getarg(0)) {
+							mes "[^cc6600Encargado de la Puerta^000000]";
+							mes "Tu party no está registrada para accesar a este dungeon.";
+							close;
+						} else if($toy_dng[0] == 1 && $toy_dng[1] == getarg(0)) {
+							if (getmapusers("force_4-1")  < 1 && getmapusers("force_5-1")  < 1) {
+								mes "[^cc6600Encargado de la Puerta^000000]";
+								mes "Lo siento pero si todos han muerto o salido del Instance este se reiniciará.";
+								deletearray $toy_dng[0],getarraysize($toy_dng);
+								announce "El ["+getarg(4)+"] ha quedado nuevamente abierto.",bc_all,"0x00ff99";
+								close;
+							}
+							mapannounce "xmas","[" + strcharinfo(0) + "] ha entrado al ["+getarg(4)+"].",bc_map,"0x00ff99";
+							warp "force_4-1",100,12;
+							end;
+						}
+				case 2:
+					close;
+			}
+
+		mes "[^cc6600Encargado de la Puerta^000000]";
+		mes "Para poder generar el Memorial Dungeon tu party debe contener al menos ^ff0000"+getarg(6)+"^000000 miembros.";
+		close;
+	}
+end;
+}
+
+// Comienzo de la instance.
+force_4-1,108,32,4	script	Papa Noel::NV1	718,{
+mes "[^ff0000Papa Noel^000000]";
+mes "Ho ho! ~";
+sleep2 1000;
+mes "Veo que me has venido a ayudar a salvar la navidad, me alegra mucho.";
+next;
+mes "[^ff0000Papa Noel^000000]";
+mes "Lamentablemente los espiritus malignos se han escondido y no quieren salir...";
+emotion e_sob;
+next;
+mes "[^ff0000Papa Noel^000000]";
+mes "Pense en seguir con la fabricacion de juguetes aun cuando no estaban los espiritus, pero...";
+next;
+mes "[^ff0000Papa Noel^000000]";
+mes "Aun cuando estan escondidos no me dejan fabricar nada, aparecen al instante...";
+next;
+mes "[^777777"+strcharinfo(0)+"^000000]";
+mes "¿No puedes fabricar algo para que salgan y derrotarlos?";
+sleep2 2000;
+next;
+mes "[^ff0000Papa Noel^000000]";
+mes "No puedo, mis materiales de construccion se han acabado y no puedo seguir con la fabricacion de juguetes.";
+emotion e_shy;
+next;
+mes "[^ff0000Papa Noel^000000]";
+mes "Se que lo principal seria derrotar a los espiritus malignos pero sin fabricacion de juguetes, dudo que quieran salir.";
+next;
+mes "[^ff0000Papa Noel^000000]";
+mes "Tengo una idea...";
+emotion e_no1;
+sleep2 1500;
+mes "Si caminas un poco por los alrededores descubriras a varios monstruos de los cuales puedes obtener los ingredientes.";
+next;
+mes "[^ff0000Papa Noel^000000]";
+mes "Elimina, destruye, pulveriza, masacra y sodomiza a todos los monstruos de la fabrica, confio totalmente en ti.";
+close2;
+	if(getmapusers("force_4-1") >= 3 && rid2name(getpartyleader(getcharid(1),1)) == strcharinfo(0)) {
+		setarray $toy_dng[3],1;
+		monster "force_4-1",100,31,"Marin",1242,150,"#factory::On1242Dead";
+		emotion e_thx;
+		disablenpc "NV1";
+		end;
+	}
+end;
+OnInit:
+disablenpc "NV1";
+end;
+}
+
+force_5-1,100,123,4	script	Fantasma::NV2	2255,{
+mes "[ ^cc6600Fantasma^000000 ]";
+mes "Asi que deseas salvar la navidad, me has derrotado pero esto no es todo.";
+next;
+mes "[ ^cc6600Fantasma^000000 ]";
+mes "Volvere un dia de estos con aun mas poder, y entonces no me podran detener, ve preparandote.";
+next;
+mes "[ ^cc6600Fantasma^000000 ]";
+mes "Te esperare con ansias.";
+close2;
+	if(rid2name(getpartyleader(getcharid(1),1)) == strcharinfo(0)) {
+		announce "El [Toy Factory] ha sido conquistado por ["+strcharinfo(0)+"] y su grupo.",bc_all,"0x00ff99";
+	}
+		if(fact_item == 1) {
+			set fact_item,1;
+			getitem 5486,1;
+			sleep2 1000;
+			getitem 7360,75;
+			sleep2 1000;
+			getexp 500000,500000;
+		}
+		getexp 200000,200000;
+		getitem 7360,30;
+		sleep2 1000;
+		warp "xmas",95,237;
+		set tick_toy,1;
+		sleep2 259000000;
+		set tick_toy,0;
+		end;
+OnInit:
+disablenpc "NV2";
+end;
+}
+		
+// Sistema de Spawn de Mobs.
+-	script	#factory	-1,{
+On1242Dead: callsub S_Factory,5,1242,150,173,25,1243,100,4,1;
+On1243Dead: callsub S_Factory,6,1243,100,174,105,1244,100,4,2;
+On1244Dead: callsub S_Factory,7,1244,100,173,175,1245,125,4,3;
+On1245Dead: callsub S_Factory,8,1245,125,105,176,1246,110,4,4;
+On1246Dead: callsub S_Factory,9,1246,110,26,174,1248,50,4,5;
+On1248Dead: callsub S_Factory,10,1248,50,27,104,1062,200,4,6;
+On1062Dead: callsub S_Factory,11,1062,200,25,25,1249,200,4,7;
+On1249Dead: callsub S_Factory,12,1249,200,100,100,2317,1,4,8;
+On2317Dead: callsub S_Factory,13,2317,1,99,47,2201,50,6,10;
+On2201Dead: callsub S_Factory,14,2201,50,173,25,2204,70,5,11;
+On2204Dead: callsub S_Factory,15,2204,70,174,105,2208,85,5,12;
+On2208Dead: callsub S_Factory,16,2208,85,173,175,1991,1,5,13;
+On1991Dead: callsub S_Factory,17,1991,1,105,176,1992,60,5,14;
+On1992Dead: callsub S_Factory,18,1992,60,126,174,2013,75,5,16;
+On2013Dead: callsub S_Factory,19,2013,75,27,104,1764,20,5,15;
+On1764Dead: callsub S_Factory,21,1764,20,25,25,2018,30,5,17;
+On2018Dead: callsub S_Factory,22,2018,30,100,100,2255,1,5,19;
+On2255Dead: enablenpc "NV2"; end;
+S_Factory:
+	if(!$toy_dng[3]) end;
+	setarray $toy_dng[getarg(0)],$toy_dng[getarg(0)] + 1;
+	if(getarg(7) == 6) { set .@a,4; set .@b,5; } else { set .@a,getarg(7); set .@b,getarg(7); }
+	mapannounce "force_"+.@a+"-1",getmonsterinfo(getarg(1),MOB_NAME)+" [ "+$toy_dng[getarg(0)]+" / "+getarg(2)+" ]",bc_map,0x3ADF00,FW_BOLD,14;
+		if($toy_dng[getarg(0)] >= getarg(2)) {
+			mapannounce "force_"+.@a+"-1",getmonsterinfo(getarg(1),MOB_NAME)+" eliminados.",bc_map,0x3ADF00,FW_BOLD,14;
+			monster "force_"+.@b+"-1",getarg(3),getarg(4),getmonsterinfo(getarg(5),MOB_NAME),getarg(5),getarg(6),"#factory::On"+getarg(5)+"Dead";
+			if(getarg(8) == 8) enablenpc "#factory009";
+			if(getarg(8) == 17) enablenpc "#factory018";
+			if(getarg(8) < 10) enablenpc "#factory00"+getarg(8);
+			enablenpc "#factory0"+getarg(8);
+			end;
+		}
+	end;
+}
+
+// Warps.
+force_4-1,136,26,0	script	#factory001	45,1,1,{ OnTouch: warp "force_4-1",155,25; end; OnInit: disablenpc "#factory001"; end; }
+force_4-1,173,44,0	script	#factory002	45,1,1,{ OnTouch: warp "force_4-1",173,65; end; OnInit: disablenpc "#factory002"; end; }
+force_4-1,173,134,0	script	#factory003	45,1,1,{ OnTouch: warp "force_4-1",173,155; end; OnInit: disablenpc "#factory003"; end; }
+force_4-1,155,173,0	script	#factory004	45,1,1,{ OnTouch: setarray $toy_dng[23],1; warp "force_4-1",134,173; end; OnInit: disablenpc "#factory004"; end; }
+force_4-1,65,173,0	script	#factory005	45,1,1,{ OnTouch: warp "force_4-1",44,173; end; OnInit: disablenpc "#factory005"; end; }
+force_4-1,27,155,0	script	#factory006	45,1,1,{ OnTouch: warp "force_4-1",26,134; end; OnInit: disablenpc "#factory006"; end; }
+force_4-1,26,65,0	script	#factory007	45,1,1,{ OnTouch: warp "force_4-1",26,44; end; OnInit: disablenpc "#factory007"; end; }
+force_4-1,44,25,0	script	#factory008	45,1,1,{ OnTouch: setarray $toy_dng[24],1; warp "force_4-1",63,26; end; OnInit: disablenpc "#factory008"; end; }
+force_4-1,99,54,0	script	#factory009	45,1,1,{ OnTouch: warp "force_4-1",100,81; end; OnInit: disablenpc "#factory009"; end; }
+force_4-1,100,125,0	script	#factory010	45,1,1,{ OnTouch: warp "force_5-1",100,12; end; OnInit: disablenpc "#factory010"; end; }
+force_5-1,136,26,0	script	#factory011	45,1,1,{ OnTouch: warp "force_5-1",155,25; end; OnInit: disablenpc "#factory011"; end; }
+force_5-1,173,44,0	script	#factory012	45,1,1,{ OnTouch: warp "force_5-1",173,65; end; OnInit: disablenpc "#factory012"; end; }
+force_5-1,173,134,0	script	#factory013	45,1,1,{ OnTouch: setarray $toy_dng[25],1; warp "force_5-1",173,155; end; OnInit: disablenpc "#factory013"; end; }
+force_5-1,155,173,0	script	#factory014	45,1,1,{ OnTouch: warp "force_5-1",134,173; end; OnInit: disablenpc "#factory014"; end; }
+force_5-1,65,173,0	script	#factory015	45,1,1,{ OnTouch: warp "force_5-1",44,173; end; OnInit: disablenpc "#factory015"; end; }
+force_5-1,27,155,0	script	#factory016	45,1,1,{ OnTouch: warp "force_5-1",26,134; end; OnInit: disablenpc "#factory016"; end; }
+force_5-1,26,65,0	script	#factory017	45,1,1,{ OnTouch: warp "force_5-1",26,44; end; OnInit: disablenpc "#factory017"; end; }
+force_5-1,44,25,0	script	#factory018	45,1,1,{ OnTouch: warp "force_5-1",63,26; end; OnInit: disablenpc "#factory018"; end; }
+force_5-1,99,54,0	script	#factory019	45,1,1,{ OnTouch: warp "force_5-1",100,81; end; OnInit: disablenpc "#factory019"; end; }
+
+// Atajo para los pisos.
+force_4-1,106,17,4	script	Flama Navideña	802,{
+function Transporte;
+mes "[ ^cc6600Flama Navideña^000000 ]";
+mes "El espiritu de la navidad te ayudara en tu travesia.";
+next;
+mes "[ ^cc6600Flama Navideña^000000 ]";
+mes "Selecciona la estacion a la que deseas ir.";
+next;
+	switch (select("^ff6060Salir^000000:^"+($toy_dng[23]?"5533ff":"E6E6E6")+"Estacion 5^000000:^"+($toy_dng[24]?"5533ff":"E6E6E6")+"Estacion 9^000000:^"+($toy_dng[25]?"5533ff":"E6E6E6")+"Estacion 14^000000")) {
+		case 1: close;
+		case 2: Transporte(23,44,173,4);
+		case 3: Transporte(24,63,26,4);
+		case 4: Transporte(25,173,155,5);
+	}
+	function	Transporte	{
+		if($toy_dng[getarg(0)]) {
+			warp "force_"+getarg(4)+"-1",getarg(1),getarg(2);
+			close;
+		}
+	}
+	mes "[ ^cc6600Flama Navideña^000000 ]";
+	mes "Tu grupo no ha llegado a ese nivel.";
+	close;
+end;
+}
+force_5-1,25,174,4	script	Niño extraviado	716,{
+mes "[^cc6600Niño extraviado^000000]";
+mes "Bwaa *sob*";
+emotion e_sob;
+sleep2 1000;
+mes "Por fin me han encontrado.";
+next;
+mes "[^cc6600Niño extraviado^000000]";
+mes "Gracias por tu ayuda *sob*";
+if(ninoexp) close;
+getexp 300000,150000;
+set ninoexp,1;
+close;
+}

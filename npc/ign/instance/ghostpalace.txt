@@ -1,0 +1,1081 @@
+//===== rAthena Script ======================================= 
+//= Ghost Palace
+//===== By: ================================================== 
+//= DanielArt
+//===== Current Version: ===================================== 
+//= 1.0
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Based on iRO Video.
+//===== Additional Comments: ================================= 
+//= 1.0 First version. [DanielArt]
+//============================================================ 
+
+// Instance Creation :: tnm
+//============================================================
+dali02,43,93,5	script	Unpleasent Royal Guard::gp_ent	686,{
+	if(BaseLevel < 120) {
+		mes "[Unpleasent Royal Guard]";
+		mes "Disculpa, pero no puedes entrar si no eres Nv. 120.";
+		close;
+	}
+	if(getgroupid() > 1)	
+		goto doit;
+		set .@ghostptime,checkquest(13997,PLAYTIME); //20 Horas
+			if (.@ghostptime == 2) {
+				mes "[Unpleasent Royal Guard]";
+				mes "Los monstruos alrededor del pasaje secreto han desaparecido, ahora es el momento para que entres.";
+				close2;
+				erasequest 13997;
+				end;
+			}
+			else  if ((.@ghostptime == 1) || (.@ghostptime == 0)) {
+				mes "[Unpleasent Royal Guard]";
+				mes "^ff0000¡Espera!, los monstruos han vuelto a llegar, vuelve después.^000000";
+				close;
+			}
+			else if (.@ghostptime == -1) {
+				doit:
+				set .@party_id,getcharid(1);
+				set .@p_name$,getpartyname(.@party_id);
+				set .@md_name$,"Ghost Palace";
+				
+				if (!instance_check_party(.@party_id,1)) {
+					mes "[Unpleasent Royal Guard]";
+					mes "No hay miembros suficientes.";
+					close;
+				}
+				mes "[Unpleasent Royal Guard]";
+				mes "Necesito ayuda de gente como tú.";
+				next;
+				mes "[Unpleasent Royal Guard]";
+				mes "En medio de la batalla la princesa desapareció mientras estaba vigilando el castillo.";
+				next;
+				mes "[Unpleasent Royal Guard]";
+				mes "Necesito que te apresures y la encuentres. Debemos de salvarla.";
+				next;
+				if (getcharid(0) == getpartyleader(.@party_id,2))
+					set .@menu$, "Inscribir Party.:Ghost Palace.:Salir";
+				else
+				set .@menu$, ":Ghost Palace.";
+				switch(select(.@menu$)) 
+				{
+				case 1:
+					if (instance_create(.@md_name$) < 0) {
+						mes "[Unpleasent Royal Guard]";
+						mes "Nombre de Party: "+.@p_name$;
+						mes "Tú nombre: "+strcharinfo(0);
+						mes "^0000ff"+.@md_name$+" ^000000- no se puede crear!";
+						close;
+					}
+					mes "[Unpleasent Royal Guard]";
+					mes "Gracias por tu ayuda, confío en ustedes.";
+					close;
+				case 2:
+					switch(instance_enter(.@md_name$))
+					{
+						case 0:
+							if (getcharid(0) == getpartyleader(.@party_id,2)) {
+								mapannounce "dali02",strcharinfo(0)+", member of the party "+.@p_name$+" entered the instance "+.@md_name$+".",bc_map,"0x00ff99";
+								setquest 13997;
+								specialeffect2 EF_WARP;
+								//warp "1@spa",42,196;
+								end;
+							}
+						//custom @ official server kRO simple when click nothing happens.
+						case 1:
+							mes "[Unpleasent Royal Guard]";
+							mes "Only the registered members can enter the instance "+.@md_name$+".";
+							close;
+						case 2:
+							mes "[Unpleasent Royal Guard]";
+							mes "The memorial dungeon "+.@md_name$+" does not exist.";
+							mes "The party leader did not generate the dungeon yet.";
+							close;
+						case 3:
+							mes "[Unpleasent Royal Guard]";
+							mes "Unknown Error...!";
+							close;
+					}
+				case 3:
+					close;	
+				}
+			}
+}
+// Primera Escena: La conversación con el rey y la invasión.
+//============================================================
+1@spa,42,201,1	script	Royal Guard#spa01	686,{
+end;
+OnChat1:
+	npctalk "Protegeré a la princesa con mi vida.";
+	end;
+OnChat2:
+	npctalk "Si, su majestad.";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Royal Guard#spa01")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Royal Guard#spa01");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Royal Guard#spa01");
+	end;
+}
+1@spa,41,204,5	script	King#spa01	965,{
+	if (getcharid(0) == getpartyleader(getcharid(1),2))
+		donpcevent instance_npcname("King#spa01")+"::OnConversation";
+	end;
+OnConversation:
+	npctalk "Has sido concedido con el honor de ser el guardia personal de la Princesa Tiara. Confío en que tu lealtad seguirá no importa qué.";
+	sleep2 2500;
+	donpcevent instance_npcname("Royal Guard#spa01")+"::OnChat1";
+	sleep2 2500;
+	npctalk "Los arreglos para el matrimonio van según lo planeado. El príncipe está aquí para encontrarse y conocer a la princesa.";
+	sleep2 2500;
+	donpcevent instance_npcname("Royal Guard#spa01")+"::OnChat2";
+	sleep2 2500;
+	npctalk "Mis dioses, ¡hay monstruos en el castillo!, ¡acaba con ellos en éste momento!";
+	sleep2 2500;
+	donpcevent instance_npcname("#spawn1")+"::OnEnable";
+	donpcevent instance_npcname("Royal Guard#spa01")+"::OnDisable";
+	donpcevent instance_npcname("King#spa01")+"::OnDisable";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("King#spa01")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("King#spa01");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("King#spa01");
+	end;
+}
+1@spa,42,196,0	script	#spawn1	139,3,3,{
+end;
+OnTouch:
+	donpcevent instance_npcname("#spawn1-1")+"::OnEnable";
+	donpcevent instance_npcname("#spawn1")+"::OnDisable";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#spawn1")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#spawn1");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("#spawn1");
+	end;
+}
+1@spa,0,0,0	script	#spawn1-1	139,{
+end;
+OnMyMobDead:
+	if(rand(1,10) < 6)
+		getitem 6672,1;
+	set .@m$,instance_mapname("1@spa");
+	if(mobcount(.@m$,instance_npcname("#spawn1-1")+"::OnMyMobDead") < 1) {
+		donpcevent instance_npcname("#spawn2")+"::OnEnable";
+		end;
+	}
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#spawn1-1")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#spawn1-1");
+	set .@m$,instance_mapname("1@spa");
+	monster .@m$,43,196,"Bloody Murderer",1507,1,instance_npcname("#spawn1-1")+"::OnMyMobDead";
+	monster .@m$,45,196,"Ragged Zombie",1865,1,instance_npcname("#spawn1-1")+"::OnMyMobDead";
+	end;
+OnDisable:
+	disablenpc instance_npcname("#spawn1-1");
+	end;
+}
+1@spa,42,183,0	script	#spawn2	139,3,3,{
+end;
+OnTouch:
+	donpcevent instance_npcname("#spawn2-1")+"::OnEnable";
+	donpcevent instance_npcname("#spawn2")+"::OnDisable";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#spawn2")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#spawn2");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("#spawn2");
+	end;
+}
+1@spa,0,0,0	script	#spawn2-1	139,{
+end;
+OnMyMobDead:
+	if(rand(1,10) < 6)
+		getitem 6672,1;
+	set .@m$,instance_mapname("1@spa");
+	if(mobcount(.@m$,instance_npcname("#spawn2-1")+"::OnMyMobDead") < 1) {
+		donpcevent instance_npcname("#spawn3")+"::OnEnable";
+	}
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#spawn2-1")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#spawn2-1");
+	set .@m$,instance_mapname("1@spa");
+	monster .@m$,42,183,"Bloody Murderer",1507,2,instance_npcname("#spawn2-1")+"::OnMyMobDead";
+	monster .@m$,42,183,"Ragged Zombie",1865,2,instance_npcname("#spawn2-1")+"::OnMyMobDead";
+	end;
+OnDisable:
+	disablenpc instance_npcname("#spawn2-1");
+	end;
+}
+1@spa,42,196,0	script	#spawn3	139,3,3,{
+end;
+OnTouch:
+	donpcevent instance_npcname("#spawn3-1")+"::OnEnable";
+	donpcevent instance_npcname("#spawn3")+"::OnDisable";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#spawn3")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#spawn3");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("#spawn3");
+	end;
+}
+1@spa,0,0,0	script	#spawn3-1	139,{
+end;
+OnMyMobDead:
+	if(rand(1,10) < 6)
+		getitem 6672,1;
+	set .@m$,instance_mapname("1@spa");
+	if(mobcount(.@m$,instance_npcname("#spawn3-1")+"::OnMyMobDead") < 1) {
+		monster .@m$,32,203,"Bloody Murderer",1507,3,instance_npcname("#spawn3-1")+"::OnMyMobDead2";
+		monster .@m$,50,201,"Ragged Zombie",1865,3,instance_npcname("#spawn3-1")+"::OnMyMobDead2";
+	}
+	end;
+OnMyMobDead2:
+	if(rand(1,10) < 6)
+		getitem 6672,1;
+	set .@m$,instance_mapname("1@spa");
+	if(mobcount(.@m$,instance_npcname("#spawn3-1")+"::OnMyMobDead2") < 1) {
+		donpcevent instance_npcname("#spawrp1")+"::OnEnable";
+	}
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#spawn3-1")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#spawn3-1");
+	set .@m$,instance_mapname("1@spa");
+	monster .@m$,32,203,"Bloody Murderer",1507,3,instance_npcname("#spawn3-1")+"::OnMyMobDead";
+	monster .@m$,50,201,"Ragged Zombie",1865,3,instance_npcname("#spawn3-1")+"::OnMyMobDead";
+	end;
+OnDisable:
+	disablenpc instance_npcname("#spawn3-1");
+	end;
+}
+1@spa,41,217,0	script	#spawrp1	45,1,1,{
+end;
+OnTouch:
+	set .@m$,instance_mapname("1@spa");
+	warp .@m$,119,103;
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#spawrp1")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#spawrp1");
+	end;
+OnDisable:
+	disablenpc instance_npcname("#spawrp1");
+	end;	
+}
+// Segunda Escena: La Princesa Tiara.
+//============================================================
+1@spa,132,122,1	script	#ttalk1	139,3,3,{
+OnTouch:
+	if (getcharid(0) == getpartyleader(getcharid(1),2)) {
+		donpcevent instance_npcname("Royal Guard#spa02")+"::OnConversation";
+		donpcevent instance_npcname("#ttalk1")+"::OnDisable";
+	}
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#ttalk1")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#ttalk1");
+	end;
+OnDisable:
+	disablenpc instance_npcname("#ttalk1");
+	end;
+}
+1@spa,132,122,1	script	Royal Guard#spa02	686,{
+end;
+OnConversation:
+	npctalk "Su majestad, el Rey ha invitado a un principe de un rey vecino a convertirse en su esposo. Prepárese para conocerlo...";
+	sleep2 2500;
+	donpcevent instance_npcname("Princess Tiara#spa01")+"::OnChat1";
+	sleep2 2500;
+	npctalk "La única cosa que yo puedo hacer es protejerla del peligro de daño físico.";
+	sleep2 2500;
+	donpcevent instance_npcname("Princess Tiara#spa01")+"::OnChat2";
+	sleep2 2500;
+	npctalk "Usted debe decidir eso por su propia cuenta, majestad.";
+	sleep2 2500;
+	donpcevent instance_npcname("Princess Tiara#spa01")+"::OnChat3";
+	sleep2 2500;
+	npctalk "Aún así estaré contigo y te protegeré por siempre.";
+	sleep2 2500;
+	donpcevent instance_npcname("Princess Tiara#spa01")+"::OnChat4";
+	sleep2 2500;
+	npctalk "Manténgase atrás. ¡Vamos!";
+	sleep2 2500;
+	donpcevent instance_npcname("#spawn4")+"::OnEnable";
+	donpcevent instance_npcname("Royal Guard#spa02")+"::OnDisable";
+	donpcevent instance_npcname("Princess Tiara#spa01")+"::OnDisable";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Royal Guard#spa02")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Royal Guard#spa02");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Royal Guard#spa02");
+	end;
+}
+1@spa,135,125,4	script	Princess Tiara#spa01	640,{
+end;
+OnChat1:
+	npctalk "Si... si es un matrimonio arreglado ¿qué se supone que haga?";
+	end;
+OnChat2:
+	npctalk "Entonces ¿qué puedo hacer?";
+	end;
+OnChat3:
+	npctalk "¿Sería más facil para tí que me casara y me enviaran a otro lugar?";
+	end;
+OnChat4:
+	npctalk "¡¿Monstruos en el castillo?!, ¡protégeme!";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Princess Tiara#spa01")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Princess Tiara#spa01");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Princess Tiara#spa01");
+	end;
+}
+1@spa,129,121,0	script	#spawn4	139,5,5,{
+end;
+OnTouch:
+	donpcevent instance_npcname("#spawn4-1")+"::OnEnable";
+	donpcevent instance_npcname("#spawn4")+"::OnDisable";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#spawn4")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#spawn4");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("#spawn4");
+	end;
+}
+1@spa,0,0,0	script	#spawn4-1	139,{
+end;
+OnMyMobDead:
+	if(rand(1,10) < 6)
+		getitem 6672,1;
+	set .@m$,instance_mapname("1@spa");
+	if(mobcount(.@m$,instance_npcname("#spawn4-1")+"::OnMyMobDead") < 1) {
+		donpcevent instance_npcname("#spawrp2")+"::OnEnable";
+		end;
+	}
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#spawn4-1")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#spawn4-1");
+	set .@m$,instance_mapname("1@spa");
+	areamonster .@m$,108,129,125,111,"Dark Frame",1260,6,instance_npcname("#spawn4-1")+"::OnMyMobDead";
+	areamonster .@m$,108,129,125,111,"Flame Skull",1869,6,instance_npcname("#spawn4-1")+"::OnMyMobDead";
+	areamonster .@m$,108,129,125,111,"Wind Ghost",1263,5,instance_npcname("#spawn4-1")+"::OnMyMobDead";
+	end;
+OnDisable:
+	disablenpc instance_npcname("#spawn4-1");
+	end;
+}
+1@spa,117,137,0	script	#spawrp2	45,1,1,{
+end;
+OnTouch:
+	set .@m$,instance_mapname("1@spa");
+	warp .@m$,61,42;
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#spawrp2")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#spawrp2");
+	end;
+OnDisable:
+	disablenpc instance_npcname("#spawrp2");
+	end;	
+}
+// Tercera Escena: La Prisión.
+//============================================================
+1@spa,30,58,0	script	#ttalk2	139,4,4,{
+OnTouch:
+	if (getcharid(0) == getpartyleader(getcharid(1),2)) {
+		donpcevent instance_npcname("Royal Guard#spa03")+"::OnConversation";
+		donpcevent instance_npcname("#ttalk2")+"::OnDisable";
+	}
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#ttalk2")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#ttalk2");
+	end;
+OnDisable:
+	disablenpc instance_npcname("#ttalk2");
+	end;
+}
+1@spa,30,58,5	script	Royal Guard#spa03	10018,{
+end;
+OnConversation:
+	donpcevent instance_npcname("King#spa02")+"::OnChat1";
+	sleep2 2500;
+	npctalk "¡Es una trampa, debe de confiar en mí, su majestad!";
+	sleep2 2500;
+	donpcevent instance_npcname("King#spa02")+"::OnChat2";
+	sleep2 2500;
+	donpcevent instance_npcname("King#spa02")+"::OnChat3";
+	sleep2 2500;
+	donpcevent instance_npcname("King#spa02")+"::OnDisable";
+	sleep2 500;
+	donpcevent instance_npcname("Prince#spa01")+"::OnDisable";
+	donpcevent instance_npcname("Guard#spa01")+"::OnDisable";
+	donpcevent instance_npcname("Guard#spa02")+"::OnDisable";
+	donpcevent instance_npcname("Guard#spa03")+"::OnDisable";
+	sleep2 1000;
+	instance_announce instance_id(),"¡Oh!, pobre guardia real, estás atrapado.",bc_map;
+	sleep2 2500;
+	instance_announce instance_id(),"La conspiración en el castillo tiene a tu princesa en grave peligro.",bc_map;
+	sleep2 2500;
+	npctalk "¿Quién eres tú?";
+	sleep2 2500;
+	instance_announce instance_id(),"Ah... ¿puede oirme?",bc_map;
+	sleep2 2500;
+	npctalk "¿...?";
+	sleep2 2500;
+	npctalk "Yo... yo....";
+	instance_announce instance_id(),"Kukuku.... ¿qué es lo que quieres niño?",bc_map,0xFF0000;
+	donpcevent instance_npcname("#spawn5")+"::OnEnable";
+	donpcevent instance_npcname("#spawn8")+"::OnEnable";
+	donpcevent instance_npcname("#spawrp3")+"::OnEnable";
+	donpcevent instance_npcname("Royal Guard#spa03")+"::OnDisable";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Royal Guard#spa03")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Royal Guard#spa03");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Royal Guard#spa03");
+	end;
+}
+1@spa,32,54,1	script	King#spa02	965,{
+end;
+OnChat1:
+	npctalk "Has sido tu el que ha comprado los monstruos aquí, ¿me querías asesinar y quedarte a la princesa para tí?";
+	end;
+OnChat2:
+	npctalk "¡Cállate!, me has engañado y yo he confiado en tí... tendrás que pagar por tu desgracia.";
+	end;
+OnChat3:
+	npctalk "¡Sufrirás por el resto de tu vida!";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("King#spa02")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("King#spa02");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("King#spa02");
+	end;
+}
+1@spa,28,52,1	script	Prince#spa01	418,{
+end;
+OnInstanceInit:
+	donpcevent instance_npcname("Prince#spa01")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Prince#spa01");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Prince#spa01");
+	end;
+}
+1@spa,30,52,1	script	Guard#spa01	417,{
+end;
+OnInstanceInit:
+	donpcevent instance_npcname("Guard#spa01")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Guard#spa01");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Guard#spa01");
+	end;
+}
+1@spa,26,53,1	script	Guard#spa02	413,{
+end;
+OnInstanceInit:
+	donpcevent instance_npcname("Guard#spa02")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Guard#spa02");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Guard#spa02");
+	end;
+}
+1@spa,34,53,2	script	Guard#spa03	413,{
+end;
+OnInstanceInit:
+	donpcevent instance_npcname("Guard#spa03")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Guard#spa03");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Guard#spa03");
+	end;
+}
+1@spa,32,53,0	script	#spawn5	139,10,10,{
+end;
+OnTouch:
+	donpcevent instance_npcname("#spawn5-1")+"::OnEnable";
+	donpcevent instance_npcname("#spawn5")+"::OnDisable";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#spawn5")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#spawn5");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("#spawn5");
+	end;
+}
+1@spa,0,0,0	script	#spawn5-1	139,{
+end;
+OnMyMobDead:
+	if(rand(1,10) < 6)
+		getitem 6672,1;
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#spawn5-1")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#spawn5-1");
+	set .@m$,instance_mapname("1@spa");
+	areamonster .@m$,27,53,47,22,"Skeleton Prisoner",1196,10,instance_npcname("#spawn5-1")+"::OnMyMobDead";
+	areamonster .@m$,27,53,47,22,"Zombie Prisoner",1480,10,instance_npcname("#spawn5-1")+"::OnMyMobDead";
+	areamonster .@m$,27,53,47,22,"Ghoul",2466,10,instance_npcname("#spawn5-1")+"::OnMyMobDead";
+	sleep2 20000;
+	areamonster .@m$,27,53,47,22,"Skeleton Prisoner",1196,10,instance_npcname("#spawn5-1")+"::OnMyMobDead";
+	areamonster .@m$,27,53,47,22,"Zombie Prisoner",1480,10,instance_npcname("#spawn5-1")+"::OnMyMobDead";
+	areamonster .@m$,27,53,47,22,"Ghoul",2466,10,instance_npcname("#spawn5-1")+"::OnMyMobDead";
+	sleep2 20000;
+	areamonster .@m$,27,53,47,22,"Skeleton Prisoner",1196,10,instance_npcname("#spawn5-1")+"::OnMyMobDead";
+	areamonster .@m$,27,53,47,22,"Zombie Prisoner",1480,10,instance_npcname("#spawn5-1")+"::OnMyMobDead";
+	areamonster .@m$,27,53,47,22,"Ghoul",2466,10,instance_npcname("#spawn5-1")+"::OnMyMobDead";
+	end;
+OnDisable:
+	disablenpc instance_npcname("#spawn5-1");
+	end;
+}
+1@spa,54,29,0	script	#spawrp3	45,1,1,{
+end;
+OnTouch:
+	set .@m$,instance_mapname("1@spa");
+	warp .@m$,218,186;
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#spawrp3")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#spawrp3");
+	end;
+OnDisable:
+	disablenpc instance_npcname("#spawrp3");
+	end;
+}
+// Cuarta Escena: El príncipe traidor.
+//============================================================
+1@spa,218,189,0	script	#spawn8	139,3,3,{
+end;
+OnTouch:
+	donpcevent instance_npcname("#spawn8-1")+"::OnEnable";
+	donpcevent instance_npcname("#spawn8")+"::OnDisable";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#spawn8")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#spawn8");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("#spawn8");
+	end;
+}
+1@spa,0,0,0	script	#spawn8-1	139,{
+end;
+OnMyMobDead:
+	if(rand(1,10) < 6)
+		getitem 6672,1;
+	set .@m$,instance_mapname("1@spa");
+	if(mobcount(.@m$,instance_npcname("#spawn8-1")+"::OnMyMobDead") < 1) {
+		donpcevent instance_npcname("Dead Corpse#spa01")+"::OnEnable";
+		donpcevent instance_npcname("Dead Corpse#spa02")+"::OnEnable";
+		donpcevent instance_npcname("Dead Corpse#spa03")+"::OnEnable";
+		donpcevent instance_npcname("King#spa03")+"::OnEnable";
+		donpcevent instance_npcname("Royal Guard#spa04")+"::OnEnable";
+		donpcevent instance_npcname("Prince#spa02")+"::OnEnable";
+		donpcevent instance_npcname("#ttalk3")+"::OnEnable";
+		end;
+	}
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#spawn8-1")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#spawn8-1");
+	set .@m$,instance_mapname("1@spa");
+	areamonster .@m$,187,215,210,190,"Khatziburg",1132,15,instance_npcname("#spawn8-1")+"::OnMyMobDead";
+	areamonster .@m$,187,215,210,190,"Bloody Murderer",1507,10,instance_npcname("#spawn8-1")+"::OnMyMobDead";
+	end;
+OnDisable:
+	disablenpc instance_npcname("#spawn8-1");
+	end;
+}
+1@spa,199,214,0	script	#ttalk4	139,4,4,{
+OnTouch:
+	if (getcharid(0) == getpartyleader(getcharid(1),2)) {
+		donpcevent instance_npcname("Royal Guard#spa04")+"::OnConversation";
+		donpcevent instance_npcname("#ttalk4")+"::OnDisable";
+	}
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#ttalk4")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#ttalk4");
+	end;
+OnDisable:
+	disablenpc instance_npcname("#ttalk4");
+	end;
+}
+1@spa,199,214,2	script	Royal Guard#spa04	686,{
+end;
+OnConversation:
+	npctalk "¿Dónde está la Princesa Tiara?";
+	sleep2 2500;
+	donpcevent instance_npcname("Prince#spa02")+"::OnChat1";
+	sleep2 2500;
+	donpcevent instance_npcname("Prince#spa02")+"::OnChat2";
+	sleep2 2500;
+	instance_announce instance_id(),"¿Cómo te atreves?",bc_map,0xFF0000;
+	sleep2 2500;
+	donpcevent instance_npcname("Prince#spa02")+"::OnChat3";
+	sleep2 1000;
+	donpcevent instance_npcname("#spawn6")+"::OnEnable";
+	donpcevent instance_npcname("Dead Corpse#spa01")+"::OnDisable";
+	donpcevent instance_npcname("Dead Corpse#spa02")+"::OnDisable";
+	donpcevent instance_npcname("Dead Corpse#spa03")+"::OnDisable";
+	donpcevent instance_npcname("King#spa03")+"::OnDisable";
+	donpcevent instance_npcname("Royal Guard#spa04")+"::OnDisable";
+	donpcevent instance_npcname("Prince#spa02")+"::OnDisable";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Royal Guard#spa04")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Royal Guard#spa04");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Royal Guard#spa04");
+	end;
+}
+1@spa,196,218,5	script	Prince#spa02	418,{
+end;
+OnChat1:
+	npctalk "Es demasiado tarde... pero has logrado lo que buscaba conseguir. Gracias por tu ayuda.";
+	end;
+OnChat2:
+	npctalk "Maldita Magia de Thanatos, ¿estás listo para tener un nuevo maestro?";
+	end;
+OnChat3:
+	npctalk "¡¡Aah, aah!!";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Prince#spa02")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Prince#spa02");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Prince#spa02");
+	end;
+}
+1@spa,192,212,4	script	King#spa03	956,{
+end;
+OnInstanceInit:
+	donpcevent instance_npcname("King#spa03")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("King#spa03");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("King#spa03");
+	end;
+}
+1@spa,192,207,4	script	Dead Corpse#spa01	849,{
+end;
+OnInstanceInit:
+	donpcevent instance_npcname("Dead Corpse#spa01")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Dead Corpse#spa01");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Dead Corpse#spa01");
+	end;
+}
+1@spa,204,210,4	script	Dead Corpse#spa02	849,{
+end;
+OnInstanceInit:
+	donpcevent instance_npcname("Dead Corpse#spa02")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Dead Corpse#spa02");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Dead Corpse#spa02");
+	end;
+}
+1@spa,200,196,4	script	Dead Corpse#spa03	849,{
+end;
+OnInstanceInit:
+	donpcevent instance_npcname("Dead Corpse#spa03")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Dead Corpse#spa03");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Dead Corpse#spa03");
+	end;
+}
+1@spa,198,212,0	script	#spawn6	139,10,10,{
+end;
+OnTouch:
+	donpcevent instance_npcname("#spawn6-1")+"::OnEnable";
+	donpcevent instance_npcname("#spawn6")+"::OnDisable";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#spawn6")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#spawn6");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("#spawn6");
+	end;
+}
+1@spa,0,0,0	script	#spawn6-1	139,{
+end;
+OnMyMobDead:
+	getitem 6672,2;
+	set .@m$,instance_mapname("1@spa");
+	if(mobcount(.@m$,instance_npcname("#spawn6-1")+"::OnMyMobDead") < 1) {
+		donpcevent instance_npcname("#spawrp4")+"::OnEnable";
+		end;
+	}
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#spawn6-1")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#spawn6-1");
+	set .@m$,instance_mapname("1@spa");
+	monster .@m$,196,218,"Torturous Redeemer",2959,1,instance_npcname("#spawn6-1")+"::OnMyMobDead";
+	end;
+OnDisable:
+	disablenpc instance_npcname("#spawn6-1");
+	end;
+}
+1@spa,178,186,0	script	#spawrp4	45,1,1,{
+end;
+OnTouch:
+	set .@m$,instance_mapname("1@spa");
+	warp .@m$,186,55;
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#spawrp4")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#spawrp4");
+	end;
+OnDisable:
+	disablenpc instance_npcname("#spawrp4");
+	end;	
+}
+// Quinta Escena: La muerte de la Princesa Tiara.
+//============================================================
+1@spa,213,42,0	script	#ttalk3	139,4,4,{
+OnTouch:
+	if (getcharid(0) == getpartyleader(getcharid(1),2)) {
+		donpcevent instance_npcname("Royal Guard#spa05")+"::OnConversation";
+		donpcevent instance_npcname("#ttalk3")+"::OnDisable";
+	}
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#ttalk3")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#ttalk3");
+	end;
+OnDisable:
+	disablenpc instance_npcname("#ttalk3");
+	end;
+}
+1@spa,213,42,4	script	Royal Guard#spa05	686,{
+end;
+OnConversation:
+	donpcevent instance_npcname("Princess Tiara#spa02")+"::OnChat1";
+	sleep2 2500;
+	npctalk "¡Princesa!";
+	sleep2 2500;
+	donpcevent instance_npcname("Princess Tiara#spa02")+"::OnChat2";
+	sleep2 2500;
+	npctalk "¡No!... ¡¡¡No!!!...";
+	sleep2 2500;
+	donpcevent instance_npcname("Princess Tiara#spa02")+"::OnChat3";
+	sleep2 2500;
+	npctalk "no... ¡¡¡Ahh ahh ahhh!!!~";
+	sleep2 2500;
+	donpcevent instance_npcname("Princess Tiara#spa02")+"::OnChat4";
+	sleep2 2500;
+	donpcevent instance_npcname("#spawn7")+"::OnEnable";
+	donpcevent instance_npcname("Royal Guard#spa05")+"::OnDisable";
+	donpcevent instance_npcname("Princess Tiara#spa02")+"::OnDisable";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Royal Guard#spa05")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Royal Guard#spa05");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Royal Guard#spa05");
+	end;
+}
+1@spa,216,44,4	script	Princess Tiara#spa02	640,{
+end;
+OnChat1:
+	npctalk "Mantuviste tu promesa...";
+	end;
+OnChat2:
+	npctalk "Gracias... ahora puedo descansar al lado tuyo.";
+	end;
+OnChat3:
+	npctalk "Quiero estar contigo por siempre en paz... por siempre...";
+	end;
+OnChat4:
+	npctalk "Te amo.";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Princess Tiara#spa02")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Princess Tiara#spa02");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Princess Tiara#spa02");
+	end;
+}
+1@spa,211,42,0	script	#spawn7	139,10,10,{
+end;
+OnTouch:
+	donpcevent instance_npcname("#spawn7-1")+"::OnEnable";
+	donpcevent instance_npcname("#spawn7")+"::OnDisable";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#spawn7")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#spawn7");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("#spawn7");
+	end;
+}
+1@spa,0,0,0	script	#spawn7-1	139,{
+end;
+OnMyMobDead2:
+	set .@m$,instance_mapname("1@spa");
+	if(mobcount(.@m$,instance_npcname("#spawn7-1")+"::OnMyMobDead2") < 1) {
+		donpcevent instance_npcname("Royal Guard#spa06")+"::OnEnable";
+	}
+OnMyMobDead:
+	if(rand(1,10) < 6)
+		getitem 6672,1;
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#spawn7-1")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#spawn7-1");
+	set .@m$,instance_mapname("1@spa");
+	areamonster .@m$,182,55,204,20,"Skeleton Prisoner",1196,10,instance_npcname("#spawn7-1")+"::OnMyMobDead";
+	areamonster .@m$,182,55,204,20,"Dullahan",1504,6,instance_npcname("#spawn7-1")+"::OnMyMobDead";
+	areamonster .@m$,182,55,204,20,"Skogul",1752,3,instance_npcname("#spawn7-1")+"::OnMyMobDead";
+	sleep2 20000;
+	areamonster .@m$,182,55,204,20,"Skeleton Prisoner",1196,10,instance_npcname("#spawn7-1")+"::OnMyMobDead";
+	areamonster .@m$,182,55,204,20,"Dullahan",1504,6,instance_npcname("#spawn7-1")+"::OnMyMobDead";
+	areamonster .@m$,182,55,204,20,"Skogul",1752,3,instance_npcname("#spawn7-1")+"::OnMyMobDead";
+	sleep2 20000;
+	areamonster .@m$,182,55,204,20,"Skeleton Prisoner",1196,10,instance_npcname("#spawn7-1")+"::OnMyMobDead2";
+	areamonster .@m$,182,55,204,20,"Dullahan",1504,6,instance_npcname("#spawn7-1")+"::OnMyMobDead2";
+	areamonster .@m$,182,55,204,20,"Skogul",1752,3,instance_npcname("#spawn7-1")+"::OnMyMobDead2";
+	end;
+OnDisable:
+	disablenpc instance_npcname("#spawn7-1");
+	end;
+}
+1@spa,197,44,5	script	Royal Guard#spa06	685,{
+	if (getcharid(0) == getpartyleader(getcharid(1),2)) {
+		npctalk "¿Estás satisfecho Maldita Magia de Thanatos?";
+		sleep2 2500;
+		instance_announce instance_id(),"Necesito más sangre... Sakray, ofréceme su sangre....",bc_map,0xFF0000;
+		sleep2 2500;
+		npctalk "Ok, eso está bien, un aventurero, ¿cómo lo ves?";
+		sleep2 2500;
+		unittalk getcharid(3),"¿Sakray? ¿Te quieres hacer el gracioso o es una trampa?";
+		sleep2 2500;
+		unittalk getcharid(3),"Si no lo es... ¿entonces por qué?";
+		sleep2 2500;
+		npctalk "... Yo... no necesito por qué mostrar piedad al enfrentar a un Novato.";
+		sleep2 2500;
+		npctalk "Yo quería matar mi poco sentido de humanidad dentro de mi, y creo que ése eres tú.";
+		sleep2 2500;
+		npctalk "Estoy estupendamente satisfecho con el resultado.";
+		sleep2 2500;
+		instance_announce instance_id(),"Sakray, ¡ofréceme sangre ahora!",bc_map,0xFF0000;
+		sleep2 2500;
+		npctalk "Si fueras yo, ¿qué es lo que harías?";
+		sleep2 2500;
+		unittalk getcharid(3),"...";
+		sleep2 2500;
+		instance_announce instance_id(),"Voz de Tiara: ¿Qué puedo hacer por tí?",bc_map;
+		sleep2 2500;
+		npctalk "Quiero estar contigo. Por favor descansa junto a mí.";
+		sleep2 2500;
+		instance_announce instance_id(),"Tu alma es mía mientras busques la sangre que me satisfaga.",bc_map,0xFF0000;
+		sleep2 2500;
+		npctalk "Descansa en las sombras conmigo.";
+		sleep2 2500;
+		npctalk "En la oscuridad por siempre.";
+		sleep2 2500;
+		donpcevent instance_npcname("King#spa04")+"::OnEnable";
+		donpcevent instance_npcname("Royal Guard#spa06")+"::OnDisable";
+		end;
+	}
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Royal Guard#spa06")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Royal Guard#spa06");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Royal Guard#spa06");
+	end;
+}
+1@spa,206,29,4	script	King#spa04	965,{
+	mes "[King]";
+	mes "Mis ojos han visto todo y aún así no lo creo.";
+	next;
+	mes "[King]";
+	mes "No sabía que mi hija tenía esos sentimientos por ése caballero.";
+	next;
+	mes "[King]";
+	mes "Debí confiar en él, y eso podría haber salvado a los dos.";
+	next;
+	mes "[King]";
+	mes "La magia de Thanatos aún abunda en el castillo, varias armas y armaduras quedaron malditas.";
+	next;
+	mes "[King]";
+	mes "Te puedo dar alguna de ellas por las ^5533fflas Piedras Oscuras^000000 que obtuviste de los monstruos.";
+	next;
+	mes "[King]";
+	mes "¿Qué opinas?";
+	next;
+	if(select("¿Qué equipamento me hablas?","Deseo irme del Palacio") == 2) {
+		warp "dali02",49,97;
+		end;
+	}
+	close2;
+	callshop "EQ_GHOSTPALACE",1;
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("King#spa04")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("King#spa04");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("King#spa04");
+	end;
+}
+-	itemshop	EQ_GHOSTPALACE	139,6672:0,28100:200,18119:200,13093:200,21009:200,16028:200,28000:200,1836:200,1496:200,1438:200,1669:200,13441:200,2023:200,1933:200,1988:200,15090:100,22033:100,20721:100,18820:100,15091:100,2187:100

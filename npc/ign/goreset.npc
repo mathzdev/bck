@@ -1,0 +1,22 @@
+-	script	reset	-1,{
+OnWhisperGlobal:
+OnCommand: // @goreset command
+	if(Class == Job_Novice) {
+		message strcharinfo(0),"No puedes reiniciar posición si eres un Novice.";
+		end;
+	}
+getmapxy(@mapa$,@x,@y,0);
+	if(@mapa$ == "ordeal_1-1" || @mapa$ == "bat_room" || @mapa$ == "guild_vs4") {
+		message strcharinfo(0),"@goreset ha fallado.";
+		message strcharinfo(0),"No puede ser usado en este mapa.";
+		end;
+	}
+specialeffect2 830;
+message strcharinfo(0),"Reset Position !!";
+progressbar "008800",30;
+warp "prontera",150,180;
+end;
+OnInit:
+bindatcmd "goreset","reset::OnCommand",0,0;
+end;
+}

@@ -1,0 +1,374 @@
+moonhaven,209,195,4	script	Guía de Novatos::training01	702,{
+	if(ign_tground == 0)
+		set ign_tground,1;
+	switch (ign_tground) {
+		case 1:
+			mes "^5533ffGuía de Novatos^000000";
+			mes "¡Hola, hola!";
+			mes "¿Pero qué tenemos aquí?";
+			next;
+			mes "^5533ffGuía de Novatos^000000";
+			mes "¿Acaso un"+(Sex ? "" : "a")+" nuev"+(Sex ? "o" : "a")+" viajer"+(Sex ? "o" : "a")+"?";
+			mes "Pues permíteme darte una calurosa bienvenida.";
+			next;
+			mes "^5533ffGuía de Novatos^000000";
+			mes "Actualmente te encuentras en la zona de entrenamiento de novatos.";
+			next;
+			mes "^5533ffGuía de Novatos^000000";
+			mes "Este es un lugar diseñado por nuestros creadores para poder orientarte en todas las dinámicas que éste mundo tiene para tí.";
+			next;
+			mes "^5533ffGuía de Novatos^000000";
+			mes "^ff0000Es muy recomendable que la tomes si eres nuevo en éste mundo^000000";
+			next;
+			mes "^5533ffGuía de Novatos^000000";
+			mes "Aún cuando hayas conocido a algunos parecidos éste pequeño tutorial te limpiará de dudas";
+			next;
+			mes "^5533ffGuía de Novatos^000000";
+			mes "También me permito decirte que si completas el tutorial se te dará una recompenza.";
+			next;
+			mes "^5533ffGuía de Novatos^000000";
+			mes "Entonces dime, ¿deseas tomar el tutorial o ir directamente a la aventura?";
+			next;
+				if(select("Quiero aprender más, tutorial.","Pero que perdida de tiempo, ¡aventura!") == 2) {
+					mes "^5533ffGuía de Novatos^000000";
+					mes "De acuerdo, que la suerte te acompañe, que lástima que no te pudimos dar tus premios.";
+					close2;
+					warp "prontera",150,180;
+					savepoint "prontera",150,180;
+					end;
+				}
+			mes "^5533ffGuía de Novatos^000000";
+			mes "Bien, empezaremos con lo básico de lo básico.";
+			next;
+			mes "^5533ffGuía de Novatos^000000";
+			mes "Por favor dirígete con el ^5533ffGuía de Batalla^000000";
+			next;
+			mes "^5533ffGuía de Novatos^000000";
+			mes "Te lo marcaré en el mapa.";
+			close2;
+			viewpoint 1,146,209,1,0xFF0000;
+			set ign_tground,2;
+			end;
+		case 2:
+			mes "^5533ffGuía de Novatos^000000";
+			mes "Por favor ve a visitar al ^5533ffGuía de Batalla^000000";
+			close2;
+			emotion e_no1;
+			end;
+	}
+}
+moonhaven,154,202,0	monster	Poring	1002,7,0,0,0
+moonhaven,158,202,0	monster	Drops	1113,7,0,0,0
+moonhaven,146,209,6	script	Guía de Batalla::training02	734,{
+	switch (ign_tground) {
+		case 0:
+		case 1:
+			mes "[^CC0000Guia de Batalla^000000]";
+			mes "No es momento de que hables conmigo.";
+			close;
+		case 2:
+			mes "[^CC0000Guia de Batalla^000000]";
+			mes "¡Hola!";
+			mes "Para empezar yo te enseñaré todo lo básico relacionado con las batallas.";
+			next;
+			mes "[^CC0000Guia de Batalla^000000]";
+			mes "La mejor forma de hacerse fuerte aquí es derrotando enemigos cada vez más y más fuertes.";
+			next;
+			mes "[^CC0000Guia de Batalla^000000]";
+			mes "Cada vez que derrotes a un enemigo recibirás ^0000CCPuntos de Experiencia^000000, estos puntos són necesarios para aumentar tu nivel y hacerte más fuerte.";
+			next;
+			mes "[^CC0000Guia de Batalla^000000]";
+			mes "También tendrás que tener en cuenta que los enemigos más fuertes te darán más ^0000CCPuntos de Experiencia^000000.";
+			next;
+			mes "[^CC0000Guia de Batalla^000000]";
+			mes "Tu primera prueba será aumentar tu Nivel hasta ^0000CCNivel 3^000000.";
+			next;
+			cutin "tuto01",2;
+			next;
+			mes "[^CC0000Guia de Batalla^000000]";
+			mes "Una última cosa a tener en cuenta...";
+			next;
+			cutin "tuto02",2;
+			next;
+			mes "[^CC0000Guia de Batalla^000000]";
+			mes "Veamos como lo haces.";
+			set ign_tground,3;
+			cutin "",255;
+			close;
+		case 3:
+			mes "[^CC0000Guia de Batalla^000000]";
+			if (BaseLevel <= 2) {
+				mes "Aún no eres nivel 3.";
+				next;
+				mes "[^CC0000Guia de Batalla^000000]";
+				mes "Mira, allí hay ^ff00ffPorings^000000, ¿por qué no intentas darles una paliza?";
+				close;
+			}
+			mes "Muy bien, veo que lo has entendido todo.";
+			next;
+			mes "[^CC0000Guia de Batalla^000000]";
+			mes "Cada vez que subas de nivel ganarás unos puntos llamados ^0000CCStatus Point^000000, estos puntos pueden ser usados para mejorar tus atributos.";
+			next;
+			cutin "tuto03",3;
+			next;
+			mes "[^CC0000Guia de Batalla^000000]";
+			mes "Los atributos són los siguientes:";
+			mes "STR - Fuerza";
+			mes "AGI - Agilidad";
+			mes "VIT - Vitalidad";
+			mes "INT - Inteligencia";
+			mes "DEX - Destreza";
+			mes "LUK - Suerte";
+			next;
+			cutin "tutostr",2;
+			next;
+			cutin "tutoagi",2;
+			next;
+			cutin "tutovit",2;
+			next;
+			cutin "tutoint",2;
+			next;
+			cutin "tutodex",2;
+			next;
+			cutin "tutoluk",2;
+			next;
+			cutin "",255;
+			mes "[^CC0000Guia de Batalla^000000]";
+			mes "Además de eso el atributo Suerte (LUK) también se usa para crear pociones o forjar armas en los oficios Alchemist y Blacksmith.";
+			next;
+			mes "[^CC0000Guia de Batalla^000000]";
+			mes "Yo ya te he enseñado lo básico para subir nivel, ahora tendras que visitar a la ^0000CCGuia de Habilidades^000000.";
+			next;
+			mes "[^CC0000Guia de Batalla^000000]";
+			mes "Llevate esto contigo, són algunas pociones para que te sea todo esto más fácil.";
+			getitem 569,50;
+			dispbottom "Experiencia obtenida por completar el tutorial:";
+			getexp 25,15;
+			set ign_tground,4;
+			next;
+			mes "[^CC0000Guia de Batalla^000000]";
+			mes "Tu próximo destino ha sido marcado en tu mapa.";
+			viewpoint 1,209,228,1,0x0101DF;
+			close;
+		case 4:
+			mes "[^CC0000Guia de Batalla^000000]";
+			mes "Tu próximo destino ha sido marcado en tu mapa.";
+			viewpoint 1,209,228,1,0x0101DF;
+			close;
+		default:
+			mes "[^CC0000Guia de Batalla^000000]";
+			mes "Por favor no me interrumpas, estoy ideando un nuevo plan de batalla.";
+			close2;
+			emotion e_bzz;
+			end;
+	}
+}
+
+moonhaven,209,228,4	script	Guia de Objetos::training03	807,{
+	switch (ign_tground) {
+		case 0:
+		case 1:
+		case 2:
+		case 3:
+			mes "[^CC0000Guia de Objetos^000000]";
+			mes "No es momento para que hables conmigo.";
+			close;
+		case 4:
+			mes "[^CC0000Guia de Objetos^000000]";
+			mes "Ya has finalizado tu entrenamiento de batalla ¿eh?";
+			next;
+			mes "[^CC0000Guia de Objetos^000000]";
+			mes "Yo te voy a enseñar lo básico sobre los diferentes objetos que existen.";
+			next;
+			mes "[^CC0000Guia de Objetos^000000]";
+			mes "Para empezar deberás saber que existen 4 tipos diferentes de objetos:";
+			mes "- Usables (Pociones, Comidas...)";
+			mes "- Equipamiento (Armas, Escudos...)";
+			mes "- Varios (Jellopy, Empty Bottle...)";
+			mes "- Cartas (Poring Card, Fabre Card...)";
+			next;
+			mes "[^CC0000Guia de Objetos^000000]";
+			mes "La mayoria de los objetos los podrás usar de la siguiente manera, los objetos varios no pueden ser usados con doble click ya que suelen ser usados para venderse o en algunas quest.";
+			cutin "tuto04",2;
+			next;
+			cutin "",255;
+			mes "[^CC0000Guia de Objetos^000000]";
+			mes "Ahora mismo te regalaré un arma para que pruebes lo que has aprendido.";
+			next;
+			getitem 1107,1;
+			set ign_tground,5;
+			mes "[^CC0000Guia de Objetos^000000]";
+			mes "Aquí tienes, hablame de nuevo cuando la hayas equipado.";
+			close;
+		case 5:
+			if(getequipid(EQI_HAND_R)==1107) {
+				mes "[^CC0000Guia de Objetos^000000]";
+				mes "Al haberte equipado el arma que te he dado tu ataque será mayor, ahora podrás derrotar a los enemigos con mayor facilidad.";
+				next;
+				mes "[^CC0000Guia de Objetos^000000]";
+				mes "Has de saber también que tu equipamiento puede ser mejorado de dos maneras ^0000CCRefinandolo^000000 o ^0000CCUsando Cartas^000000.";
+				next;
+				mes "[^CC0000Guia de Objetos^000000]";
+				mes "Para poder mejorar tu equipamiento deberás encontrar ^0000CCOridecon^000000 o ^0000CCElunium^000000 según que equipamiento quieras refinar y dirigirte a un refinador, podrás encontrar uno en Prontera o Payon.";
+				cutin "tuto05",2;
+				next;
+				cutin "",255;
+				mes "[^CC0000Guia de Objetos^000000]";
+				mes "También has de tener en cuenta que a determinado refinamiento el arma tendrá posibilidades de romperse, pero de esto ya te avisará el refinador.";
+				next;
+				if(getequiprefinerycnt(EQI_HAND_R) < 1)
+					successrefitem EQI_HAND_R;
+				mes "[^CC0000Guia de Objetos^000000]";
+				mes "Para que veas un ejemplo voy a refinar tu arma 1 vez.";
+				next;
+				mes "[^CC0000Guia de Objetos^000000]";
+				mes "La otra forma es añadiendole cartas, las cartas añadiran habilidades especiales o mejoras a tu equipamiento.";
+				cutin "tuto06",2;
+				next;
+				cutin "",255;
+				mes "[^CC0000Guia de Objetos^000000]";
+				mes "El número al final del equipamiento determina cuantas cartas puede llevar como máximo ese equipo.";
+				next;
+				mes "[^CC0000Guia de Objetos^000000]";
+				mes "Ejemplo: Tu posees una Blade[3] eso significa que puede llegar a tener 3 cartas como máximo.";
+				next;
+				mes "[^CC0000Guia de Objetos^000000]";
+				mes "El número máximo que encontrarás en armas es de [4] y en todo lo demás de [1].";
+				next;
+				mes "[^CC0000Guia de Objetos^000000]";
+				mes "Esto es todo lo que te tenia que enseñar, espero que no se te olvide.";
+				next;
+				mes "[^CC0000Guia de Objetos^000000]";
+				mes "Te daré algunas cosas para que empieces tu aventura con más ganas.";
+				next;
+				getitem 645,3;
+				getitem 662,2;
+				getitem 12235,1;
+				dispbottom "Experiencia obtenida por completar el tutorial:";
+				getexp 30,20;
+				set ign_tground,6;
+				viewpoint 1,206,239,1,0x0101DF;
+				mes "[^CC0000Guia de Objetos^000000]";
+				mes "Ya puedes seguir a la próxima guia, ella te enseñara sobre los sistemas del servidor.";
+				close;
+			}
+			mes "[^CC0000Guia de Objetos^000000]";
+			mes "Equipate el arma que te he regalado y hablamos.";
+			close;
+		case 6:
+			mes "[^CC0000Guia de Objetos^000000]";
+			mes "Ya puedes seguir a la próxima guia, ella te enseñara sobre los sistemas del servidor.";
+			close;
+		default:
+			mes "[^CC0000Guia de Objetos^000000]";
+			mes "Dame un momento, me acabo de atragantar con una manzana.";
+			close2;
+			emotion e_wah;
+			end;
+	}
+}
+moonhaven,206,239,4	script	Guía de Sistemas::training04	726,{
+	switch (ign_tground) {
+		case 0:
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+			mes "[^5533ffGuía de Sistemas^000000]";
+			mes "No es momento para que hables conmigo.";
+			close;
+		case 6:
+			while(1) {
+				mes "[^5533ffGuía de Sistemas^000000]";
+				mes "Se bienvenid"+(Sex ? "o":"a")+" a la última etapa de tu recorrido en los campos de entrenamiento.";
+				next;
+				mes "[^5533ffGuía de Sistemas^000000]";
+				mes "Aquí simplemente te explicaré sobre los sistemas de éste servidor en especial.";
+				next;
+				mes "[^5533ffGuía de Sistemas^000000]";
+				mes "Primeramente permíteme explicarte de los puntos por hora.";
+				next;
+				mes "[^5533ffGuía de Sistemas^000000]";
+				mes "Si notaste en tu chat hay un mensaje que aparece cada minuto, ése te indica cuánto tiempo llevas jugando.";
+				next;
+				mes "[^5533ffGuía de Sistemas^000000]";
+				mes "Si completas una hora, recibirás una IGN Coin que te servirá para distintos servicios, como lo es el Casino, Reset de Stat y Skill, Platinum Skill, entre otros servicios.";
+				next;
+				mes "[^5533ffGuía de Sistemas^000000]";
+				mes "Pero ten cuidado, si te ausentas ^ff00004 minutos^000000 perderás tu derecho a los puntos por hora, y tendrás que reloguear para reiniciar el sistema nuevamente.";
+				next;
+				mes "[^5533ffGuía de Sistemas^000000]";
+				mes "Pero tenemos en cuenta que necesitas hacer cosas a veces, por lo cual tienes derecho a ausentarte una hora usando el comando ^5533ff@afktime^000000, éste detendrá el tiempo de tu reloj, y cuando regreses úsalo nuevamente para reiniciar el conteo.";
+				next;
+				mes "[^5533ffGuía de Sistemas^000000]";
+				mes "Si no quieres ver el mensaje puedes utilizar el comando ^5533ff@showtime^000000.";
+				next;
+				mes "[^5533ffGuía de Sistemas^000000]";
+				mes "Bien, permíteme continuar, ahora te explicaré sobre la competitividad.";
+				next;
+				mes "[^5533ffGuía de Sistemas^000000]";
+				mes "Éste mundo se basa en la competitividad de sus habitantes.";
+				next;
+				mes "[^5533ffGuía de Sistemas^000000]";
+				mes "Es decir, en ^5533ffWar of Emperium, Battleground y Caza de MvP^000000 habrán recompenzas y clasificatorias para cada modo.";
+				next;
+				mes "[^5533ffGuía de Sistemas^000000]";
+				mes "Lo que permitirá a los más audaces mostrar su gloria ante el resto.";
+				next;
+				mes "[^5533ffGuía de Sistemas^000000]";
+				mes "Cada sistema tiene sus recompenzas, y puedes consultarlo en la ^5533ffGuild Town^000000, una ciudad en una isla establecida para consultar distintas empresas de competitividad.";
+				next;
+				mes "[^5533ffGuía de Sistemas^000000]";
+				mes "En ésta misma ciudad, existe algo llamado ^ff8800Casas de Gremio^000000, donde si logras cumplir con los requisitos, tu Maestro de Gremio puede comprar una base donde sólo los miembros de tu guild podrán ingresar desde casi cualquier lugar.";
+				next;
+				mes "[^5533ffGuía de Sistemas^000000]";
+				mes "Siendo de ésta manera una forma de establecer estrategias con tus miembros teniendo un punto de reunión secreto, donde allí mismo cuentan con un agradable ambiente, música, una Alice que limpiará tu base siempre por un pequeño costo y por supuesto, una Sala PvP privada para que hagas lo que se te apetezca.";
+				next;
+				mes "[^5533ffGuía de Sistemas^000000]";
+				mes "Si tienes alguna duda podrás consultarlo con los NPC adecuados en la ciudad de Prontera.";
+				next;
+				mes "[^5533ffGuía de Sistemas^000000]";
+				mes "Antes que nada...";
+				mes "[^5533ffGuía de Sistemas^000000]";
+				mes "¿Quieres repasar la información?";
+				next;
+					if(select("No, gracias","Si por favor") == 2)
+						break;
+				mes "[^5533ffGuía de Sistemas^000000]";
+				mes "Entonces continuemos, permíteme darte tu premio por ser tan buen escucha.";
+				next;
+				switch (rand(1,5)) {
+					case 1:
+						getitem 19503,1;
+						break;
+					case 2:
+						getitem 19530,1;
+						break;
+					case 3:
+						getitem 19676,1;
+						break;
+					case 4:
+						getitem 19696,1;
+						break;
+					case 5:
+						getitem 19707,1;
+						break;
+				}
+				set Zeny,Zeny + 20000;
+				dispbottom "Haz recibido 20,000 Zeny por completar la Quest.";
+				mes "[^5533ffGuía de Sistemas^000000]";
+				mes "Te deseo la mejor de las suertes.";
+				close2;
+				warp "prontera",150,180;
+				savepoint "prontera",150,180;
+				end;
+			}
+		default:
+			mes "[^5533ffGuía de Sistemas^000000]";
+			mes "No te puedo dar tu premio si no haces nada.";
+			close2;
+			emotion e_swt;
+			end;
+	}
+}

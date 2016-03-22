@@ -1,0 +1,270 @@
+// MvP Coin
+-	itemshop	ranker_1	111,673:0,5933:25,658:10,7776:20,20071:30,18894:150,18895:50,18907:170,18911:200,18912:50,18913:50,18891:100,18893:300,5864:150,5868:100,5869:100,5870:100,5871:100,18716:125,5529:20,35041:200,35043:100,35044:100,35042:300,35023:100,12912:3,12103:15,12210:10,12412:25,13607:40,12902:70,16268:200
+// PvP Coin Shop
+-	itemshop	ranker_2-1	111,677:0,5931:200,19524:200,19525:200,19526:200,19527:200,19528:200,19529:200,19530:200,19531:200,19532:200,19533:200,19534:200,19535:200,19536:200,19537:200,19538:200,19539:200,19540:200,19541:200,19542:200,19543:200,19544:200,19545:200,19546:200,19547:200,19548:200,19549:200,19550:200,19551:200,19552:200,19553:200,19573:200,19574:200,19576:200,19577:200,19579:200,19585:200,19586:200,19587:200,19588:200,19589:200,19590:200,19598:200,19599:200,19600:200,19601:200,19602:200,19607:200,19617:200,19618:200,19619:200
+-	itemshop	ranker_2-2	111,677:0,19620:200,20195:200,20196:200,19621:200,19622:200,19623:200,19624:200,19625:200,19629:200,19630:200,19632:200,19633:200,19634:200,19635:200,19636:200,19637:200,19638:200,19639:200,19649:200,19650:200,19651:200,19655:200,19656:200,19661:200,19662:200,19666:200,19668:200,19676:200,19677:200,19678:200,19682:200,19685:200,19686:200,19689:200,19690:200,19695:200,19696:200,19701:200,19702:200,19706:200,19707:200,19709:200,19710:200,19716:200,19719:200,19721:200,19724:200,19729:200,19718:200,19728:200,19730:200
+-	itemshop	ranker_2-3	111,677:0,19731:200,19732:200,19733:200,19734:200,19735:200,19736:200,19737:200,19738:200,19739:200,19746:200,19764:200,19765:200,19767:200,19768:200,19772:200,19775:200,19859:200,19860:200,19861:200,19862:200,19863:200,19864:200,19865:200,19876:200,19878:200,19882:200,19883:200,19884:200,19885:200,19886:200,19887:200,19888:200,19889:200,19902:200,19903:200,19913:200,19914:200,19917:200,19918:200,19919:200,19920:200,19922:200,19931:200,19932:200,19934:200,19935:200,19936:200
+-	itemshop	ranker_2-4	111,677:0,19938:200,19941:200,19955:200,19961:200,19962:200,19963:200,19964:200,19965:200,19966:200,19967:200,19968:200,19969:200,19970:200,19971:200,19972:200,19973:200,19974:200,19976:200,19977:200,19978:200,19979:200,19980:200,19982:200,19983:200,19984:200,19996:200,19999:200,20000:200,20001:200,20002:200,20003:200,20025:200,20026:200,20027:200,20028:200,20034:200,20036:200,20049:200,20050:200,20054:200,20057:200,20053:200,20063:200,20064:200,20067:200
+-	itemshop	ranker_2-5	111,677:0,19824:200,19825:200,19826:200,19827:200,20068:200,20073:200,20074:200,20086:200,20087:200,20088:200,20089:200,20090:200,20091:200,20092:200,20093:200,20094:200,20095:200,20096:200,20097:200,20110:200,20114:200,20118:200,20119:200,20120:200,20121:200,20125:200,20130:200,20132:200,20133:200,20135:200,20136:200
+// Emperium Coin
+-	itemshop	ranker_3	111,674:0,18909:100,18910:50,18908:15,18716:5,14210:2,20706:30,2573:15,20707:30,20724:40,2589:40,20727:15,20761:15,20746:15,20737:15,35046:15
+// Medallas de Misión
+-	itemshop	ranker_7	111,8996:0,18740:300,13989:5,14005:3,13995:5,13997:30,14001:2,14002:5,14003:8,7776:45,1230:90,2347:90,2349:90,2351:90
+
+//Hats sin sprite pendientes: 5873:30,5874:30,5875:30
+
+prontera,150,186,5	script	Ranker	10010,{
+	playbgm "royal_room3";
+	cutin "lydia_a",2;
+	mes "[^A020F0Ranker^000000]";
+	mes "Aquí podrás consultar todas las clasificaciones del servidor y canjear premios.";
+	mes "¿En qué te puedo ayudar?";
+	next;
+	switch(prompt("Ver Clasificación:Tienda:Mi clasificación:Elegir título MvP:^777777Salir^000000")) {
+		case 1:
+			mes "[^A020F0Ranker^000000]";
+			mes "Bien, por favor dime de qué deseas ver la clasificación.";
+			next;
+			switch(prompt("^5533ffOficios^000000:Logros:Most Valuable Player:Player vs. Player:Emperium:Gremios:Battleground:^777777Salir^000000")) {
+				case 1:
+					switch(prompt("Minero:Leñador:Costurero:Cazador:Carpintero:^777777Salir^000000")) {
+						case 1: set @on$,"Minero"; set @o$,"minero"; break;
+						case 2: set @on$,"Leñador"; set @o$,"lenador"; break;
+						case 3: set @on$,"Costurero"; set @o$,"costurero"; break;
+						case 4: set @on$,"Cazador"; set @o$,"cazador"; break;
+						case 5: set @on$,"Carpintero"; set @o$,"carpintero"; break;
+					}
+					mes "^5533ff"+@on$+"^000000";
+					query_sql( "SELECT `name`,`"+@o$+"` FROM `char_rank` ORDER BY `"+@o$+"` DESC LIMIT 5",.@n$,.@c );
+					if( getarraysize( .@n$ ) ){
+						for( set .@i,0; .@i < getarraysize( .@n$ ); set .@i,.@i + 1 )
+							mes "^777777[ "+( .@i + 1 )+". ]^000000 ^ff0000"+.@n$[.@i]+"^000000 - ^cc6600"+.@c[.@i]+" puntos^000000";
+					} else {
+						mes "Clasificación vacía.";
+					}
+					close2; cutin "",255;
+					playbgm "prt_city";
+					end;
+				case 2:
+					mes "^5533ffLogros^000000";
+					query_sql( "SELECT `name`,`logros` FROM `char_rank` ORDER BY `logros` DESC LIMIT 5",.@n$,.@c );
+					if( getarraysize( .@n$ ) ){
+						for( set .@i,0; .@i < getarraysize( .@n$ ); set .@i,.@i + 1 )
+							mes "^777777[ "+( .@i + 1 )+". ]^000000 ^ff0000"+.@n$[.@i]+"^000000 - ^cc6600"+.@c[.@i]+" Logros^000000";
+					} else {
+						mes "Clasificación vacía.";
+					}
+					close2; cutin "",255;
+					playbgm "prt_city";
+					end;
+				case 3:
+					mes "^5533ffMost Valuable Player [MVP]^000000";
+					query_sql( "SELECT `name`,`mvp` FROM `char_rank` ORDER BY `mvp` DESC LIMIT 5",.@n$,.@c );
+					if( getarraysize( .@n$ ) ){
+						for( set .@i,0; .@i < getarraysize( .@n$ ); set .@i,.@i + 1 )
+							mes "^777777[ "+( .@i + 1 )+". ]^000000 ^ff0000"+.@n$[.@i]+"^000000 - ^cc6600"+.@c[.@i]+" MvP^000000";
+					} else {
+						mes "Clasificación vacía.";
+					}
+					close2; cutin "",255;
+					playbgm "prt_city";
+					end;
+				case 4:
+					mes "^5533ffPlayer vs. Player [PVP]^000000";
+					query_sql( "SELECT `char`,`kill`,`death`,`kdr` FROM `pvp_rank` ORDER BY `kill` DESC LIMIT 5",.@n$,.@c,.@d,.@kdr$ );
+					if( getarraysize( .@n$ ) ){
+						for( set .@i,0; .@i < getarraysize( .@n$ ); set .@i,.@i + 1 )
+							mes "^777777[ "+( .@i + 1 )+". ]^000000 ^ff0000"+.@n$[.@i]+"^000000 - ^cc6600"+.@c[.@i]+"K^000000-^cc6600"+.@d[.@i]+"D^000000 ^ff0000["+.@kdr$[.@i]+"]^000000";
+					} else {
+						mes "Clasificación vacía.";
+					}
+					close2; cutin "",255;
+					playbgm "prt_city";
+					end;
+				case 5:
+					mes "^5533ffEmperium^000000";
+					query_sql( "SELECT `name`,`emperium` FROM `char_rank` ORDER BY `emperium` DESC LIMIT 5",.@n$,.@c );
+					if( getarraysize( .@n$ ) ){
+						for( set .@i,0; .@i < getarraysize( .@n$ ); set .@i,.@i + 1 )
+							mes "^777777[ "+( .@i + 1 )+". ]^000000 ^ff0000"+.@n$[.@i]+"^000000 - ^cc6600"+.@c[.@i]+" Emperiums^000000";
+					} else {
+						mes "Clasificación vacía.";
+					}
+					close2; cutin "",255;
+					playbgm "prt_city";
+					end;
+				case 6:
+					mes "^5533ffGremios^000000";
+					query_sql( "SELECT `name`,`points` FROM `char_rank_gld` ORDER BY `points` DESC LIMIT 5",.@n$,.@c );
+					if( getarraysize( .@n$ ) ){
+						for( set .@i,0; .@i < getarraysize( .@n$ ); set .@i,.@i + 1 )
+							mes "^777777[ "+( .@i + 1 )+". ]^000000 ^ff0000"+.@n$[.@i]+"^000000 - ^cc6600"+.@c[.@i]+" puntos.^000000";
+					} else {
+						mes "Clasificación vacía.";
+					}
+					close2; cutin "",255;
+					playbgm "prt_city";
+					end;
+				case 7:
+					mes "^5533ffBattleground^000000";
+					mes "En construcción.";
+					close2; cutin "",255;
+					playbgm "prt_city";
+					end;
+				case 8:
+					close2; cutin "",255;
+					playbgm "prt_city";
+					end;
+				case 255:
+					cutin "",255;
+					playbgm "prt_city";
+					end;
+			}
+		case 2:
+			mes "[^A020F0Ranker^000000]";
+			mes "Por favor elige el tipo de moneda y por ende a la tienda que accesarás.";
+			next;
+			switch(prompt("MvP Coins:PvP Coin:Emperium Coin:Medallas de Misión:^777777Salir^000000")) {
+				case 1:
+					close2; cutin "",255;
+					playbgm "prt_city";
+					callshop "ranker_1",1;
+					end;
+				case 2:
+					if(countitem(7420) > 0) {
+						mes "[^A020F0Ranker^000000]";
+						mes "Veo que tienes 'Skulls' contigo, te las intercambiaré por PvP Coin para que puedas utilizar la tienda.";
+						next;
+						set @delc,countitem(7420);
+						delitem 7420,@delc;
+						getitem 677,@delc;
+						mes "[^A020F0Ranker^000000]";
+						mes "Bien, continuemos.";
+						next;
+						break;
+					}
+					mes "[^A020F0Ranker^000000]";
+					mes "Contamos con una gran gama de objetos, por favor elige la tienda que quieres ver.";
+					next;
+					set .@me,select("Tienda de Hats 1","Tienda de Hats 2","Tienda de Hats 3","Tienda de Hats 4","Tienda de Hats 5");
+					close2; cutin "",255;
+					playbgm "prt_city";
+					callshop "ranker_2-"+.@me,1;
+					end;
+				case 3:
+					close2; cutin "",255;
+					playbgm "prt_city";
+					callshop "ranker_3",1;
+					end;
+				case 4:
+					close2; cutin "",255;
+					playbgm "prt_city";
+					callshop "ranker_7",1;
+					end;
+				case 5:
+					close2; cutin "",255;
+					playbgm "prt_city";
+					end;
+				case 255:
+					cutin "",255;
+					playbgm "prt_city";
+					end;
+			}
+			close2; cutin "",255;
+			playbgm "prt_city";
+			end;
+		case 3:
+			mes "[^A020F0Ranker^000000]";
+			query_sql( "SELECT `name`,`logros` FROM `char_rank` WHERE `name`='"+strcharinfo(0)+"'",.@n$,.@c );
+			query_sql( "SELECT `name`,`mvp` FROM `char_rank`WHERE `name`='"+strcharinfo(0)+"'",.@n1$,.@c1 );
+			query_sql( "SELECT `char`,`kill`,`death`,`kdr` FROM `pvp_rank` WHERE `char`='"+strcharinfo(0)+"'",.@n2$,.@c2,.@d,.@kdr$ );
+			query_sql( "SELECT `name`,`emperium` FROM `char_rank` WHERE `name`='"+strcharinfo(0)+"'",.@n3$,.@c3 );
+			query_sql( "SELECT `char_id`,`win`,`lost`,`tie` FROM `char_bg` WHERE `char_id`='"+getcharid(0)+"'",.@cid,.@w,.@l,.@t );
+			mes "^5533ffLogros^000000: "+.@c+" completados";
+			mes "^5533ffMvP^000000: "+.@c1+" derrotados";
+			mes "^5533ffPvP^000000: "+.@c2+"K "+.@d+"D "+.@kdr$+"KDR";
+			mes "^5533ffWoE^000000: "+.@c3+" emperium destruidos";
+			mes "^5533ffBattleground^000000: "+.@w+" W - "+.@l+" L";
+			close2; cutin "",255;
+			emotion e_no1;
+			playbgm "prt_city";
+			end;
+		case 4:
+			mes "[^A020F0Ranker^000000]";
+			mes "Hola ^ff6060"+strcharinfo(0)+"^000000";
+			mes "Aquí podrás elegir el título MvP que desees y aparezca cada ves que mates a uno.";
+			next;
+			mes "[^A020F0Ranker^000000]";
+			mes "Recuerda no incluir ninguna palabra indecente hacia el servidor, la comunidad o alguna persona, incluídas malas palabras.";
+			next;
+			mes "[^A020F0Ranker^000000]";
+			mes "A sí que, ¿deseas elegirlo?";
+			next;
+			if(select("Elegir título MvP","^777777Salir^000000")==2) {
+				mes "[^A020F0Ranker^000000]";
+				mes "Vuelve cuando cambies de idea.";
+				playbgm "prt_city";
+				close;
+			}
+			while (1) {
+				mes "[^A020F0Ranker^000000]";
+				mes "Por favor escribe el título MvP, para cancelar, escribe ^ff00000^000000";
+				next;
+				input @titulo$;
+					if(@titulo$=="0") {
+						playbgm "prt_city";
+						close;
+					}
+				mes "[^A020F0Ranker^000000]";
+				mes "^5533ff"+@titulo$+"^000000";
+				next;
+				mes "[^A020F0Ranker^000000]";
+				mes "¿Deseas que ese sea tu título?";
+				next;
+				if(select("No","Si")== 2) {
+					mes "[^A020F0Ranker^000000]";
+					mes "Bien, ese será tu título a partir de hoy.";
+					set title_mvp$,@titulo$;
+					set title_mvp,1;
+					close2; cutin "",255;
+					playbgm "prt_city";
+					emotion e_thx;
+					end;
+				}
+			}
+		case 5:
+			close2; cutin "",255;
+			playbgm "prt_city";
+			end;
+		case 255:
+			cutin "",255;
+			playbgm "prt_city";
+			end;
+	}
+end;
+OnLogro:
+	query_sql("INSERT INTO `char_rank` SET `char_id`='"+getcharid(0)+"',`name`='"+strcharinfo(0)+"',`logros`='1' ON DUPLICATE KEY UPDATE `logros`=`logros`+1");
+	set @GID,getcharid(2);
+	if(@GID)
+		getitem 18174,rand(1,5);
+	message strcharinfo(0),"[Ranker]: Haz obtenido 1 punto de Logros.";
+	return;
+}
+function	script	RankEmperium	{
+	set .@GID,getarg(0);
+	query_sql("INSERT INTO `char_rank` SET `guild`='"+.@GID+"',`char_id`='"+getcharid(0)+"',`name`='"+strcharinfo(0)+"',`emperium`='1' ON DUPLICATE KEY UPDATE `emperium`=`emperium`+1");
+	getitem 674,rand(1,2);
+	getitem 18174,rand(1,5);
+	message strcharinfo(0),"[Ranker]: Haz obtenido Emperium Coin por destruir el Emperium.";
+	return;
+}
+function	script	RankGuild	{
+	set .@Emperium,getarg(0)*10;
+	set .@Stone,getarg(1)*5;
+	set .@Points,.@Emperium+.@Stone+getarg(3)+getarg(4);
+	set .@GID,getarg(2);
+	query_sql("SELECT `points` FROM `char_rank_gld` WHERE `id`='.@GID'"),.@pact;
+	set .@Points,.@Points + .@pact; 
+	query_sql("INSERT INTO `char_rank_gld` SET `id`='"+.@GID+"',`name`='"+strcharinfo(2)+"',`points`='.@Points'");
+	return;
+}

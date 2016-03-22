@@ -1,0 +1,66 @@
+function	script	F_TreasureChest	{
+	if( tre_t < 1 ) {
+		cutin "treasure",4;
+		sleep2 10000;
+		cutin "",255;
+		set tre_t,1;
+		end;
+	}
+	deletearray @item[0],getarraysize(@item);
+	switch (getarg(0)) {
+		case 1: set @blvl,10;
+			setarray @item[0],671,673,756,757,984,985,718,719,720,721,722,723,724,725,726,727,728,729;
+			break;
+		case 2: set @blvl,40;
+			setarray @item[0],756,757,984,985,671,673,718,719,720,721,722,723,724,725,726,727,728,729,730,731,732,733;
+			break;
+		case 3: set @blvl,90;
+			setarray @item[0],6223,6224,18173,671,673,756,757,984,985,718,719,720,721,722,723,724,725,726,727,728,729;
+			break;
+		case 4: set @blvl,120;
+			setarray @item[0],6223,6224,671,673,18173,6225,6226,756,757,984,985,718,719,720,721,722,723,724,725,726,727,728,729;
+			break;
+		case 5: set @blvl,150;
+			setarray @item[0],6240,6241,671,673,6223,6224,18173,6225,6226,756,757,984,985,718,719,720,721,722,723,724,725,726,727,728,729;
+			break;
+		case 6: set @blvl,170;
+			setarray @item[0],35036,6240,6241,671,673,6223,6224,18173,6225,6226,756,757,984,985,718,719,720,721,722,723,724,725,726,727,728,729;
+			break;
+	}
+	if(BaseLevel < @blvl) {
+		message strcharinfo(0),"Ocupas Nv "+@blvl+" para abrir éste cofre.";
+		end;
+	}
+	progressbar "008800",7;
+	set tr_c,tr_c + 1;
+	switch (tr_c) {
+		case 5:
+			achieve 7;
+			break;
+		case 20:
+			achieve 8;
+			break;
+	}
+	getitem @item[rand(0,getarraysize(@item))],rand(1,2);
+	message strcharinfo(0),"El cofre ha desaparecido, ¿a dónde habrá ido?";
+	return;
+}
+prontera,202,270,4	script	Treasure Chest#001	10005,{ callfunc "F_TreasureChest",1; OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); }
+prt_fild08,51,57,4	script	Treasure Chest#002	10005,{ callfunc "F_TreasureChest",1; OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); }
+gef_fild07,277,332,4	script	Treasure Chest#003	10005,{ callfunc "F_TreasureChest",1; OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); }
+ve_fild02,304,262,4	script	Treasure Chest#004	10005,{ callfunc "F_TreasureChest",2; OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); }
+prt_fild01,196,256,4	script	Treasure Chest#005	10005,{ callfunc "F_TreasureChest",2; OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); }
+pay_dun01,242,251,4	script	Treasure Chest#006	10005,{ callfunc "F_TreasureChest",2; OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); }
+pay_dun04,120,116,4	script	Treasure Chest#007	10005,{ callfunc "F_TreasureChest",3; OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); }
+spl_fild02,330,175,4	script	Treasure Chest#008	10005,{ callfunc "F_TreasureChest",3; OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); }
+pay_dun01,106,73,4	script	Treasure Chest#009	10005,{ callfunc "F_TreasureChest",1; OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); }
+man_fild02,86,220,4	script	Treasure Chest#010	10005,{ callfunc "F_TreasureChest",4; OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); }
+//-	script	Treasure Chest#011	10005,{ callfunc "F_TreasureChest",1; OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); }
+//-	script	Treasure Chest#012	10005,{ callfunc "F_TreasureChest",1; OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); }
+//-	script	Treasure Chest#013	10005,{ callfunc "F_TreasureChest",1; OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); }
+odin_tem03,239,191,4	script	Treasure Chest#014	10005,{ callfunc "F_TreasureChest",5; OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); }
+mid_camp,113,46,4	script	Treasure Chest#015	10005,{ callfunc "F_TreasureChest",5; OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); }
+//-	script	Treasure Chest#016	10005,{ callfunc "F_TreasureChest",1; OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); }
+//-	script	Treasure Chest#017	10005,{ callfunc "F_TreasureChest",1; OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); }
+//-	script	Treasure Chest#018	10005,{ callfunc "F_TreasureChest",1; OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); }
+gefenia04,119,272,4	script	Treasure Chest#019	10005,{ callfunc "F_TreasureChest",6; OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); }

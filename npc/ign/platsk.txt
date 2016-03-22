@@ -1,0 +1,97 @@
+//===== eAthena Script ======================================================================
+//= Platinum Skills NPC
+//===== By: =================================================================================
+//= Keichii and edited by DarkChild
+//===== Current Version: ====================================================================
+//= 2.2
+//===== Compatible With: ====================================================================
+//= Any eAthena Version
+//===== Description: ========================================================================
+//= Single NPC that assigns quests skills for all classes.
+//===== Additional Comments: ================================================================
+//= Added advanced classes by ShadowLady.
+//= Added baby clases by Midas
+//= Simplified Job Checks [Silentdragon]
+//===========================================================================================
+prontera,131,218,5	script	Platinum Skill NPC	861,{
+	mes "[^ff0000Platinum Skill NPC^000000]";
+	mes "Yo puedo darte tus Skills Platinum dependiendo de tu Job.";
+	mes "¿Quieres tenerlas ahora?";
+	next;
+	if ( select ("Obtener Skills:No, gracias") == 2 ) {
+		mes "[^ff0000Platinum Skill NPC^000000]";
+		mes "Vuelve cuando quieras.";
+		close;
+	}
+	mes "[^ff0000Platinum Skill NPC^000000]";
+	mes "Veo que eres un ^5533ff"+ jobname(basejob) +"^000000.";
+	mes "En un momento te otorgaré tus skills.";
+	progressbar "5533ff",3;
+	skill 142,1,0;
+	if ( basejob == Job_Novice ) skill 143,1,0;
+	if ( baseclass == Job_Swordman) {
+		skill 144,1,0;
+		skill 145,1,0;
+		skill 146,1,0;
+	} else if ( baseclass == Job_Mage ) {
+		skill 157,1,0;
+	} else if ( baseclass == Job_Archer ) {
+		skill 147,1,0;
+		skill 148,1,0;
+	} else if ( baseclass == Job_Acolyte ) {
+		skill 156,1,0;
+	} else if ( baseclass == Job_Merchant ) {
+		skill 153,1,0;
+		skill 154,1,0;
+		skill 155,1,0;
+	} else if ( baseclass == Job_Thief ) {
+		skill 149,1,0;
+		skill 150,1,0;
+		skill 151,1,0;
+		skill 152,1,0;
+	}
+	if ( basejob == Job_Knight ) {
+		skill 1001,1,0;
+	} else if ( basejob == Job_Crusader ) {
+		skill 1002,1,0;
+	} else if ( basejob == Job_Wizard ) {
+		skill 1006,1,0;
+	} else if ( basejob == Job_Sage ) {
+		skill 1008,1,0;
+		skill 1018,1,0;
+		skill 1017,1,0;
+		skill 1019,1,0;
+		skill 1007,1,0;
+	} else if ( basejob == Job_Hunter ) {
+		skill 1009,1,0;
+	} else if ( basejob == Job_Bard ) {
+		skill 1010,1,0;
+	} else if ( basejob == Job_Dancer ) {
+		skill 1011,1,0;
+	} else if ( basejob == Job_Priest ) {
+		skill 1014,1,0;
+	} else if ( basejob == Job_Monk ) {
+		skill 1015,1,0;
+		skill 1016,10,0;
+	} else if ( basejob == Job_Blacksmith ) {
+		skill 1012,1,0;
+		skill 1013,1,0;
+	} else if ( basejob == Job_Alchem ) {
+		skill 238,1,0;
+		if ( !alch_bock ) {
+			getitem 7434,1;
+			set alch_bock,1;
+		}
+	} else if ( basejob == Job_Assassin ) {
+		skill 1003,1,0;
+		skill 1004,1,0;
+	} else if ( basejob == Job_Rogue ) {
+		skill 1005,1,0;
+	}
+	specialeffect2 456;
+	mes "Muy bien, ahora tienes todas tus Platinum Skills";
+	next;
+	mes "[^ff0000Platinum Skill NPC^000000]";
+	mes "Suerte con tu aventura.";
+	close;
+}

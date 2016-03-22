@@ -1,0 +1,6 @@
+moonhaven	mapflag	nocommand	0
+cell_game	mapflag	nocommand	0
+quiz_00	mapflag	nocommand	99
+quiz_01	mapflag	nocommand	99
+quiz_02	mapflag	nocommand	99
+ilyo_kwan	mapflag	nocommand	99

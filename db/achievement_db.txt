@@ -1,0 +1,89 @@
+// Achievement Database
+// =====================================================
+// Structure:
+// <Unique ID>,<Type>,<name>,<cutin>,<reward bexp>,<reward jexp>,<reward itemid>,<reward amount>,<npc event>,<parameter1>,<count1>,...,<parameter5>,<count5>
+// =====================================================
+// Name (Max 32 characters)
+// Cutin (Max 64 characters). The cutin bmp image on client side to show when the user get the achievement.
+// Type:
+// 0  = Script Achievement. No source checks, only given by script command "achievement_get". No parameters required.
+// 1  = Exploration. Received by visiting the given times (count), the given maps names (parameter). Use 1 for just count the first time.
+// ------ Mob Goals ------
+// 2  = Mob Kill by Class. Received by killing the given monster id the given number of times (count). You can input a max of 5 monsters per achievement.
+// 3  = Mob Kill by Race, where parameter : 0 - Formless, 1 - Undead, 2 - Beast, 3 - Plant, 4 - Insect, 5 - Fish, 6 - Demon, 7 - Demi-Human, 8 - Angel, 9 - Dragon
+// 4  = Mob Kill by Element, where parameter : 0 - Neutral, 1 - Water, 2 - Earth, 3 - Fire, 4 - Wind, 5 - Poison, 6 - Holy, 7 - Dark, 8 - Ghost, 9 - Undead
+// 5  = Mob Kill by Size, where parameter : 0 - Small, 1 - Medium, 2 - Large
+// 6  = Mob Kill by Class on Castles only, usefull for WoE Achievements.
+// ------ Kill and Damage Goals ------
+// 7  = PC Kill. Received by killing players, where parameter : 0 - PVP, 1 - WoE, 2 - BG, 3 - PvPmode (@pvpmode), 4 - Everywhere
+// 8  = PC Damage Done (to players only), where parameter : 0 - PVP, 1 - WoE, 2 - BG, 3 - PvPmode (@pvpmode), 4 - Everywhere
+// ------ Objective Goals ------
+// 9  = Quest, using the quest ID as parameter. Count will be 1.
+// 10 = Achievement Set. This is received when you complete other achievement groups. Count will be 1.
+// ------ Zeny Goals ------
+// 11 = Zeny where count is the required amount of Zeny and parameter : 0 - Hold it, 1 - Expend it on Shops, 2 - Win it from Vending, 3 - Expend it on Vendings, 4 - Expend it on Skills
+// ------ Item Goals ------
+// NOTE : parameter could be the item ID or item type. Remember item id start from 500, while item types is a value from 0 to 18
+// 12 = Find Item. Only works from monster drops. For example, find a Poring Card 10 times.
+// 13 = Item Have, where the player requires to have the given amount in it's inventory. Do not abuse and remember the limits of weight and max amount.
+// 14 = Item Equip, where the player must equip the given item id/type.
+// 15 = Item Use, where it counts when you use the item, like potions.
+// 16 = Item Consume, counting when you use item for skills only.
+// =====================================================
+
+// Cambio de Clase
+1,0,El primer paso,l1,3000,3000,671,1,Ranker::OnLogro,0
+2,0,El segundo paso,l2,6000,6000,671,1,Ranker::OnLogro,0
+3,0,El paso final,l3,7000,70000,671,1,Ranker::OnLogro,0
+4,0,Maestro del Job,l4,8000,8000,671,1,Ranker::OnLogro,0
+5,0,El Gran Maestro,l5,9000,9000,671,1,Ranker::OnLogro,0
+6,0,Aventurero Oficial,l6,10000,10000,671,1,Ranker::OnLogro,0
+
+// Cofres de Tesoro
+7,0,Buscador de Tesoros,l7,15000,15000,671,1,Ranker::OnLogro,0
+8,0,Experto en Tesoros,l8,50000,50000,671,1,Ranker::OnLogro,0
+
+// Oficios
+9,0,Emprendí el Oficio de Cazador,l9,10000,10000,671,1,Ranker::OnLogro,0
+10,0,Emprendí el Oficio de Leñador,l10,10000,10000,671,1,Ranker::OnLogro,0
+11,0,Emprendí el Oficio de Minero,l11,10000,10000,671,1,Ranker::OnLogro,0
+12,0,Emprendí el Oficio de Costurero,l12,10000,10000,671,1,Ranker::OnLogro,0
+13,0,Emprendí el Oficio de Carpintero,l13,10000,10000,671,1,Ranker::OnLogro,0
+14,0,Maestro en mi Oficio,l14,70000,70000,671,1,Ranker::OnLogro,0
+15,0,Maestro en dos Oficios,l15,200000,200000,671,1,Ranker::OnLogro,0
+
+// Caza de Poring
+16,2,Mi Primer Poring,l16,300,300,671,1,Ranker::OnLogro,1002,1
+17,2,Poring Slayer,l17,15000,15000,671,1,Ranker::OnLogro,1002,100
+
+// Objetos
+18,12,Buscador de Materiales Raros,l18,10000,10000,671,1,Ranker::OnLogro,714,10
+
+// Estilista
+19,0,Una nueva apariencia,l19,500,500,671,1,Ranker::OnLogro,0
+
+// Oficios 2
+20,0,Talador Frenético,l20,10000,10000,671,1,Ranker::OnLogro,0
+21,0,Minero Frenético,l21,10000,10000,671,1,Ranker::OnLogro,0
+
+// Montura
+22,0,Montador de Camellos Legendarios,l22,10000,10000,671,1,Ranker::OnLogro,0
+
+// Valkyrian Set
+23,14,La suerte está de mi lado,l23,10000,10000,671,1,Ranker::OnLogro,2357,1,2524,1,2421,1
+
+// Puntos por hora
+24,0,Jugador Dedicado,l24,15000,15000,671,1,Ranker::OnLogro,0
+25,0,Jugador Frenético,l25,35000,35000,671,1,Ranker::OnLogro,0
+
+// Reseter
+26,0,Mi primer reinicio,l26,3000,3000,671,1,Ranker::OnLogro,0
+
+// Gasto de Zeny
+27,11,Mi bolsillo tiene moscas,l27,20000,15000,671,1,Ranker::OnLogro,1,1000000,3,1000000
+
+// MvPS
+28,0,Mi Primer MvP,l28,20000,35000,671,1,Ranker::OnLogro,0
+
+// Creación de objetos Costurero y Carpintero
+29,0,Gran Manufacturador,l29,30000,30000,671,1,Ranker::OnLogro,0

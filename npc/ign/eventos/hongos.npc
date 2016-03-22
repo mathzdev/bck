@@ -1,0 +1,141 @@
+prontera,159,178,4	script	Cuenta-Hongos::CUENTE	10047,{
+	mes "[^5533ffCuenta-Hongos^000000]";
+	mes "¡Hola, ¿deseas participar?";
+	next;
+	switch(select("Información:^5533ffParticipar^000000 [ ^ff0000"+getmapusers("poring_w02")+"^000000 ]:^777777Salir^000000")) {
+		case 1:
+			mes "[^5533ffCuenta-Hongos^000000]";
+			mes "El evento consiste en ser el primero en contar los hongos en el mapa y escribir su número con el encargado NPC.";
+			next;
+			mes "[^5533ffCuenta-Hongos^000000]";
+			mes "Si eres el primero en hacerlo, serás el ganador.";
+			next;
+			mes "[^5533ffCuenta-Hongos^000000]";
+			mes "En cada ronda de éste evento, el número de hongos, es aleatorio, así que no te confíes.";
+			close;
+		case 2:
+			set @op,0;
+			warp "poring_w02",98,110;
+			close;
+		case 3:
+			mes "[^5533ffCuenta-Hongos^000000]";
+			mes "Ven de nuevo si deseas participar.";
+			close2;
+			emotion e_thx;
+			end;
+	}
+OnEnable:
+	enablenpc "CUENTE";
+	waitingroom "Cuenta-Hongos",0;
+	end;
+OnDisable:
+	delwaitingroom;
+OnInit:
+	disablenpc "CUENTE";
+	end;
+}
+-	script	CUENT	-1,{
+OnWhisperGlobal:
+OnCuentaHongos:
+	set $cnt_evt,0;
+	killmonsterall "poring_w02";
+	donpcevent "CUENTE::OnEnable";
+	announce "[Cuenta-Hongos]: ¡El evento de Cuenta-Hongos correcto está por comenzar!",bc_all,"0xFF00EE";
+	sleep2 2000;
+	announce "[Cuenta-Hongos]: Dirígete con el NPC en la Ciudad de Prontera para participar.",bc_all,"0xFF00EE";
+	sleep2 5000;
+	announce "[Cuenta-Hongos]: El evento empezará en 2 minutos.",bc_all,"0xFF00EE";
+	sleep2 60000;
+	announce "[Cuenta-Hongos]: El evento empezará en 1 minuto.",bc_all,"0xFF00EE";
+	sleep2 30000;
+	announce "[Cuenta-Hongos]: El evento empezará en tan sólo 30 segundos, ¡apresúrate a entrar!",bc_all,"0xFF00EE";
+	sleep2 30000;
+	announce "[Cuenta-Hongos]: ¡El evento ha comenzado!.",bc_all,"0xFF00EE";
+	donpcevent "CUENTE::OnDisable";
+	if(getmapusers("poring_w02") < 1) {
+		mapwarp "poring_w02","prontera",150,180;
+		end;
+	}
+	set .c1,rand(5,15);
+	set .c2,rand(5,15);
+	set $cnt_evt,.c1+.c2;
+	areamonster "poring_w02",93,125,104,122,"Cuenta-Hongos",1014,.c1,"CUENT::OnHongo";
+	areamonster "poring_w02",93,125,104,122,"Cuenta-Hongos",1077,.c2,"CUENT::OnHongo";
+	end;
+OnHongo:
+	set @op,0;
+	message strcharinfo(0),"Haz matado a un hongo, eso está prohibido y te descalifica automáticamente del evento.";
+	sleep2 1000;
+	atcommand "@me he matado un hongo, tómenlo en cuenta.";
+	sleep2 1500;
+	warp "prontera",150,180;
+	end;
+}
+poring_w02	mapflag	nomobloot
+poring_w02,95,112,4	script	Jefa del Evento::jef_evt	720,{
+	if($cnt_evt > 0 && @op < 1)
+		set @op,3;
+	if($cnt_evt < 1 || @op < 1) {
+		mes "[^FF00EEJefa del Evento^000000]";
+		mes "El evento consiste en ser el primero en contar los hongos en el mapa y escribir su número con el encargado NPC.";
+		next;
+		mes "[^FF00EEJefa del Evento^000000]";
+		mes "Si eres el primero en hacerlo, serás el ganador.";
+		next;
+		mes "[^FF00EEJefa del Evento^000000]";
+		mes "En cada ronda de éste evento, el número de hongos, es aleatorio, así que no te confíes.";
+		close;
+	}
+	mes "[^FF00EEJefa del Evento^000000]";
+	mes "Venga, venga, adivina cuántos hongos hay y te daré el premio ganador.";
+	next;
+	mes "[^FF00EEJefa del Evento^000000]";
+	mes "Sólo tienes ^ff0000"+@op+"^000000 Oportunidades Restantes.";
+	next;
+	input @cnt;
+	if($cnt_evt == 0 && @cnt == 0) {
+		mes "[^FF00EEJefa del Evento^000000]";
+		mes "¿Así que intentando aprovecharte de un bug?";
+		mes "Pues aquí está tu premio.";
+		atcommand "@mute "+strcharinfo(0)+" 20";
+		close;
+	}
+	if(@cnt == $cnt_evt) {
+		mes "[^FF00EEJefa del Evento^000000]";
+		mes "^FF00EE¡Felicidades!^000000, haz ganado, cierra la ventana para recibir tu premio.";
+		announce "[Cuenta-Hongos] ¡Felicitaciones!, "+strcharinfo(0)+" ha ganado el evento, acertando a la cantidad de [ "+$cnt_evt+" ] hongos.",bc_all,0xFF00EE;
+		callfunc "F_Event",1,rand(1,5);
+		set Zeny,Zeny+50000;
+		dispbottom "Gained 50,000z";
+		set $cnt_evt,0;
+		set @op,0;
+		sleep2 5000;
+		mapwarp "poring_w02","prontera",150,180;
+		close;
+	}
+	set @op,@op-1;
+	if(@op < 1) {
+		mes "[^FF00EEJefa del Evento^000000]";
+		mes "Te haz quedado sin oportunidades, adios.";
+		close2;
+		set @op,0;
+		announce "[Cuenta-Hongos] "+strcharinfo(0)+" ha gastado todas sus oportunidades.",bc_map,0xFF00EE;
+		warp "prontera",150,180;
+		if(getmapusers("poring_w02") < 1) {
+			announce "[Cuenta-Hongos] Nadie adivinó el número de hongos, evento finalizado.",bc_all,0xFF00EE;
+			set $cnt_evt,0;
+			disablenpc "jev_evt";
+			end;
+		}
+		end;
+	}
+	mes "[^FF00EEJefa del Evento^000000]";
+	mes "Lo siento, pero te haz equivocado, sólo te quedan ^ff0000"+@op+"^000000 Oportunidades Restantes para adivinar el número correcto.";
+	close;
+}
+poring_w02,117,121,0	script	#touchw	136,5,5,{
+OnTouch:
+	warp "poring_w02",105,110;
+	end;
+}
+poring_w02,79,122,0	duplicate(#touchw)	#touchw2	136,5,5

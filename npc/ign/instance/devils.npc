@@ -1,0 +1,1330 @@
+//===== rAthena Script ======================================= 
+//= Devil's Tower
+//===== By: ================================================== 
+//= DanielArt
+//===== Current Version: ===================================== 
+//= 1.1
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Based on iRO Video.
+//===== Additional Comments: ================================= 
+//= 1.0 First version. [DanielArt]
+//= 1.1 Added quest on Dimensional Crack. [DanielArt]
+//============================================================ 
+dali	mapflag	loadevent
+dali02	mapflag	loadevent
+dali,95,149,4	script	Samuel#tnm	620,{
+	if(checkquest(13996,HUNTING) == 2) {
+		mes "[Samuel]";
+		mes "Excelente trabajo, ahora el mundo está fuera de peligro mientras el demonio no sea revivido.";
+		getexp 4500000,4500000;
+		completequest 13996;
+		close;
+	}
+	mes "[Samuel]";
+	mes "Un gran demonio ha infectado una torre que se usaba como guarida, ahora gran número de guerreros han caído enfermos y no encontramos forma de salvarles.";
+	next;
+	mes "[Samuel]";
+	mes "Varios valientes aventureros han ido a costa de su propia voluntad (y la de un servidor) a buscar una forma de solucionar el problema.";
+	next;
+	mes "[Samuel]";
+	mes "Pero lamentablemente la mayoría cae en las garras de la oscuridad, y son asesinados brutalmente que se dice que sus cuerpos se tranforman en horribles demonios.";
+	next;
+	mes "[Samuel]";
+	mes "Cuenta la leyenda que esa torre era la guarida de un poderoso Nigromante, que intentaba crear al demonio de las tinieblas más poderoso de todos.";
+	next;
+	mes "[Samuel]";
+	mes "Pero está escrito en los libros de historia de las hadas, que el nigromante accidentalmente fue transformado en su anhelado sueño.";
+	next;
+	mes "[Samuel]";
+	mes "Ahora convertido en demonio, busca asesinar por puro instinto, manteniendose en una eterna maldición que no muestra una luz de fin.";
+	next;
+	mes "[Samuel]";
+	mes "Por favor entra por el portal que he creado, cura a los enfermos, salva vidas y derrota al gran demonio en el último piso de la torre.";
+	close2;
+	if (checkquest(13996) == -1)
+		setquest 13996;
+	end;
+OnPCLoadMapEvent:
+	if(strcharinfo(3) == "dali" && checkquest(13996) == -1)
+		showevent 0,1;
+	end;
+}
+dali,91,146,4	script	Erika#tnm	729,{
+	if(checkquest(13995,HUNTING) == 2) {
+		mes "[Erika]";
+		mes "¿Se encuentra bien?";
+		next;
+		mes "[Erika]";
+		mes "Gracias al cielo, ten ésto como muestra de mi agradecimiento.";
+		getexp 500000,500000;
+		completequest 13995;
+		close;
+	}
+	mes "[Erika]";
+	mes "Por favor ayúdanos aventurer"+(Sex?"o":"a")+", uno de mis amigos es guardia de seguridad en esa torre y está a punto de morir.";
+	next;
+	mes "[Erika]";
+	mes "Te lo ruego por favor, no sé que males le puedan pasan mientras él está dentro de allí.";
+	next;
+	mes "[Erika]";
+	mes "Por favor ayúdanos.";
+	close2;
+	if (checkquest(13995) == -1)
+		setquest 13995;
+	emotion e_sob;
+	end;
+OnPCLoadMapEvent:
+	if(strcharinfo(3) == "dali" && checkquest(13996) == -1)
+		showevent 0,1;
+	end;
+}
+// Instance Creation :: tnm
+//============================================================
+dali,99,148,5	script	Portal Dimensional#tnm	10007,{
+	set .@party_id,getcharid(1);
+	set .@md_name$,"Devil's Tower";
+
+	if (!.@party_id || BaseLevel < 100) {
+		mes "[Samuel]";
+		mes "Lo siento, pero no puedes venir sólo y sin experiencia..";
+		close2; cutin "",255; end;
+	}
+	mes "[Samuel]";
+	mes "No te preocupes, soy un gran mago, no te pasará nada por usar éste portal, adelante..";
+	next;
+	while(1) {
+		switch(select("Devil's Tower.:Salir.")) {
+			case 1:
+				if (getcharid(0) == getpartyleader(.@party_id,2)) {
+					set .@playtime, checkquest(13994,PLAYTIME);
+					if (.@playtime == 0 || .@playtime == 1) {
+						switch(instance_enter("Devil's Tower")) {
+							case 3:
+								mes "[Samuel]";
+								mes "Aún no es tiempo, vuelve luego.";
+								close2; cutin "",255; end;
+							case 2:
+							case 1:
+								mes "[Samuel]";
+								mes "Un gran hechizo negro te envuelve, no te recomendaría ir aquí.";
+								close2; cutin "",255; end;
+							case 0:
+								mapannounce "dali", getpartyname(getcharid(1))+"  ha entrado a "+.@md_name$+"!",bc_map,"0x00ff99";
+								if (checkquest(13994) == -1) setquest 13994;
+								close2; cutin "",255; end;
+							default:
+								mes "[Samuel]";
+								mes "No estás enlistado para el combate.";
+								close2; cutin "",255; end;
+						}
+						mes "[Samuel]";
+						mes "El portal está presentando fallos por el momento, vuelve más tarde.";
+						close2; cutin "",255; end;
+					}
+					if (.@playtime == 2) erasequest 13994;
+					if (instance_create(.@md_name$) < 0) {
+						mes "[Samuel]";
+						mes "Nombre de party es... "+getpartyname(.@party_id)+".";
+						mes "El lider es... "+strcharinfo(0)+".";
+						mes "^0000ff"+.@md_name$+"^000000, No la puedo abrir ahora";
+						mes "No es el tiempo, vuelve luego.";
+						close2; cutin "",255; end;
+					}
+					switch(instance_enter("Devil's Tower")) {
+						case 3:
+							mes "[Samuel]";
+							mes "Aún no es tiempo, vuelve luego.";
+							close2; cutin "",255; end;
+						case 2:
+						case 1:
+							mes "[Samuel]";
+							mes "Un gran hechizo negro te envuelve, no te recomendaría ir aquí.";
+									close2; cutin "",255; end;
+						case 0:
+							mapannounce "dali", strcharinfo(0)+"  ha entrado a "+.@md_name$+"!",bc_map,"0x00ff99";
+							if (checkquest(13994) == -1) setquest 13994;
+							if (checkquest(13995) == -1) setquest 13995;
+							if (checkquest(13996) == -1) setquest 13996;
+							close2; cutin "",255; end;
+						default:
+							mes "[Samuel]";
+							mes "No estás enlistado para el combate.";
+							close2; cutin "",255; end;
+					}
+				}
+				switch(instance_enter("Devil's Tower")) {
+					case 3:
+						mes "[Samuel]";
+						mes "Aún no es tiempo, vuelve luego.";
+						close2; cutin "",255; end;
+					case 2:
+					case 1:
+						mes "[Samuel]";
+						mes "Un gran hechizo negro te envuelve, no te recomendaría ir aquí.";
+						close2; cutin "",255; end;
+					case 0:
+						mapannounce "dali", getpartyname(getcharid(1))+"  ha entrado a "+.@md_name$+"!",bc_map,"0x00ff99";
+						if (checkquest(13994) == -1) setquest 13994;
+						if (checkquest(13995) == -1) setquest 13995;
+						if (checkquest(13996) == -1) setquest 13996;
+						close2; cutin "",255; end;
+					default:
+						mes "[Samuel]";
+						mes "No estás enlistado para el combate.";
+						close2; cutin "",255; end;
+				}
+			case 2:
+				mes "[Samuel]";
+				mes "Vuelve después.";
+				close2; cutin "",255; end;
+		}
+	}
+}
+
+// Primera Escena: Curar a los Heridos
+//============================================================
+1@tnm1,57,110,4	script	Oficial Heim#tnm01	691,{
+	if (getcharid(0) == getpartyleader(getcharid(1),2))
+		donpcevent instance_npcname("Oficial Heim#tnm01")+"::OnConversation";
+	end;
+OnConversation:
+	npctalk "¡He dicho que debemos de proteger a los heridos!";
+	sleep2 2000;
+	npctalk "¿Están escuchando?";
+	sleep2 2000;
+	donpcevent instance_npcname("Healer Fama#tnm01")+"::OnEnable";
+	donpcevent instance_npcname("Healer Fama#tnm01")+"::OnChat1";
+	sleep2 2000;
+	npctalk "Ayuda a Fama a curar a los soldados heridos.";
+	end;
+OnChat1:
+	npctalk "¿Nuestros refuerzos son el Gremio de Asesinos?, muchas gracias, han llegado a tiempo.";
+	end;
+OnChat2:
+	npctalk "¿Te burlas de mí?";
+	end;
+OnChat3:
+	npctalk "¿Cómo sabes eso?, sí, los demonios han dejado de atacar en las escaleras.";
+	end;
+OnChat4:
+	npctalk "¿Y qué es lo que harás?, si vas sólo serás asesinado.";
+	end;
+OnChat5:
+	npctalk "Ellos son impredecibles. Bien, ya sabes que pasará ¿cierto?, sean sus guardaespaldas...";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Oficial Heim#tnm01")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Oficial Heim#tnm01");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Oficial Heim#tnm01");
+	end;
+}
+1@tnm1,47,109,5	script	Healer Fama#tnm01	696,{
+	if (getcharid(0) == getpartyleader(getcharid(1),2)) {
+		if(countitem(35055) >= 5) {
+			delitem 35055,countitem(35055);
+			mes "[Healer Fama]";
+			mes "Gracias por devolverme las cajas vacías.";
+			next;
+			mes "[Healer Fama]";
+			mes "Espera... ¿escuchaste algo?";
+			close2;
+			npctalk "¡¿Asesinos?!";
+			donpcevent instance_npcname("Guerrero Mágico#tnm1")+"::OnEnable";
+			donpcevent instance_npcname("Lucile#tnm1")+"::OnEnable";
+			donpcevent instance_npcname("Asesino Dewey#tnm2")+"::OnEnable";
+			donpcevent instance_npcname("Asesino Louie#tnm3")+"::OnEnable";
+			end;
+		} else if(countitem(7641) > 0) {
+			mes "[Healer Fama]";
+			mes "Por favor devuélveme las cajas vacías de medicamentos.";
+			close;
+		}
+	}
+	mes "[Healer Fama]";
+	mes "Por favor ayúdame a curar a los heridos con el paquete de primeros auxilios, no es muy dificil de usar, sólo lee las instrucciones.";
+	if(countitem(7641) < 1)
+		getitem 7641,1;
+	close;
+OnChat1:
+	npctalk "Comandante por favor ayúdame. ¡No puedo hacer ésto yo sola~!";
+	end;
+OnHealed:
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Healer Fama#tnm01")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Healer Fama#tnm01");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Healer Fama#tnm01");
+	end;
+}
+1@tnm1,61,110,4	script	Guardia de Morroc#t	998,{
+	mes "[Guardia de Morroc]";
+	mes "Estamos aquí para poder ayudar en todo lo que podamos.";
+	close;
+OnInstanceInit:
+	donpcevent instance_npcname("Guardia de Morroc#t")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Guardia de Morroc#t");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Guardia de Morroc#t");
+	end;
+}
+1@tnm1,61,114,4	script	Guardia de Morroc#t1	997,{
+	mes "[Guardia de Morroc]";
+	mes "Estamos aquí para poder ayudar en todo lo que podamos.";
+	close;
+OnInstanceInit:
+	donpcevent instance_npcname("Guardia de Morroc#t1")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Guardia de Morroc#t1");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Guardia de Morroc#t1");
+	end;
+}
+1@tnm1,39,113,4	script	Soldado Herido#ta01	687,{
+	mes "El soldado ha perdido la conciencia y está desfalleciendo.";
+	if(countitem(7641) > 0) {
+		next;
+		select("Utilizar Primeros Auxilios");
+		delitem 7641,1;
+		specialeffect 72;
+		mes "^777777Aplicas la poción de cura con cuidado.^000000";
+		progressbar "008800",5;
+		donpcevent instance_npcname("Soldado Herido#ta01")+"::OnDisable";
+		donpcevent instance_npcname("Soldado Herido#ta02")+"::OnEnable";
+		mes " ";
+		mes "¡El soldado se ha curado!";
+		getitem 35055,1; donpcevent instance_npcname("Healer Fama#tnm01")+"::OnHealed";
+		close;
+	}
+	close;
+OnInstanceInit:
+	donpcevent instance_npcname("Soldado Herido#ta01")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Soldado Herido#ta01");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Soldado Herido#ta01");
+	end;
+}
+1@tnm1,39,113,4	script	Soldado Herido#ta02	688,{
+	mes "[Swordman]";
+	mes "Gracias por tu ayuda, ahora me siento mejor.";
+	close;
+OnInstanceInit:
+	donpcevent instance_npcname("Soldado Herido#ta02")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Soldado Herido#ta02");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Soldado Herido#ta02");
+	end;
+}
+1@tnm1,29,119,4	script	Soldado Herido#tb01	689,{
+	mes "El soldado ha perdido la conciencia y está desfalleciendo.";
+	if(countitem(7641) > 0) {
+		next;
+		select("Utilizar Primeros Auxilios");
+		delitem 7641,1;
+		specialeffect 72;
+		mes "^777777Aplicas la poción de cura con cuidado.^000000";
+		progressbar "008800",5;
+		donpcevent instance_npcname("Soldado Herido#tb01")+"::OnDisable";
+		donpcevent instance_npcname("Soldado Herido#tb02")+"::OnEnable";
+		mes " ";
+		mes "¡El soldado se ha curado!";
+		getitem 35055,1; donpcevent instance_npcname("Healer Fama#tnm01")+"::OnHealed";
+		close;
+	}
+	close;
+OnInstanceInit:
+	donpcevent instance_npcname("Soldado Herido#tb01")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Soldado Herido#tb01");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Soldado Herido#tb01");
+	end;
+}
+1@tnm1,29,119,4	script	Soldado Herido#tb02	690,{
+	mes "[Monk]";
+	mes "Gracias por tu ayuda, ahora me siento mejor.";
+	close;
+OnInstanceInit:
+	donpcevent instance_npcname("Soldado Herido#tb02")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Soldado Herido#tb02");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Soldado Herido#tb02");
+	end;
+}
+1@tnm1,24,105,4	script	Soldado Herido#tc01	689,{
+	mes "El soldado ha perdido la conciencia y está desfalleciendo.";
+	if(countitem(7641) > 0) {
+		next;
+		select("Utilizar Primeros Auxilios");
+		delitem 7641,1;
+		specialeffect 72;
+		mes "^777777Aplicas la poción de cura con cuidado.^000000";
+		progressbar "008800",5;
+		donpcevent instance_npcname("Soldado Herido#tc01")+"::OnDisable";
+		donpcevent instance_npcname("Soldado Herido#tc02")+"::OnEnable";
+		mes " ";
+		mes "¡El soldado se ha curado!";
+		close;
+	}
+	close;
+OnInstanceInit:
+	donpcevent instance_npcname("Soldado Herido#tc01")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Soldado Herido#tc01");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Soldado Herido#tc01");
+	end;
+}
+1@tnm1,24,105,4	script	Soldado Herido#tc02	690,{
+	mes "[Monk]";
+	mes "Gracias por tu ayuda, ahora me siento mejor.";
+	close;
+OnInstanceInit:
+	donpcevent instance_npcname("Soldado Herido#tc02")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Soldado Herido#tc02");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Soldado Herido#tc02");
+	end;
+}
+1@tnm1,31,110,4	script	Soldado Herido#td01	692,{
+	mes "El soldado ha perdido la conciencia y está desfalleciendo.";
+	if(countitem(7641) > 0) {
+		next;
+		select("Utilizar Primeros Auxilios");
+		delitem 7641,1;
+		specialeffect 72;
+		mes "^777777Aplicas la poción de cura con cuidado.^000000";
+		progressbar "008800",5;
+		donpcevent instance_npcname("Soldado Herido#td01")+"::OnDisable";
+		donpcevent instance_npcname("Soldado Herido#td02")+"::OnEnable";
+		mes " ";
+		mes "¡El soldado se ha curado!";
+		getitem 35055,1; donpcevent instance_npcname("Healer Fama#tnm01")+"::OnHealed";
+		close;
+	}
+	close;
+OnInstanceInit:
+	donpcevent instance_npcname("Soldado Herido#td01")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Soldado Herido#td01");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Soldado Herido#td01");
+	end;
+}
+1@tnm1,31,110,4	script	Soldado Herido#td02	693,{
+	mes "[Sage]";
+	mes "Gracias por tu ayuda, ahora me siento mejor.";
+	close;
+OnInstanceInit:
+	donpcevent instance_npcname("Soldado Herido#td02")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Soldado Herido#td02");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Soldado Herido#td02");
+	end;
+}
+1@tnm1,20,118,4	script	Soldado Herido#te01	694,{
+	mes "El soldado ha perdido la conciencia y está desfalleciendo.";
+	if(countitem(7641) > 0) {
+		next;
+		select("Utilizar Primeros Auxilios");
+		delitem 7641,1;
+		specialeffect 72;
+		mes "^777777Aplicas la poción de cura con cuidado.^000000";
+		progressbar "008800",5;
+		donpcevent instance_npcname("Soldado Herido#te01")+"::OnDisable";
+		donpcevent instance_npcname("Soldado Herido#te02")+"::OnEnable";
+		mes " ";
+		mes "¡El soldado se ha curado!";
+		getitem 35055,1; donpcevent instance_npcname("Healer Fama#tnm01")+"::OnHealed";
+		close;
+	}
+	close;
+OnInstanceInit:
+	donpcevent instance_npcname("Soldado Herido#te01")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Soldado Herido#te01");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Soldado Herido#te01");
+	end;
+}
+1@tnm1,20,118,4	script	Soldado Herido#te02	695,{
+	mes "[Hunter]";
+	mes "Gracias por tu ayuda, ahora me siento mejor.";
+	close;
+OnInstanceInit:
+	donpcevent instance_npcname("Soldado Herido#te02")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Soldado Herido#te02");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Soldado Herido#te02");
+	end;
+}
+1@tnm1,19,110,4	script	Soldado Herido#tf01	697,{
+	mes "El soldado ha perdido la conciencia y está desfalleciendo.";
+	if(countitem(7641) > 0) {
+		next;
+		select("Utilizar Primeros Auxilios");
+		delitem 7641,1;
+		specialeffect 72;
+		mes "^777777Aplicas la poción de cura con cuidado.^000000";
+		progressbar "008800",5;
+		donpcevent instance_npcname("Soldado Herido#tf01")+"::OnDisable";
+		donpcevent instance_npcname("Soldado Herido#tf02")+"::OnEnable";
+		mes " ";
+		mes "¡El soldado se ha curado!";
+		getitem 35055,1; donpcevent instance_npcname("Healer Fama#tnm01")+"::OnHealed";
+		close;
+	}
+	close;
+OnInstanceInit:
+	donpcevent instance_npcname("Soldado Herido#tf01")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Soldado Herido#tf01");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Soldado Herido#tf01");
+	end;
+}
+1@tnm1,19,110,4	script	Soldado Herido#tf02	698,{
+	mes "[Assassin]";
+	mes "Gracias por tu ayuda, ahora me siento mejor.";
+	close;
+OnInstanceInit:
+	donpcevent instance_npcname("Soldado Herido#tf02")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Soldado Herido#tf02");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Soldado Herido#tf02");
+	end;
+}
+
+// Segunda Escena: La llegada de los Asesinos
+//============================================================
+1@tnm1,50,101,3	script	Guerrero Mágico#tnm1	494,{
+end;
+OnChat1:
+	npctalk "Hmmm. Yo iré e investigaré acerca de la situación.";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Guerrero Mágico#tnm1")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Guerrero Mágico#tnm1");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Guerrero Mágico#tnm1");
+	end;
+}
+1@tnm1,46,103,5	script	Lucile#tnm1	667,{
+	if (getcharid(0) == getpartyleader(getcharid(1),2))
+		donpcevent instance_npcname("Lucile#tnm1")+"::OnConversation";
+	end;
+OnConversation:
+	npctalk "Yo soy Lucile, del Gremio de Asesinos.";
+	sleep2 2000;
+	donpcevent instance_npcname("Oficial Heim#tnm01")+"::OnChat1";
+	sleep2 2000;
+	npctalk "La situación no parece estar bien.";
+	sleep2 2000;
+	npctalk "¿Qué le sucedió a los valientes caballeros de Prontera?";
+	sleep2 2000;
+	donpcevent instance_npcname("Oficial Heim#tnm01")+"::OnChat2";
+	sleep2 2000;
+	npctalk "No del todo. En realidad quiero saber. ¿Qué es lo que hay subiendo las escaleras?";
+	sleep2 2000;
+	donpcevent instance_npcname("Oficial Heim#tnm01")+"::OnChat3";
+	sleep2 2000;
+	npctalk "¿Qué piensas de la situación Guerrero Mágico?";
+	sleep2 2000;
+	donpcevent instance_npcname("Guerrero Mágico#tnm1")+"::OnChat1";
+	sleep2 2000;
+	donpcevent instance_npcname("Oficial Heim#tnm01")+"::OnChat4";
+	sleep2 2000;
+	npctalk "No estaremos solos. Aquí hay algunos soldados que no están heridos.";
+	sleep2 2000;
+	npctalk "Bien, les pregunto si desean ser mis guarda espaldas. Hahahaha ¿verdad Dewey?";
+	sleep2 2000;
+	donpcevent instance_npcname("Oficial Heim#tnm01")+"::OnChat5";
+	sleep2 1000;
+	donpcevent instance_npcname("Guerrero Mágico#tnm1")+"::OnDisable";
+	donpcevent instance_npcname("Lucile#tnm1")+"::OnDisable";
+	donpcevent instance_npcname("Asesino Dewey#tnm2")+"::OnDisable";
+	donpcevent instance_npcname("Asesino Louie#tnm3")+"::OnDisable";
+	donpcevent instance_npcname("Asesino Dewey#tnm4")+"::OnEnable";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Lucile#tnm1")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Lucile#tnm1");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Lucile#tnm1");
+	end;
+}
+1@tnm1,42,105,4	script	Asesino Dewey#tnm2	884,{
+end;
+OnInstanceInit:
+	donpcevent instance_npcname("Asesino Dewey#tnm2")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Asesino Dewey#tnm2");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Asesino Dewey#tnm2");
+	end;
+}
+1@tnm1,42,100,5	script	Asesino Louie#tnm3	10002,{
+end;
+OnInstanceInit:
+	donpcevent instance_npcname("Asesino Louie#tnm3")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Asesino Louie#tnm3");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Asesino Louie#tnm3");
+	end;
+}
+
+// Tercera Escena: Subiendo las escaleras
+//============================================================
+1@tnm1,71,106,4	script	Asesino Dewey#tnm4	884,{
+	mes "[Dewey]";
+	mes "Los guiaré al siguiente piso.";
+	mes "No olviden asesinar a todos los demonios que encuentren por el camino.";
+	close2;
+	set .@m$,instance_mapname("1@tnm1");
+	warp .@m$,91,23;
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Asesino Dewey#tnm4")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Asesino Dewey#tnm4");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Asesino Dewey#tnm4");
+	end;
+}
+1@tnm1,100,23,4	script	#ctrltnm1	139,5,5,{
+OnTouch:
+	donpcevent instance_npcname("#ctrltnm2")+"::OnEnable";
+	donpcevent instance_npcname("#ctrltnm1")+"::OnDisable";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#ctrltnm1")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#ctrltnm1");
+	end;
+OnDisable:
+	disablenpc instance_npcname("#ctrltnm1");
+	end;
+}
+1@tnm1,0,0,4	script	#ctrltnm2	139,{
+OnInstanceInit:
+	donpcevent instance_npcname("#ctrltnm2")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#ctrltnm2");
+	set .@m$,instance_mapname("1@tnm1");
+	monster .@m$,109,23,"Evil Shadow",2939,7,instance_npcname("#ctrltnm2")+"::OnMyMobDead";
+	monster .@m$,122,23,"Evil Shadow",2940,7,instance_npcname("#ctrltnm2")+"::OnMyMobDead";
+	monster .@m$,144,23,"Evil Shadow",2941,7,instance_npcname("#ctrltnm2")+"::OnMyMobDead";
+	end;
+OnDisable:
+	disablenpc instance_npcname("#ctrltnm2");
+	end;
+OnMyMobDead:
+	set .@m$,instance_mapname("1@tnm1");
+	if(mobcount(.@m$,instance_npcname("#ctrltnm2")+"::OnMyMobDead") < 1) {
+		donpcevent instance_npcname("Asesino Louie#tnm5")+"::OnEnable";
+		donpcevent instance_npcname("#ctrltnm2")+"::OnDisable";
+	}
+	end;
+}
+1@tnm1,157,23,4	script	Asesino Louie#tnm5	884,{
+	mes "[Louie]";
+	mes "Me estoy asegurando de que nadie más suba arriba de las escaleras, no quiero que pase lo mismo otra ves.";
+	next;
+	mes "[Louie]";
+	mes "Me gustaría que me ayudaras.";
+	mes "Te guiaré.";
+	close2;
+	set .@m$,instance_mapname("1@tnm1");
+	warp .@m$,124,86;
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Asesino Louie#tnm5")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Asesino Louie#tnm5");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Asesino Louie#tnm5");
+	end;
+}
+// Cuarta Escena: El ritual
+//============================================================
+1@tnm1,137,97,4	script	Lucile#tnm2	667,{
+	if (getcharid(0) == getpartyleader(getcharid(1),2))
+		donpcevent instance_npcname("Lucile#tnm2")+"::OnConversation";
+	end;
+OnConversation:
+	npctalk "Me apresuré a subir para espiar sobre qué estaba sucediendo, pero ahora no puedo moverme.";
+	sleep2 2000;
+	npctalk "Lo siento, no ayudé en nada.";
+	sleep2 2000;
+	npctalk "Por favor tengan cuidado.";
+	sleep2 2000;
+	donpcevent instance_npcname("Asesino Huey#tnm6")+"::OnChat1";
+	donpcevent instance_npcname("#ctrltnm3")+"::OnEnable";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Lucile#tnm2")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Lucile#tnm2");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Lucile#tnm2");
+	end;
+}
+1@tnm1,0,0,0	script	#ctrltnm3	139,{
+OnInstanceInit:
+	donpcevent instance_npcname("#ctrltnm3")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#ctrltnm3");
+	set .@m$,instance_mapname("1@tnm1");
+	monster .@m$,138,93,"Evil Shadow",2939,2,instance_npcname("#ctrltnm3")+"::OnMyMobDead";
+	monster .@m$,132,102,"Evil Shadow",2940,2,instance_npcname("#ctrltnm3")+"::OnMyMobDead";
+	monster .@m$,144,106,"Evil Shadow",2941,2,instance_npcname("#ctrltnm3")+"::OnMyMobDead";
+	end;
+OnDisable:
+	disablenpc instance_npcname("#ctrltnm3");
+	end;
+OnMyMobDead:
+	set .@m$,instance_mapname("1@tnm1");
+	if(mobcount(.@m$,instance_npcname("#ctrltnm3")+"::OnMyMobDead") < 1) {
+		donpcevent instance_npcname("Asesino Huey#tnm6")+"::OnChat2";
+		monster .@m$,139,102,"Evil Shadow",2939,5,instance_npcname("#ctrltnm3")+"::OnMyMobDead2";
+		monster .@m$,139,102,"Evil Shadow",2940,5,instance_npcname("#ctrltnm3")+"::OnMyMobDead2";
+		monster .@m$,139,102,"Evil Shadow",2941,6,instance_npcname("#ctrltnm3")+"::OnMyMobDead2";
+	}
+	end;
+OnMyMobDead2:
+	set .@m$,instance_mapname("1@tnm1");
+	if(mobcount(.@m$,instance_npcname("#ctrltnm3")+"::OnMyMobDead2") < 1) {
+		donpcevent instance_npcname("Asesino Huey#tnm6")+"::OnChat3";
+		monster .@m$,128,106,"Evil Shadow",2939,5,instance_npcname("#ctrltnm3")+"::OnMyMobDead3";
+		monster .@m$,129,89,"Evil Shadow",2940,5,instance_npcname("#ctrltnm3")+"::OnMyMobDead3";
+		monster .@m$,144,91,"Evil Shadow",2941,6,instance_npcname("#ctrltnm3")+"::OnMyMobDead3";
+	}
+	end;
+OnMyMobDead3:
+	set .@m$,instance_mapname("1@tnm1");
+	if(mobcount(.@m$,instance_npcname("#ctrltnm3")+"::OnMyMobDead3") < 1) {
+		donpcevent instance_npcname("Lucile#tnm2")+"::OnChat1";
+		donpcevent instance_npcname("Lucile#tnm2")+"::OnDisable";
+		donpcevent instance_npcname("Asesino Huey#tnm6")+"::OnDisable";
+		donpcevent instance_npcname("Asesino Dewey#tnm6")+"::OnEnable";
+	}
+	end;
+}
+1@tnm1,135,100,5	script	Asesino Huey#tnm6	884,{
+end;
+OnChat1:
+	npctalk "¡Oh no, hermana ten cuidado!, unos demonios han aparecido de repente.";
+	end;
+OnChat2:
+	npctalk "¿De dónde están viniendo?, demonios otra vez.";
+	end;
+OnChat3:
+	npctalk "¡Siguen apareciendo todavía más!";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Asesino Huey#tnm6")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Asesino Huey#tnm6");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Asesino Huey#tnm6");
+	end;
+}
+1@tnm1,135,100,5	script	Asesino Dewey#tnm6	884,{
+	mes "[Dewey]";
+	mes "Los guiaré al siguiente piso.";
+	mes "No olviden asesinar a todos los demonios que encuentren por el camino.";
+	close2;
+	set .@m$,instance_mapname("1@tnm2");
+	warp .@m$,136,127;
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Asesino Dewey#tnm6")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Asesino Dewey#tnm6");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Asesino Dewey#tnm6");
+	end;
+}
+
+// Quinta Escena: Romper los Sellos
+//============================================================
+1@tnm2,143,137,4	script	Lucile#tnm3	667,{
+	if (getcharid(0) == getpartyleader(getcharid(1),2))
+		donpcevent instance_npcname("Lucile#tnm3")+"::OnConversation";
+	end;
+OnConversation:
+	npctalk "Al parecer éste sello está siendo bloqueado por éste demonio.";
+	sleep2 2000;
+	npctalk "Necesitamos encontrar una forma de romper el sello si queremos proseguir con ésto.";
+	donpcevent instance_npcname("#ctrltnm4")+"::OnEnable";
+	donpcevent instance_npcname("Lucile#tnm4")+"::OnEnable";
+	donpcevent instance_npcname("Lucile#tnm3")+"::OnDisable";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Lucile#tnm3")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Lucile#tnm3");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Lucile#tnm3");
+	end;
+}
+1@tnm2,143,137,0	script	#ctrltnm4	139,10,10,{
+OnTouch:
+	if (getcharid(0) == getpartyleader(getcharid(1),2)) {
+		donpcevent instance_npcname("#ctrltnm5")+"::OnEnable";
+		instance_announce instance_id(),"¡Derrota a todos los Magic Seal para abrir el portal del centro!",bc_map,0xFF8800;
+		donpcevent instance_npcname("#ctrltnm4")+"::OnDisable";
+	}
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#ctrltnm4")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#ctrltnm4");
+	end;
+OnDisable:
+	disablenpc instance_npcname("#ctrltnm4");
+	end;
+}
+1@tnm2,0,0,4	script	#ctrltnm5	139,{
+OnInstanceInit:
+	donpcevent instance_npcname("#ctrltnm5")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#ctrltnm5");
+	set .@m$,instance_mapname("1@tnm2");
+	monster .@m$,67,168,"Magic Seal",2938,1,instance_npcname("#ctrltnm5")+"::OnMyMobDead";
+	monster .@m$,141,214,"Magic Seal",2938,1,instance_npcname("#ctrltnm5")+"::OnMyMobDead";
+	monster .@m$,206,162,"Magic Seal",2938,1,instance_npcname("#ctrltnm5")+"::OnMyMobDead";
+	monster .@m$,191,87,"Magic Seal",2938,1,instance_npcname("#ctrltnm5")+"::OnMyMobDead";
+	monster .@m$,90,86,"Magic Seal",2938,1,instance_npcname("#ctrltnm5")+"::OnMyMobDead";
+	end;
+OnDisable:
+	disablenpc instance_npcname("#ctrltnm5");
+	end;
+OnMyMobDead:
+	set .@m$,instance_mapname("1@tnm2");
+	if(mobcount(.@m$,instance_npcname("#ctrltnm5")+"::OnMyMobDead") < 1) {
+		instance_announce instance_id(),"¡Los cinco sellos han sido rotos, dirígete al centro del mapa!",bc_map,0xFF8800;
+		donpcevent instance_npcname("Guardian#tnm01")+"::OnDisable";
+		donpcevent instance_npcname("Guardian#tnm02")+"::OnEnable";
+		donpcevent instance_npcname("Lucile#tnm4")+"::OnDisable";
+		donpcevent instance_npcname("Lucile#tnm5")+"::OnEnable";
+	}
+	end;
+}
+
+1@tnm2,143,137,4	script	Lucile#tnm4	667,{
+	mes "[Lucile]";
+	mes "Rápido y vayan a destruir los sellos mágicos.";
+	close;
+OnInstanceInit:
+	donpcevent instance_npcname("Lucile#tnm4")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Lucile#tnm4");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Lucile#tnm4");
+	end;
+}
+
+1@tnm2,143,137,4	script	Lucile#tnm5	667,{
+	mes "[Lucile]";
+	mes "Al parecer tenemos el poder suficiente para quitar a ese demonio del camino.";
+	next;
+	mes "[Lucile]";
+	mes "...";
+	close2;
+	donpcevent instance_npcname("Demonio#tnm01")+"::OnDisable";
+	donpcevent instance_npcname("Lucile#tnm6")+"::OnEnable";
+	donpcevent instance_npcname("Lucile#tnm5")+"::OnDisable";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Lucile#tnm5")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Lucile#tnm5");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Lucile#tnm5");
+	end;
+}
+
+1@tnm2,143,137,4	script	Lucile#tnm6	667,{
+	mes "[Lucile]";
+	mes "El portal se ha abierto, vayamos rápido.";
+	close2;
+	set .@m$,instance_mapname("1@tnm3");
+	warp .@m$,11,172;
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Lucile#tnm6")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Lucile#tnm6");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Lucile#tnm6");
+	end;
+}
+
+1@tnm2,136,139,4	script	Demonio#tnm01	1917,{
+end;
+OnInstanceInit:
+	donpcevent instance_npcname("Demonio#tnm01")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Demonio#tnm01");
+	end;
+OnDisable:
+	specialeffect EF_LORD;
+	disablenpc instance_npcname("Demonio#tnm01");
+	end;
+}
+
+1@tnm2,133,139,5	script	Guardian#tnm01	10009,{
+end;
+OnInstanceInit:
+	donpcevent instance_npcname("Guardian#tnm01")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Guardian#tnm01");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Guardian#tnm01");
+	end;
+}
+
+1@tnm2,133,139,5	script	Guardian#tnm02	403,{
+end;
+OnInstanceInit:
+	donpcevent instance_npcname("Guardian#tnm02")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Guardian#tnm02");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Guardian#tnm02");
+	end;
+}
+
+// Sexta Escena: Cuartos llenos de demonios
+//============================================================
+1@tnm3,12,172,0	script	#ctrltnm6	139,5,5,{
+OnTouch:
+	donpcevent instance_npcname("#ctrltnm7")+"::OnEnable";
+	donpcevent instance_npcname("#ctrltnm6")+"::OnDisable";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#ctrltnm6")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#ctrltnm6");
+	end;
+OnDisable:
+	disablenpc instance_npcname("#ctrltnm6");
+	end;
+}
+1@tnm3,0,0,0	script	#ctrltnm7	139,{
+OnInstanceInit:
+	donpcevent instance_npcname("#ctrltnm7")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#ctrltnm7");
+	set .@m$,instance_mapname("1@tnm3");
+	donpcevent instance_npcname("Niña#tnm1")+"::OnEnable";
+	monster .@m$,31,179,"Evil Shadow",2939,2,instance_npcname("#ctrltnm7")+"::OnMyMobDead";
+	monster .@m$,38,167,"Evil Shadow",2940,2,instance_npcname("#ctrltnm7")+"::OnMyMobDead";
+	monster .@m$,25,166,"Evil Shadow",2941,2,instance_npcname("#ctrltnm7")+"::OnMyMobDead";
+	end;
+OnDisable:
+	disablenpc instance_npcname("#ctrltnm7");
+	end;
+OnMyMobDead:
+	set .@m$,instance_mapname("1@tnm3");
+	if(mobcount(.@m$,instance_npcname("#ctrltnm7")+"::OnMyMobDead") < 1) {
+		donpcevent instance_npcname("Niña#tnm1")+"::OnChat1";
+		sleep2 2000;
+		donpcevent instance_npcname("Niña#tnm1")+"::OnChat2";
+		sleep2 4000;
+		mapwarp .@m$,.@m$,85,177;
+		end;
+	}
+	end;
+}
+1@tnm3,43,175,4	script	Niña#tnm1	941,{
+	mes "[Niña]";
+	mes "¿Quiéres continuar a la siguiente habitación?";
+	next;
+	select("Si, vamos");
+	set .@m$,instance_mapname("1@tnm3");
+	warp .@m$,85,177;
+	close;
+OnInstanceInit:
+	donpcevent instance_npcname("Niña#tnm1")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Niña#tnm1");
+	npctalk "¡Ten cuidado, hay muchos demonios cerca!";
+	end;
+OnChat1:
+	npctalk "Gracias por salvarme, últimamente he visto muchos de esos demonios en el castillo";
+	end;
+OnChat2:
+	npctalk "Los llevaré a un lugar que se me ha hecho muy sospechoso, mi padre sabrá que hacer.";
+	end;
+OnDisable:
+	disablenpc instance_npcname("Niña#tnm1");
+	end;
+}
+1@tnm3,91,179,0	script	#ctrltnm8	139,10,10,{
+OnTouch:
+	donpcevent instance_npcname("Niña#tnm2")+"::OnChat1";
+	donpcevent instance_npcname("#ctrltnm8")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#ctrltnm8");
+	end;
+OnDisable:
+	disablenpc instance_npcname("#ctrltnm8");
+	end;
+}
+1@tnm3,91,179,5	script	Niña#tnm2	941,{
+end;
+OnInstanceInit:
+	donpcevent instance_npcname("Niña#tnm2")+"::OnEnable";
+	end;
+OnChat1:
+	npctalk "Mira, hay más demonios, ellos van a sobrepoblar el castillo pronto.";
+	set .@m$,instance_mapname("1@tnm3");
+	monster .@m$,101,173,"Evil Shadow",2939,5,instance_npcname("Niña#tnm2")+"::OnMyMobDead";
+	monster .@m$,93,176,"Evil Shadow",2940,5,instance_npcname("Niña#tnm2")+"::OnMyMobDead";
+	monster .@m$,118,174,"Evil Shadow",2941,5,instance_npcname("Niña#tnm2")+"::OnMyMobDead";
+	end;
+OnMyMobDead:
+	set .@m$,instance_mapname("1@tnm3");
+	if(mobcount(.@m$,instance_npcname("Niña#tnm2")+"::OnMyMobDead") < 1) {
+		donpcevent instance_npcname("Niña#tnm3")+"::OnEnable";
+		donpcevent instance_npcname("Niña#tnm2")+"::OnDisable";
+	}
+	end;
+OnEnable:
+	enablenpc instance_npcname("Niña#tnm2");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Niña#tnm2");
+	end;
+}
+1@tnm3,131,155,4	script	Niña#tnm3	941,{
+	mes "[Niña]";
+	mes "Venga, es por aquí, vamos.";
+	close2;
+	set .@m$,instance_mapname("1@tnm3");
+	warp .@m$,170,166;
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Niña#tnm3")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Niña#tnm3");
+	instance_announce instance_id(),"Niña: Venga, sigamos, es por aquí ~~ . . .",bc_map;
+	npctalk "Ven, sigamos, es por aquí~~....";
+	end;
+OnDisable:
+	disablenpc instance_npcname("Niña#tnm3");
+	end;
+}
+1@tnm3,168,166,0	script	#ctrltnm9	139,5,5,{
+OnTouch:
+	donpcevent instance_npcname("#ctrltnm10")+"::OnEnable";
+	donpcevent instance_npcname("#ctrltnm9")+"::OnDisable";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#ctrltnm9")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#ctrltnm9");
+	end;
+OnDisable:
+	disablenpc instance_npcname("#ctrltnm9");
+	end;
+}
+1@tnm3,0,0,0	script	#ctrltnm10	139,{
+OnInstanceInit:
+	donpcevent instance_npcname("#ctrltnm10")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#ctrltnm10");
+	set .@m$,instance_mapname("1@tnm3");
+	monster .@m$,173,172,"Evil Shadow",2939,2,instance_npcname("#ctrltnm10")+"::OnMyMobDead";
+	monster .@m$,179,171,"Evil Shadow",2940,2,instance_npcname("#ctrltnm10")+"::OnMyMobDead";
+	monster .@m$,176,168,"Evil Shadow",2941,2,instance_npcname("#ctrltnm10")+"::OnMyMobDead";
+	end;
+OnDisable:
+	disablenpc instance_npcname("#ctrltnm10");
+	end;
+OnMyMobDead:
+	set .@m$,instance_mapname("1@tnm3");
+	if(mobcount(.@m$,instance_npcname("#ctrltnm10")+"::OnMyMobDead") < 1) {
+		sleep2 6500;
+		donpcevent instance_npcname("#wrptnm1")+"::OnEnable";
+		donpcevent instance_npcname("#ctrltnm10")+"::OnSpawn";
+	}
+	end;
+OnSpawn:
+	set .@m$,instance_mapname("1@tnm3");
+	monster .@m$,98,19,"Evil Shadow",2939,9,instance_npcname("#ctrltnm10")+"::OnMyMobDead2";
+	monster .@m$,82,19,"Evil Shadow",2940,9,instance_npcname("#ctrltnm10")+"::OnMyMobDead2";
+	monster .@m$,113,19,"Evil Shadow",2941,9,instance_npcname("#ctrltnm10")+"::OnMyMobDead2";
+	end;
+OnMyMobDead2:
+	set .@m$,instance_mapname("1@tnm3");
+	if(mobcount(.@m$,instance_npcname("#ctrltnm10")+"::OnMyMobDead2") < 1) {
+		donpcevent instance_npcname("Caballero de Morroc#t1")+"::OnEnable";
+		donpcevent instance_npcname("Loki#tnm1")+"::OnEnable";
+	}
+	end;
+}
+1@tnm3,184,176,0	script	#wrptnm1	45,1,1,{
+end;
+OnTouch:
+	set .@m$,instance_mapname("1@tnm3");
+	warp .@m$,98,7;
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#wrptnm1")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#wrptnm1");
+	end;
+OnDisable:
+	disablenpc instance_npcname("#wrptnm1");
+	end;
+}
+
+// Séptima Escena: El papá que golpea a sus hijos
+//============================================================
+1@tnm3,92,52,4	script	Caballero de Morroc#t1	106,{
+	if (getcharid(0) == getpartyleader(getcharid(1),2))
+		donpcevent instance_npcname("Caballero de Morroc#t1")+"::OnConversation";
+	end;
+OnConversation:
+	npctalk "Bien... ¿la rata es un asesino? ¿has venido aquí a morir?";
+	sleep2 2500;
+	donpcevent instance_npcname("Loki#tnm1")+"::OnChat1";
+	sleep2 2500;
+	donpcevent instance_npcname("Loki#tnm1")+"::OnChat2";
+	sleep2 2500;
+	npctalk "Realmente, el Gremio de Asesinos que yo conozco tiene la misión de mantener el balance de poder en el mundo.";
+	sleep2 2500;
+	npctalk "¡Reviviré al demonio que traerá de vuelta el balance!, donde los débiles se convertirán en esclavos de un dios.";
+	sleep2 2500;
+	npctalk "Los dios tienen sus propios planes, ¿sabes qué es lo que los dioses planearon para mí o para tí?";
+	sleep2 2500;
+	npctalk "Ellos quieren que éste mundo sea justo como ellos desea, ¿dónde estoy equivocado dentro de éso?";
+	sleep2 2500;
+	donpcevent instance_npcname("Loki#tnm1")+"::OnChat3";
+	sleep2 2500;
+	donpcevent instance_npcname("Loki#tnm1")+"::OnChat4";
+	sleep2 2500;
+	donpcevent instance_npcname("Loki#tnm1")+"::OnChat5";
+	sleep2 2500;
+	npctalk "¿Entonces todo lo que quieres es finalizar tu maldita misión?";
+	sleep2 2500;
+	donpcevent instance_npcname("Niña#tnm4")+"::OnEnable";
+	donpcevent instance_npcname("Niña#tnm4")+"::OnChat1";
+	sleep2 2500;
+	donpcevent instance_npcname("Niña#tnm4")+"::OnChat2";
+	sleep2 2500;
+	npctalk "¡Eres una humana!, lo único para lo que sirves es para ser un sacrificio.";
+	sleep2 2500;
+	npctalk "Tú sabes, la verdad es, es esa, éres una inútil.";
+	sleep2 2500;
+	npctalk "Gwuaaa hahahahaha. Ustedes estúpidos humanos, ¡¡los mataré como sacrificio para el demonio!!";
+	sleep2 2500;
+	donpcevent instance_npcname("Loki#tnm1")+"::OnChat6";
+	sleep2 2500;
+	set .@m$,instance_mapname("1@tnm3");
+	mapwarp .@m$,.@m$,137,67;
+	donpcevent instance_npcname("Loki#tnm1")+"::OnDisable";
+	donpcevent instance_npcname("Niña#tnm4")+"::OnDisable";
+	donpcevent instance_npcname("Caballero de Morroc#t1")+"::OnDisable";
+	donpcevent instance_npcname("Loki#tnm2")+"::OnEnable";
+OnInstanceInit:
+	donpcevent instance_npcname("Caballero de Morroc#t1")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Caballero de Morroc#t1");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Caballero de Morroc#t1");
+	end;
+}
+1@tnm3,93,49,4	script	Niña#tnm4	941,{
+end;
+OnChat1:
+	npctalk "¡Deja a mi padre en paz!";
+	end;
+OnChat2:
+	npctalk "Mi padre nunca sería capaz de hacer algo así.";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Niña#tnm4")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Niña#tnm4");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Niña#tnm4");
+	end;
+}
+1@tnm3,96,48,4	script	Loki#tnm1	512,{
+end;
+OnChat1:
+	npctalk "¿Por qué te acompleja todo lo que he hecho?";
+	end;
+OnChat2:
+	npctalk "Simplemente mi misión me trajo aquí nuevamente.";
+	end;
+OnChat3:
+	npctalk "¡Cállate!";
+	end;
+OnChat4:
+	npctalk "No me interesa nada acerca de dioses o demonios, o sus planes que tienen hecho. La única cosa que me importa es matarte.";
+	end;
+OnChat5:
+	npctalk "¡Esa es mi misión!";
+	end;
+OnChat6:
+	npctalk "¡Es inutil lo que intentes!";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Loki#tnm1")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Loki#tnm1");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Loki#tnm1");
+	end;
+}
+1@tnm3,138,69,4	script	Loki#tnm2	512,{
+	if (getcharid(0) == getpartyleader(getcharid(1),2)) {
+		mes "[Loki]";
+		mes "Escucha atentamente.";
+		next;
+		mes "[Loki]";
+		mes "El Caballero de Morroc ha sacrificado a su hija para convocar parte del poder del demonio.";
+		next;
+		mes "[Loki]";
+		mes "Necesitamos sus poderes para derrotar al demonio antes de que el caos se desate en el mundo.";
+		next;
+		mes "[Loki]";
+		mes "Te ofreceré mi fuerza a cambio de que me ayudes.";
+		close2;
+		summon "Loki",2937,99999999;
+		set .@m$,instance_mapname("1@tnm3");
+		monster .@m$,97,52,"Evil Fanatics",2942,1,instance_npcname("Loki#tnm2")+"::OnMyMobDead";
+		hideonnpc instance_npcname("Loki#tnm2");
+		end;
+	}
+	mes "[Loki]";
+	mes "Estoy hablando con tu líder.";
+	close;
+OnMyMobDead:
+	switch(rand(1,6)) {
+		case 1: set .@i,16027; break;
+		case 2: set .@i,18120; break;
+		case 3: set .@i,28001; break;
+		case 4: set .@i,21010; break;
+		case 5: set .@i,13094; break;
+		case 6: set .@i,1671; break;
+	}
+	set sarah_q1,1;
+	getitem2 .@i,1,0,rand(1,20),0,0,rand(4853,4858),rand(4853,4858),rand(4853,4858);
+	sleep2 20000;
+	set .@m$,instance_mapname("1@tnm3");
+	mapwarp .@m$,"dali",93,140;
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Loki#tnm2")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Loki#tnm2");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Loki#tnm2");
+	end;
+}

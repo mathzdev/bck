@@ -1,0 +1,18 @@
+renting1,18,23,4	itemshop	Mercader Secuestrado::m01	10018,18174:0,36024:400,36032:400,36037:400,36000:5,36010:5,36015:5,35067:8000,35065:8000,35066:8000,35046:1000,35025:100
+renting1,23,23,3	duplicate(kaf_pro)	Kafra Employee#esGH01	117
+renting1,25,13,4	duplicate(Healer)	Healer#esGH01	749
+renting1,12,23,4	script	Música de Fondo::bgm_s	837,{
+	mes "[Música de Fondo]";
+	mes "Escribe el nombre del archivo de tu carpeta de RO/BGM.";
+	input @bgm$;
+	set .@c,40; //Número de Celdas.
+	getmapxy(.@mapa$,.@x,.@y,0);
+	playbgmall @bgm$,.@mapa$,.@x+.@c,.@y-.@c,.@x-.@c,.@y+.@c;
+	mes "Listo.";
+	close;
+}
+
+rentinb15,14,23,4	itemshop	Mercader Secuestrado::m02	10018,18174:0,36024:400,36032:400,36037:400,36000:5,36010:5,36015:5,35067:8000,35065:8000,35066:8000,35046:1000,35025:100
+rentinb15,11,23,4	duplicate(kaf_pro)	Kafra Employee#esGH02	117
+rentinb15,8,23,4	duplicate(Healer)	Healer#esGH02	749
+rentinb15,19,17,4	duplicate(bgm_s)	Música de Fondo#02	837

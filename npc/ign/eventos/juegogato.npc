@@ -1,0 +1,249 @@
+mal_in01,11,170,5	script	Smithy::GT01	545,{
+	playbgm "23";
+	if(g01_day != gettime(8)) {
+		set g01_day,gettime(8);
+		set g01_lose,0;
+	}
+	mes "[^cc6600Smithy^000000]";
+	if(g01_lose >= 10) {
+		mes "No podemos jugar más porque has perdido 10 veces, vuelve mañana.";
+		close2;
+		emotion e_sry;
+		playbgm "145";
+		end;
+	}
+	mes "¡Hola, hola!";
+	mes "¿Quieres jugar conmigo?";
+	next;
+	while (1) {
+		switch(select("¡Juguemos!:¿Qué jugaremos?:^777777Salir^000000")) {
+			case 1:
+				mes "[^cc6600Smithy^000000]";
+				mes "¿Qué elijes? Meowh ~~";
+				next;
+				cutin "cat_g_01",4;
+				if(select("Mano arriba ^ff0000^^000000","Mano abajo ^0000ffv^000000")== 1)
+					set @m,1;
+				else
+					set @m,0;
+				set @p,rand(0,1);
+				if(@m == @p && rand(1,100) < 20) {
+					if(@m == 0) set @cutin$,"cat_g_01";
+					if(@m == 1) set @cutin$,"cat_g_04";
+					set @w,1;
+				} else {
+					if(@m == 1 && @p == 0) set @cutin$,"cat_g_03";
+					if(@m == 0 && @p == 1) set @cutin$,"cat_g_02";
+					set @w,2;
+				}
+				cutin @cutin$,4;
+				mes "^777777Esta es la jugada.";
+				mes "^cc6600Smithy^000000: "+(@p ? "Arriba":"Abajo");
+				mes "^cc6600"+strcharinfo(0)+"^000000: "+(@m ? "Arriba":"Abajo");
+				next;
+				switch (@w) {
+					case 1:
+						mes "[^cc6600Smithy^000000]";
+						mes "Meowh!! ~~";
+						mes "Has ganado ^5533ff*sob*^000000";
+						emotion e_sob;
+						cutin "cat_g_lose",4;
+						next;
+						mes "[^cc6600Smithy^000000]";
+						mes "Aquí tienes tu premio...";
+						getitem 671,1;
+						sleep2 1000;
+						close2;
+						cutin "",255;
+						playbgm "145";
+						end;
+					case 2:
+						mes "[^cc6600Smithy^000000]";
+						mes "Meohohohow!! ~~";
+						mes "Has perdido, perdeeedor ~~.";
+						emotion e_heh;
+						cutin "cat_g_win",4;
+						close2;
+						set g01_lose,g01_lose + 1;
+						cutin "",255;
+						playbgm "145";
+						end;
+				}
+			case 2:
+				cutin "cat_g_01",4;
+				mes "[^cc6600Smithy^000000]";
+				mes "Jugaremos Mano y Pata.";
+				mes "Te explicaré en qué consiste.";
+				next;
+				mes "[^cc6600Smithy^000000]";
+				mes "Al comenzar a jugar tendrás que elegir si tu mano estará volteada hacia arriba o hacia abajo.";
+				next;
+				mes "[^cc6600Smithy^000000]";
+				mes "Si está en diferente posición, yo gano.";
+				next;
+				mes "[^cc6600Smithy^000000]";
+				mes "Si está en la misma posición, tú ganas.";
+				next;
+				mes "[^cc6600Smithy^000000]";
+				mes "Depende si ganas o no, te daré premio.";
+				cutin "",255;
+				next;
+				break;
+			case 3:
+				mes "[^cc6600Smithy^000000]";
+				mes "Vuelve cuando desees comenzar a jugar.";
+				close2;
+				emotion e_no1;
+				playbgm "145";
+				cutin "",255;
+				end;
+		}
+	}
+}
+mal_in01,23,170,5	script	Pouru::GT02	555,{
+	playbgm "33";
+	if(g02_day != gettime(8)) {
+		set g02_day,gettime(8);
+		set g02_lose,0;
+	}
+	mes "[^cc6600Pouru^000000]";
+	if(g02_lose >= 10) {
+		mes "No podemos jugar más porque has perdido 10 veces, vuelve mañana.";
+		close2;
+		emotion e_sry;
+		playbgm "145";
+		end;
+	}
+	mes "¡Estoy aburrido!";
+	mes "Juega conmigo... miau...  ^5533ff*bzz*^000000";
+	next;
+	while (1) {
+		switch(select("Jugaré contigo:¿Cómo se juega tu juego?:^777777Salir^000000")) {
+			case 1:
+				cutin "g_cat_00",4;
+				mes "[^cc6600Pouru^000000]";
+				mes "Bien, bien, ¿hacia qué lado crees que voltearé?";
+				next;
+				set @m,select("Centro:^5533ffDerecha:^ff6060Izquierda^000000");
+				set @c,rand(1,3);
+				if(@m == @c && rand(1,100) < 20) {
+					switch (@m) {
+						case 1:
+							set @cutin$,"g_cat_00";
+							set @lm$,"Centro";
+							set @lg$,"Centro";
+							break;
+						case 2:
+							set @cutin$,"g_cat_03";
+							set @lm$,"Derecha";
+							set @lg$,"Derecha";
+							break;
+						case 3:
+							set @cutin$,"g_cat_01";
+							set @lm$,"Izquierda";
+							set @lm$,"Izquierda";
+							break;
+					}
+					set @w,1;
+				} else {
+					switch (@m) {
+						case 1:
+							set @cutin$,"g_cat_05";
+							set @lm$,"Centro";
+							set @lg$,"Izquierda";
+							break;
+						case 2:
+							set @cutin$,"g_cat_04";
+							set @lm$,"Derecha";
+							set @lg$,"Izquierda";
+							break;
+						case 3:
+							set @cutin$,"g_cat_02";
+							set @lm$,"Izquierda";
+							set @lg$,"Derecha";
+							break;
+					}
+					set @w,2;
+				}
+				cutin @cutin$,4;
+				mes "^777777Esta es la jugada.";
+				mes "^cc6600Pouru^000000: "+@lg$;
+				mes "^cc6600"+strcharinfo(0)+"^000000: "+@lm$;
+				next;
+				switch (@w) {
+					case 1:
+						mes "[^cc6600Pouru^000000]";
+						mes "Meowh!! ~~";
+						mes "Me has logrado ganar, desgraciado ^5533ff*sob*^000000";
+						emotion e_sob;
+						cutin "cat_g_lose",4;
+						next;
+						mes "[^cc6600Pouru^000000]";
+						mes "Ten tu premio de una vez";
+						getitem 671,1;
+						sleep2 1000;
+						close2;
+						cutin "",255;
+						playbgm "145";
+						end;
+					case 2:
+						mes "[^cc6600Pouru^000000]";
+						mes "Bwahahameohwahameow!!! ~~";
+						mes "Has perdido, perderor-meo-meohw ~~.";
+						emotion e_heh;
+						cutin "cat_g_win",4;
+						close2;
+						set g02_lose,g02_lose + 1;
+						cutin "",255;
+						playbgm "145";
+						end;
+				}
+			case 2:
+				cutin "g_cat_00",4;
+				mes "[^cc6600Pouru^000000]";
+				mes "Jugaremos Cat-Head.";
+				mes "Te explicaré como funciona.";
+				next;
+				mes "[^cc6600Pouru^000000]";
+				mes "Tendrás que adivinar hacia que lado voltearé, si el centro, izquierda o derecha.";
+				next;
+				mes "[^cc6600Pouru^000000]";
+				mes "Si adivinas hacia que lado voltié, ganas.";
+				next;
+				mes "[^cc6600Pouru^000000]";
+				mes "Si fallas en adivinar, pues... pierdes-meowh...";
+				cutin "",255;
+				next;
+				break;
+			case 3:
+				mes "[^cc6600Pouru^000000]";
+				mes "Vuelve cuando desees comenzar a jugar.";
+				close2;
+				emotion e_no1;
+				playbgm "145";
+				cutin "",255;
+				end;
+		}
+	}
+}
+/*vip,59,78,5	script	Canjeador::GT03	549,{
+	mes "[^ff6060Canjeador^000000]";
+	mes "¿Deseas cambiar tus Event Coin por IGN Coin?";
+	next;
+	if(select("Cambiar 10 ^5533ffEvent Coin^000000","^777777Salir^000000")==2)
+		close;
+	if(countitem(675) < 10) {
+		mes "[^ff6060Canjeador^000000]";
+		mes "Lo siento pero necesitas 10 Event Coin para realizar el canje.";
+		close2;
+		emotion e_sry;
+		end;
+	}
+	delitem 675,10;
+	getitem 671,1;
+	mes "[^ff6060Canjeador^000000]";
+	mes "Allí tienes tu IGN Coin, vuelve después.";
+	close2;
+	emotion e_thx;
+	end;
+}*/

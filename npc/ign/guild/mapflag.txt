@@ -1,0 +1,21 @@
+// Mapflags
+glemior	mapflag	noexppenalty
+glemior	mapflag	nobranch
+
+roy_in01	mapflag	noexppenalty
+roy_in01	mapflag	noreturn
+roy_in01	mapflag	noteleport
+roy_in01	mapflag	nowarp
+roy_in01	mapflag	nobranch
+
+roy_in02	mapflag	noexppenalty
+roy_in02	mapflag	noreturn
+roy_in02	mapflag	noteleport
+roy_in02	mapflag	nowarp
+roy_in02	mapflag	nobranch
+
+roy_church	mapflag	noexppenalty
+roy_church	mapflag	noreturn
+roy_church	mapflag	noteleport
+roy_church	mapflag	nowarp
+roy_church	mapflag	nobranch

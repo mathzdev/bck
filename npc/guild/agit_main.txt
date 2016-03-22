@@ -123,7 +123,8 @@ OnAgitBreak:
 	// Announce that the Emperium is destroyed, and respawn all but new castle-occupants.
 	mapannounce strnpcinfo(2),"The emperium has been destroyed.",bc_map|bc_woe,"0x00CCFF",FW_NORMAL,12;
 	MapRespawnGuildID strnpcinfo(2),.@GID,6;
-
+	callfunc "RankEmperium",.@GID;
+	callfunc "RankGuild",1,0,.@GID,.@Economy,.@Defence;
 	// Refresh castle data, disable Kafra and reset Invest information.
 	donpcevent strnpcinfo(0)+"::OnRecvCastle";
 	disablenpc "Kafra Staff#"+strnpcinfo(2);
@@ -386,7 +387,7 @@ OnRecvCastle:
 					end;
 				}
 				set Zeny, Zeny - 200;
-				set RESRVPTS,RESRVPTS+20;
+				set RESRVPTS,RESRVPTS+2;
 				close2;
 				warp .@destination$[1],.@coordinates[0],.@coordinates[1];
 				end;
@@ -436,7 +437,7 @@ OnRecvCastle:
 					cutin "",255;
 					end;
 				}
-				set RESRVPTS,RESRVPTS+80;
+				set RESRVPTS,RESRVPTS+8;
 				set Zeny, Zeny - 800;
 				setcart;
 				close2;

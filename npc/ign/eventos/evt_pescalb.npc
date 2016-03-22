@@ -1,0 +1,378 @@
+//      ______  __    __                                 
+//     /\  _  \/\ \__/\ \                                
+//     \ \ \_\ \ \ ,_\ \ \___      __    ___      __     
+// _____\ \  __ \ \ \/\ \  _ `\  /'__`\/' _ `\  /'__`\   
+///\  __\\ \ \/\ \ \ \_\ \ \ \ \/\  __//\ \/\ \/\ \_\.\_ 
+//\ \_\_/ \ \_\ \_\ \__\\ \_\ \_\ \____\ \_\ \_\ \__/.\_\
+// \/_/    \/_/\/_/\/__/ \/_/\/_/\/____/\/_/\/_/\/__/\/_/
+//
+//========================================================
+// ---		  Concurso de Pesca Alberta            ---
+//========================================================
+// ---                  by DanielArt                   ---
+//========================================================
+-	script	PESCALBE	-1,{
+OnWhisperGlobal:
+OnPescaAlberta:
+	enablenpc "Pescadito";
+	announce "[Competición de Alberta]: Va a empezar la competición de pesca en Alberta.",bc_all,0x919CFF;
+	sleep2 5000;
+	announce "[Competición de Alberta]: Los que quieran participar acérquense a la esquina inferior derecha de Alberta o hablen con el pescado de Prontera.",bc_all,0x919CFF;
+	donpcevent "Pescadito::OnTalk";
+	sleep2 5000;
+	announce "[Competición de Alberta]: El evento empezará en 5 minutos.",bc_all,0x919CFF;
+	set $@evt_pescalbe,1;
+	sleep2 60000;
+	announce "[Competición de Alberta]: El evento empezará en 4 minutos.",bc_all,0x919CFF;
+	sleep2 60000;
+	announce "[Competición de Alberta]: El evento empezará en 3 minutos.",bc_all,0x919CFF;
+	sleep2 60000;
+	donpcevent "Pescadito::OnTalk1";
+	announce "[Competición de Alberta]: El evento empezará en 2 minutos.",bc_all,0x919CFF;
+	sleep2 60000;
+	announce "[Competición de Alberta]: El evento empezará en 1 minuto.",bc_all,0x919CFF;
+	sleep2 30000;
+	donpcevent "Pescadito::OnTalk2";
+	sleep2 30000;
+	announce "[Competición de Alberta]: ¡El evento ha comenzado!.",bc_all,0x919CFF;
+	set $@fishable,1;
+	disablenpc "Pescadito";
+	set $rank_pescalbe,0;
+	set $r_pescalbe,0;
+	set $@evt_pescalbe,2;
+	set .@i, 1;
+	while (.@i <= 8) {
+		if($r_pescalbe > 0)
+			mapannounce "alberta","[Competición de Alberta]: Va ganando "+$rank_pescalbe$+" ["+$r_pescalbe+" Puntos].",bc_map,0x919CFF;
+		set .@i, .@i +1;
+		sleep2 30000;
+	}
+	announce "[Competición de Alberta]: ¡El evento ha finalizado!.",bc_all,0x919CFF;
+	set $@fishable,0;
+	mapannounce "alberta","[Competición de Alberta]: El ganador es "+$rank_pescalbe$+" con "+$r_pescalbe+" puntos.",bc_map,0x919CFF;
+	sleep2 10000;
+	announce "[Competición de Alberta]: ¡El ganador tiene 5 minutos para recoger su premio!.",bc_all,0x919CFF;
+	set $@evt_pescalbe,3;
+	sleep2 300000;
+	set $@evt_pescalbe,0;
+	end;
+}
+alberta,215,33,1	shop	Vendedora de Cebos	73,2775:50
+alberta,224,35,4	script	Gran Pescador	52,{
+	set @npc$,"[^cc0000Gran Pescador^000000]";
+	switch($@evt_pescalbe) {
+		case 1:
+			mes @npc$;
+			mes "La competición de pesca empezará pronto.";
+			next;
+			mes @npc$;
+			mes "¿Quiéres que te explique cómo funciona?";
+			next;
+			if(select("Explicación","No, gracias") == 2) {
+				mes @npc$;
+				mes "Vuelve cuando quieras.";
+				close;
+			}
+			mes @npc$;
+			mes "Al empezar apareceran 4 zonas de pesca justo debajo mio y un vendedor de cebos.";
+			next;
+			mes @npc$;
+			mes "Tendrás que comprar rápidamente algún cebo en la tienda y correr hacia una zona de pesca.";
+			next;
+			mes @npc$;
+			mes "Las zonas de pesca pueden ser usadas por cualquier jugador ilimitadamente mientras la competición esté activa.";
+			next;
+			mes @npc$;
+			mes "Ahora te tocará pescar para obtener puntos y ser mejor que todos los demás.";
+			next;
+			mes @npc$;
+			mes "Si acaba la competición y eres el pescador con mayor número de puntos ganarás.";
+			next;
+			mes @npc$;
+			mes "Hasta aquí mi explicación.";
+			close;
+		case 2:
+			mes @npc$;
+			mes "La competición de alberta se está realizando actualmente.";
+			close;
+		case 3:
+			mes @npc$;
+			if(strcharinfo(0) == $rank_pescalbe$) {
+				mes "¡Felicidades!";
+				mes "El primer puesto en la competición es ahora tuyo.";
+				next;
+				mes @npc$;
+				mes "Ten aquí tu premio.";
+				callfunc "F_Event",1,rand(1,5);
+				set @z,rand(10000,200000);
+				dispbottom "Has ganado "+@z+" Zeny";
+				set $@evt_pescalbe,0;
+				@evt_pescalbe = 0;
+				close2;
+				emotion e_thx;
+				end;
+			}
+			mes "Lo siento, pero no has ganado en el actual concurso, espero y te hayas divertido.";
+			close2;
+			emotion e_sry;
+			end;
+		default:
+			mes @npc$;
+			mes "No hay un evento en curso, estate atento a los anuncios si deseas participar en la próxima competición.";
+			close2;
+			emotion e_sob;
+			end;
+	}
+end;
+}
+alberta,224,40,3	script	Pescado Inutil::Pescado	1158,{}
+alberta,220,40,4	duplicate(Pescado)	Pescado Inutil#02	1158
+alberta,216,40,4	duplicate(Pescado)	Pescado Inutil#03	1158
+alberta,214,38,4	duplicate(Pescado)	Pescado Inutil#04	1158
+alberta,213,35,4	duplicate(Pescado)	Pescado Inutil#05	1158
+-	script	fishzone	-1,{
+	callsub F_Check;
+	set @npc$,"[^cc0000"+strcharinfo(0)+"^000000]";
+	mes @npc$;
+	mes "Parece que he encontrado dónde pescar...";
+	next;
+	mes @npc$;
+	mes "¿Qué debería de hacer?";
+	next;
+	if(select("Pescaré un poco","Más al rato mejor...") == 2) {
+		mes @npc$;
+		mes "Intentaré luego mejor, no me vaya a morder uno.";
+		next;
+		mes "[^777777Pescados^000000]";
+		mes "¡Diabos!, queríamos morder a ese humano . . .";
+		close;
+	}
+	if(countitem(2775) < 1) {
+		mes @npc$;
+		mes "Al parecer no tengo cebo para pescar...";
+		close;
+	}
+	mes @npc$;
+	mes "¡Ya tengo todo lo necesario!";
+	mes "Es hora de pescar ^5533ff*gg*^000000";
+	emotion e_gg,strcharinfo(0);
+	next;
+	mes @npc$;
+	mes "¡Hallá voy!";
+	next;
+OnTirarCebo:
+	callsub F_Check;
+	specialeffect2 501;
+	sleep2 1000;
+	specialeffect2 457;
+	specialeffect2 265;
+	atcommand "@me lanza el cebo con todas sus fuerzas";
+	set @cebo,rand(1,10);
+	switch (@cebo) {
+		case 1:
+		case 2:
+			progressbar "008800",5;
+			mes @npc$;
+			mes "¡Algo ha mordido el anzuelo!";
+			next;
+OnContinue:
+			callsub F_Check;
+			mes @npc$;
+			mes "¿Qué debería de hacer?";
+			next;
+			if(select("Estirar la caña","Soltarlo un poco") == 1) {
+				specialeffect2 463;
+				specialeffect2 457;
+				set @pesca,rand(1,5);
+				if(@pesca == 3) {
+					switch(rand(1,6)) {
+						case 1:
+							atcommand "@me estira su caña como si fuera un ¡¡METAPOD!!";
+							set @pesca_,11;
+							break;
+						case 2:
+							atcommand "@me estira su caña al ¡¡ESTILO CHUCK NORRIS!!";
+							set @pesca_,7;
+							break;
+						case 3:
+							atcommand "@me estira su caña como... como ¡¡sí fuera el racismo de Michael Jackson!!";
+							set @pesca_,5;
+							break;
+						case 4:
+							atcommand "@me estira su caña como, como si fuera un condenado ¡¡P-poring!!";
+							set @pesca_,10;
+							break;
+						case 5:
+							atcommand "@me estira su caña como sí fuera un condenado estirador de cañas bien estiradas estiradoras estirabilidilidásticas.";
+							set @pesca_,6;
+							break;
+						case 6:
+							atcommand "@me ha hecho un ¡¡C-c-c-combo breakerestirado!!";
+							set @pesca_,5;
+							break;
+					}
+				} else {
+					atcommand "@me estira su caña con fuerza.";
+					set @pesca_,12;
+				}
+				progressbar "008800",5;
+				set @pesca,rand(1,@pesca_-@pesca_b);
+				if(@pesca >= 0 || @pesca < 0 && @pesca < 5) {
+					atcommand "@me da un gran tirón consigue sacar algo debajo del agua.";
+					specialeffect2 610;
+					set @pez,rand(1,25);
+					emotion e_hmm,strcharinfo(0);
+					switch (@pez) {
+						//callsub F_Fishing,Puntos,ItemID,ItemN,"Nombre",¿Spawn?,MobID,MobN;
+						case 1:
+						case 2:
+						case 3: callsub F_Fishing,2,0,0,"Estrella de Mar",1,1277,rand(1,6); break;
+						case 4: callsub F_Fishing,1,7013,1,"Coral Reef",0,0,0; break;
+						case 5: callsub F_Fishing,2,0,0,"Concha Marina",1,1067,2; break;
+						case 6:
+						case 7:
+						case 8: callsub F_Fishing,1,961,1,"Conch",0,0,0; break;
+						case 9: callsub F_Fishing,3,0,0,"Cangrejo",1,1073,2; break;
+						case 10: callsub F_Fishing,3,0,0,"Caballito de Mar",1,1045,2; break;
+						case 11: callsub F_Fishing,4,0,0,"Calamar",1,1144,rand(1,5); break;
+						case 12: callsub F_Fishing,5,0,0,"Sirena",1,1044,2; break;
+						case 13: callsub F_Fishing,6,0,0,"Phen",1,1158,2; break;
+						case 14: callsub F_Fishing,4,0,0,"Piraña",1,2070,rand(1,3); break;
+						case 15: callsub F_Fishing,2,0,0,"Rana",1,1012,rand(1,6); break;
+						case 16: callsub F_Fishing,2,0,0,"Almeja",1,1012,2; break;
+						case 17: callsub F_Fishing,4,0,0,"Swordfish",1,1069,2; break;
+						case 18:
+						case 19:
+						case 20: callsub F_Fishing,1,624,1,"Rotten Fish",0,0,0; break;
+						case 21: callsub F_Fishing,12,579,1,"Pescado Fresco",0,0,0; break;
+						case 22: callsub F_Fishing,15,6096,1,"Gran Pescado Azul",0,0,0; break;
+						case 23: callsub F_Fishing,20,5380,1,"¿Gorro?",0,0,0; break;
+						case 24: callsub F_Fishing,9,567,1,"Gamba",0,0,0; break;
+						case 25: callsub F_Fishing,18,7768,1,"Calamarcin",0,0,0; break;
+					}
+					mes @npc$;
+					mes "¡Oh! he pescado algo.";
+					close;
+				}
+				if(@pesca >= 5 && @pesca < 11) {
+					mes @npc$;
+					mes "El pez se resiste e intenta escapar.";
+					emotion e_omg,strcharinfo(0);
+					next;
+					goto OnContinue;
+				}
+				if(@pesca == 12) {
+					specialeffect2 611;
+					delitem 2775,1;
+					dispbottom "Has perdido tu cebo, deberás comprar otro.";
+					mes @npc$;
+					mes "¡Oh, no!";
+					mes "He estirado demaciado fuerte y he roto el hilo.";
+					close2;
+					emotion e_sob,strcharinfo(0);
+					end;
+				}
+				mes @npc$;
+				mes "Parece que el pez se resiste.";
+				next;
+				goto OnContinue;
+			}
+			specialeffect2 463;
+			specialeffect2 457;
+			atcommand "@me suelta un poco su caña para provocar al pez.";
+			set @pesca,rand(1,3);
+			if(@pesca < 2) {
+				mes @npc$;
+				mes "Demonios... el pez se ha escapado.";
+				emotion e_sob,strcharinfo(0);
+				close;
+			} else {
+				mes @npc$;
+				mes "Genial ha picado de mejor manera, ¡lo tomaré desprevenido!";
+				@pesca_b += rand(0,1);
+				emotion e_gg,strcharinfo(0);
+				next;
+				goto OnContinue;
+			}
+			mes @npc$;
+			mes "^ff0000Ha ocurrido un error inesperado, por favor reporta el siguiente código a un Game Master:^000000.";
+			mes "^5533ffLINE295-"+@pesca_b+@pesca+@pesca_+"-DROPFISH^000000";
+			close;
+		case 3:
+		case 4:
+		case 5:
+		case 6:
+		case 7:
+		case 8:
+		case 9:
+		case 10:
+			progressbar "008800",5;
+			mes @npc$;
+			mes "Parece que no pican.";
+			next;
+			mes @npc$;
+			mes "¿Qué debería de hacer?";
+			next;
+			if(select("Intentar otra ves","Mejor lo dejo") == 2) {
+				mes @npc$;
+				mes "Mejor lo dejaré, creo que me comeran vivo estos peces.";
+				mes "Brillan por su ausencia ^5533ff*sob*^000000";
+				emotion e_sob,strcharinfo(0);
+				close;
+			}
+			goto OnTirarCebo;
+	}
+F_Fishing:
+	@evt_pescalbe += getarg(0);
+	dispbottom "¡Consigues pescar un/a ["+getarg(3)+"]!";
+	dispbottom "¡Ganas "+getarg(0)+" puntos de pesca! [Total: "+@evt_pescalbe+" puntos.]";
+	if(@evt_pescalbe > $r_pescalbe) {
+		set $r_pescalbe,@evt_pescalbe;
+		set $rank_pescalbe$,strcharinfo(0);
+	}
+	if(getarg(1) > 0)
+		getitem getarg(1),getarg(2);
+	if(getarg(4) > 0)
+		areamonster "alberta",212,31,227,27,getarg(3),getarg(5),getarg(6);
+	return;
+F_Check:
+	if($@fishable == 0) {
+		@evt_pescalbe = 0;
+		mes "^777777No puedes pescar cuando no el evento no está en curso.^000000.";
+		close;
+	}
+	return;
+end;
+}
+alberta,224,27,4	duplicate(fishzone)	Zona de Pesca#01	111
+alberta,220,27,4	duplicate(fishzone)	Zona de Pesca#02	111
+alberta,216,27,4	duplicate(fishzone)	Zona de Pesca#03	111
+alberta,212,27,4	duplicate(fishzone)	Zona de Pesca#04	111
+prontera,159,174,4	script	Competición de Pesca::Pescadito	1158,{
+	if(@evt_pescalbe)
+		@evt_pescalbe = 0;
+	message strcharinfo(0),"¿Deseas ir a pescar?";
+	sleep2 1000;
+	message strcharinfo(0),"Cuando comience el evento tendrás que ir caminando, así que aprovecha.";
+	select("Deseo ir al evento ^5533ff[ "+getmapusers("alberta")+" ]^000000");
+	warp "alberta",225,36;
+	end;
+OnTalk:
+	npctalk "El evento empezará en 5 minutos, habla conmigo para ir más rápido.";
+	end;
+OnTalk1:
+	npctalk "Creo que deberías de alistarte ¡ya! para ir al evento, habla conmigo.";
+	end;
+OnTalk2:
+	npctalk "¡Ya casi me voy!, habla conmigo para ir más rápido al evento.";
+	end;
+OnInit:
+	set $@fishable,0;
+	disablenpc "Pescadito";
+	end;
+OnPCLoginEvent:
+OnPCLoadMapEvent:
+	if(@evt_pescalbe)
+		@evt_pescalbe = 0;
+	end;
+}

@@ -1,0 +1,844 @@
+// ==============================================================================
+//= BattleGround System - Common NPCs
+// ==============================================================================
+
+// Comando @joinbg [DanielArt]
+// *********************************************************************
+-	script	joinbg	-1,{
+OnCommand: // @joinbg command.
+	if(last_use > gettimetick(2)) {
+		message strcharinfo(0),"@joinbg - fallido.";
+		message strcharinfo(0),"Debes esperar 30 segundos antes de usar el comando nuevamente.";
+		end;
+	}
+	getmapxy(@map$,@x,@y,0);
+	if(getmapflag(@map$,mf_pvp) || getmapflag(@map$,mf_gvg)) {
+		message strcharinfo(0),"@joinbg - fallido.";
+		message strcharinfo(0),"No puede ser usado en mapas PvP";
+		end;
+	}
+	if(BaseLevel < 120) {
+		message strcharinfo(0),"@joinbg fallido.";
+		message strcharinfo(0),"Se requiere Lv. 120 para usar este comando.";
+		end;
+	}
+	set @let$,.@atcmd_parameters$[0];
+	set last_use, gettimetick(2) + 30;
+	if(@let$ == "ver" || @let$ == "Ver" || @let$ == "VER" || @let$ == "vER") {
+		message strcharinfo(0),"@joinbg - Ver Modos disponibles y ocupados.";
+		if( $@FlaviusBG1 == 1 )
+			message strcharinfo(0),"Flavious * (" + bg_get_data($@FlaviusBG1_id2, 0) + ") vs (" + bg_get_data($@FlaviusBG1_id1, 0) + ")";
+		else
+			message strcharinfo(0),"Flavious * VACIO";
+		if( $@TierraBG1 == 1 )
+			message strcharinfo(0),"Tierra * (" + bg_get_data($@TierraBG1_id2, 0) + ") vs (" + bg_get_data($@TierraBG1_id1, 0) + ")";
+		else
+			message strcharinfo(0),"Tierra * VACIO";
+		if( $@KvM01BG == 1 )
+			message strcharinfo(0),"KvM - A * (" + bg_get_data($@KvM01BG_id2, 0) + ") vs (" + bg_get_data($@KvM01BG_id1, 0) + ")";
+		else
+			message strcharinfo(0),"KvM - A * VACIO";
+		if( $@KvM04BG == 1 )
+			message strcharinfo(0),"Duel * (" + bg_get_data($@KvM04BG_id2, 0) + ") vs (" + bg_get_data($@KvM04BG_id1, 0) + ")";
+		else
+			message strcharinfo(0),"Duel * VACIO";
+		if( $@FlaviusCTF == 1 )
+			message strcharinfo(0),"Flavious CTF * (" + bg_get_data($@FlaviusCTF_id2, 0) + ") vs (" + bg_get_data($@FlaviusCTF_id1, 0) + ")";
+		else
+			message strcharinfo(0),"Flavious CTF * VACIO";
+		if( $@FlaviusTD == 1 )
+			message strcharinfo(0),"Flavious TD * (" + bg_get_data($@FlaviusTD_id2, 0) + ") vs (" + bg_get_data($@FlaviusTD_id1, 0) + ")";
+		else
+			message strcharinfo(0),"Flavious TD * VACIO";
+		if( $@FlaviusSC == 1 )
+			message strcharinfo(0),"Flavious SC * (" + bg_get_data($@FlaviusSC_id2, 0) + ") vs (" + bg_get_data($@FlaviusSC_id1, 0) + ")";
+		else
+			message strcharinfo(0),"Flavious SC * VACIO";
+		if( $@TierraEOS == 1 )
+			message strcharinfo(0),"Tierra EoS * (" + bg_get_data($@TierraEOS_id2, 0) + ") vs (" + bg_get_data($@TierraEOS_id1, 0) + ")";
+		else
+			message strcharinfo(0),"Tierra EoS * VACIO";
+		if( $@TierraBoss == 1 )
+			message strcharinfo(0),"Tierra Boss * (" + bg_get_data($@TierraBoss_id2, 0) + ") vs (" + bg_get_data($@TierraBoss_id1, 0) + ")";
+		else
+			message strcharinfo(0),"Tierra Boss * VACIO";
+		if( $@TierraDOM == 1 )
+			message strcharinfo(0),"Tierra Dom * (" + bg_get_data($@TierraDOM_id2, 0) + ") vs (" + bg_get_data($@TierraDOM_id1, 0) + ")";
+			else
+			message strcharinfo(0),"Tierra Dom * VACIO";
+		if( $@TierraTI == 1 )
+			message strcharinfo(0),"Triple Inferno * ^008000(" + bg_get_data($@TierraTI_id3, 0) + ") vs (" + bg_get_data($@TierraTI_id2, 0) + ") vs (" + bg_get_data($@TierraTI_id1, 0) + ")";
+		else
+			message strcharinfo(0),"Triple Inferno * VACIO";
+		if( $@Conquest == 1 )
+			message strcharinfo(0),"Conquest * (" + bg_get_data($@Conquest_id2, 0) + ") vs (" + bg_get_data($@Conquest_id1, 0) + ")";
+		else
+			message strcharinfo(0),"Conquest * VACIO";
+		if( $@Rush == 1 )
+			message strcharinfo(0),"Rush * (" + bg_get_data($@Rush_id2, 0) + ") vs (" + bg_get_data($@Rush_id1, 0) + ")";
+		else
+			message strcharinfo(0),"Rush * VACIO";
+		if( $@CrysBG == 1 )
+			message strcharinfo(0),"Crystal * (" + bg_get_data($@CrysBG_id2, 0) + ") vs (" + bg_get_data($@CrysBG_id1, 0) + ")";
+		else
+			message strcharinfo(0),"Crystal * VACIO";
+		if( $@YYBG == 1 )
+			message strcharinfo(0),"Ying Yang * (" + bg_get_data($@YYBG_id2, 0) + ") vs (" + bg_get_data($@YYBG_id1, 0) + ")";
+		else
+			message strcharinfo(0),"Ying Yang * VACIO";
+		message strcharinfo(0),"PvP * "+getvariableofnpc(.userspvp,"PvP System")+" Usuarios";
+		end;
+	} else
+	if(@let$ == "warp" || @let$ == "Warp") {
+		warp "bat_room",155,150;
+		end;
+	} else
+	if(@let$ == "modo" || @let$ == "Modo") {
+		message strcharinfo(0),"@joinbg - Lista de modos.";
+		message strcharinfo(0),"Utiliza @joinbg '<nombre_del_modo>' para accesar.";
+		message strcharinfo(0),"Por ejemplo '@joinbg td' para ingresar automaticamente a Flavius Team Deathmatch";
+		message strcharinfo(0),"---------------------------------------------------------------------";
+		message strcharinfo(0),"flavius     tierra    kvm    yy    duel     pvp      crystal";
+		message strcharinfo(0),"ctf     td     sc     eos     boss     dom     inferno     conquest     rush";
+		end;
+	}
+// Warps a modos
+	if(@let$=="flavius")
+		callfunc "CMD_Template","Flavius",120,8506,8503,253,77,253,94,"Fl1R_Guillaume","Fl1R_Croix",0,0,0,0,0,1;
+	else if(@let$=="tierra")
+		callfunc "CMD_Template","Tierra",120,8506,8500,85,224,85,208,"TV1R_Guillaume","TV1R_Croix",0,0,0,0,0,1;
+	else if(@let$=="kvm")
+		callfunc "CMD_Template","KvM",120,8506,6025,253,224,253,208,"KvM01R_Guillaume","KvM01R_Croix",0,0,0,0,0,1;
+	else if(@let$=="crystal" || @let$=="cry")
+		callfunc "CMD_Template","Crystal",120,8506,8502,225,224,225,208,"CrysR_Guillaume","CrysR_Croix",0,0,0,0,0,1;
+	else if(@let$=="yy")
+		callfunc "CMD_Template","Ying Yang",120,8506,6025,197,224,197,208,"YYR_Guillaume","YYR_Croix",0,0,0,0,0,1;
+	else if(@let$=="duel")
+		callfunc "CMD_Template","Duel",120,8506,6025,113,224,113,208,"KvM04R_Guillaume","KvM04R_Croix",0,0,0,0,0,1;
+	else if(@let$=="ctf")
+		callfunc "CMD_Template","Flavius CTF",120,8506,8504,57,77,57,94,"CTFR_Guillaume","CTFR_Croix",0,0,0,0,0,1;
+	else if(@let$=="td")
+		callfunc "CMD_Template","Flavius TD",120,8506,8505,113,78,113,93,"TDR_Guillaume","TDR_Croix",0,0,0,0,0,1;
+	else if(@let$=="sc")
+		callfunc "CMD_Template","Flavius SC",120,8506,8507,141,77,141,94,"SCR_Guillaume","SCR_Croix",0,0,0,0,0,1;
+	else if(@let$=="eos")
+		callfunc "CMD_Template","Tierra EoS",120,8506,8501,85,77,85,94,"EOSR_Guillaume","EOSR_Croix",0,0,0,0,0,1;
+	else if(@let$=="boss")
+		callfunc "CMD_Template","Tierra Boss",120,8506,8502,57,223,57,208,"TBR_Guillaume","TBR_Croix",0,0,0,0,0,1;
+	else if(@let$=="dom")
+		callfunc "CMD_Template","Tierra DOM",120,8506,8511,141,223,141,208,"DOMR_Guillaume","DOMR_Croix",0,0,0,0,0,1; 
+	else if(@let$=="inferno")
+		callfunc "CMD_Template","Tierra TI",120,8506,8508,197,77,197,94,197,94,225,77,"TTIR_Guillaume","TTIR_Croix","TTIR_Traitor",2;
+	else if(@let$=="conquest")
+		callfunc "CMD_Template","Conquest",120,8506,8509,169,77,169,94,"ConR_Guillaume","ConR_Croix",0,0,0,0,0,1;
+	else if(@let$=="rush")
+		callfunc "CMD_Template","Rush",120,8506,8510,169,223,169,208,"RushR_Guillaume","RushR_Croix",0,0,0,0,0,1;
+	else if(@let$=="pvp") {
+		warp "bat_room",226,94;
+		end;
+	}
+	else if(@let$=="invitar") {
+		if(Zeny < 10000) {
+			message strcharinfo(0),"@joinbg - Zeny insuficiente.";
+			end;
+		}
+		set Zeny,Zeny-10000;
+		announce "[@joinbg]: "+strcharinfo(0)+" los invita a [Battleground]. Usuarios: [ "+getmapusers("bat_room")+" ].",bc_all,0xFF6060;
+		end;
+	} else {
+		message strcharinfo(0),"@joinbg - Ayuda";
+		message strcharinfo(0),"-------------------------------------------------";
+		message strcharinfo(0),"@joinbg ver - verificas que salas de battleground estan activas y cuales disponibles.";
+		message strcharinfo(0),"@joinbg warp - te diriges al mapa principal de BattleGround";
+		message strcharinfo(0),"@joinbg modo - miras el seudonimo para accesar a un modo de BG";
+		message strcharinfo(0),"@joinbg '<modo>' - depende los seudonimos del anterior comando, te ingresa directamente a la waiting room del modo escrito.";
+		message strcharinfo(0),"@joinbg invitar - mandas un broadcast de invitacion a Battleground por un costo de 10,000z.";
+		end;
+	}
+end;
+OnInit:
+bindatcmd "joinbg","joinbg::OnCommand",0,40;
+end;
+}
+function	script	CMD_Template	{
+	if( getarg(15) == 2 ) {
+		set .@Guillaume,getwaitingroomstate(0,getarg(12));
+		set .@Croix,getwaitingroomstate(0,getarg(13));
+		set .@Traitor,getwaitingroomstate(0,getarg(14));
+		set .@glim,(getwaitingroomstate(1,getarg(12))-1);
+		set .@clim,(getwaitingroomstate(1,getarg(13))-1);
+		set .@tlim,(getwaitingroomstate(1,getarg(14))-1);
+		set @menu,rand(1,2);
+		switch(@menu) {
+			case 1:
+			case 2:
+				if( BaseLevel < getarg(1) ) {
+					message strcharinfo(0),"@joinbg fallido.";
+					message strcharinfo(0),"Solo lvl 120+ pueden accesar a BG.";
+					end;
+				}
+				if( checkquest(getarg(2),PLAYTIME) == 2 ) erasequest getarg(2);
+				if( checkquest(getarg(2),PLAYTIME) != -1 ) {
+					message strcharinfo(0),"@joinbg fallido.";
+					message strcharinfo(0),"Haz sido señalado como 'Desertor' no podras entrar hasta que este indicador desaparezca.";
+					end;
+				}
+				if( checkquest(getarg(3),PLAYTIME) == 2 ) erasequest getarg(3);
+				if( checkquest(getarg(3),PLAYTIME) != -1 ) {
+					message strcharinfo(0),"@joinbg fallido.";
+					message strcharinfo(0),"Debes esperar un poco mas para entrar nuevamente en el mismo modo.";
+					end;
+				}
+				L_check1:
+				if (.@Guillaume < .@glim && .@Croix < .@clim) {
+					set Bat_Team,rand(1,2);
+					set @menu,1;
+				} else if(.@Croix >= .@clim) {
+					set Bat_Team,1;
+					set @menu,1;
+				} else if(.@Guillaume >= .@glim) {
+					set Bat_Team,2;
+					set @menu,1;
+				} else {
+					set Bat_Team,1;
+					set @menu,2;
+				}
+				if(@menu == 1) {
+					switch (Bat_Team) {
+						case 1: warp "bat_room",getarg(4),getarg(5); //Guillaume
+								close;
+						case 2: warp "bat_room",getarg(6),getarg(7); //Croix
+								close;
+					}
+				} else if(@menu == 2) {
+					if(.@Traitor >= .@tlim) {
+						mes "["+getarg(0)+" Officer]";
+						mes "Ya no pueden ingresar mas traidores.";
+						close;
+					}
+					switch (Bat_Team) {
+						case 1: warp "bat_room",getarg(8),getarg(9); //Guillaume
+								close;
+						case 2: warp "bat_room",getarg(10),getarg(11); //Croix
+								close;
+					}				
+				}
+			message strcharinfo(0),"Modo de juego, lleno.";
+			end;
+		}
+	}
+	set .@Guillaume,getwaitingroomstate(0,getarg(8));
+	set .@Croix,getwaitingroomstate(0,getarg(9));
+	set .@glim,(getwaitingroomstate(1,getarg(8))-1);
+	set .@clim,(getwaitingroomstate(1,getarg(9))-1);
+			if( BaseLevel < getarg(1) ) {
+				message strcharinfo(0),"@joinbg fallido.";
+				message strcharinfo(0),"Necesitas ser Lv. 120 + para ingresar a BG.";
+				end;
+			}
+			if( checkquest(getarg(2),PLAYTIME) == 2 ) erasequest getarg(2);
+			if( checkquest(getarg(2),PLAYTIME) != -1 ) {
+				message strcharinfo(0),"@joinbg fallido.";
+				message strcharinfo(0),"Eres un 'desertor', podras volver a entrar a BG hasta que la etiqueta desaparezca.";
+				end;
+			}
+			if( checkquest(getarg(3),PLAYTIME) == 2 ) erasequest getarg(3);
+			if( checkquest(getarg(3),PLAYTIME) != -1 ) {
+				message strcharinfo(0),"@joinbg fallido";
+				message strcharinfo(0),"Debes esperar un poco mas antes de participar en este modo nuevamente.";
+				end;
+			}
+			if (.@Guillaume < .@glim && .@Croix < .@clim) {
+				set Bat_Team,rand(1,2);
+			} else if(.@Croix >= .@clim) {
+				set Bat_Team,1;
+			} else if(.@Guillaume >= .@glim) {
+				set Bat_Team,2;
+			}
+			switch (Bat_Team) {
+				case 1: 
+						message strcharinfo(0),"Has ingresado a [ "+getarg(0)+" ] en Guillaume.";
+						warp "bat_room",getarg(4),getarg(5); //Guillaume
+						close;
+				case 2: 
+						message strcharinfo(0),"Has ingresado a [ "+getarg(0)+" ] en Croix.";
+						warp "bat_room",getarg(6),getarg(7); //Croix
+						close;
+			}
+message strcharinfo(0),"Modo de juego, lleno.";
+end;
+}
+
+// MapFlags
+// *********************************************************************
+
+bat_room	mapflag	nomemo
+bat_room	mapflag	nowarpto
+bat_room	mapflag	nobranch
+bat_room	mapflag	nopenalty
+bat_room	mapflag	noteleport
+bat_room	mapflag	nosave	SavePoint
+bat_room	mapflag	allow_bg_items
+
+// BattleGround Warper - Entrance
+// *********************************************************************
+
+payon,189,104,3	script	Maroll Battle Recruiter::BatRecruit	728,{
+	mes "[Maroll Battle Recruiter]";
+	mes "Buen dia, aventurero";
+	mes "Yo soy un caballero del reino Maroll.";
+	next;
+	mes "[Maroll Battle Recruiter]";
+	mes "Los dos principes herederos al trono estan peleando por este, con el fin de saber quien sera el proximo rey estamos reclutando valiente soldados. ¿Deseas unirte?";
+	next;
+	if( select("Unirme:No unirme") == 2 )
+	{
+		mes "[Maroll Battle Recruiter]";
+		mes "Aqui estare buscando mas soldados, ven cuando gustes.";
+		close;
+	}
+/* Available only for eAmod-B
+	if( bg_logincount() > 0 )
+	{
+		mes "[Maroll Battle Recruiter]";
+		mes "El double login no esta permitido en BG.";
+		close;
+	}
+*/
+	mes "[Maroll Battle Recruiter]";
+	mes "Que el camino de la guerra te guie.";
+	close2;
+	warp "bat_room",155,150;
+	end;
+OnInit:
+	do {
+		set .users,(getmapusers("bat_room")+getmapusers("pvp_n_3-5")+getmapusers("guild_vs3")+getmapusers("guild_vs2")+getmapusers("pvp_n_1-5")+getmapusers("guild_vs2-1")+getmapusers("guild_vs2-2")+getmapusers("pvp_n_1-1")+getmapusers("pvp_n_1-3")+getmapusers("pvp_n_2-3")+getmapusers("pvp_n_3-3"));
+		delwaitingroom;
+		waitingroom "BattleGround [ "+.users+" ]",0;
+		sleep 50;
+	} while(1);
+end;
+}
+prontera,164,175,4	duplicate(BatRecruit)	Maroll Battle Recruiter::BatRecruit7	728
+prontera,123,83,5	duplicate(BatRecruit)	Maroll Battle Recruiter::BatRecruit2	728
+rachel,149,138,5	duplicate(BatRecruit)	Maroll Battle Recruiter::BatRecruit3	728
+moc_ruins,75,162,5	duplicate(BatRecruit)	Maroll Battle Recruiter::BatRecruit4	728
+aldebaran,146,109,5	duplicate(BatRecruit)	Maroll Battle Recruiter::BatRecruit5	728
+lighthalzen,153,86,5	duplicate(BatRecruit)	Maroll Battle Recruiter::BatRecruit6	728
+hugel,105,153,5	duplicate(BatRecruit)	Maroll Battle Recruiter::BatRecrui7	728
+// Info Board
+// *********************************************************************
+bat_room,163,154,2	script	Informacion de BG::BGINF	837,{
+	if( $@FlaviusCTF == 1 )
+		mes "^A0522DFlavious CTF^000000 * ^FF0000(" + bg_get_data($@FlaviusCTF_id2, 0) + ")^000000 vs ^0000FF(" + bg_get_data($@FlaviusCTF_id1, 0) + ")^000000";
+	else
+		mes "^A0522DFlavious CTF^000000 * ^808080VACIO^000000";
+	if( $@FlaviusTD == 1 )
+		mes "^808000Flavious TD^000000 * ^FF0000(" + bg_get_data($@FlaviusTD_id2, 0) + ")^000000 vs ^0000FF(" + bg_get_data($@FlaviusTD_id1, 0) + ")^000000";
+	else
+		mes "^808000Flavious TD^000000 * ^808080VACIO^000000";
+	if( $@FlaviusSC == 1 )
+		mes "^9ACD32Flavious SC^000000 * ^FF0000(" + bg_get_data($@FlaviusSC_id2, 0) + ")^000000 vs ^0000FF(" + bg_get_data($@FlaviusSC_id1, 0) + ")^000000";
+	else
+		mes "^9ACD32Flavious SC^000000 * ^808080VACIO^000000";
+	if( $@TierraEOS == 1 )
+		mes "^4169E1Tierra EoS^000000 * ^FF0000(" + bg_get_data($@TierraEOS_id2, 0) + ")^000000 vs ^0000FF(" + bg_get_data($@TierraEOS_id1, 0) + ")^000000";
+	else
+		mes "^4169E1Tierra EoS^000000 * ^808080VACIO^000000";
+	if( $@TierraBoss == 1 )
+		mes "^483D8BTierra Boss^000000 * ^FF0000(" + bg_get_data($@TierraBoss_id2, 0) + ")^000000 vs ^0000FF(" + bg_get_data($@TierraBoss_id1, 0) + ")^000000";
+	else
+		mes "^483D8BTierra Boss^000000 * ^808080VACIO^000000";
+	if( $@TierraDOM == 1 )
+		mes "^4169E1Tierra Dom^000000 * ^FF0000(" + bg_get_data($@TierraDOM_id2, 0) + ")^000000 vs ^0000FF(" + bg_get_data($@TierraDOM_id1, 0) + ")^000000";
+	else
+		mes "^4169E1Tierra Dom^000000 * ^808080VACIO^000000";
+	if( $@TierraTI == 1 )
+		mes "^696969Triple Inferno^000000 * ^008000(" + bg_get_data($@TierraTI_id3, 0) + ")^000000 vs ^FF0000(" + bg_get_data($@TierraTI_id2, 0) + ")^000000 vs ^0000FF(" + bg_get_data($@TierraTI_id1, 0) + ")^000000";
+	else
+		mes "^696969Triple Inferno^000000 * ^808080VACIO^000000";
+	if( $@Conquest == 1 )
+		mes "^FFA500Conquest^000000 * ^FF0000(" + bg_get_data($@Conquest_id2, 0) + ")^000000 vs ^0000FF(" + bg_get_data($@Conquest_id1, 0) + ")^000000";
+	else
+		mes "^FFA500Conquest^000000 * ^808080VACIO^000000";
+	if( $@Rush == 1 )
+		mes "^DDA0DDRush^000000 * ^FF0000(" + bg_get_data($@Rush_id2, 0) + ")^000000 vs ^0000FF(" + bg_get_data($@Rush_id1, 0) + ")^000000";
+	else
+		mes "^DDA0DDRush^000000 * ^808080VACIO^000000";
+	close;
+
+OnFri0600:
+	rankreset 1; // Ranking Reset
+	end;
+
+// BattleGround Happy Hour
+OnInit:
+OnClock1600:
+OnClock1800:
+OnClock2000:
+OnClock2200:
+	switch( gettime(4) )
+	{
+	case 1:
+	case 3:
+	case 5:
+		if( gettime(3) >= 20 && gettime(3) < 22 )
+		{
+OnWhisperGlobal:
+			announce "-- Battleground Happy Hour ha comenzado | Ranked Arena Mode --",0,0x00FF00;
+			setbattleflag "bg_reward_rates",200; // +20% Reward Rates
+			setbattleflag "bg_ranked_mode",1;
+			end;
+		}
+		
+		if( gettime(3) == 22 )
+		{
+			announce "-- Battleground Happy Hour ha terminado | Regular Arena Mode --",0,0x00BFFF;
+			setbattleflag "bg_reward_rates",100; // Normal Rates
+			setbattleflag "bg_ranked_mode",0;
+			end;
+		}
+		break;
+	case 2:
+	case 4:
+	case 6:
+		if( gettime(3) >= 16 && gettime(3) < 18 )
+		{
+			announce "-- Battleground Happy Hour ha comenzado | Ranked Arena Mode --",0,0x00FF00;
+			setbattleflag "bg_reward_rates",120; // +20% Reward Rates
+			setbattleflag "bg_ranked_mode",1;
+			end;
+		}
+		
+		if( gettime(3) == 18 )
+		{
+			announce "-- Battleground Happy Hour ha terminado | Regular Arena Mode --",0,0x00BFFF;
+			setbattleflag "bg_reward_rates",100; // Normal Rates
+			setbattleflag "bg_ranked_mode",0;
+			end;
+		}
+		break;
+	}
+	end;
+}
+
+// BattleGround Warper - Exit
+// *********************************************************************
+
+bat_room,148,150,4	script	Teleporter#bat	124,{
+	mes "[Teleporter]";
+	mes "¿Deseas salir de battleground?.";
+	next;
+	if( select("Irse:No salir") == 2 )
+	{
+		mes "[Teleporter]";
+		mes "Aqui estare hasta que desees usar mis servicios.";
+		close;
+	}
+
+	switch( @ArenaPVP_out )
+	{
+		// Rune Midgard Republic
+		case 1: warp "prontera",149,92; break;
+		case 2: warp "payon",165,98; break;
+		case 3: warp "morocc",153,94; break;
+		case 4: warp "umbala",121,143; break;
+		case 5: warp "comodo",196,140; break;
+		case 6: warp "niflheim",214,193; break;
+		case 7: warp "aldebaran",143,111; break;
+		case 8: warp "geffen",107,53; break;
+		// Schwarzard Republic
+		case 9: warp "yuno",151,177; break;
+		case 10: warp "hugel",99,143; break;
+		case 11: warp "lighthalzen",167,93; break;
+		case 12: warp "einbroch",70,194; break;
+		case 13: warp "einbech",168,130; break;
+		// Arunafelz Republic
+		case 14: warp "rachel",118,114; break;
+		case 15: warp "veins",207,122; break;
+		// Islands
+		case 16: warp "nameless_n",161,179; break;
+		case 17: warp "louyang",213,106; break;
+		case 18: warp "gonryun",154,111; break;
+		case 19: warp "ayothaya",148,109; break;
+		case 20: warp "moscovia",229,195; break;
+		case 21: warp "xmas",151,127; break;
+		case 22: warp "amatsu",203,107; break;
+		case 23: warp "izlude",126,114; break;
+		case 24: warp "brasilis",195,211; break;
+		case 25: warp "manuk",279,214; break;
+		case 26: warp "splendide",200,174; break;
+		// Anyplace else
+		default:
+			set .@spoint$, getsavepoint(0);
+			set .@x, getsavepoint(1);
+			set .@y, getsavepoint(2);
+			mes "[Teleporter]";
+			mes "Te enviare a " + .@spoint$ + ".";
+			close2;
+			warp .@spoint$, .@x, .@y;
+			break;
+	}
+	
+	set @ArenaPVP_out, 0;
+	end;
+}
+
+// Kafra
+// *********************************************************************
+bat_room,148,147,4	script	Kafra Staff::kaf_bat	861,{
+	cutin "kafra_09",2;
+	callfunc "F_Kafra",0,2,1,150,0;
+}
+
+// General Guillaume
+// *********************************************************************
+bat_room,160,159,3	script	General Guillaume	420,{
+	cutin "bat_kiyom2",2;
+	mes "[^0000ffGeneral Guillaume^000000]";
+	mes "Derrotemos al ejercito del Principe Croix, ve a elegir un campo de batalla, ojala y quedes en mi ejercito electo.";
+	close2;
+	cutin "",255;
+	end;
+}
+
+// General Croix
+// *********************************************************************
+bat_room,160,140,3	script	Prince Croix	416,{
+	cutin "bat_crua1",2;
+	mes "[^ff0000Prince Croix^000000]";
+	mes "Espero y pelees a mi lado y triunfes en la batalla, ve a elegir una sala y posiblemente te unas a mi ejercito.";
+	close2;
+	cutin "",255;
+	end;
+}
+
+// *********************************************************************
+// Join Battle Random NPC's - Template [DanielArt]
+// *********************************************************************
+function	script	BG_Template	{
+	if( getarg(15) == 2 ) {
+		set .@Guillaume,getwaitingroomstate(0,getarg(12));
+		set .@Croix,getwaitingroomstate(0,getarg(13));
+		set .@Traitor,getwaitingroomstate(0,getarg(14));
+		set .@glim,(getwaitingroomstate(1,getarg(12))-1);
+		set .@clim,(getwaitingroomstate(1,getarg(13))-1);
+		set .@tlim,(getwaitingroomstate(1,getarg(14))-1);
+		mes "["+getarg(0)+" Officer]";
+		mes "Hola "+strcharinfo(0)+", dime en que te puedo ayudar.";
+		mes " ";
+		mes "No olvides que tambien puedes usar ^ff0000@joinbg^000000 para entrar desde cualquier lado.";
+		next;
+		switch( select("Ingresar a la armada:Ingresar solitario:^777777Salir^000000")) {
+			case 1:
+			case 2:
+				mes "["+getarg(0)+" Officer]";
+				if( BaseLevel < getarg(1) ) {
+					mes "Estoy muy agradecido que quieras ingresar a la armada, pero no puedo enviar a novatos al campo de batalla, antes de entrar a las arenas de battleground debes de ser Nivel 120.";
+					close;
+				}
+				if( checkquest(getarg(2),PLAYTIME) == 2 ) erasequest getarg(2);
+				if( checkquest(getarg(2),PLAYTIME) != -1 ) {
+					mes "Al parecer eres un ^FF0000Desertor de Battleground^000000. No te puedo dejar participar hasta que este indicador desaparezca";
+					close;
+				}
+				if( checkquest(getarg(3),PLAYTIME) == 2 ) erasequest getarg(3);
+				if( checkquest(getarg(3),PLAYTIME) != -1 ) {
+					mes "Ya has participado en esta batalla. No puedo dejar que participes hasta que este indicador desaparezca";
+
+					close;
+				}
+				if (.@Guillaume < .@glim && .@Croix < .@clim) {
+					set Bat_Team,rand(1,2);
+					set @menu,1;
+				} else if(.@Croix >= .@clim) {
+					set Bat_Team,1;
+					set @menu,1;
+				} else if(.@Guillaume >= .@glim) {
+					set Bat_Team,2;
+					set @menu,1;
+				} else {
+					set Bat_Team,1;
+					set @menu,2;
+				}
+				if(@menu == 1) {
+					switch (Bat_Team) {
+						case 1: warp "bat_room",getarg(4),getarg(5); //Guillaume
+								close;
+						case 2: warp "bat_room",getarg(6),getarg(7); //Croix
+								close;
+					}
+				} else if(@menu == 2) {
+					if(.@Traitor >= .@tlim) {
+						mes "["+getarg(0)+" Officer]";
+						mes "Ya no pueden ingresar mas traidores.";
+						close;
+					}
+					switch (Bat_Team) {
+						case 1: warp "bat_room",getarg(8),getarg(9); //Guillaume
+								close;
+						case 2: warp "bat_room",getarg(10),getarg(11); //Croix
+								close;
+					}				
+				}
+				message strcharinfo(0),"Modo de juego, lleno.";
+				end;
+			case 3:
+				close;
+		}
+		end;
+	}
+	set .@Guillaume,getwaitingroomstate(0,getarg(8));
+	set .@Croix,getwaitingroomstate(0,getarg(9));
+	set .@glim,(getwaitingroomstate(1,getarg(8))-1);
+	set .@clim,(getwaitingroomstate(1,getarg(9))-1);
+	mes "["+getarg(0)+" Officer]";
+	mes "Hola "+strcharinfo(0)+", dime en que te puedo ayudar.";
+	mes " ";
+	mes "No olvides que tambien puedes usar ^ff0000@joinbg^000000 para entrar desde cualquier lado.";
+	next;
+	switch( select("Ingresar a la armada:^777777Salir^000000")) {
+		case 1:
+			mes "["+getarg(0)+" Officer]";
+			if( BaseLevel < getarg(1) ) {
+				mes "Estoy muy agradecido que quieras ingresar a la armada, pero no puedo enviar a novatos al campo de batalla, antes de entrar a las arenas de battleground debes de ser Nivel 120.";
+				close;
+			}
+			if( checkquest(getarg(2),PLAYTIME) == 2 ) erasequest getarg(2);
+			if( checkquest(getarg(2),PLAYTIME) != -1 ) {
+				mes "Al parecer eres un ^FF0000Desertor de Battleground^000000. No te puedo dejar participar hasta que este indicador desaparezca";
+				close;
+			}
+			if( checkquest(getarg(3),PLAYTIME) == 2 ) erasequest getarg(3);
+			if( checkquest(getarg(3),PLAYTIME) != -1 ) {
+				mes "Ya has participado en esta batalla. No puedo dejar que participes hasta que este indicador desaparezca";
+
+				close;
+			}
+			if (.@Guillaume < .@glim && .@Croix < .@clim) {
+				set Bat_Team,rand(1,2);
+			} else if(.@Croix >= .@clim) {
+				set Bat_Team,1;
+			} else if(.@Guillaume >= .@glim) {
+				set Bat_Team,2;
+			}
+			switch (Bat_Team) {
+				case 1: 
+					message strcharinfo(0),"Has ingresado a [ "+getarg(0)+" ] en Guillaume.";
+					warp "bat_room",getarg(4),getarg(5); //Guillaume
+					close;
+				case 2: 
+					message strcharinfo(0),"Has ingresado a [ "+getarg(0)+" ] en Croix.";
+					warp "bat_room",getarg(6),getarg(7); //Croix
+					close;
+			}
+			message strcharinfo(0),"Modo de juego, lleno.";
+			end;
+		case 2:
+			close;
+	}
+end;
+}
+//Tierra Valley
+bat_room,156,178,5	script	Tierra Valley Officer#1	556,{ callfunc "BG_Template","Tierra",120,8506,8500,85,224,85,208,"TV1R_Guillaume","TV1R_Croix",0,0,0,0,0,1; OnInit: waitingroom strnpcinfo(1),0; end;}
+//Flavius CTF
+bat_room,159,121,1	script	Flavius CTF Officer#1	556,{ callfunc "BG_Template","Flavius CTF",120,8506,8504,57,77,57,94,"CTFR_Guillaume","CTFR_Croix",0,0,0,0,0,1; OnInit: waitingroom strnpcinfo(1),0; end;}
+//Tierra EoS
+bat_room,167,178,5	script	Tierra EoS Officer#1	556,{ callfunc "BG_Template","Tierra EoS",120,8506,8501,85,77,85,94,"EOSR_Guillaume","EOSR_Croix",0,0,0,0,0,1; OnInit: waitingroom strnpcinfo(1),0; end;}
+//Flavius Normal
+bat_room,167,121,1	script	Flavius Officer#1	556,{ callfunc "BG_Template","Flavius",120,8506,8503,253,77,253,94,"Fl1R_Guillaume","Fl1R_Croix",0,0,0,0,0,1; OnInit: waitingroom strnpcinfo(1),0; end;}
+//KvM A
+bat_room,175,178,5	script	KvM Officer#1	556,{ callfunc "BG_Template","KvM",120,8506,6025,253,224,253,208,"KvM01R_Guillaume","KvM01R_Croix",0,0,0,0,0,1; OnInit: waitingroom strnpcinfo(1),0; end;}
+//Crystal
+bat_room,175,121,1	script	Crystal  Officer#1	556,{ callfunc "BG_Template","Crystal",120,8506,8502,225,224,225,208,"CrysR_Guillaume","CrysR_Croix",0,0,0,0,0,1; OnInit: waitingroom strnpcinfo(1),0; end;}
+//Ying Yang
+bat_room,151,178,5	script	Ying Yang Officer#1	556,{ callfunc "BG_Template","Ying Yang",120,8506,6025,197,224,197,208,"YYR_Guillaume","YYR_Croix",0,0,0,0,0,1; OnInit: waitingroom strnpcinfo(1),0; end;}
+//Duel
+bat_room,151,121,1	script	Duel Officer#1	556,{ callfunc "BG_Template","Duel",120,8506,6025,113,224,113,208,"KvM04R_Guillaume","KvM04R_Croix",0,0,0,0,0,1; OnInit: waitingroom strnpcinfo(1),0; end;}
+//Bossnia
+bat_room,143,178,5	script	Tierra Boss Officer#1	556,{ callfunc "BG_Template","Tierra Boss",120,8506,8502,57,223,57,208,"TBR_Guillaume","TBR_Croix",0,0,0,0,0,1; OnInit: waitingroom strnpcinfo(1),0; end;}
+//Flavius TD
+bat_room,143,121,1	script	Flavius TD Officer#1	556,{ callfunc "BG_Template","Flavius TD",120,8506,8505,113,78,113,93,"TDR_Guillaume","TDR_Croix",0,0,0,0,0,1; OnInit: waitingroom strnpcinfo(1),0; end;}
+//Conquest
+bat_room,135,178,5	script	Conquest Officer#1	556,{ callfunc "BG_Template","Conquest",120,8506,8509,169,77,169,94,"ConR_Guillaume","ConR_Croix",0,0,0,0,0,1; OnInit: waitingroom strnpcinfo(1),0; end;}
+//Flavius SC
+bat_room,135,121,1	script	Flavius SC Officer#1	556,{ callfunc "BG_Template","Flavius SC",120,8506,8507,141,77,141,94,"SCR_Guillaume","SCR_Croix",0,0,0,0,0,1;OnInit: waitingroom strnpcinfo(1),0; end; }
+//Tierra TI
+bat_room,127,178,5	script	Tierra TI Officer#1	556,{ callfunc "BG_Template","Tierra TI",120,8506,8508,197,77,197,94,225,77,225,77,"TTIR_Guillaume","TTIR_Croix","TTIR_Traitor",2;OnInit: waitingroom strnpcinfo(1),0; end; }
+//Rush
+bat_room,127,121,1	script	Rush Officer#1	556,{ callfunc "BG_Template","Rush",120,8506,8510,169,223,169,208,"RushR_Guillaume","RushR_Croix",0,0,0,0,0,1;OnInit: waitingroom strnpcinfo(1),0; end; }
+//Tierra DOM
+bat_room,180,178,5	script	Tierra DOM Officer#1	556,{ callfunc "BG_Template","Tierra DOM",120,8506,8511,141,223,141,208,"DOMR_Guillaume","DOMR_Croix",0,0,0,0,0,1;OnInit: waitingroom strnpcinfo(1),0; end; }
+//Masacre [PvP]
+bat_room,180,121,1	script	PvP Officer#1	556,{ warp "bat_room",226,94; end; OnInit: waitingroom strnpcinfo(1),0; end; }
+
+// Guard Dummy
+// *********************************************************************
+
+bat_room,161,141,3	script	Ayudante Croix::bat_aid	415,{ end; }
+bat_room,161,139,3	duplicate(bat_aid)	Ayudante Croix::bat_aid2	415
+bat_room,161,160,3	duplicate(bat_aid)	Ayudante Guillaume::bat_aid3	419
+bat_room,161,158,3	duplicate(bat_aid)	Ayudante Guillaume::bat_aid4	419
+
+// Flags
+// *********************************************************************
+
+-	script	Guillaume camp#bat	973,{ end; }
+-	script	Croix camp#bat	974,{ end; }
+
+// Exit from Registration
+// *********************************************************************
+
+// Flavius CTF
+bat_room,57,81,0	warp	bat1	1,1,bat_room,154,149
+bat_room,57,90,0	warp	bat2	1,1,bat_room,154,149
+// Tierra Boss
+bat_room,57,220,0	warp	bat3	1,1,bat_room,154,149
+bat_room,57,211,0	warp	bat4	1,1,bat_room,154,149
+// Tierra EOS
+bat_room,85,81,0	warp	bat5	1,1,bat_room,154,149
+bat_room,85,90,0	warp	bat6	1,1,bat_room,154,149
+// Tierra Valley
+bat_room,85,220,0	warp	bat7	1,1,bat_room,154,149
+bat_room,85,211,0	warp	bat8	1,1,bat_room,154,149
+// Flavius TD
+bat_room,113,81,0	warp	bat9	1,1,bat_room,154,149
+bat_room,113,90,0	warp	bat10	1,1,bat_room,154,149
+// KvM
+bat_room,113,220,0	warp	bat11	1,1,bat_room,154,149
+bat_room,113,211,0	warp	bat12	1,1,bat_room,154,149
+// Flavius SC
+bat_room,141,81,0	warp	bat13	1,1,bat_room,154,149
+bat_room,141,90,0	warp	bat14	1,1,bat_room,154,149
+// Tierra Domination
+bat_room,141,220,0	warp	bat15	1,1,bat_room,154,149
+bat_room,141,211,0	warp	bat16	1,1,bat_room,154,149
+// Castle Conquest
+bat_room,169,81,0	warp	bat17	1,1,bat_room,154,149
+bat_room,169,90,0	warp	bat18	1,1,bat_room,154,149
+// Castle Rush
+bat_room,169,220,0	warp	bat19	1,1,bat_room,154,149
+bat_room,169,211,0	warp	bat20	1,1,bat_room,154,149
+// Tierra Triple Infierno
+bat_room,197,81,0	warp	bat21	1,1,bat_room,154,149
+bat_room,197,90,0	warp	bat22	1,1,bat_room,154,149
+bat_room,225,81,0	warp	bat25	1,1,bat_room,154,149
+// KvM
+bat_room,197,220,0	warp	bat23	1,1,bat_room,154,149
+bat_room,197,211,0	warp	bat24	1,1,bat_room,154,149
+// Free BG
+bat_room,225,90,0	warp	bat26	1,1,bat_room,154,149
+// KvM
+bat_room,225,220,0	warp	bat27	1,1,bat_room,154,149
+bat_room,225,211,0	warp	bat28	1,1,bat_room,154,149
+// Flavius
+bat_room,253,81,0	warp	bat29	1,1,bat_room,154,149
+bat_room,253,90,0	warp	bat30	1,1,bat_room,154,149
+// KvM
+bat_room,253,220,0	warp	bat31	1,1,bat_room,154,149
+bat_room,253,211,0	warp	bat32	1,1,bat_room,154,149
+
+// Badges Repairman
+// *********************************************************************
+
+bat_room,138,144,5	script	Repairman#bg	99,{
+	callfunc "repairmain","Repairman";
+	end;
+}
+
+//bat_room,1,1,3,7828	sshop	BraveryExchanger	111,13036:100,13411:100,1425:100,1632:100,1634:100,1543:100,1924:100,1978:100,1574:100,1824:100,1183:100,1380:100,13305:100,1279:100,1739:100,13108:100,13172:100,2538:50,2539:50,2540:50,2435:50,2436:50,2437:50,2376:80,2377:80,2378:80,2379:80,2380:80,2381:80,2382:80,2720:500,2721:500,2722:500,2723:500,2724:500,2725:500,2733:500
+//bat_room,1,1,3,7829	sshop	ValorExchanger	111,13037:100,13410:100,1633:100,1635:100,1542:100,1923:100,1977:100,1575:100,1823:100,1184:100,1482:100,1379:100,13306:100,1280:100,1738:100,13171:100,13173:100,13174:100,2538:50,2539:50,2540:50,2435:50,2436:50,2437:50,2376:80,2377:80,2378:80,2379:80,2380:80,2381:80,2382:80,2720:500,2721:500,2722:500,2723:500,2724:500,2725:500,2733:500
+//bat_room,1,1,3,7773	sshop	HeroismExchanger	111,1187:2000,1281:2000,1282:2000,1310:2000,1382:2000,1426:2000,1486:2000,1546:2000,1576:2000,1577:2000,1640:2000,1641:2000,1743:2000,1826:2000,1827:2000,1927:2000,1981:2000,2002:2000,13042:2000,13110:2000,13176:2000,13177:2000,13178:2000,13179:2000,13307:2000,13416:2000,13417:2000,13418:2000,2394:840,2395:170,2396:25,2444:580,2445:70,2446:15,2549:630,2772:1200,2773:280,2774:40
+bat_room,1,1,3,7828	sshop	BraveryExchanger	111,13036:70,13411:70,1425:70,1632:70,1634:70,1543:70,1924:70,1978:70,1574:70,1824:70,1183:70,1380:70,13305:70,1279:70,1739:70,13108:70,13172:70,2538:40,2539:40,2540:40,2435:40,2436:40,2437:40,2376:60,2377:60,2378:60,2379:60,2380:60,2381:60,2382:60,2720:300,2721:300,2722:300,2723:300,2724:300,2725:300,2733:300
+bat_room,1,1,3,7829	sshop	ValorExchanger	111,13037:70,13410:70,1633:70,1635:70,1542:70,1923:70,1977:70,1575:70,1823:70,1184:70,1482:70,1379:70,13306:70,1280:70,1738:70,13171:70,13173:70,13174:70,2538:40,2539:40,2540:40,2435:40,2436:40,2437:40,2376:60,2377:60,2378:60,2379:60,2380:60,2381:60,2382:60,2720:300,2721:300,2722:300,2723:300,2724:300,2725:300,2733:300
+bat_room,1,1,3,7773	sshop	HeroismExchanger	111,1187:1200,1281:1200,1282:1200,1310:1200,1382:1200,1426:1200,1486:1200,1546:1200,1576:1200,1577:1200,1640:1200,1641:1200,1743:1200,1826:1200,1827:1200,1927:1200,1981:1200,2002:1200,13042:1200,13110:1200,13176:1200,13177:1200,13178:1200,13179:1200,13307:1200,13416:1200,13417:1200,13418:1200,2394:580,2395:170,2396:25,2444:580,2445:70,2446:15,2549:580,2772:900,2773:280,2774:40
+
+bat_room,160,150,3	script	Erundek	109,{
+	mes "[Erundek]";
+	mes "Bienvenid"+(Sex?"o":"a")+", valiente guerrer"+(Sex?"o":"a")+".";
+	mes "¿En que puedo ayudarte hoy?";
+	next;
+	switch( select("Cambiar Bravery Badges","Cambiar Valor Badges","Cambiar Heroism Badges","^777777Salir^000000") )
+	{
+		case 4:
+			mes "[Erundek]";
+			mes "Como desees.";
+			mes "Nos vemos despues.";
+			close;
+		case 1: // Bravery Badges
+			mes "[Erundek]";
+			mes "Bien, deseas cambiar las ^0000FFBravery Badges^000000 de las batallas de Tierra Valley.";
+			mes "Cierra la ventana para abrir la tienda.";
+			close2;
+			callshop "BraveryExchanger",0;
+			end;
+		case 2: // Valor Badges
+			mes "[Erundek]";
+			mes "Bien, deseas cambiar las ^FF0000Valor Badges^000000 de las batallas de Flavius.";
+			mes "Cierra la ventana para abrir la tienda.";
+			close2;
+			callshop "ValorExchanger",0;
+			end;
+		case 3: // Heroism Badges
+			mes "[Erundek]";
+			mes "Bien, deseas cambiar las ^FFA500Heroism Badges^000000 de las batallas de Kriger Von Midgard.";
+			mes "Cierra la ventana para abrir la tienda.";
+			close2;
+			callshop "HeroismExchanger",0;
+			end;
+	}
+}
+
+// Badge Reward Function [DanielArt]
+//============================================================
+function	script	F_BG_Badge	{
+
+	if (getarg(2) == "Tierra") {
+		set .@badge,7828; //BF_Badge1
+		set .@amount_win,3;
+		set .@amount_lose,1;
+	} else if (getarg(2) == "Flavius") {
+		set .@badge,7829; //BF_Badge2
+		set .@amount_win,9;
+		set .@amount_lose,3;
+	} else
+		return;
+
+	if (getarg(0) == 1) {
+		set .@amount, .@amount_win;
+		if (getarg(1) == "Guillaume") {
+			mes "[Axl Rose]";
+			mes "Blessed Guillaume!";
+		} else if (getarg(1) == "Croix") {
+			mes "[Swandery]";
+			mes "Blessed Croix!";
+		}
+		mes "Let's enjoy our glorious victory!";
+		mes strcharinfo(0)+", it's a sign reflecting victory.";
+	} else {
+		set .@amount, .@amount_lose;
+		if (getarg(1) == "Guillaume") {
+			mes "[Axl Rose]";
+			mes "You lost, but you're dedicated to this battle.";
+			mes "This is a reward for your great dedication by Guillaume Marollo!";
+			mes "Just take this defeat as a lesson, and next time you will definitely win.";
+		} else if (getarg(1) == "Croix") {
+			mes "[Swandery]";
+			mes "Oh, "+strcharinfo(0)+" Don't be sad.";
+			mes "Even though we didn't win, we did our best.";
+			mes "This is a Royal gift from Croix, and please don't forget this battle. We will win the next one.";
+		}
+	}
+	close2;
+
+	// If the VIP system is enabled, VIP players receive an extra 2 badges.
+	if (getserverdef(VAR_VIP_SCRIPT) && vip_status(1))
+		set .@amount, .@amount+2;
+
+	set .@medal_gap, 500 - countitem(.@badge);
+	if (.@medal_gap >= .@amount)
+		getitem .@badge,.@amount;
+	else
+		getitem .@badge,.@medal_gap;
+	return;
+}

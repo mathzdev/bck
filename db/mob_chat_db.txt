@@ -24,7 +24,7 @@
 19#0xFF0000#I was born to conquer this world! None shall stop me!
 20#0xFF0000#Your days are numbered!
 21#0xFF0000#Pulse Strike! My fingers tear steel!
-22#0xFF0000#Hahaha, tell me who I am! I'm Baphomet, the Heir of Hell!
+22#0xFF0000#Hahaha, tell me who I am! I'm the terror of the Heel, the Heir of Hell!
 23#0xFF0000#Enjoy your time on the mortal plane while you can, your hope will soon turn into despair!
 24#0xFF0000#When are you going to learn your lesson? In death?
 25#0xFF0000#No... I can't lose! I won't beg for my life! I'm not running away! I don't accept this as defeat!
@@ -43,4 +43,7 @@
 38#0xFF0000#Discard your life and stay confined here.  You will yearn for freedom in captivity !!
 39#0xFF0000#How much will the outside world change if you stay here in solitude for one thousand years?
 40#0xFF0000#Yes! Yearn for your freedom from this confined place, your captivity here will be permanent !!
-
+//Lafayette
+41#0xFF0000#Rawwrrr....!! Groaawwrr...!!
+42#0xFF0000#You killed my sons, you must die... !! Roaarr...!!
+43#0xFF0000#I am the Lord of Dragons..!!! Prepare to met the terror of death..!!!

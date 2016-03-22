@@ -21,6 +21,7 @@
 //============================================================
 
 // Cities ========================
+que_ba	mapflag	noteleport
 ayo_in01	mapflag	noteleport
 ayo_in02	mapflag	noteleport
 alb_ship	mapflag	noteleport
@@ -350,28 +351,6 @@ que_qaru04	mapflag	noteleport
 que_qaru04	mapflag	monster_noteleport
 que_qaru05	mapflag	noteleport
 que_qaru05	mapflag	monster_noteleport
-
-//Sealed Shrine ==================
-1@cata	mapflag	noteleport
-1@cata	mapflag	monster_noteleport
-2@cata	mapflag	noteleport
-2@cata	mapflag	monster_noteleport
-
-//Endless Tower ==================
-e_tower	mapflag	noteleport
-1@tower	mapflag	noteleport
-1@tower	mapflag	monster_noteleport
-2@tower	mapflag	noteleport
-2@tower	mapflag	monster_noteleport
-3@tower	mapflag	noteleport
-3@tower	mapflag	monster_noteleport
-4@tower	mapflag	noteleport
-4@tower	mapflag	monster_noteleport
-5@tower	mapflag	noteleport
-5@tower	mapflag	monster_noteleport
-6@tower	mapflag	noteleport
-6@tower	mapflag	monster_noteleport
-
 // Battle Grounds ==============
 bat_c01	mapflag	noteleport
 bat_c02	mapflag	noteleport

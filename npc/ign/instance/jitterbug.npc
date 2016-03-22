@@ -1,0 +1,802 @@
+//===== rAthena Script ======================================= 
+//= Nightmare of Jitterbug
+//===== By: ================================================== 
+//= DanielArt
+//===== Current Version: ===================================== 
+//= 1.2
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Based on kRO video.
+//===== Additional Comments: ================================= 
+//= 1.0 First version. [DanielArt]
+//= 1.1 Automatic chat. [DanielArt]
+//= 1.2 Fixed Free Entrance when dead [DanielArt]
+//============================================================ 
+
+// Instance Creation :: jtb
+//============================================================
+moc_para01,31,95,5	script	Dehare	10039,{
+	cutin "lunain01",2;
+	set .@party_id,getcharid(1);
+	set .@md_name$,"Nightmare of Jitterbug";
+
+	if (!.@party_id || BaseLevel < 120) {
+		mes "[Dehare]";
+		mes "Ey aventurero, no puedes venir si estás solo.";
+		close2; cutin "",255; end;
+	}
+	mes "[Dehare]";
+	mes "Estamos aquí porque necesitamos ayuda para vencer a un ser oscuro que ha aparecido el el bosque.";
+	next;
+	while(1) {
+		switch(select("Preguntar qué pasa.:Nightmare of Jitterbug.:Salir.")) {
+			case 1:
+				mes "[Dehare]";
+				mes "Recientemente nos informaron que una extraña criatura con forma de piano ha estado comiendo humanos en el bosque";
+				next;
+				mes "[Dehare]";
+				mes "Por eso mismo ha sido catalogada como una pesadilla y estamos aquí para reclutar aventureros que nos ayuden a eliminarle.";
+				next;
+				break;
+			case 2:
+				if (getcharid(0) == getpartyleader(.@party_id,2)) {
+					set .@playtime, checkquest(17500,PLAYTIME);
+					if (.@playtime == 0 || .@playtime == 1) {
+						switch(instance_enter("Nightmare of Jitterbug")) {
+							case 3:
+								mes "[Dehare]";
+								mes "Aún no es tiempo, vuelve luego.";
+								close2; cutin "",255; end;
+							case 2:
+							case 1:
+								mes "[Dehare]";
+								mes "Creo que no aparece tu nombre en nuestro registro, asegurate de enlistarte correctamente.";
+								close2; cutin "",255; end;
+							case 0:
+								mapannounce "moc_para01", getpartyname(getcharid(1))+"  ha entrado a Nightmare of Jitterbug!",bc_map,"0x00ff99";
+								if (checkquest(17500) == -1) setquest 17500;
+								//warp "1@jtb",13,18;
+								close2; cutin "",255; end;
+							default:
+								mes "[Dehare]";
+								mes "No estás enlistado para el combate.";
+								close2; cutin "",255; end;
+						}
+						mes "[Dehare]";
+						mes "No se ha detectado al monstruo por los alrededores, vuelve luego.";
+						close2; cutin "",255; end;
+					}
+					if (.@playtime == 2) erasequest 17500;
+					if (instance_create(.@md_name$) < 0) {
+						mes "[Dehare]";
+						mes "Nombre de party es... "+getpartyname(.@party_id)+".";
+						mes "El lider es... "+strcharinfo(0)+".";
+						mes "^0000ff"+.@md_name$+"^000000, No la puedo abrir ahora";
+					}
+					switch(instance_enter("Nightmare of Jitterbug")) {
+						case 3:
+							mes "[Dehare]";
+							mes "Aún no es tiempo, vuelve luego.";
+							close2; cutin "",255; end;
+						case 2:
+						case 1:
+							mes "[Dehare]";
+							mes "Creo que no aparece tu nombre en nuestro registro, asegurate de enlistarte correctamente.";
+							close2; cutin "",255; end;
+						case 0:
+							mapannounce "moc_para01", getpartyname(getcharid(1))+"  ha entrado a Nightmare of Jitterbug!",bc_map,"0x00ff99";
+							if (checkquest(17500) == -1) setquest 17500;
+							//warp "1@jtb",13,18;
+							close2; cutin "",255; end;
+						default:
+							mes "[Dehare]";
+							mes "No estás enlistado para el combate.";
+							close2; cutin "",255; end;
+					}
+				}
+				switch(instance_enter("Nightmare of Jitterbug")) {
+					case 3:
+						mes "[Dehare]";
+						mes "Aún no es tiempo, vuelve luego.";
+						close2; cutin "",255; end;
+					case 2:
+					case 1:
+						mes "[Dehare]";
+						mes "Creo que no aparece tu nombre en nuestro registro, asegurate de enlistarte correctamente.";
+						close2; cutin "",255; end;
+					case 0:
+						mapannounce "moc_para01", getpartyname(getcharid(1))+"  ha entrado a Nightmare of Jitterbug!",bc_map,"0x00ff99";
+						if (checkquest(17500) == -1) setquest 17500;
+						//warp "1@jtb",13,18;
+						close2; cutin "",255; end;
+					default:
+						mes "[Dehare]";
+						mes "No estás enlistado para el combate.";
+						close2; cutin "",255; end;
+				}
+			case 3:
+				mes "[Dehare]";
+				mes "Vuelve después.";
+				close2; cutin "",255; end;
+		}
+	}
+end;
+}
+
+// Instance Scripts :: jtb_in
+//============================================================
+1@jtb,28,30,5	script	Newoz#jtb_newoz	625,{
+	if (getcharid(0) == getpartyleader(getcharid(1),2))
+		donpcevent instance_npcname("Newoz#jtb_newoz")+"::OnConversation";
+	end;
+OnConversation:
+	npctalk "Debemos averiguar de dónde salió ése monstruo.";
+	sleep2 2500;
+	donpcevent instance_npcname("Dehare#jtb_dejare")+"::OnTalk";
+	sleep2 2500;
+	npctalk "No pudo haber aparecido de la nada.";
+	sleep2 2500;
+	donpcevent instance_npcname("Genetic#jtb_genetic")+"::OnTalk";
+	sleep2 2500;
+	npctalk "No me extrañaría que fuese una especie de homúnculo.";
+	sleep2 2500;
+	donpcevent instance_npcname("Gelka#jtb_jelka")+"::OnTalk";
+	sleep2 2500;
+	npctalk "La fuerza bruta no ayudará en nada Gelka.";
+	sleep2 2500;
+	npctalk "Debemos saber la forma de vencerlo, no existe sólo uno.";
+	sleep2 2500;
+	donpcevent instance_npcname("Rotert#jtb_rotert")+"::OnTalk";
+	sleep2 2500;
+	npctalk "Podría ser una posibilidad.";
+	sleep2 2500;
+	npctalk "Así que por favor aventureros, ayúdenos a vencer a ésta calamidad.";
+	sleep2 2500;
+	donpcevent instance_npcname("jtb_warp_q1")+"::OnEnable";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Newoz#jtb_newoz")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Newoz#jtb_newoz");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Newoz#jtb_newoz");
+	end;
+}
+
+1@jtb,23,22,5	script	Dehare#jtb_dejare	10039,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Dehare#jtb_dejare")+"::OnEnable";
+	end;
+OnTalk:
+	npctalk "Sabemos que de un día para otro apareció en el bosque.";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Dehare#jtb_dejare");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Dehare#jtb_dejare");
+	end;
+}
+
+1@jtb,25,24,5	script	Genetic#jtb_genetic	643,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Genetic#jtb_genetic")+"::OnEnable";
+	end;
+OnTalk:
+	npctalk "Claramente es magia, no puede haber sido creado por la ciencia.";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Genetic#jtb_genetic");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Genetic#jtb_genetic");
+	end;
+}
+
+1@jtb,23,26,5	script	Gelka#jtb_jelka	629,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Gelka#jtb_jelka")+"::OnEnable";
+	end;
+OnTalk:
+	npctalk "Simplemente debemos de patearlo, por eso trajimos gente fuerte.";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Gelka#jtb_jelka");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Gelka#jtb_jelka");
+	end;
+}
+
+1@jtb,25,28,5	script	Rotert#jtb_rotert	630,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Rotert#jtb_rotert")+"::OnEnable";
+	end;
+OnTalk:
+	npctalk "Si es un tipo de demonio, se propagará rapidamente, debemos hacer algo.";
+OnEnable:
+	enablenpc instance_npcname("Rotert#jtb_rotert");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Rotert#jtb_rotert");
+	end;
+}
+
+1@jtb,31,28,4	script	Iuri#jtb_iuri	646,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Iuri#jtb_iuri")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Iuri#jtb_iuri");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Iuri#jtb_iuri");
+	end;
+}
+
+1@jtb,34,27,4	script	Ragi#jtb_ragi	647,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Ragi#jtb_ragi")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Ragi#jtb_ragi");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Ragi#jtb_ragi");
+	end;
+}
+
+1@jtb,32,24,4	script	Roel#jtb_roel	10040,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Roel#jtb_roel")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Roel#jtb_roel");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Roel#jtb_roel");
+	end;
+}
+
+
+// Instance Scripts :: Sala 2
+//============================================================
+1@jtb,370,45,5	script	Iuri#jtb_iuri1	646,{
+	if (getcharid(0) == getpartyleader(getcharid(1),2))
+		donpcevent instance_npcname("Iuri#jtb_iuri1")+"::OnConversation";
+	end;
+OnConversation:
+	npctalk "Este lugar es horrible, debemos tener cuidado de los monstruos.";
+	sleep2 2500;
+	donpcevent instance_npcname("Dehare#jtb_dejare1")+"::OnTalk";
+	sleep2 2500;
+	npctalk "¡Espera!, ¿escuchaste eso?";
+	sleep2 2500;
+	donpcevent instance_npcname("Shalosh#jtb_shalosh")+"::OnEnable";
+	sleep2 2500;
+	npctalk "¡¿Tú quién eres?!";
+	sleep2 2500;
+	donpcevent instance_npcname("Shalosh#jtb_shalosh")+"::OnTalk";
+	sleep2 2500;
+	npctalk "Escuchar eso es reconfortante, pero no es el lugar, sigamos.";
+	sleep2 2500;
+	donpcevent instance_npcname("jtb_warp_q2")+"::OnEnable";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Iuri#jtb_iuri1")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Iuri#jtb_iuri1");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Iuri#jtb_iuri1");
+	end;
+}
+
+1@jtb,375,44,4	script	Dehare#jtb_dejare1	10039,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Dehare#jtb_dejare1")+"::OnDisable";
+	end;
+OnTalk:
+	npctalk "D-de cualquier forma, debemos de reunirnos rápido con el resto.";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Dehare#jtb_dejare1");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Dehare#jtb_dejare1");
+	end;
+}
+
+1@jtb,373,47,4	script	Shalosh#jtb_shalosh	10041,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Shalosh#jtb_shalosh")+"::OnDisable";
+	end;
+OnTalk:
+	npctalk "Tranquila, vengo a darles información del monstruo, en realidad yo vi cómo lo crearon...";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Shalosh#jtb_shalosh");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Shalosh#jtb_shalosh");
+	end;
+}
+
+1@jtb,357,45,0	script	jtb_jitter2	139,4,4,{
+	end;
+OnTouch:
+	donpcevent instance_npcname("jtb_jitter_m1")+"::OnEnable";
+	disablenpc instance_npcname("jtb_jitter2");
+	end;
+	
+}
+
+1@jtb,1,12,0	script	jtb_jitter_m1	139,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("jtb_jitter_m1")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("jtb_jitter_m1");
+	set .@map$,instance_mapname("1@jtb");
+	monster .@map$,378,28,"Pere",3069,20,instance_npcname("jtb_jitter_m1")+"::OnMyMobDead";
+	end;
+OnDisable:
+	disablenpc instance_npcname("jtb_jitter_m1");
+	end;
+OnMyMobDead:
+	set .@map$,instance_mapname("1@jtb");
+	if(mobcount(.@map$,instance_npcname("jtb_jitter_m1")+"::OnMyMobDead") < 1) {
+		donpcevent instance_npcname("Iuri#jtb_iuri1")+"::OnEnable";
+		donpcevent instance_npcname("Dehare#jtb_dejare1")+"::OnEnable";
+		end;
+	}
+	end;
+}
+// Instance Scripts :: Sala 3
+//============================================================
+1@jtb,205,32,4	script	Gelka#jtb_jelka1	629,{
+	if (getcharid(0) == getpartyleader(getcharid(1),2))
+		donpcevent instance_npcname("Gelka#jtb_jelka1")+"::OnConversation";
+	end;
+OnConversation:
+	npctalk "¡Guarda silencio de una vez, yo haré lo que quiera y tú no eres nadie para ordenarme!";
+	specialeffect 400;
+	sleep2 2500;
+	donpcevent instance_npcname("Rotert#jtb_rotert1")+"::OnTalk";
+	sleep2 2500;
+	npctalk "¡No me toques!";
+	specialeffect 450;
+	donpcevent instance_npcname("Rotert#jtb_rotert1")+"::OnEffect";
+	sleep2 2500;
+	donpcevent instance_npcname("jtb_warp_q3")+"::OnEnable";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Gelka#jtb_jelka1")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Gelka#jtb_jelka1");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Gelka#jtb_jelka1");
+	end;
+}
+
+1@jtb,199,32,5	script	Rotert#jtb_rotert1	630,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Rotert#jtb_rotert1")+"::OnDisable";
+	end;
+OnTalk:
+	npctalk "Eres muy repugnante, sucia hija del demonio, aléjate.";
+	specialeffect 400;
+	end;
+OnEffect:
+	specialeffect 450;
+	end;
+OnEnable:
+	enablenpc instance_npcname("Rotert#jtb_rotert1");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Rotert#jtb_rotert1");
+	end;
+}
+
+1@jtb,183,17,0	script	jtb_jitter3	139,4,4,{
+	end;
+OnTouch:
+	donpcevent instance_npcname("jtb_jitter_m2")+"::OnEnable";
+	disablenpc instance_npcname("jtb_jitter3");
+	end;
+	
+}
+
+1@jtb,1,13,0	script	jtb_jitter_m2	139,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("jtb_jitter_m2")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("jtb_jitter_m2");
+	set .@map$,instance_mapname("1@jtb");
+	monster .@map$,206,32,"Pere",3070,20,instance_npcname("jtb_jitter_m2")+"::OnMyMobDead";
+	end;
+OnDisable:
+	disablenpc instance_npcname("jtb_jitter_m2");
+	end;
+OnMyMobDead:
+	set .@map$,instance_mapname("1@jtb");
+	if(mobcount(.@map$,instance_npcname("jtb_jitter_m2")+"::OnMyMobDead") < 1) {
+		donpcevent instance_npcname("Gelka#jtb_jelka1")+"::OnEnable";
+		donpcevent instance_npcname("Rotert#jtb_rotert1")+"::OnEnable";
+		end;
+	}
+	end;
+}
+
+// Instance Scripts :: Sala 4
+//============================================================
+1@jtb,34,116,4	script	Newoz#jtb_newoz1	625,{
+	if (getcharid(0) == getpartyleader(getcharid(1),2))
+		donpcevent instance_npcname("Newoz#jtb_newoz1")+"::OnConversation";
+	end;
+OnConversation:
+	npctalk "Ésta señorita ya nos ha explicado cómo fue creado el monstruo.";
+	sleep2 2500;
+	donpcevent instance_npcname("Shalosh#jtb_shalosh1")+"::OnTalk";
+	sleep2 2500;
+	npctalk "Asi que es como oyes, aventureros, por favor ayúdenos.";
+	donpcevent instance_npcname("Roel#jtb_roel1")+"::OnTalk";
+	sleep2 2500;
+	npctalk "Tal como dice Roel, les cubriremos la espalda, esfuercence.";
+	sleep2 2500;
+	donpcevent instance_npcname("jtb_warp_q4")+"::OnEnable";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Newoz#jtb_newoz1")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Newoz#jtb_newoz1");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Newoz#jtb_newoz1");
+	end;
+}
+
+1@jtb,29,114,5	script	Roel#jtb_roel1	10040,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Roel#jtb_roel1")+"::OnDisable";
+	end;
+OnTalk:
+	npctalk "No se preocupen por los monstruos de atrás, les pisaremos los talones.";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Roel#jtb_roel1");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Roel#jtb_roel1");
+	end;
+}
+
+1@jtb,32,108,4	script	Shalosh#jtb_shalosh1	10041,{
+	end; 
+OnInstanceInit:
+	donpcevent instance_npcname("Shalosh#jtb_shalosh1")+"::OnDisable";
+	end;
+OnTalk:
+	npctalk "En efecto, es un demonio que sólo puede ser vencido por un valiente aventurero de corazón puro.";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Shalosh#jtb_shalosh1");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Shalosh#jtb_shalosh1");
+	end;
+}
+
+1@jtb,27,108,5	script	Dehare#jtb_dejare2	10039,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Dehare#jtb_dejare2")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Dehare#jtb_dejare2");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Dehare#jtb_dejare2");
+	end;
+}
+
+1@jtb,48,99,0	script	jtb_jitter1	139,4,4,{
+	end;
+OnTouch:
+	donpcevent instance_npcname("jtb_jitter_b")+"::OnEnable";
+	disablenpc instance_npcname("jtb_jitter1");
+	end;
+	
+}
+
+1@jtb,1,14,0	script	jtb_jitter_b	139,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("jtb_jitter_b")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("jtb_jitter_b");
+	set .@map$,instance_mapname("1@jtb");
+	monster .@map$,42,113,"Jitterbug",3073,1,instance_npcname("jtb_jitter_b")+"::OnMyMobDead";
+	end;
+OnDisable:
+	disablenpc instance_npcname("jtb_jitter_b");
+	end;
+OnMyMobDead:
+	set .@map$,instance_mapname("1@jtb");
+	if(mobcount(.@map$,instance_npcname("jtb_jitter_b")+"::OnMyMobDead") < 1) {
+		donpcevent instance_npcname("Dehare#jtb_dejare2")+"::OnEnable";
+		donpcevent instance_npcname("Shalosh#jtb_shalosh1")+"::OnEnable";
+		donpcevent instance_npcname("Roel#jtb_roel1")+"::OnEnable";
+		donpcevent instance_npcname("Newoz#jtb_newoz1")+"::OnEnable";
+		end;
+	}
+	end;
+}
+// Instance Scripts :: Warps Salas 1-4
+//============================================================
+//1era sala
+1@jtb,46,49,0	script	jtb_warp_q1	45,1,1,{
+	end;
+OnTouch:
+	set .@map$,instance_mapname("1@jtb");
+	warp .@map$,357,45;
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("jtb_warp_q1")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("jtb_warp_q1");
+	end;
+OnDisable:
+	disablenpc instance_npcname("jtb_warp_q1");
+	end;
+}
+//2da sala
+1@jtb,391,38,0	script	jtb_warp_q2	45,1,1,{
+	end;
+OnTouch:
+	set .@map$,instance_mapname("1@jtb");
+	warp .@map$,183,17;
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("jtb_warp_q2")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("jtb_warp_q2");
+	end;
+OnDisable:
+	disablenpc instance_npcname("jtb_warp_q2");
+	end;
+}
+//3era sala
+1@jtb,220,22,0	script	jtb_warp_q3	45,1,1,{
+	end;
+OnTouch:
+	set .@map$,instance_mapname("1@jtb");
+	warp .@map$,48,99;
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("jtb_warp_q3")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("jtb_warp_q3");
+	end;
+OnDisable:
+	disablenpc instance_npcname("jtb_warp_q3");
+	end;
+}
+
+//4ta sala
+1@jtb,43,132,0	script	jtb_warp_q4	45,1,1,{
+	end;
+OnTouch:
+	set .@map$,instance_mapname("1@jtb");
+	warp .@map$,181,215;
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("jtb_warp_q4")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("jtb_warp_q4");
+	end;
+OnDisable:
+	disablenpc instance_npcname("jtb_warp_q4");
+	end;
+}
+
+// Instance Scripts :: Sala 5
+//============================================================
+1@jtb,181,215,0	script	jtb_jitter5	139,4,4,{
+	end;
+OnTouch:
+	donpcevent instance_npcname("jtb_jitter_m4")+"::OnEnable";
+	disablenpc instance_npcname("jtb_jitter5");
+	end;
+	
+}
+
+1@jtb,1,1,0	script	jtb_jitter_m4	139,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("jtb_jitter_m4")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("jtb_jitter_m4");
+	set .@map$,instance_mapname("1@jtb");
+	monster .@map$,208,200,"Pere",3072,20,instance_npcname("jtb_jitter_m4")+"::OnMyMobDead";
+	end;
+OnDisable:
+	disablenpc instance_npcname("jtb_jitter_m4");
+	end;
+OnMyMobDead:
+	set .@map$,instance_mapname("1@jtb");
+	if(mobcount(.@map$,instance_npcname("jtb_jitter_m4")+"::OnMyMobDead") < 1) {
+		donpcevent instance_npcname("jtb_warp_pas1")+"::OnEnable";
+		end;
+	}
+	end;
+}
+
+1@jtb,218,202,0	script	jtb_warp_pas1	45,1,1,{
+	end;
+OnTouch:
+	set .@map$,instance_mapname("1@jtb");
+	warp .@map$,310,358;
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("jtb_warp_pas1")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("jtb_warp_pas1");
+	end;
+OnDisable:
+	disablenpc instance_npcname("jtb_warp_pas1");
+	end;
+}
+
+// Instance Scripts :: Pasillo
+//============================================================
+1@jtb,310,358,0	script	jtb_jitter6	139,4,4,{
+	end;
+OnTouch:
+	donpcevent instance_npcname("jtb_jitter_m5")+"::OnEnable";
+	disablenpc instance_npcname("jtb_jitter6");
+	end;
+}
+
+1@jtb,1,16,0	script	jtb_jitter_m5	139,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("jtb_jitter_m5")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("jtb_jitter_m5");
+	set .@map$,instance_mapname("1@jtb");
+	monster .@map$,307,293,"Pere",3072,20,instance_npcname("jtb_jitter_m5")+"::OnMyMobDead";
+	monster .@map$,355,292,"Pere",3071,20,instance_npcname("jtb_jitter_m5")+"::OnMyMobDead";
+	end;
+OnDisable:
+	disablenpc instance_npcname("jtb_jitter_m5");
+	end;
+OnMyMobDead:
+	set .@map$,instance_mapname("1@jtb");
+	if(mobcount(.@map$,instance_npcname("jtb_jitter_m5")+"::OnMyMobDead") < 1) {
+		donpcevent instance_npcname("jtb_warp_pas2")+"::OnEnable";
+		end;
+	}
+	end;
+}
+1@jtb,288,358,0	script	jtb_warp_pas2	45,1,1,{
+	end;
+OnTouch:
+	set .@map$,instance_mapname("1@jtb");
+	warp .@map$,333,318;
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("jtb_warp_pas2")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("jtb_warp_pas2");
+	end;
+OnDisable:
+	disablenpc instance_npcname("jtb_warp_pas2");
+	end;
+}
+// Instance Scripts :: Sala Final
+//============================================================
+1@jtb,318,332,5	script	Newoz#jtb_newoz2	625,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("Newoz#jtb_newoz2")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("Newoz#jtb_newoz2");
+	sleep2 2500;
+	npctalk "Shalosh intentó detener al denomio y terminó incitándolo.";
+	sleep2 2500;
+	npctalk "¡Allí está";
+	sleep2 2500;
+	npctalk "Ten cuidado, atacalo ferozmente.";
+	sleep2 2500;
+	npctalk "No te rindas, sabes que puedes hacerlo.";
+	sleep2 2500;
+	npctalk "Ya ha matado a muchos de nuestros camaradas.";
+	end;
+OnTalk:
+	npctalk "Han hecho un fabuloso trabajo.";
+	sleep2 2500;
+	npctalk "Como recompenza búscame en la segunda planta de Paradise Group.";
+	sleep2 2500;
+	npctalk "Te contaré algo interesante.";
+	sleep2 3000;
+	set .@id,instance_id();
+	instance_warpall "moc_para01",30,88,.@id;
+	end;
+OnDisable:
+	disablenpc instance_npcname("Newoz#jtb_newoz2");
+	end;
+}
+1@jtb,333,318,0	script	jtb_jitter7	139,4,4,{
+	end;
+OnTouch:
+	donpcevent instance_npcname("jtb_jitter_m6")+"::OnEnable";
+	donpcevent instance_npcname("Newoz#jtb_newoz2")+"::OnEnable";
+	disablenpc instance_npcname("jtb_jitter7");
+	end;
+}
+
+1@jtb,1,1,0	script	jtb_jitter_m6	139,{
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("jtb_jitter_m6")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("jtb_jitter_m6");
+	set .@map$,instance_mapname("1@jtb");
+	monster .@map$,318,332,"Pere",3072,5,instance_npcname("jtb_jitter_m6")+"::OnMyMobDead";
+	monster .@map$,318,332,"Pere",3071,5,instance_npcname("jtb_jitter_m6")+"::OnMyMobDead";
+	monster .@map$,318,332,"Jitterbug",3109,1,instance_npcname("jtb_jitter_m6")+"::OnMyMobDead";
+	end;
+OnDisable:
+	disablenpc instance_npcname("jtb_jitter_m6");
+	end;
+OnMyMobDead:
+	set .@map$,instance_mapname("1@jtb");
+	if(mobcount(.@map$,instance_npcname("jtb_jitter_m6")+"::OnMyMobDead") < 1) {
+		monster .@map$,318,332,"Jitterbug",3108,1,instance_npcname("jtb_jitter_m7")+"::OnMyMobDead";
+		end;
+	}
+	end;
+}
+1@jtb,1,17,0	script	jtb_jitter_m7	139,{
+	end;
+OnMyMobDead:
+	set .@map$,instance_mapname("1@jtb");
+	if(mobcount(.@map$,instance_npcname("jtb_jitter_m7")+"::OnMyMobDead") < 1) {
+		donpcevent instance_npcname("Newoz#jtb_newoz2")+"::OnTalk";
+		end;
+	}
+	end;
+}

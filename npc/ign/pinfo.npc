@@ -1,0 +1,60 @@
+-	script	PINFO	-1,{
+end;
+
+OnWhisperGlobal:
+//
+//If not Admin, end the script
+//
+if(getgmlevel() < 40) { end; }
+
+
+	dispbottom " ";
+	dispbottom " ";
+	dispbottom " ";
+
+set .@q2,query_sql("SELECT `account_id`,`name` FROM `char` WHERE `name` LIKE '%"+@whispervar0$+"%' ORDER BY `account_id` LIMIT 100",.@aid,.@name$);
+
+if(.@aid == 0) { dispbottom "I could not find a character named '"+@whispervar0$+"', make sure to type in a part or the complete name of the player to load the information."; dispbottom " "; dispbottom " "; dispbottom " "; end;}
+
+if(getarraysize(.@aid) > 1) { 
+        dispbottom "I have found "+getarraysize(.@aid)+" characters containing the string '"+@whispervar0$+"'.";
+} else {
+        dispbottom "I have found "+getarraysize(.@aid)+" character containing the string '"+@whispervar0$+"'.";
+}
+
+dispbottom " ";
+
+
+    for(set .@c, 0; .@c < getarraysize(.@aid); set .@c, .@c + 1){
+    deletearray .@in_account_name$,127;
+
+	dispbottom "[--------------------------------------------------------]";
+	set .@q3,query_sql("SELECT `userid`,`sex`,`level`,`state`,`logincount`,`lastlogin`,`last_ip` FROM `login` WHERE `account_id` = '"+.@aid[.@c]+"' LIMIT 1",.@user$,.@sex$,.@level,.@state,.@logincount,.@lastlogin$,.@last_ip$);
+	set .@q3,query_sql("SELECT `name` FROM `char` WHERE `account_id` = '"+.@aid[.@c]+"'",.@in_account_name$);
+	dispbottom "~~~~~~~Account information of '"+.@name$[.@c]+"':";
+	dispbottom "Account ID: "+.@aid[.@c];
+	dispbottom "User ID: "+.@user$;
+	if(.@sex$ == "M") { set .@sex_string$,"Male"; } else { set .@sex_string$,"Female"; }
+	dispbottom "Sex: "+.@sex_string$;
+	dispbottom "GM Level: "+.@level;
+	dispbottom "Account State: "+.@state;
+	dispbottom "Login Count: "+.@logincount;
+	dispbottom "Last Login: "+.@lastlogin$;
+	dispbottom "Last IP: "+.@last_ip$;
+
+	dispbottom "~~~~~~~Characters in the same account:";
+		if(getarraysize(.@in_account_name$) > 1) { 
+		for(set .@d, 0; .@d < getarraysize(.@in_account_name$); set .@d, .@d + 1){
+                    dispbottom "~ "+.@in_account_name$[.@d];    
+		}
+		} else {
+		dispbottom "~ None found";
+	}
+	dispbottom "[--------------------------------------------------------]";
+	}
+
+dispbottom "[-----------------End of the list-----------------------]";
+dispbottom "[--------------------------------------------------------]";
+end;
+
+}

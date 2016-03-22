@@ -1,0 +1,313 @@
+/*
+// Badges Exchange
+// *********************************************************************
+-	shop	ChronosShop	-1,502:200,503:550,504:1200,506:40,645:800,656:1500,657:3000,533:999,611:40,601:60,602:300,717:600,610:4000,1065:100,1750:1,13200:1,13250:4
+bat_room,163,147,2	script	Supplie Store	573,{
+	mes "[^cc6600Supplie Store^000000]";
+	mes "Bienvenid"+(Sex?"o":"a")+" ^"+(Sex?"0000ff":"ff0000")+strcharinfo(0)+"^000000";
+	mes "Yo puedo cambiar tus medallas por consumibles importantes que ^ff0000solo pueden ser usados en BG, WoE y otros en cualquier lado^000000.";
+	next;
+	mes "[^cc6600Supplie Store^000000]";
+	mes "¿En que te puedo ayudar?";
+	next;
+	switch( select("^FF0000Obtener Terra Old Red Box^000000:^FFA500Tienda Chronos^000000:^FF0000Items BG Exclusivos^000000:^0000FFWoE Box Exclusivas:Items WoE Exclusivos^000000:Otros objetos") )
+	{
+	case 1: // Terra Old Red Box
+		mes "[^cc6600Supplie Store^000000]";
+		mes "Puedes cambiar todos tus puntos de pariticpacion en BG de una ronda completa donde hayas ganado el BG, por una ^FF0000Terra Old Red Box^000000.";
+		mes "Dejame revisar tus puntos...";
+		next;
+		mes "Tierra EoS : ^0000FF" + BG_EoE + "^000000";
+		mes "Tierra Boss : ^0000FF" + BG_Boss + "^000000";
+		mes "Tierra Dom : ^0000FF" + BG_DOM + "^000000";
+		mes "Flavius CTF : ^0000FF" + BG_CTF + "^000000";
+		mes "Flavius TDM : ^0000FF" + BG_TDM + "^000000";
+		mes "Flavius SC : ^0000FF" + BG_SC + "^000000";
+		mes "Conquest : ^0000FF" + BG_CON + "^000000";
+		mes "Rush : ^0000FF" + BG_RUSH + "^000000";
+		mes "Triple Inferno : ^0000FF" + BG_TI + "^000000";
+		next;
+		if( BG_EoE > 0 && BG_Boss > 0 && BG_CTF > 0 && BG_TDM > 0 && BG_SC > 0 && BG_TI > 0 && BG_CON > 0 && BG_RUSH > 0 && BG_DOM > 0 )
+		{
+			set BG_EoE, BG_EoE - 1;
+			set BG_Boss, BG_Boss - 1;
+			set BG_DOM, BG_DOM - 1;
+			set BG_CTF, BG_CTF - 1;
+			set BG_TDM, BG_TDM - 1;
+			set BG_SC, BG_SC - 1;
+			set BG_CON, BG_CON - 1;
+			set BG_RUSH, BG_RUSH - 1;
+			set BG_TI, BG_TI - 1;
+			getitem 5000,1;
+			mes "[^cc6600Supplie Store^000000]";
+			mes "Aqui esta esta caja para ti!!";
+			mes "Deseo que encuentres una gran sorpresa dentro.";
+			mes "Habla conmigo si deseas cambiar mas cosas.";
+		}
+		else
+		{
+			mes "[^cc6600Supplie Store^000000]";
+			mes "Para cambiar tus puntos por una caja necesitar tener dos puntos almenos de cada partido...";
+			mes "Juega unos cuantos BG!!.";
+		}
+		close;
+	case 2: // Supply Store
+		mes "[^cc6600Supplie Store^000000]";
+		mes "De acuerdo, abrire la Tienda Chronos.";
+		close2;
+		callshop "ChronosShop",1;
+		end;
+	case 3: // BG Supply
+		setarray .@Items[0],   547,  504,  505,  678, 7135, 7136, 7137, 7138, 7139,  715,  716,  717,12016, 1025, 7321,  662,12072,12077,12082,12087,12092,12097;
+		setarray .@Amount[0],  150,  100,  100,   10,   40,   40,   30,   30,   25,   50,  100,  200,   10,   40,   25,   10,    3,    3,    3,    3,    3,    3;
+		setarray .@Value[0],     2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2;
+		set .@cID, getbattleflag("bg_reserved_char_id");
+		set .@Tarjet$, "Battleground";
+		break;
+	case 4: // WoE Supply Boxs
+		setarray .@Items[0],  8917, 8924,14287,14288;// 8929, 8935, 8934,             8926, 8927, 8962, 8961, 8925, 8928, 8930;
+		setarray .@Amount[0],    1,    1,1,1;//    2,    1,    1,                2,    1,    1,    1,    4,    1,    1;
+		setarray .@Value[0],    10,    15,5,5;//     8,   10,   10,                8,    8,    4,    2,    8,   10,    8;
+		set .@cID, 0;
+		set .@Tarjet$, "War of Emperium or GvG";
+		break;
+	case 5: // WoE Supply Items
+		setarray .@Items[0],   547,  504,  505, 7137, 7138, 7139,  715,  716,  717,12016, 1025, 7321,  662,12072,12077,12082,12087,12092,12097;
+		setarray .@Amount[0],  150,  100,  100,   30,   30,   25,   50,  100,  200,   10,   40,   25,   10,    3,    3,    3,    3,    3,    3;
+		setarray .@Value[0],    10,   10,   10,   20,   10,   10,   10,   10,   10,   10,   10,   10,    2,    2,    2,    2,    2,    2,    2;
+		set .@cID, getbattleflag("woe_reserved_char_id");
+		set .@Tarjet$, "War of Emperium o GvG";
+		break;
+	case 6:
+		setarray .@Items[0],  8918;
+		setarray .@Amount[0],    1;
+		setarray .@Value[0],    50;
+		set .@cID, 0;
+		set .@Tarjet$, "Donde sea";
+		break;
+	}
+
+	set .@Menu$, "";
+	for( set .@i, 0; .@i < getarraysize(.@Items); set .@i, .@i + 1 )
+		set .@Menu$, .@Menu$ + .@Amount[.@i] + " " + getitemname(.@Items[.@i]) + " (" + .@Value[.@i] + " badges):";
+	set .@j, select(.@Menu$) - 1;
+
+	mes "[^cc6600Supplie Store^000000]";
+	mes "^0000FF" + .@Amount[.@j] + " " + getitemname(.@Items[.@j]) + "^000000";
+	mes "Esto te costara " + .@Value[.@j] + " medallas por paquete.";
+	mes "Recuerda que esto solo puede ser usado en " + .@Tarjet$ + ".";
+	next;
+	
+	mes "[^cc6600Supplie Store^000000]";
+	mes "Pero cuentame primero, ¿donde deseas recibir estos items?";
+	next;
+	set .@Destiny, select("Aqui, en mi inventario:Directo a mi Storage") - 1;
+
+	mes "[^cc6600Supplie Store^000000]";
+	mes "¿Cuantos paquetes deseas comprar? (1..50)";
+	next;
+
+	input .@total;
+	if( .@total < 1 || .@total > 50 )
+	{
+		mes "[^cc6600Supplie Store^000000]";
+		mes "Lo siento, por favor coloca un valor del 1 al 50.";
+		mes "Habla conmigo de nuevo cuando decidas tu seleccion.";
+		close;
+	}
+	
+	set .@vtotal, .@total * .@Value[.@j]; // Value of all Packages
+	set .@total, .@total * .@Amount[.@j]; // Total Amount of Items
+
+	if( .@Destiny )
+	{ // Check Storage Space Limit
+		if( .@cID )
+		{
+			if( checkspace(.@Items[.@j],.@total,1,0,0,254,0,.@cID&0xffff,(.@cID>>16)&0xffff) == 0 )
+			{
+				mes "[^cc6600Supplie Store^000000]";
+				mes "Tu storage no acepta mas items.";
+				mes "Por favor liberalo de unos cuantos items e intenta de nuevo.";
+				close;
+			}
+		}
+		else
+		{
+			if( checkspace(.@Items[.@j],.@total,1,0,0,0,0,0,0) == 0 )
+			{
+				mes "[^cc6600Supplie Store^000000]";
+				mes "Tu storage no acepta mas items.";
+				mes "Por favor liberalo de unos cuantos items e intenta de nuevo.";
+				close;
+			}
+		}
+	}
+	else
+	{ // Check Weight Limit
+		if( checkweight(.@Items[.@j],.@total) == 0 )
+		{
+			mes "[^cc6600Supplie Store^000000]";
+			mes "Al parecer no puedes cargar con esto que deseas comprar";
+			mes "Ve y almacena en tu storage unos cuantos items e intenta de nuevo.";
+			close;
+		}
+	}
+
+	if( countitem(7828) + countitem(7829) + countitem(7773) < .@vtotal )
+	{
+		mes "[^cc6600Supplie Store^000000]";
+		mes "Medallas requeridas: ^0000FF" + .@vtotal + "^000000";
+		mes "Tu no tienes medallas, lo siento...";
+		mes "Participa en las arenas de Battleground si deseas conseguirlas.";
+		close;
+	}
+	set .@vcount, .@vtotal;
+	set .@i7828, 0;
+	set .@i7829, 0;
+	set .@i7773, 0;
+
+	// Bravery Badges
+	if( countitem(7828) > 0 )
+	{
+		mes "[^cc6600Supplie Store^000000]";
+		mes "Medallas requeridas: ^0000FF" + .@vcount + "^000000";
+		mes "Bravery Badges a incluir:";
+		next;
+		input .@i7828;
+		if( .@i7828 < 0 || .@i7828 > countitem(7828) )
+		{
+			mes "[^cc6600Supplie Store^000000]";
+			mes "Numero invalido. Lo siento.";
+			close;
+		}
+		
+		if( .@i7828 > .@vcount ) set .@i7828,.@vcount;
+		set .@vcount, .@vcount - .@i7828;
+	}
+
+	// Valor Badges
+	if( .@vcount && countitem(7829) > 0 )
+	{
+		mes "[^cc6600Supplie Store^000000]";
+		mes "Medallas requeridas: ^0000FF" + .@vcount + "^000000";
+		mes "Valor Badges a incluir:";
+		next;
+		input .@i7829;
+		if( .@i7829 < 0 || .@i7829 > countitem(7829) )
+		{
+			mes "[^cc6600Supplie Store^000000]";
+			mes "Numero invalido. Lo siento.";
+			close;
+		}
+		
+		if( .@i7829 > .@vcount ) set .@i7829,.@vcount;
+		set .@vcount, .@vcount - .@i7829;
+	}
+
+	// Heroism Badges
+	if( .@vcount && countitem(7773) > 0 )
+	{
+		mes "[^cc6600Supplie Store^000000]";
+		mes "Medallas requeridas: ^0000FF" + .@vcount + "^000000";
+		mes "Heroism Badges a incluir:";
+		next;
+		input .@i7773;
+		if( .@i7773 < 0 || .@i7773 > countitem(7773) )
+		{
+			mes "[^cc6600Supplie Store^000000]";
+			mes "Numero invalido. Lo siento.";
+			close;
+		}
+
+		if( .@i7773 > .@vcount ) set .@i7773, .@vcount;
+		set .@vcount, .@vcount - .@i7773;
+	}
+
+	// Final Checks
+	if( .@vcount != 0 )
+	{
+		mes "[^cc6600Supplie Store^000000]";
+		mes "Lo siento pero no tienes las suficientes medallas para cumplir con el valor requerido.";
+		close;
+	}
+
+	mes "[^cc6600Supplie Store^000000]";
+	mes "¿Estas listo para pagar y recibir los items?";
+	mes "Tus detalles de pago:";
+	mes "^0000FF" + .@i7828 + "^000000 Bravery Badges";
+	mes "^0000FF" + .@i7829 + "^000000 Valor Badges";
+	mes "^0000FF" + .@i7773 + "^000000 Heroism Badges";
+	next;
+
+	if( select("Si, hagamoslo:Lo siento... ahora no") == 2 )
+	{
+		mes "[^cc6600Supplie Store^000000]";
+		mes "Ok, vuelve cuando hayas cambiado de opinion.";
+		close;
+	}
+
+	if( .@Destiny )
+	{ // Check Storage Space Limit
+		if( .@cID )
+		{
+			if( checkspace(.@Items[.@j],.@total,1,0,0,254,0,.@cID&0xffff,(.@cID>>16)&0xffff) == 0 )
+			{
+				mes "[^cc6600Supplie Store^000000]";
+				mes "Tu storage no acepta mas items.";
+				mes "Por favor liberalo de unos cuantos items e intenta de nuevo.";
+				close;
+			}
+		}
+		else
+		{
+			if( checkspace(.@Items[.@j],.@total,1,0,0,0,0,0,0) == 0 )
+			{
+				mes "[^cc6600Supplie Store^000000]";
+				mes "Tu storage no acepta mas items.";
+				mes "Por favor liberalo de unos cuantos items e intenta de nuevo.";
+				close;
+			}
+		}
+	}
+	else
+	{ // Check Weight Limit
+		if( checkweight(.@Items[.@j],.@total) == 0 )
+		{
+			mes "[^cc6600Supplie Store^000000]";
+			mes "Al parecer no puedes cargar con esto que deseas comprar";
+			mes "Ve y almacena en tu storage unos cuantos items e intenta de nuevo.";
+			close;
+		}
+	}
+
+	if( .@i7828 > countitem(7828) || .@i7829 > countitem(7829) || .@i7773 > countitem(7773) )
+	{
+		mes "[^cc6600Supplie Store^000000]";
+		mes "Que!? Eres un mago o un ladron!? Que has hecho con tus medallas!?";
+		mes "Fuera de aqui!";
+		close;
+	}
+
+	delitem 7828,.@i7828;
+	delitem 7829,.@i7829;
+	delitem 7773,.@i7773;
+
+	if( .@cID )
+	{
+		if( .@Destiny )
+			storeitem2 .@Items[.@j],.@total,1,0,0,254,0,.@cID&0xffff,(.@cID>>16)&0xffff;
+		else
+			getitem2 .@Items[.@j],.@total,1,0,0,254,0,.@cID&0xffff,(.@cID>>16)&0xffff;
+	}
+	else
+	{
+		if( .@Destiny )
+			storeitem .@Items[.@j],.@total;
+		else
+			getitem .@Items[.@j],.@total;
+	}
+
+	mes "[^cc6600Supplie Store^000000]";
+	mes "Aqui esta lo que solicitaste... ahora asegurate de pelear en el honor del rey y su principe.";
+	close;
+}*/

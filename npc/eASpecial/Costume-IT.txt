@@ -1,0 +1,93 @@
+// --------------------------------------------------------------------------
+// --------------------------------------------------------------------------
+// eAmod Project - Scripts
+// --------------------------------------------------------------------------
+// Script Name : Headgear to Costume converter
+// --------------------------------------------------------------------------
+// Description :
+// Allows a user to convert the equipped headgear (on Top, Mid or Low) into a
+// costume item. It will remove any card and refine of the Item.
+// --------------------------------------------------------------------------
+
+prontera,147,173,5	script	CostumeIT	878,{
+	mes "[^5533ffCostume-^cc6600IT^000000]";
+	mes "Hola ^5533ff"+strcharinfo(0)+"^000000.";
+	next;
+	mes "[^5533ffCostume-^cc6600IT^000000]";
+	mes "Aquí podrás convertir cualquier gorro tuyo en un elemento decorativo.";
+	next;
+	mes "[^5533ffCostume-^cc6600IT^000000]";
+	mes "Antes de eso he de darte un aviso muy importante, si conviertes tu gorro en decorativo ^ff0000todas sus cartas y refinamiento se perderán y nunca más podrá volver a ser un gorro normal^000000, pero se conservarán sus efectos.";
+	next;
+	mes "[^5533ffCostume-^cc6600IT^000000]";
+	mes "Por el detalle de que los ^ff8800efectos se conservan^000000 tendré que cobrarte 20 IGN Coin y 1,500,000 Zeny por cada hat o capa que transformes.";
+	next;
+	if(select("De acuerdo","Adios.") == 2) {
+		mes "[^5533ffCostume-^cc6600IT^000000]";
+		mes "Como quieras.";
+		close;
+	}
+	if(countitem(671) < 20 || Zeny < 1500000) {
+		mes "[^5533ffCostume-^cc6600IT^000000]";
+		mes "Ocupas 20 IGN Coin y 1,500,000 Zeny si quieres transformar un gorro o capa.";
+		emotion e_sry;
+		close;
+	}
+	next;
+	mes "[^5533ffCostume-^cc6600IT^000000]";
+	mes "Indicame que gorro quieres transformar a decorativo.";
+	mes "(Deberás tenerlo equipado)";
+	next;
+
+	setarray .@Position$[1],"Top","Mid","Low","Garment";
+	setarray .@Position[1],     1,    9,   10,        5;
+
+	set .@Menu$,"";
+	for( set .@i, 1; .@i < 5; set .@i, .@i + 1 )
+	{
+		if( getequipisequiped(.@Position[.@i]) )
+			set .@Menu$, .@Menu$ + .@Position$[.@i] + "-" + "[" + getequipname(.@Position[.@i]) + "]";
+
+		set .@Menu$, .@Menu$ + ":";
+	}
+
+	set .@Part, .@Position[ select(.@Menu$) ];
+	if( !getequipisequiped(.@Part) )
+	{
+		mes "[^5533ffCostume-^cc6600IT^000000]";
+		mes "No veo ningún equipo ahí...";
+		close;
+	}
+	if ( .@Position[.@Part] == 5 )
+		for ( @i = 0; @i < getarraysize(.garmentid); @i++ )
+			if( getequipid(EQI_GARMENT) != .garmentid[@i] ) {
+				mes "[^5533ffCostume-^cc6600IT^000000]";
+				mes "Lo siento pero no puedo customizar éste objeto.";
+				close;
+			}
+				
+	mes "[^5533ffCostume-^cc6600IT^000000]";
+	mes "¿Quieres convertir tu " + getitemname(getequipid(.@Part)) + " a decorativo?";
+	next;
+	if( select("Customizarlo:No, lo siento.") == 2 )
+	{
+		mes "[^5533ffCostume-^cc6600IT^000000]";
+		mes "Comprendo que pueda ser una decisión dificil.";
+		close;
+	}
+
+	delitem 671,20;
+	set Zeny,Zeny - 1500000;
+	costume .@Part; // Convert the Headgear
+
+	mes "[^5533ffCostume-^cc6600IT^000000]";
+	mes "Disfruta de tu nuevo gorro decorativo.";
+	close;
+OnInit:
+	setarray .garmentid[0],35046,2573,2589,20707,35041,2576;
+}
+
+// --------------------------------------------------------------------------
+// Use duplicates to put your npc on different cities
+// --------------------------------------------------------------------------
+//prontera,155,180,4	duplicate(Costume-IT)	Costume-IT#1	864

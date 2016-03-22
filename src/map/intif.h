@@ -79,6 +79,10 @@ int intif_homunculus_requestload(uint32 account_id, int homun_id);
 int intif_homunculus_requestsave(uint32 account_id, struct s_homunculus* sh);
 int intif_homunculus_requestdelete(int homun_id);
 
+// ACHIEVEMENT SYSTEM
+int intif_request_achievement(struct map_session_data* sd);
+int intif_achievement_save(struct map_session_data* sd);
+
 /******QUEST SYTEM*******/
 void intif_request_questlog(struct map_session_data * sd);
 int intif_quest_save(struct map_session_data * sd);

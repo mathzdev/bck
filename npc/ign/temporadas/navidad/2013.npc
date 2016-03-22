@@ -1,0 +1,89 @@
+prontera,159,182,4	script	Hombre de Nieve::NV01	710,{
+	mes "[^5533ffHombre de Nieve^000000]";
+	mes "Owwhh... me derrito ...";
+	next;
+	if(countitem(18141) > 0) {
+		mes "[^5533ffHombre de Nieve^000000]";
+		mes "Oh!";
+		mes "¿Tienes nieve?";
+		mes "¿Me la das?";
+		next;
+		switch(select("No","Si, ten la nieve.")) {
+			case 1:
+				mes "[^5533ffHombre de Nieve^000000]";
+				mes "Vuelve cuando juntes mucha.";
+				close;
+			case 2:
+				set @nieve,countitem(18141);
+				delitem 18141,@nieve;
+				if(@nieve < 10)
+					set nieve,nieve+@nieve;
+				if(@nieve >= 10 && @nieve < 50) {
+					progressbar "008800",10;
+					set nieve,nieve+@nieve;
+				}
+				if(@nieve >= 50) {
+					progressbar "008800",20;
+					set nieve,nieve+@nieve;
+				}
+				mes "[^5533ffHombre de Nieve^000000]";
+				mes "Gracias, me has dado ^0000ff"+@nieve+"^000000 copos de nieve.";
+				mes " ";
+				mes "Llevas recolectados ^0000ff"+nieve+"^000000 copos de nieve.";
+				close;
+		}
+	}
+	mes "[^5533ffHombre de Nieve^000000]";
+	mes "Por favor ve a juntar nieve.";
+	close;
+end;
+}
+prontera,157,182,5	script	Señora Claus::NV02	711,{
+	progressbar "008800",3;
+	if(nieve > 0) {
+		if(nieve > 100 && n_premio < 1) {
+			set Zeny,Zeny + 500000;
+			dispbottom "Has ganado 500,000 Zeny.";
+			set n_premio,1;
+			end;
+		}
+		if(nieve > 200 && n_premio2 < 1) {
+			rentitem 18139,604800;
+			set n_premio2,1;
+		}
+		if(nieve > 300 && n_premio3 < 1) {
+			rentitem 18140,604800;
+			set n_premio3,1;
+		}
+		if(nieve > 400 && n_premio4 < 1) {
+			rentitem 18139,6048000;
+			set n_premio4,1;
+		}
+		if(nieve > 500 && n_premio5 < 1) {
+			set Zeny,Zeny + 5000000;
+			dispbottom "Has ganado 5,000,000 Zeny.";
+			set n_premio5,1;
+		}
+		if(nieve > 1000 && n_premio6 < 1) {
+			getitem 18139,1;
+			set n_premio6,1;
+			announce "["+strcharinfo(0)+"] ha finalizado la recolección de Copos de Nieve.",bc_all,0xFF6060;
+		}
+		mes "[^ff6060Señora Claus^000000]";
+		mes "Vuelve cuando obtengas más copos de nieve.";
+		close;
+	}
+	mes "[^ff6060Señora Claus^000000]";
+	mes "Ayúdame viajero, mi muñeco de nieve se está comenzando a derretir no sé por qué, junta toda la nieve que puedas conseguir y dásela al mono de nieve.";
+	next;
+	mes "[^ff6060Señora Claus^000000]";
+	mes "Depende de cuánta nieve juntes en total, te daré cosas para recompenzarte.";
+	next;
+	close;
+}
+-	script	killeventnieve	-1,{
+OnNPCKillEvent:
+	if(rand(1,100) <= 5)
+		getitem 18141,rand(1,3);
+	end;
+}

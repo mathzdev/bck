@@ -15,6 +15,15 @@ int check_filepath(const char* filepath);
 void findfile(const char *p, const char *pat, void (func)(const char*));
 bool exists(const char* filename);
 
+#define add2limit(a, b, max) \
+	do { \
+		if( (max - a) < b ) { \
+			a = max; \
+		} else { \
+			a += b; \
+		} \
+	} while(0)
+
 /// Caps values to min/max
 #define cap_value(a, min, max) (((a) >= (max)) ? (max) : ((a) <= (min)) ? (min) : (a))
 

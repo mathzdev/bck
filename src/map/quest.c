@@ -16,6 +16,7 @@
 #include "quest.h"
 #include "chrif.h"
 #include "intif.h"
+#include "achievement.h"
 
 #include <stdlib.h>
 
@@ -314,7 +315,7 @@ int quest_update_status(TBL_PC *sd, int quest_id, enum quest_state status)
 		clif_quest_update_status(sd, quest_id, status == Q_ACTIVE ? true : false);
 		return 0;
 	}
-
+	achievement_validate_quest(sd,quest_id);
 	// The quest is complete, so it needs to be moved to the completed quests block at the end of the array.
 	if( i < (--sd->avail_quests) ) {
 		struct quest tmp_quest;
@@ -407,7 +408,7 @@ void quest_read_txtdb(void)
 		while(fgets(line, sizeof(line), fp)) {
 			struct quest_db *quest = NULL;
 			char *str[19], *p;
-			int quest_id = 0;
+			int quest_id = 0; //Test quest
 			uint8 i;
 
 			++ln;

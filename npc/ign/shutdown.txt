@@ -1,0 +1,57 @@
+-	script	shutdd	-1,{
+OnCommand:
+	mes "[^CC0000Reiniciador^000000]";
+	mes "Puedo apagar el servidor en 15 minutos con avisos a los users automáticamente.";
+	next;
+menu "Apagar Servidor",apagar,"Detener cuenta atras",detener,"Cancelar",cancelar;
+
+apagar:
+close2;
+set .ReinicioServer,0;
+if (.ReinicioServer == 1) goto detienereini;
+announce "[Mantenimiento] Usuarios de IGN RO, se les informa que va a realizarse un reinicio del servidor en aproximadamente 15 minutos.",bc_all,0xD0C7C7;
+sleep2 300000;
+if (.ReinicioServer == 1) goto detienereini;
+announce "[Mantenimiento] Quedan 10 minutos para el reinicio.",bc_all,0xD0C7C7;
+sleep2 300000;
+if (.ReinicioServer == 1) goto detienereini;
+announce "[Mantenimiento] Quedan 5 minutos para el reinicio.",bc_all,0xD0C7C7;
+sleep2 60000;
+if (.ReinicioServer == 1) goto detienereini;
+announce "[Mantenimiento] Quedan 4 minutos para el reinicio.",bc_all,0xD0C7C7;
+sleep2 60000;
+if (.ReinicioServer == 1) goto detienereini;
+announce "[Mantenimiento] Quedan 3 minutos para el reinicio.",bc_all,0xD0C7C7;
+sleep2 60000;
+if (.ReinicioServer == 1) goto detienereini;
+announce "[Mantenimiento] Quedan 2 minutos para el reinicio.",bc_all,0xD0C7C7;
+sleep2 240000;
+if (.ReinicioServer == 1) goto detienereini;
+announce "[Mantenimiento] Queda 1 minuto para el reinicio.",bc_all,0xD0C7C7;
+sleep2 30000;
+if (.ReinicioServer == 1) goto detienereini;
+announce "[Mantenimiento] Quedan 30 segundos para el reinicio.",bc_all,0xD0C7C7;
+sleep2 3000;
+announce "[Mantenimiento] Se les recomienda desloguear para evitar 'rollback'",bc_all,0xD0C7C7;
+sleep2 30000;
+atcommand "@kickall";
+sleep2 1000;
+atcommand "@mapexit";
+close;
+
+detener:
+set .ReinicioServer,1;
+	mes "[^CC0000Reiniciador^000000]";
+	mes "El proceso de apagar el server ha sido abortado, pronto los usuarios podrán leer el aviso.";
+close;
+
+detienereini:
+announce "[Mantenimiento] El reinicio del servidor ha sido detenido temporalmente.",bc_all,0xD0C7C7;
+end;
+
+cancelar:
+close;
+OnInit:
+	bindatcmd "shutdown","shutdd::OnCommand",99,99;
+	end;
+}

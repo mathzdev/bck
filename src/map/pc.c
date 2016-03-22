@@ -31,6 +31,7 @@
 #include "party.h" // party_search()
 #include "storage.h"
 #include "quest.h"
+#include "achievement.h"
 
 #include <stdlib.h>
 #include <math.h>
@@ -57,6 +58,10 @@ int pc_expiration_tid = INVALID_TIMER;
 struct fame_list smith_fame_list[MAX_FAME_LIST];
 struct fame_list chemist_fame_list[MAX_FAME_LIST];
 struct fame_list taekwon_fame_list[MAX_FAME_LIST];
+struct fame_list pvprank_fame_list[MAX_FAME_LIST];
+struct fame_list pvpevent_fame_list[MAX_FAME_LIST];
+struct fame_list bgrank_fame_list[MAX_FAME_LIST];
+struct fame_list bg_fame_list[MAX_FAME_LIST];
 
 static unsigned int equip_pos[EQI_MAX]={EQP_ACC_L,EQP_ACC_R,EQP_SHOES,EQP_GARMENT,EQP_HEAD_LOW,EQP_HEAD_MID,EQP_HEAD_TOP,EQP_ARMOR,EQP_HAND_L,EQP_HAND_R,EQP_COSTUME_HEAD_TOP,EQP_COSTUME_HEAD_MID,EQP_COSTUME_HEAD_LOW,EQP_COSTUME_GARMENT,EQP_AMMO,EQP_SHADOW_ARMOR,EQP_SHADOW_WEAPON,EQP_SHADOW_SHIELD,EQP_SHADOW_SHOES,EQP_SHADOW_ACC_R,EQP_SHADOW_ACC_L};
 
@@ -93,6 +98,65 @@ int pc_class2idx(int class_) {
 	if (class_ >= JOB_NOVICE_HIGH)
 		return class_- JOB_NOVICE_HIGH+JOB_MAX_BASIC;
 	return class_;
+}
+
+/***********************************************************
+* Update Idle PC Timer
+* Type
+* 0 = Send By Server
+* 1 = KeyBoard Action
+* 2 = Mouse Click
+* 3 = Both Hands
+***********************************************************/
+int pc_update_last_action(struct map_session_data *sd, int type, enum idletime_option idle_option)
+{
+	struct battleground_data *bg;
+	unsigned int tick = gettick();
+
+	if( !(battle_config.idletime_option&idle_option) )
+		return 1;
+
+	sd->idletime = last_tick;
+
+	if( sd->bg_id && sd->state.bg_afk && (bg = bg_team_search(sd->bg_id)) != NULL && bg->g )
+	{ // Battleground AFK announce
+		char output[128];
+		sprintf(output, "%s : %s is no longer away...", bg->g->name, sd->status.name);
+		clif_bg_message(bg, bg->bg_id, bg->g->name, output, strlen(output) + 1);
+		sd->state.bg_afk = 0;
+	}
+
+	switch( type )
+	{
+	case 1: // Keyboard Possible Actions (Skill Single, Potion)
+		if( battle_config.action_keyboard_limit )
+		{
+			if( DIFF_TICK(tick, sd->keyboard_action_tick) < battle_config.action_keyboard_limit )
+				return 0;
+			sd->keyboard_action_tick = tick;
+		}
+		break;
+	case 2:
+		if( battle_config.action_mouse_limit )
+		{
+			if( DIFF_TICK(tick, sd->mouse_action_tick) < battle_config.action_mouse_limit )
+				return 0;
+			sd->mouse_action_tick = tick;
+		}
+		break;
+	case 3:
+		if( battle_config.action_dual_limit )
+		{
+			unsigned int mtick = max(sd->keyboard_action_tick,sd->mouse_action_tick);
+			if( DIFF_TICK(tick,mtick) < battle_config.action_dual_limit )
+				return 0;
+			sd->keyboard_action_tick = tick;
+			sd->mouse_action_tick = tick;
+		}
+		break;
+	}
+
+	return 1;
 }
 
 /**
@@ -694,6 +758,7 @@ void pc_setnewpc(struct map_session_data *sd, uint32 account_id, uint32 char_id,
 */
 int pc_equippoint(struct map_session_data *sd,int n){
 	int ep = 0;
+	int char_id = 0;
 
 	nullpo_ret(sd);
 
@@ -710,6 +775,15 @@ int pc_equippoint(struct map_session_data *sd,int n){
 		if(ep == EQP_HAND_R && (pc_checkskill(sd,AS_LEFT) > 0 || (sd->class_&MAPID_UPPERMASK) == MAPID_ASSASSIN ||
 			(sd->class_&MAPID_UPPERMASK) == MAPID_KAGEROUOBORO))//Kagerou and Oboro can dual wield daggers. [Rytech]
 			return EQP_ARMS;
+	}
+	if( battle_config.costume_reserved_char_id &&
+		sd->status.inventory[n].card[0] == CARD0_CREATE &&
+		(char_id = MakeDWord(sd->status.inventory[n].card[2],sd->status.inventory[n].card[3])) == battle_config.costume_reserved_char_id )
+	{ // Costume Item - Converted
+		if( ep&EQP_HEAD_TOP ) { ep &= ~EQP_HEAD_TOP; ep |= EQP_COSTUME_HEAD_TOP; }
+		if( ep&EQP_HEAD_LOW ) { ep &= ~EQP_HEAD_LOW; ep |= EQP_COSTUME_HEAD_LOW; }
+		if( ep&EQP_HEAD_MID ) { ep &= ~EQP_HEAD_MID; ep |= EQP_COSTUME_HEAD_MID; }
+		if( ep&EQP_GARMENT  ) { ep &= ~EQP_GARMENT; ep |= EQP_COSTUME_GARMENT; }
 	}
 	return ep;
 }
@@ -866,57 +940,66 @@ bool pc_isequipped(struct map_session_data *sd, unsigned short nameid)
 	return false;
 }
 
-/** Check adopt rule
-* @param p1_sd Player 1
-* @param p2_sd Player 2
-* @param b_sd Player that will be adopted
-* @return True - if can be adopted, False otherwise
-*/
-bool pc_can_Adopt(struct map_session_data *p1_sd, struct map_session_data *p2_sd, struct map_session_data *b_sd )
+/**
+ * Check adoption rules
+ * @param p1_sd: Player 1
+ * @param p2_sd: Player 2
+ * @param b_sd: Player that will be adopted
+ * @return ADOPT_ALLOWED - Sent message to Baby to accept or deny
+ *         ADOPT_ALREADY_ADOPTED - Already adopted
+ *         ADOPT_MARRIED_AND_PARTY - Need to be married and in the same party
+ *         ADOPT_EQUIP_RINGS - Need wedding rings equipped
+ *         ADOPT_NOT_NOVICE - Adoptee is not a Novice
+ *         ADOPT_CHARACTER_NOT_FOUND - Parent or Baby not found
+ *         ADOPT_MORE_CHILDREN - Cannot adopt more than 1 Baby (client message)
+ *         ADOPT_LEVEL_70 - Parents need to be level 70+ (client message)
+ *         ADOPT_MARRIED - Cannot adopt a married person (client message)
+ */
+enum adopt_responses pc_try_adopt(struct map_session_data *p1_sd, struct map_session_data *p2_sd, struct map_session_data *b_sd)
 {
 	if( !p1_sd || !p2_sd || !b_sd )
-		return false;
+		return ADOPT_CHARACTER_NOT_FOUND;
 
 	if( b_sd->status.father || b_sd->status.mother || b_sd->adopt_invite )
-		return false; // already adopted baby / in adopt request
+		return ADOPT_ALREADY_ADOPTED; // already adopted baby / in adopt request
 
 	if( !p1_sd->status.partner_id || !p1_sd->status.party_id || p1_sd->status.party_id != b_sd->status.party_id )
-		return false; // You need to be married and in party with baby to adopt
+		return ADOPT_MARRIED_AND_PARTY; // You need to be married and in party with baby to adopt
 
 	if( p1_sd->status.partner_id != p2_sd->status.char_id || p2_sd->status.partner_id != p1_sd->status.char_id )
-		return false; // Not married, wrong married
+		return ADOPT_MARRIED_AND_PARTY; // Not married, wrong married
 
 	if( p2_sd->status.party_id != p1_sd->status.party_id )
-		return false; // Both parents need to be in the same party
+		return ADOPT_MARRIED_AND_PARTY; // Both parents need to be in the same party
 
 	// Parents need to have their ring equipped
 	if( !pc_isequipped(p1_sd, WEDDING_RING_M) && !pc_isequipped(p1_sd, WEDDING_RING_F) )
-		return false;
+		return ADOPT_EQUIP_RINGS;
 
 	if( !pc_isequipped(p2_sd, WEDDING_RING_M) && !pc_isequipped(p2_sd, WEDDING_RING_F) )
-		return false;
+		return ADOPT_EQUIP_RINGS;
 
 	// Already adopted a baby
 	if( p1_sd->status.child || p2_sd->status.child ) {
-		clif_Adopt_reply(p1_sd, 0);
-		return false;
+		clif_Adopt_reply(p1_sd, ADOPT_REPLY_MORE_CHILDREN);
+		return ADOPT_MORE_CHILDREN;
 	}
 
 	// Parents need at least lvl 70 to adopt
 	if( p1_sd->status.base_level < 70 || p2_sd->status.base_level < 70 ) {
-		clif_Adopt_reply(p1_sd, 1);
-		return false;
+		clif_Adopt_reply(p1_sd, ADOPT_REPLY_LEVEL_70);
+		return ADOPT_LEVEL_70;
 	}
 
 	if( b_sd->status.partner_id ) {
-		clif_Adopt_reply(p1_sd, 2);
-		return false;
+		clif_Adopt_reply(p1_sd, ADOPT_REPLY_MARRIED);
+		return ADOPT_MARRIED;
 	}
 
 	if( !( ( b_sd->status.class_ >= JOB_NOVICE && b_sd->status.class_ <= JOB_THIEF ) || b_sd->status.class_ == JOB_SUPER_NOVICE || b_sd->status.class_ == JOB_SUPER_NOVICE_E ) )
-		return false;
+		return ADOPT_NOT_NOVICE;
 
-	return true;
+	return ADOPT_ALLOWED;
 }
 
 /*==========================================
@@ -927,7 +1010,7 @@ bool pc_adoption(struct map_session_data *p1_sd, struct map_session_data *p2_sd,
 	int job, joblevel;
 	unsigned int jobexp;
 
-	if( !pc_can_Adopt(p1_sd, p2_sd, b_sd) )
+	if( pc_try_adopt(p1_sd, p2_sd, b_sd) != ADOPT_ALLOWED )
 		return false;
 
 	// Preserve current job levels and progress
@@ -1135,6 +1218,7 @@ bool pc_authok(struct map_session_data *sd, uint32 login_id2, time_t expiration_
 	sd->pvp_timer = INVALID_TIMER;
 	sd->expiration_tid = INVALID_TIMER;
 	sd->autotrade_tid = INVALID_TIMER;
+	sd->achievement_cutin_timer = INVALID_TIMER;
 
 #ifdef SECURE_NPCTIMEOUT
 	// Initialize to defaults/expected
@@ -1245,7 +1329,6 @@ bool pc_authok(struct map_session_data *sd, uint32 login_id2, time_t expiration_
 	         sd->packet_ver, CONVIP(ip), sd->group_id);
 	// Send friends list
 	clif_friendslist_send(sd);
-
 	if( !changing_mapservers ) {
 
 		if (battle_config.display_version == 1)
@@ -1363,11 +1446,44 @@ void pc_reg_received(struct map_session_data *sd)
 
 	// Cooking Exp
 	sd->cook_mastery = pc_readglobalreg(sd, add_str("COOK_MASTERY"));
+	
+	// HamsterGuard Mob MVP ID
+	//sd->ham_mvpid = pc_readglobalreg(sd, add_str("ham_mvpid"));
+
+	// Oficios
+	sd->oficio = pc_readglobalreg(sd, add_str("Oficio"));
+	sd->oficio_ex = pc_readglobalreg(sd, add_str("Oficio2"));
+	sd->tailorexp = pc_readglobalreg(sd, add_str("TailorExp"));
+	sd->carpenterexp = pc_readglobalreg(sd, add_str("CarpenterExp"));
 
 	if( (sd->class_&MAPID_BASEMASK) == MAPID_TAEKWON )
 	{ // Better check for class rather than skill to prevent "skill resets" from unsetting this
 		sd->mission_mobid = pc_readglobalreg(sd, add_str("TK_MISSION_ID"));
 		sd->mission_count = pc_readglobalreg(sd, add_str("TK_MISSION_COUNT"));
+	}
+	char varname[32];
+	// Hunting Missions [Zephyrus]
+	sd->hunting_time = pc_readglobalreg(sd,add_str("Mission_Tick"));
+	for( i = 0; i < MAX_HUNTING_MOB; i++ )
+	{
+		sprintf(varname, "Mission_ID%d", i + 1);
+		sd->hunting[i].mob_id = pc_readglobalreg(sd,add_str(varname));
+		/*short m,rep;
+		 // Corrección de mobs repetidos [DanielArt]
+		for( m = 0; m < MAX_HUNTING_MOB; i++ )
+			if(sd->hunting[m].mob_id == sd->hunting[i].mob_id)
+				rep = 1;
+			else
+				rep = 0;
+		while (rep > 0) {
+			for( m = 0; m < MAX_HUNTING_MOB; i++ )
+				if(sd->hunting[m].mob_id == sd->hunting[i].mob_id)
+					rep = 1;
+				else
+					rep = 0;
+		}*/
+		sprintf(varname, "Mission_Count%d", i + 1);
+		sd->hunting[i].count = pc_readglobalreg(sd,add_str(varname));
 	}
 
 	if (battle_config.feature_banking)
@@ -1457,6 +1573,23 @@ void pc_reg_received(struct map_session_data *sd)
 #endif
 	intif_Mail_requestinbox(sd->status.char_id, 0); // MAIL SYSTEM - Request Mail Inbox
 	intif_request_questlog(sd);
+
+	if( battle_config.bg_reward_rates != 100 )
+	{
+		char output[128];
+		int erate = battle_config.bg_reward_rates - 100;
+		sprintf(output, "Battleground Happy Hour. Rates at + %d %%", erate);
+		clif_displaymessage(sd->fd, output);
+	}
+	intif_request_achievement(sd);
+	// Security System
+	if( pc_readaccountreg(sd,add_str("#SECURITYCODE")) > 0 )
+	{
+		clif_displaymessage(sd->fd, "Item Security System ENABLE : Use @security for more options.");
+		sd->state.secure_items = 1;
+	}
+	else
+		clif_displaymessage(sd->fd, "Item Security System DISABLE : Use @security for more options.");
 
 	if (sd->state.connect_new == 0 && sd->fd) { //Character already loaded map! Gotta trigger LoadEndAck manually.
 		sd->state.connect_new = 1;
@@ -3105,7 +3238,7 @@ void pc_bonus2(struct map_session_data *sd,int type,int type2,int val)
 	case SP_SUBELE: // bonus2 bSubEle,e,x;
 		PC_BONUS_CHK_ELEMENT(type2,SP_SUBELE);
 		if(sd->state.lr_flag != 2)
-			sd->subele_script[type2] += val;
+			sd->subele[type2]+=val;
 		break;
 	case SP_SUBRACE: // bonus2 bSubRace,r,x;
 		PC_BONUS_CHK_RACE(type2,SP_SUBRACE);
@@ -3140,7 +3273,7 @@ void pc_bonus2(struct map_session_data *sd,int type,int type2,int val)
 	case SP_MAGIC_ADDELE: // bonus2 bMagicAddEle,e,x;
 		PC_BONUS_CHK_ELEMENT(type2,SP_MAGIC_ADDELE);
 		if(sd->state.lr_flag != 2)
-			sd->magic_addele_script[type2] += val;
+			sd->magic_addele[type2]+=val;
 		break;
 	case SP_MAGIC_ADDRACE: // bonus2 bMagicAddRace,r,x;
 		PC_BONUS_CHK_RACE(type2,SP_MAGIC_ADDRACE);
@@ -4317,6 +4450,7 @@ char pc_getzeny(struct map_session_data *sd,int zeny, enum e_log_pick_type type,
 
 	sd->status.zeny += zeny;
 	clif_updatestatus(sd,SP_ZENY);
+	achievement_validate_zeny(sd,ATZ_HAVE,sd->status.zeny);
 
 	if(!tsd) tsd = sd;
 	log_zeny(sd, type, tsd, zeny);
@@ -4428,6 +4562,9 @@ char pc_additem(struct map_session_data *sd,struct item *item,int amount,e_log_p
 		clif_additem(sd,i,amount,0);
 	}
 
+	if( i < MAX_INVENTORY )
+		achievement_validate_item(sd,AT_ITEM_HAVE,sd->status.inventory[i].nameid,sd->status.inventory[i].amount);
+
 	log_pick_pc(sd, log_type, amount, &sd->status.inventory[i]);
 
 	sd->weight += w;
@@ -4435,7 +4572,7 @@ char pc_additem(struct map_session_data *sd,struct item *item,int amount,e_log_p
 	//Auto-equip
 	if(id->flag.autoequip)
 		pc_equipitem(sd, i, id->equip);
-
+	
 	/* rental item check */
 	if( item->expire_time ) {
 		if( time(NULL) > item->expire_time ) {
@@ -4515,6 +4652,12 @@ bool pc_dropitem(struct map_session_data *sd,int n,int amount)
 	{
 		clif_displaymessage (sd->fd, msg_txt(sd,271));
 		return false; //Can't drop items in nodrop mapflag maps.
+	}
+
+	if( sd->state.secure_items )
+	{
+		clif_displaymessage(sd->fd, "You can't drop. Blocked with @security");
+		return 0;
 	}
 
 	if( !pc_candrop(sd,&sd->status.inventory[n]) )
@@ -4818,6 +4961,9 @@ int pc_useitem(struct map_session_data *sd,int n)
 	if (item.nameid == 0 || item.amount <= 0)
 		return 0;
 
+	if( sd->state.only_walk )
+		return 0;
+
 	if( !pc_isUseitem(sd,n) )
 		return 0;
 
@@ -4869,6 +5015,7 @@ int pc_useitem(struct map_session_data *sd,int n)
 		if( item.expire_time == 0 && nameid != ITEMID_REINS_OF_MOUNT )
 		{
 			clif_useitemack(sd, n, amount - 1, true);
+			achievement_validate_item(sd,AT_ITEM_USE,sd->status.inventory[n].nameid,1);
 			pc_delitem(sd, n, 1, 1, 0, LOG_TYPE_CONSUME); // Rental Usable Items are not deleted until expiration
 		}
 		else
@@ -4886,7 +5033,6 @@ int pc_useitem(struct map_session_data *sd,int n)
 	sd->canuseitem_tick = tick + battle_config.item_use_interval;
 	if( itemdb_iscashfood(nameid) )
 		sd->canusecashfood_tick = tick + battle_config.cashfood_use_interval;
-
 	run_script(script,0,sd->bl.id,fake_nd->bl.id);
 	potion_flag = 0;
 	return 1;
@@ -5265,6 +5411,7 @@ char pc_setpos(struct map_session_data* sd, unsigned short mapindex, int x, int 
 	if( sd->state.changemap ) { // Misc map-changing settings
 		int i;
 		sd->state.pmap = sd->bl.m;
+		sd->state.only_walk = 0;
 		if (sd->sc.count) { // Cancel some map related stuff.
 			if (sd->sc.data[SC_JAILED])
 				return 1; //You may not get out!
@@ -5294,6 +5441,8 @@ char pc_setpos(struct map_session_data* sd, unsigned short mapindex, int x, int 
 		party_send_dot_remove(sd); //minimap dot fix [Kevin]
 		guild_send_dot_remove(sd);
 		bg_send_dot_remove(sd);
+		if( battle_config.bg_queue_onlytowns && sd->qd && map[sd->bl.m].flag.town && !map[m].flag.town )
+			queue_leaveall(sd);
 		if (sd->regen.state.gc)
 			sd->regen.state.gc = 0;
 		// make sure vending is allowed here
@@ -7596,6 +7745,20 @@ int pc_dead(struct map_session_data *sd,struct block_list *src)
 		}
 	}
 
+	//BG [DanielArt]
+ 	if( sd->bg_id )
+ 	{
+ 		struct battleground_data *bg;
+		if( map[sd->bl.m].flag.battleground && (bg = bg_team_search(sd->bg_id)) != NULL && bg->die_event[0] )
+		{
+			struct map_session_data *ssd = BL_CAST(BL_PC,src);
+			pc_setreg(sd,add_str("@killer_bg_id"),bg_team_get_id(src)); // Killer's Team
+			pc_setreg(sd,add_str("@killer_bg_src"),ssd && ssd->bg_id ? ssd->bl.id : 0);
+
+			npc_event(sd, bg->die_event, 0);
+		}
+ 	}
+
 	//Reset "can log out" tick.
 	if( battle_config.prevent_logout )
 		sd->canlog_tick = gettick() - battle_config.prevent_logout;
@@ -9323,38 +9486,6 @@ bool pc_equipitem(struct map_session_data *sd,short n,int req_pos)
 		return false;
 	}
 
-	if ((sd->class_&MAPID_BASEMASK) == MAPID_GUNSLINGER) {
-		/** Failing condition:
-		 * 1. Always failed to equip ammo if no weapon equipped yet
-		 * 2. Grenade only can be equipped if weapon is Grenade Launcher
-		 * 3. Bullet cannot be equipped if the weapon is Grenade Launcher
-		 * (4. The rest is relying on item job/class restriction).
-		 **/
-		if (id->type == IT_AMMO) {
-			int w_idx = sd->equip_index[EQI_HAND_R];
-			enum weapon_type w_type = (w_idx != -1) ? (enum weapon_type)sd->inventory_data[w_idx]->look : W_FIST;
-			if (w_idx == -1 ||
-				(id->look == A_GRENADE && w_type != W_GRENADE) ||
-				(id->look != A_GRENADE && w_type == W_GRENADE))
-			{
-				clif_equipitemack(sd, 0, 0, ITEM_EQUIP_ACK_FAIL);
-				return false;
-			}
-		}
-		else if (id->type == IT_WEAPON && id->look >= W_REVOLVER && id->look <= W_GRENADE) {
-			int a_idx = sd->equip_index[EQI_AMMO];
-			if (a_idx != -1) {
-				enum ammo_type a_type = (enum ammo_type)sd->inventory_data[a_idx]->look;
-				if ((a_type == A_GRENADE && id->look != W_GRENADE) ||
-					(a_type != A_GRENADE && id->look == W_GRENADE))
-				{
-					clif_equipitemack(sd, 0, 0, ITEM_EQUIP_ACK_FAIL);
-					return false;
-				}
-			}
-		}
-	}
-
 	if (id->flag.bindOnEquip && !sd->status.inventory[n].bound) {
 		sd->status.inventory[n].bound = (char)battle_config.default_bind_on_equip;
 		clif_notify_bindOnEquip(sd,n);
@@ -9404,6 +9535,7 @@ bool pc_equipitem(struct map_session_data *sd,short n,int req_pos)
 		clif_equipitemack(sd,n,pos,ITEM_EQUIP_ACK_OK);
 
 	sd->status.inventory[n].equip=pos;
+	achievement_validate_item(sd,AT_ITEM_EQUIP,sd->status.inventory[n].nameid,1);
 
 	if(pos & EQP_HAND_R) {
 		if(id)
@@ -10393,15 +10525,12 @@ void pc_delspiritcharm(struct map_session_data *sd, int count, int type)
  * Renewal EXP/Itemdrop rate modifier base on level penalty
  * 1=exp 2=itemdrop
  *------------------------------------------*/
-int pc_level_penalty_mod(struct map_session_data *sd, int mob_level, uint32 mob_class, enum e_mode mode, int type)
+int pc_level_penalty_mod(struct map_session_data *sd, int mob_level, uint32 mob_class, int type)
 {
 	int diff, rate = 100, i;
 	int tmp;
 
 	nullpo_ret(sd);
-
-	if (type == 2 && (mode&MD_FIXED_ITEMDROP))
-		return rate;
 
 	diff = mob_level - sd->status.base_level;
 

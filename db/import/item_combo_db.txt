@@ -1,0 +1,56 @@
+// Item Combos Database
+//
+// Structure of Database:
+// ID:ID:ID:ID,{ Script }
+
+36026:36039,{ bonus bAllStats,2; bonus2 bAddMonsterDropItem,11552,10; }
+28326:28327,{ bonus bInt,8; bonus bStr,8; }
+24180:24181:24182:24183:24184:24185,{ set .@refine,getequiprefinerycnt(EQI_SHADOW_ARMOR)+getequiprefinerycnt(EQI_SHADOW_WEAPON)+getequiprefinerycnt(EQI_SHADOW_SHIELD)+getequiprefinerycnt(EQI_SHADOW_SHOES)+getequiprefinerycnt(EQI_SHADOW_ACC_R)+getequiprefinerycnt(EQI_SHADOW_ACC_L); bonus bAllStats,1; if(.@refine>=45) { bonus bMaxHPrate,(.@refine-60); sc_start4 SC_ENDURE,1,10,0,0,1;} }
+24186:24198,{ bonus2 bSubEle,Ele_Neutral,2; }
+24187:24199,{ bonus2 bSubEle,Ele_Dark,2; }
+24188:24200,{ bonus2 bSubEle,Ele_Water,2; }
+24189:24201,{ bonus2 bSubEle,Ele_Earth,2; }
+24190:24202,{ bonus2 bSubEle,Ele_Fire,2; }
+24191:24203,{ bonus2 bSubEle,Ele_Wind,2; }
+24192:24204,{ bonus2 bSubEle,Ele_Poison,2; }
+24193:24205,{ bonus2 bSubEle,Ele_Holy,2; }
+24194:24206,{ bonus2 bSubEle,Ele_Ghost,2; }
+24195:24207,{ bonus2 bSubEle,Ele_Undead,2; }
+24196:24197,{ bonus bFlee,5; if(getequiprefinerycnt(EQI_SHADOW_SHOES)+getequiprefinerycnt(EQI_SHADOW_ARMOR)>=15) bonus bSpeedAddRate,3; }
+5967:4152,{ bonus2 bAddItemHealRate,531,1000; bonus2 bAddItemHealRate,532,1000; bonus2 bAddItemHealRate,534,1000; }
+5967:4163,{ bonus bAspdRate,2; bonus bAspd,2; bonus bAtkRate,-5; }
+5967:4015,{ bonus2 bSubEle,Ele_Neutral,5; bonus2 bSubEle,Ele_Water,5; bonus2 bSubEle,Ele_Earth,5; bonus2 bSubEle,Ele_Fire,5; bonus2 bSubEle,Ele_Wind,5; bonus2 bSubEle,Ele_Poison,5; bonus2 bSubEle,Ele_Holy,5; bonus2 bSubEle,Ele_Dark,5; bonus2 bSubEle,Ele_Ghost,5; bonus2 bSubEle,Ele_Undead,5; }
+5967:4517,{ bonus bInt,1; bonus bCriticalRate,15; }
+20717:2499,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; }
+20717:22000,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; }
+20717:22001,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; }
+20717:22002,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; }
+20717:22003,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; }
+20717:22004,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; }
+20717:22005,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; }
+20717:22006,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; }
+20717:22007,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; }
+20717:22008,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; }
+20717:22009,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; }
+20717:22010,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; }
+20717:22011,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; }
+20718:2499,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; }
+20718:22000,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; }
+20718:22001,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; }
+20718:22002,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; }
+20718:22003,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; }
+20718:22004,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; }
+20718:22005,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; }
+20718:22006,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; }
+20718:22007,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; }
+20718:22008,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; }
+20718:22009,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; }
+20718:22010,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; }
+20718:22011,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; }
+35028:35037,{ bonus bBaseAtk,(5*getequiprefinerycnt(EQI_SHADOW_WEAPON)); bonus bMatk,(5*getequiprefinerycnt(EQI_SHADOW_WEAPON)); }
+2988:1935,{ bonus2 bSkillAtk,"CG_ARROWVULCAN",200; }
+35044:35047:35048:35049:35050,{ bonus bAllStats,6; bonus bMaxHPRate,15; bonus bMaxSPrate,15; bonus bDef,30; bonus bMdef,30; bonus bFlee,30; bonus bHit,30; }
+35047:35048:35049:35050,{ bonus bAtk,50; bonus bMatk,50; }
+2979:18716,{ bonus bMaxHPRate,15; bonus2 bSubEle,Ele_Fire,10; bonus bLongAtkRate,30; }
+15117:20744:22047,{ bonus bMaxHPrate,25; bonus bMaxSPrate,25; set .@r,getequiprefinerycnt(EQI_GARMENT) + getequiprefinerycnt(EQI_ARMOR) + getequiprefinerycnt(EQI_SHOES); if(.@r >= 30) { bonus bMaxHPrate,10; bonus bMaxSPrate,10; bonus bSpeedAddRate,3; } }
+35056:35057,{ bonus2 bSubRace,RC_Dragon,30; bonus2 bSubSize,Size_Large,30; bonus2 bSubEle,Ele_Fire,30; bonus bLongAtkDef,30; }

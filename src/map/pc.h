@@ -12,6 +12,7 @@
 #include "atcommand.h" // AtCommandType
 #include "battle.h" // battle_config
 #include "buyingstore.h"  // struct s_buyingstore
+#include "battleground.h" // battleground_queue
 #include "itemdb.h" // MAX_ITEMGROUP
 #include "script.h" // struct script_reg, struct script_regstr
 #include "searchstore.h"  // struct s_search_store_info
@@ -29,6 +30,7 @@
 #define MAX_SPIRITBALL 15 /// Max spirit balls
 #define MAX_DEVOTION 5 /// Max Devotion slots
 #define MAX_SPIRITCHARM 10 /// Max spirit charms
+#define MAX_HUNTING_MOB 5 /// Max hunting mob list
 
 #define BANK_VAULT_VAR "#BANKVAULT"
 #define ROULETTE_BRONZE_VAR "RouletteBronze"
@@ -199,6 +201,7 @@ struct map_session_data {
 		unsigned int lr_flag : 3;//1: left h. weapon; 2: arrow; 3: shield
 		unsigned int connect_new : 1;
 		unsigned int arrow_atk : 1;
+		unsigned int bg_id : 3; //[DanielArt]
 		unsigned int gangsterparadise : 1;
 		unsigned int rest : 1;
 		unsigned int storage_flag : 2; //0: closed, 1: Normal Storage open, 2: guild storage open [Skotlex]
@@ -208,12 +211,14 @@ struct map_session_data {
 		unsigned int autotrade : 3;	//By Fantik. &2 Requested by vending autotrade; &4 Requested by buyingstore autotrade
 		unsigned int showdelay :1;
 		unsigned int showexp :1;
+		unsigned int showgain :1;
 		unsigned int showzeny :1;
 		unsigned int noask :1; // [LuzZza]
 		unsigned int trading :1; //[Skotlex] is 1 only after a trade has started.
 		unsigned int deal_locked :2; //1: Clicked on OK. 2: Clicked on TRADE
 		unsigned int monster_ignore :1; // for monsters to ignore a character [Valaris] [zzo]
 		unsigned int size :2; // for tiny/large types
+		unsigned int blockedmove :1; // Block move
 		unsigned int night :1; //Holds whether or not the player currently has the SI_NIGHT effect on. [Skotlex]
 		unsigned int using_fake_npc :1;
 		unsigned int rewarp :1; //Signals that a player should warp as soon as he is done loading a map. [Skotlex]
@@ -226,6 +231,7 @@ struct map_session_data {
 		unsigned int lesseffect : 1;
 		unsigned int vending : 1;
 		unsigned int noks : 3; // [Zeph Kill Steal Protection]
+		unsigned int secure_items : 1; // [Zephyrus] Item Security
 		unsigned int changemap : 1;
 		unsigned int callshop : 1; // flag to indicate that a script used callshop; on a shop
 		short pmap; // Previous map on Map Change
@@ -241,9 +247,14 @@ struct map_session_data {
 		unsigned int hold_recalc : 1;
 		unsigned int banking : 1; //1 when we using the banking system 0 when closed
 		unsigned int hpmeter_visible : 1;
+		unsigned hamsterguard_skill_check_double : 1; // HamsterGuard - Double Cast [DanielArt]
+		unsigned hamsterguard_skill_check_flood : 1; // HamsterGuard - Flood Cast [DanielArt]
 		unsigned disable_atcommand_on_npc : 1; //Prevent to use atcommand while talking with NPC [Kichi]
 		uint8 isBoundTrading; // Player is currently add bound item to trade list [Cydh]
 		bool ignoretimeout; // Prevent the SECURE_NPCTIMEOUT function from closing current script.
+		unsigned int only_walk : 1; // [Zephyrus] Block Skills and Item usage to a player
+		unsigned bg_afk : 1; // Moved here to reduce searchs
+		unsigned short bg_team : 3;
 	} state;
 	struct {
 		unsigned char no_weapon_damage, no_magic_damage, no_misc_damage;
@@ -284,7 +295,9 @@ struct map_session_data {
 	int npc_timer_id; //For player attached npc timers. [Skotlex]
 	unsigned int chatID;
 	time_t idletime;
-
+	unsigned int keyboard_action_tick;
+	unsigned int mouse_action_tick;
+	time_t idlepvp; // [Zephyrus] Ultimo Tick de daño PVP
 	struct s_progressbar {
 		int npc_id;
 		unsigned int timeout;
@@ -318,6 +331,15 @@ struct map_session_data {
 	unsigned int cansendmail_tick; // [Mail System Flood Protection]
 	unsigned int ks_floodprotect_tick; // [Kill Steal Protection]
 
+	// HamsterGuard [DanielArt]
+	unsigned int canskill_tick2;		
+	int64 last_skill;			
+	unsigned int tem_tick_skill1;	// Save temporer
+	unsigned int tem_tick_skill2;
+	unsigned int tem_tick_skill3;
+	unsigned int castskill_tick;
+	int spam_count;
+
 	struct s_item_delay {
 		unsigned short nameid;
 		unsigned int tick;
@@ -331,7 +353,6 @@ struct map_session_data {
 	// here start arrays to be globally zeroed at the beginning of status_calc_pc()
 	int param_bonus[6],param_equip[6]; //Stores card/equipment bonuses.
 	int subele[ELE_MAX];
-	int subele_script[ELE_MAX];
 	int subdefele[ELE_MAX];
 	int subrace[RC_MAX];
 	int subclass[CLASS_MAX];
@@ -350,7 +371,6 @@ struct map_session_data {
 	int arrow_addclass[CLASS_MAX];
 	int arrow_addsize[SZ_MAX];
 	int magic_addele[ELE_MAX];
-	int magic_addele_script[ELE_MAX];
 	int magic_addrace[RC_MAX];
 	int magic_addclass[CLASS_MAX];
 	int magic_addsize[SZ_MAX];
@@ -533,6 +553,13 @@ struct map_session_data {
 	char fakename[NAME_LENGTH]; // fake names [Valaris]
 
 	int duel_group; // duel vars [LuzZza]
+
+	struct {
+		int MVPKiller;
+		time_t session_start;
+		unsigned int session_base_exp, session_job_exp;
+	} custom_data;
+
 	int duel_invite;
 
 	int killerrid, killedrid;
@@ -544,6 +571,59 @@ struct map_session_data {
 	struct s_auction{
 		int index, amount;
 	} auction;
+
+	// Hunting Missions [Zephyrus]
+	int hunting_time;
+	struct {
+		int mob_id;
+		short count;
+	} hunting[5];
+
+	// HamsterGuard Mob MVP ID Verify [DanielArt]
+	int ham_mvpid;
+
+	// BG Rank [DanielArt]
+	struct s_bgstats{
+		int rank_games;
+		int deserter;
+		int win;
+		int lost;
+		int tie;
+		int leader_win;
+		int leader_tie;
+		int leader_lost;
+		int eos_wins;
+		int boss_wins;
+		int sc_wins;
+		int ti_wins;
+		int ctf_wins;
+		int td_wins;
+		int cq_wins;
+		int ru_wins;
+		int dom_wins;
+		int eos_tie;
+		int boss_tie;
+		int ti_tie;
+		int ctf_tie;
+		int td_tie;
+		int sc_tie;
+		int dom_tie;
+		int eos_lost;
+		int boss_lost;
+		int ti_lost;
+		int ctf_lost;
+		int td_lost;
+		int sc_lost;
+		int cq_lost;
+		int ru_lost;
+		int dom_lost;
+	} bgstats;
+
+	// Sistema de Oficios [DanielArt]
+	short oficio;
+	short oficio_ex;
+	short tailorexp;
+	short carpenterexp;
 
 	// Mail System [Zephyrus]
 	struct s_mail {
@@ -559,6 +639,13 @@ struct map_session_data {
 	struct quest *quest_log; ///< Quest log entries (note: Q_COMPLETE quests follow the first <avail_quests>th enties
 	bool save_quest;         ///< Whether the quest_log entries were modified and are waitin to be saved
 
+	// Battleground and Queue System
+	unsigned int bg_id;
+	struct battleground_data *bmaster_flag;
+	unsigned short bg_kills; 
+	struct queue_data *qd;
+	unsigned short bg_team;
+
 	/* ShowEvent Data Cache flags from map */
 	bool *qi_display;
 	unsigned short qi_count;
@@ -568,7 +655,11 @@ struct map_session_data {
 	int debug_line;
 	const char* debug_func;
 
-	unsigned int bg_id;
+	// Achievement System
+	struct s_achievement achievement[ACHIEVEMENT_MAX];
+	int achievement_count;
+	int achievement_cutin_timer;
+	bool save_achievement;
 
 #ifdef SECURE_NPCTIMEOUT
 	/**
@@ -747,6 +838,18 @@ enum idletime_option {
 	IDLE_EMOTION       = 0x080,
 	IDLE_DROPITEM      = 0x100,
 	IDLE_ATCOMMAND     = 0x200,
+};
+
+enum adopt_responses {
+	ADOPT_ALLOWED = 0,
+	ADOPT_ALREADY_ADOPTED,
+	ADOPT_MARRIED_AND_PARTY,
+	ADOPT_EQUIP_RINGS,
+	ADOPT_NOT_NOVICE,
+	ADOPT_CHARACTER_NOT_FOUND,
+	ADOPT_MORE_CHILDREN,
+	ADOPT_LEVEL_70,
+	ADOPT_MARRIED,
 };
 
 struct {
@@ -966,7 +1069,7 @@ bool pc_takeitem(struct map_session_data *sd,struct flooritem_data *fitem);
 bool pc_dropitem(struct map_session_data *sd,int n,int amount);
 
 bool pc_isequipped(struct map_session_data *sd, unsigned short nameid);
-bool pc_can_Adopt(struct map_session_data *p1_sd, struct map_session_data *p2_sd, struct map_session_data *b_sd );
+enum adopt_responses pc_try_adopt(struct map_session_data *p1_sd, struct map_session_data *p2_sd, struct map_session_data *b_sd);
 bool pc_adoption(struct map_session_data *p1_sd, struct map_session_data *p2_sd, struct map_session_data *b_sd);
 
 void pc_updateweightstatus(struct map_session_data *sd);
@@ -1137,6 +1240,10 @@ bool pc_set_hate_mob(struct map_session_data *sd, int pos, struct block_list *bl
 extern struct fame_list smith_fame_list[MAX_FAME_LIST];
 extern struct fame_list chemist_fame_list[MAX_FAME_LIST];
 extern struct fame_list taekwon_fame_list[MAX_FAME_LIST];
+extern struct fame_list pvprank_fame_list[MAX_FAME_LIST];
+extern struct fame_list pvpevent_fame_list[MAX_FAME_LIST];
+extern struct fame_list bgrank_fame_list[MAX_FAME_LIST];
+extern struct fame_list bg_fame_list[MAX_FAME_LIST];
 
 void pc_readdb(void);
 void do_init_pc(void);
@@ -1162,6 +1269,8 @@ extern int day_timer_tid;
 extern int night_timer_tid;
 int map_day_timer(int tid, unsigned int tick, int id, intptr_t data); // by [yor]
 int map_night_timer(int tid, unsigned int tick, int id, intptr_t data); // by [yor]
+
+int pc_update_last_action(struct map_session_data *sd, int type, enum idletime_option idle_option);
 
 // Rental System
 void pc_inventory_rentals(struct map_session_data *sd);
@@ -1221,6 +1330,6 @@ void pc_show_questinfo(struct map_session_data *sd);
 void pc_show_questinfo_reinit(struct map_session_data *sd);
 
 #if defined(RENEWAL_DROP) || defined(RENEWAL_EXP)
-int pc_level_penalty_mod(struct map_session_data *sd, int mob_level, uint32 mob_class, enum e_mode mode, int type);
+int pc_level_penalty_mod(struct map_session_data *sd, int mob_level, uint32 mob_class, int type);
 #endif
 #endif /* _PC_H_ */

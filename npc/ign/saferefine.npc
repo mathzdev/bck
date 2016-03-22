@@ -1,0 +1,113 @@
+vip,70,60,3	script	Yuhra	10079,{
+	disable_items;
+	mes "[Yuhra]";
+	mes "Aquí podrás utilizar tu ^5533ffDark Mithril^000000 para refinar cualquier clase de equipo.";
+	next;
+	mes "[Yuhra]";
+	mes "Por favor dime, ¿qué clase de equipo utilizas?";
+	next;
+	if(select("Equipo Normal","Shadow Gear") == 2) {
+		setarray .@position$[16], "Shadow Armor","Shadow Weapon","Shadow Shield","Shadow Shoes","Shaddow Accessory R","Shadow Accessory L";
+		set .@menu$,"";
+		for(set .@i,16; .@i<=21; set .@i,.@i+1) {
+			if(getequipisequiped(.@i)) {
+				set .@menu$, .@menu$ + .@position$[.@i] + "-" + "[" + getequipname(.@i) + "]";
+				set .@equipped,1;
+			}
+			set .@menu$, .@menu$ + ":";
+		}
+		if (.@equipped == 0) {
+			mes "[Yuhra]";
+			mes "Disculpa pero... no creo que te pueda refinar la piel...";
+			close;
+		}
+		set .@part, select(.@menu$);
+		set .@part,.@part + 15;
+	} else {
+		setarray .@position$[1], "Head","Body","Left hand","Right hand","Robe","Shoes","Accessory 1","Accessory 2","Head 2","Head 3";
+		set .@menu$,"";
+		for(set .@i,1; .@i<=10; set .@i,.@i+1) {
+			if(getequipisequiped(.@i)) {
+				set .@menu$, .@menu$ + .@position$[.@i] + "-" + "[" + getequipname(.@i) + "]";
+				set .@equipped,1;
+			}
+			set .@menu$, .@menu$ + ":";
+		}
+		if (.@equipped == 0) {
+			mes "[Yuhra]";
+			mes "Disculpa pero... no creo que te pueda refinar la piel...";
+			close;
+		}
+		set .@part, select(.@menu$);
+	}
+	if(!getequipisequiped(.@part)) { //custom check
+		mes "[Yuhra]";
+		mes "No estás vistiendo algo que pueda refinar.";
+		emotion e_an;
+		close;
+	}
+	//Check if the item is refinable...
+	if(!getequipisenableref(.@part)) {
+		mes "[Yuhra]";
+		mes "No creo que pueda refinar éste objeto.";
+		close;
+	}
+	//Check to see if the items is already +20
+	if(getequiprefinerycnt(.@part) >= 20) {
+		mes "[Yuhra]";
+		mes "No puedo refinar más.";
+		close;
+	}
+	set .@refineitemid, getequipid(.@part); // save id of the item
+	set .@refinerycnt, getequiprefinerycnt(.@part); //save refinery count
+	set .@price,500000+(300000*.@refinerycnt);
+	set .@material,35036; //Dark Mithril
+	set .@safe,90;
+
+	// If the VIP system is enabld, the prices for non-VIP players are considerably higher.
+	if (VIP_SCRIPT && !vip_status(1))
+		set .@price,.@price * 10;
+
+		mes "[Yuhra]";
+		mes "Para refinar ésto necesito";
+		mes "un ^003366"+getitemname(.@material)+"^000000 y";
+		mes "un pago de servicio de " + .@price + " Zeny.";
+		mes "¿Deseas continuar?";
+		next;
+		if(select("Si:No") == 2){
+			mes "[Yuhra]";
+			mes "Bien... no me hagas perder mi tiempo.";
+			close;
+		}
+		if((countitem(.@material) < 1) || (Zeny < .@price)) {
+			mes "[Yuhra]";
+			mes "Al parecer o no tiene Zeny o el material necesario, vuelve cuando los tengas.";
+			close;
+		}
+		set Zeny, Zeny-.@price;
+		delitem .@material,1;
+
+		// anti-hack
+		if (callfunc("F_IsEquipIDHack", .@part, .@refineitemid) ||
+		    callfunc("F_IsEquipRefineHack", .@part, .@refinerycnt)) {
+			mes "[Yuhra]";
+			emotion e_an;
+			mes "¿Acaso crees que soy estúpido?";
+			mes "No estés cambiando de equipo mientras refinas.";
+			close;
+		}
+		if(rand(100) > .@safe) {
+			mes "[Yuhra]";
+			successrefitem .@part;
+			emotion e_heh;
+			mes "El refinamiento se ha llevado a la perfección.";
+			close;
+		} else {
+			mes "[Yuhra]";
+			mes "Al parecer algo salió mal, pero no te preocupes, no haz perdido tu objeto, sólo ha bajado su refine un valor.";
+			emotion e_sry;
+			downrefitem .@part;
+			close;
+		}
+end;
+}

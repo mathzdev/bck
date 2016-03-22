@@ -3,7 +3,7 @@
 //===== By: ==================================================
 //= Euphy
 //===== Current Version: =====================================
-//= 1.1
+//= 1.2
 //===== Compatible With: =====================================
 //= rAthena Project
 //===== Description: =========================================
@@ -16,6 +16,7 @@
 //= 0.1 NPCs are currently placeholders. [Euphy]
 //= 1.0 Implemented all official quests. [Euphy]
 //= 1.1 Added GM management function and NPCs. [Euphy]
+//= 1.2 You not allow to do quest without Mora Main Quest [DanielArt]
 //============================================================
 
 // Theore's Request :: ep14_1_bs
@@ -592,7 +593,7 @@ splendide,183,117,4	script	Tired-looking Fairy	438,{
 			mes "[Tired-looking Fairy]";
 			mes "Theodore must be roaming the area northeast of the village.";
 			mes "Go see if he has lost his pouch.";
-			if (ep14_1_bs2 == 8)
+			if (countitem(6390) > 0)
 				set ep14_1_bs2,11;
 			close;
 		case 9264: // Pauchon: sea-blue hair, dark skin, grassy-green clothing, characteristic wings
@@ -1962,6 +1963,10 @@ mora,117,66,3	script	Euridi#pa	521,{
 		mes "but I don't think you can help.";
 		close;
 	}
+	if (ep14_1_bs < 13) {
+		mes "^777777Em....","I don't know what to say...^000000";
+		close;
+	}
 	if (ep14_1_rope == 0) {
 		mes "[Euridi]";
 		mes "I hear you passed through the Hazy Forest.";
@@ -2141,6 +2146,10 @@ mora,117,66,3	script	Euridi#pa	521,{
 }
 
 mora,115,68,3	script	Euridi's Friend#pa	520,{
+	if (ep14_1_bs < 13) {
+		mes "^777777Em....","I don't know what to say...^000000";
+		close;
+	}
 	if (ep14_1_rope < 2) {
 		mes "[Euridi's Friend]";
 		mes "Please stop Euridi.";
@@ -2241,6 +2250,10 @@ mora,115,68,3	script	Euridi's Friend#pa	520,{
 }
 
 mora,65,145,3	script	Pitt#pa	519,{
+	if (ep14_1_bs < 13) {
+		mes "^777777Em....","I don't know what to say...^000000";
+		close;
+	}
 	if (ep14_1_rope == 0) {
 		mes "[Pitt]";
 		mes "So you're quite good,";
@@ -2509,6 +2522,10 @@ OnTouch:
 // Find the Research Tools :: ep14_1_muk
 //============================================================
 mora,31,138,6	script	Raffle Researcher#ep14	522,{
+	if (ep14_1_bs < 13) {
+		mes "^777777Em....","I don't know what to say...^000000";
+		close;
+	}
 	if (checkweight(1201,1) == 0 || MaxWeight - Weight < 500) {
 		mes "^FF0000- Warning message -";
 		mes "- Hang on there!! -";
@@ -3447,6 +3464,10 @@ L_CheckWeight:
 }
 
 mora,114,79,0	script	Black Shadow#ep14_muk	844,{
+	if (ep14_1_bs < 13) {
+		mes "^777777Em....","I don't know what to say...^000000";
+		close;
+	}
 	if (checkweight(1201,1) == 0 || MaxWeight - Weight < 500) {
 		mes "^FF0000- Warning message -";
 		mes "- Hang on there!! -";
@@ -4076,6 +4097,10 @@ OnFullon:
 }
 
 -	script	???#mora	-1,{
+	if (ep14_1_bs < 13) {
+		mes "^777777Em....","I don't know what to say...^000000";
+		close;
+	}
 	if (checkquest(5019) > -1) {
 		mes "You find an area emitting a distinct aura.";
 		mes "You may be able to collect bath water samples.";
@@ -4218,6 +4243,10 @@ mora,116,81,0	duplicate(???#mora)	???#ep14_muk04	844,2,2
 mora,118,86,0	duplicate(???#mora)	???#ep14_muk05	844,2,2
 
 -	script	#mora_puddle	-1,{
+	if (ep14_1_bs < 13) {
+		mes "^777777Em....","I don't know what to say...^000000";
+		close;
+	}
 	set .@i, atoi(charat(strnpcinfo(2),9));
 
 	// This script has a lot of checks,
@@ -4359,6 +4388,10 @@ bif_fild02,113,340,0	duplicate(#mora_puddle)	Puddle#ep14_muk04	844
 // Mora Daily Quests :: ep14_1_dealer
 //============================================================
 mora,133,80,6	script	Elephantine#pa0829	509,{
+	if (ep14_1_bs < 13) {
+		mes "^777777Em....","I don't know what to say...^000000";
+		close;
+	}
 	if (checkweight(1201,1) == 0) {
 		mes "You have too many kinds of things with you to do that. Throw out some of them and try again.";
 		close;
@@ -4467,6 +4500,10 @@ mora,133,80,6	script	Elephantine#pa0829	509,{
 }
 
 mora,115,98,8	script	Hotcha#pa0829	509,{
+	if (ep14_1_bs < 13) {
+		mes "^777777Em....","I don't know what to say...^000000";
+		close;
+	}
 	if (checkweight(1201,1) == 0) {
 		mes "You have too many kinds of things with you to do that. Throw out some of them and try again.";
 		close;
@@ -4542,6 +4579,10 @@ mora,115,98,8	script	Hotcha#pa0829	509,{
 }
 
 mora,119,103,4	script	Bow-wow#pa0829	513,{
+	if (ep14_1_bs < 13) {
+		mes "^777777Em....","I don't know what to say...^000000";
+		close;
+	}
 	if (checkweight(1201,1) == 0) {
 		mes "You have too many kinds of things with you to do that. Throw out some of them and try again.";
 		close;
@@ -4650,6 +4691,10 @@ mora,119,103,4	script	Bow-wow#pa0829	513,{
 }
 
 mora,119,118,4	script	General Good Dealer#pa0	516,{
+	if (ep14_1_bs < 13) {
+		mes "^777777Em....","I don't know what to say...^000000";
+		close;
+	}
 	if (checkweight(1201,1) == 0) {
 		mes "You have too many kinds of things with you to do that. Throw out some of them and try again.";
 		close;
@@ -4738,6 +4783,10 @@ L_CheckQuest:
 }
 
 mora,124,108,7	script	Woof-grrr#pa0829	514,{
+	if (ep14_1_bs < 13) {
+		mes "^777777Em....","I don't know what to say...^000000";
+		close;
+	}
 	if (checkweight(1201,1) == 0) {
 		mes "You have too many kinds of things with you to do that. Throw out some of them and try again.";
 		close;
@@ -4846,6 +4895,10 @@ mora,124,108,7	script	Woof-grrr#pa0829	514,{
 }
 
 mora,127,112,4	script	Commodities Dealer#pa08	518,{
+	if (ep14_1_bs < 13) {
+		mes "^777777Em....","I don't know what to say...^000000";
+		close;
+	}
 	if (checkweight(1201,1) == 0) {
 		mes "You have too many kinds of things with you to do that. Throw out some of them and try again.";
 		close;
@@ -4934,6 +4987,10 @@ L_CheckQuest:
 }
 
 mora,170,101,4	script	Soul Guide#pa0829	515,{
+	if (ep14_1_bs < 13) {
+		mes "^777777Em....","I don't know what to say...^000000";
+		close;
+	}
 	if (checkweight(1201,1) == 0) {
 		mes "You have too many kinds of things with you to do that. Throw out some of them and try again.";
 		close;
@@ -5155,6 +5212,10 @@ mora,118,166,6	script	Knights Chief#mo	525,{
 }
 
 mora,116,165,5	script	Knights Boss#mo	524,{
+	if (ep14_1_bs < 13) {
+		mes "^777777Em....","I don't know what to say...^000000";
+		close;
+	}
 	set .@playtime, checkquest(1119,PLAYTIME);
 	if (.@playtime == 0 || .@playtime == 1) {
 		mes "[Order of the Knights Boss]";
@@ -5217,6 +5278,10 @@ mora,116,165,5	script	Knights Boss#mo	524,{
 }
 
 mora,114,163,5	script	Knights Head#mo	522,{
+	if (ep14_1_bs < 13) {
+		mes "^777777Em....","I don't know what to say...^000000";
+		close;
+	}
 	if (checkweight(6380,1) == 0) {
 		mes "[Order of the Knights Head]";
 		mes "You have a lot of things with you!";

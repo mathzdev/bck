@@ -96,7 +96,6 @@ int64 battle_calc_damage(struct block_list *src,struct block_list *bl,struct Dam
 int64 battle_calc_gvg_damage(struct block_list *src,struct block_list *bl,int64 damage,uint16 skill_id,int flag);
 int64 battle_calc_bg_damage(struct block_list *src,struct block_list *bl,int64 damage,uint16 skill_id,int flag);
 
-void battle_damage(struct block_list *src, struct block_list *target, int64 damage, int delay, uint16 skill_lv, uint16 skill_id, enum damage_lv dmg_lv, unsigned short attack_type, bool additional_effects, unsigned int tick);
 int battle_delay_damage (unsigned int tick, int amotion, struct block_list *src, struct block_list *target, int attack_type, uint16 skill_id, uint16 skill_lv, int64 damage, enum damage_lv dmg_lv, int ddelay, bool additional_effects);
 
 // Summary normal attack treatment (basic attack)
@@ -210,6 +209,7 @@ extern struct Battle_Config
 	int guild_skill_relog_delay;
 	int emergency_call;
 	int guild_aura;
+	int guild_skills_separed_delay;
 	int pc_invincible_time;
 
 	int pet_catch_rate;
@@ -290,6 +290,7 @@ extern struct Battle_Config
 	int gvg_magic_damage_rate;
 	int gvg_misc_damage_rate;
 	int gvg_flee_penalty;
+	int costume_reserved_char_id;
 	int pk_short_damage_rate;
 	int pk_long_damage_rate;
 	int pk_weapon_damage_rate;
@@ -491,6 +492,11 @@ extern struct Battle_Config
 	int hom_S_max_level;
 	int hom_S_growth_level;
 
+	// [Action Limits]
+	int action_keyboard_limit;
+	int action_mouse_limit;
+	int action_dual_limit;
+
 	// [BattleGround Settings]
 	int bg_update_interval;
 	int bg_short_damage_rate;
@@ -499,6 +505,21 @@ extern struct Battle_Config
 	int bg_magic_damage_rate;
 	int bg_misc_damage_rate;
 	int bg_flee_penalty;
+	int bg_idle_announce;
+	int bg_idle_autokick;
+	int bg_reserved_char_id;
+	int bg_items_on_pvp;
+	int bg_reward_rates;
+	int bg_ranking_bonus;
+
+	int bg_ranked_mode;
+	int bg_ranked_max_games;
+	int bg_reportafk_leaderonly;
+	int bg_queue2team_balanced;
+	int bg_logincount_check;
+	int bg_queue_onlytowns;
+
+	int bg_eAmod_mode;
 
 	// rAthena
 	int max_third_parameter;
@@ -551,6 +572,14 @@ extern struct Battle_Config
 	int feature_autotrade_sit;
 	int feature_autotrade_open_delay;
 
+	// HamsterGuard [DanielArt]
+	int status_min_duration;
+	int hamsterguard_protection;
+	int hamsterguard_min_delay;
+	int hamsterguard_flood_protection;
+	int hamsterguard_spam_count;
+	int hamsterguard_spam_punish;
+
 	// Fame points
 	int fame_taekwon_mission;
 	int fame_refine_lv1;
@@ -599,8 +628,9 @@ extern struct Battle_Config
 	int max_body_style;
 	int save_body_style;
 	int mob_eye_range_bonus; //Vulture's Eye and Snake's Eye range bonus
-	int mob_stuck_warning; //Show warning if a monster is stuck too long
-	int skill_eightpath_algorithm; //Official path algorithm
+	int monster_atorado; // Muestra una advertencia cuando el mob se atora [DanielArt]
+	int skill_eightpath_algorithm; //Área de servidores oficiales basado de dónde se ataca.
+
 } battle_config;
 
 void do_init_battle(void);

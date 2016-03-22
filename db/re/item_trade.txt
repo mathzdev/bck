@@ -682,7 +682,7 @@
 6377,467,100	// Buy_Market_Permit
 6378,499,100	// Winning_Mark
 6380,467,100	// Mora_Coin
-6383,499,100	// Clue_Of_Lope
+//6383,499,100	// Clue_Of_Lope
 6384,507,100	// Ring_Of_Lope
 6385,507,100	// Research_Tool_Bag
 6386,499,100	// Bathtub_R_Sample
@@ -1095,7 +1095,7 @@
 7765,507,100	// Yaga_Secret_Medicine
 7766,475,100	// Bok_Choy
 7767,475,100	// Chung_E_Cake
-7773,499,100	// War_Badge
+//7773,499,100	// War_Badge
 7775,475,100	// Spring_Rabbit_Ticket
 7776,475,100	// Max_Weight_Up_Scroll
 7779,475,100	// Gold_Key_TW
@@ -1121,8 +1121,8 @@
 7825,475,100	// Heroic_Stone
 7826,507,100	// Continental_Guard_Paper
 7827,499,100	// Mineral_Report
-7828,499,100	// BF_Badge1
-7829,499,100	// BF_Badge2
+//7828,499,100	// BF_Badge1
+//7829,499,100	// BF_Badge2
 7839,499,100	// Crystal_Key
 7840,507,100	// Valkyrie_Gift
 7841,499,100	// Spotted_Paper
@@ -2429,7 +2429,7 @@
 14232,475,100	// Yggdrasilberry_Box_
 14233,475,100	// Dead_Tree_Branch_Box1
 14234,475,100	// Dead_Tree_Branch_Box2
-14235,475,100	// Field_Manual_Box_2
+//14235,475,100	// Field_Manual_Box_2
 14236,475,100	// Steamed_Tongue_Box_20
 14237,475,100	// Steamed_Desert_Scorpions_Box_20
 14238,475,100	// Stew_Of_Immortality_Box_20
@@ -2693,9 +2693,9 @@
 14529,507,100	// Greed_Scroll
 14530,475,100	// Flee_30_Scroll
 14531,475,100	// Accuracy_30_Scroll
-14532,475,100	// Battle_Manual25
-14533,475,100	// Battle_Manual100
-14533,475,100	// Battle_Manual100
+//14532,475,100	// Battle_Manual25
+//14533,475,100	// Battle_Manual100
+//14533,475,100	// Battle_Manual100
 14534,475,100	// Small_Life_Potion
 14535,475,100	// Med_Life_Potion
 14536,475,100	// Abrasive
@@ -2707,7 +2707,7 @@
 14542,475,100	// B_Def_Potion
 14543,475,100	// S_Mdef_Potion
 14544,475,100	// B_Mdef_Potion
-14545,475,100	// Battle_Manual_X3
+//14545,475,100	// Battle_Manual_X3
 14546,475,100	// Fire_Cracker_Love
 14547,475,100	// Fire_Cracker_Wday
 14548,475,100	// Fire_Cracker_Valentine
@@ -2754,7 +2754,7 @@
 14590,475,100	// Pty_Assumptio_Scroll
 14591,475,100	// Siege_Teleport_Scroll
 14591,475,100	// Siege_Teleport_Scroll
-14592,475,100	// Job_Manual50
+//14592,475,100	// Job_Manual50
 14593,475,100	// Magic_Power_Scroll
 14594,475,100	// Quagmire_Scroll
 14595,507,100	// Unsealed_Magic_Spell
@@ -2767,7 +2767,7 @@
 14603,475,100	// MistressS
 14604,475,100	// Orc_HeroS
 14605,475,100	// Orc_LoadS
-14606,475,100	// Job_Manual25
+//14606,475,100	// Job_Manual25
 14611,475,100	// M_Def_Potion
 14612,475,100	// M_Mdef_Potion
 14613,475,100	// RWC_Scroll_2012
@@ -3740,7 +3740,7 @@
 22591,499,100	// Desert_Wolf_Ora_Ora
 22592,507,100	// Happy_Call_Box
 22610,499,100	// New_Beginnings_Box
-22614,507,100	// Premium_Manual
+//22614,507,100	// Premium_Manual
 22617,475,100	// Clear_Box_S
 22618,475,100	// Clear_Box_A
 22619,499,100	// Ghost_Summon_Scroll

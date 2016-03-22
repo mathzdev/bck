@@ -900,28 +900,28 @@ int unit_escape(struct block_list *bl, struct block_list *target, short dist)
  * @param dst_y: Y coordinate to warp to
  * @param easy: Easy(1) or Hard(0) path check (hard attempts to go around obstacles)
  * @param checkpath: Whether or not to do a cell and path check for NOPASS and NOREACH
- * @return True: Success False: Fail
+ * @return 1: Success 0: Fail
  */
-bool unit_movepos(struct block_list *bl, short dst_x, short dst_y, int easy, bool checkpath)
+int unit_movepos(struct block_list *bl, short dst_x, short dst_y, int easy, bool checkpath)
 {
 	short dx,dy;
 	uint8 dir;
 	struct unit_data        *ud = NULL;
 	struct map_session_data *sd = NULL;
 
-	nullpo_retr(false,bl);
+	nullpo_ret(bl);
 
 	sd = BL_CAST(BL_PC, bl);
 	ud = unit_bl2ud(bl);
 
 	if(ud == NULL)
-		return false;
+		return 0;
 
 	unit_stop_walking(bl, 1);
 	unit_stop_attack(bl);
 
 	if( checkpath && (map_getcell(bl->m,dst_x,dst_y,CELL_CHKNOPASS) || !path_search(NULL,bl->m,bl->x,bl->y,dst_x,dst_y,easy,CELL_CHKNOREACH)) )
-		return false; // Unreachable
+		return 0; // Unreachable
 
 	ud->to_x = dst_x;
 	ud->to_y = dst_y;
@@ -948,7 +948,7 @@ bool unit_movepos(struct block_list *bl, short dst_x, short dst_y, int easy, boo
 			npc_touch_areanpc(sd, bl->m, bl->x, bl->y);
 
 			if (bl->prev == NULL) // Script could have warped char, abort remaining of the function.
-				return false;
+				return 0;
 		} else
 			sd->areanpc_id=0;
 
@@ -969,7 +969,7 @@ bool unit_movepos(struct block_list *bl, short dst_x, short dst_y, int easy, boo
 		}
 	}
 
-	return true;
+	return 1;
 }
 
 /**
@@ -1439,10 +1439,8 @@ int unit_set_walkdelay(struct block_list *bl, unsigned int tick, int delay, int 
 			return 0;
 	} else {
 		// Don't set walk delays when already trapped.
-		if (!unit_can_move(bl)) {
-			unit_stop_walking(bl,4); //Unit might still be moving even though it can't move
+		if (!unit_can_move(bl))
 			return 0;
-		}
 		//Immune to being stopped for double the flinch time
 		if (DIFF_TICK(ud->canmove_tick, tick-delay) > 0)
 			return 0;
@@ -1776,6 +1774,7 @@ int unit_skilluse_id2(struct block_list *src, int target_id, uint16 skill_id, ui
 			unsigned int k = (distance_bl(src,target)-1)/3; //Range 0-3: 500ms, Range 4-6: 1000ms, Range 7+: 1500ms
 			if(k > 2)
 				k = 2;
+
 			casttime += casttime * k;
 		}
 		break;
@@ -2037,8 +2036,8 @@ int unit_skilluse_pos2( struct block_list *src, short skill_x, short skill_y, ui
 		casttime = 0;
 
 	ud->state.skillcastcancel = castcancel&&casttime>0?1:0;
-	if (!sd || sd->skillitem != skill_id || skill_get_cast(skill_id, skill_lv))
-		ud->canact_tick = tick + max(casttime, max(status_get_amotion(src), battle_config.min_skill_delay_limit)) + SECURITY_CASTTIME;
+	if( !sd || sd->skillitem != skill_id || skill_get_cast(skill_id,skill_lv) )
+		ud->canact_tick  = tick + casttime + 100;
 
 // 	if( sd )
 // 	{
@@ -2516,6 +2515,9 @@ static int unit_attack_timer_sub(struct block_list* src, int tid, unsigned int t
 	if( ud->skilltimer != INVALID_TIMER && !(sd && pc_checkskill(sd,SA_FREECAST) > 0) )
 		return 0; // Can't attack while casting
 
+	if( sd && map[src->m].flag.battleground )
+		pc_update_last_action(sd,0,IDLE_ATTACK);
+
 	if( !battle_config.sdelay_attack_enable && DIFF_TICK(ud->canact_tick,tick) > 0 && !(sd && pc_checkskill(sd,SA_FREECAST) > 0) ) {
 		// Attacking when under cast delay has restrictions:
 		if( tid == INVALID_TIMER ) { // Requested attack.
@@ -2582,9 +2584,10 @@ static int unit_attack_timer_sub(struct block_list* src, int tid, unsigned int t
 			if(md->state.skillstate == MSS_ANGRY || md->state.skillstate == MSS_BERSERK) {
 				if (mobskill_use(md,tick,-1))
 					return 1;
+			} else {
+				// Set mob's ANGRY/BERSERK states.
+				md->state.skillstate = md->state.aggressive?MSS_ANGRY:MSS_BERSERK;
 			}
-			// Set mob's ANGRY/BERSERK states.
-			md->state.skillstate = md->state.aggressive?MSS_ANGRY:MSS_BERSERK;
 
 			if (sstatus->mode&MD_ASSIST && DIFF_TICK(md->last_linktime, tick) < MIN_MOBLINKTIME) { 
 				// Link monsters nearby [Skotlex]
@@ -3181,6 +3184,7 @@ int unit_free(struct block_list *bl, clr_type clrtype)
 			guild_send_memberinfoshort(sd,0);
 			pc_cleareventtimer(sd);
 			pc_inventory_rental_clear(sd);
+			if( sd->qd ) queue_leaveall(sd);
 			pc_delspiritball(sd, sd->spiritball, 1);
 			pc_delspiritcharm(sd, sd->spiritcharm, sd->spiritcharm_type);
 

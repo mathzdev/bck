@@ -1,0 +1,51 @@
+//      ______  __    __                                 
+//     /\  _  \/\ \__/\ \                                
+//     \ \ \_\ \ \ ,_\ \ \___      __    ___      __     
+// _____\ \  __ \ \ \/\ \  _ `\  /'__`\/' _ `\  /'__`\   
+///\  __\\ \ \/\ \ \ \_\ \ \ \ \/\  __//\ \/\ \/\ \_\.\_ 
+//\ \_\_/ \ \_\ \_\ \__\\ \_\ \_\ \____\ \_\ \_\ \__/.\_\
+// \/_/    \/_/\/_/\/__/ \/_/\/_/\/____/\/_/\/_/\/__/\/_/
+//
+//========================================================
+// ---          Dynamic Shop: Halloween Ticket         ---
+//========================================================
+// ---                  by DanielArt                   ---
+//========================================================
+prontera,1,1,4	itemshop	hallow_shop	111,7941:0,671:10,12411:300,12264:200,12412:300,2753:50,2754:50,2755:50,2756:50,2757:50,2758:50,2759:50,2760:50,2761:50,2762:50,2765:5,2766:5,2767:5,2768:5,2769:5,2770:5,2771:5,5475:250,18656:150,5356:500,18527:150;
+prontera,178,213,3	script	Máquina de Halloween::MDH	563,{
+mes "[^5533ffMáquina de Halloween^000000]";
+mes "En esta temporada de Halloween podrás canjear los Halloween Tickets por estupendos premios aquí.";
+next;
+	switch (select("^5533ffAbrir tienda.^000000:¿Halloween Tickets?:^777777Salir^000000")) {
+		case 1:
+			mes "[^5533ffMáquina de Halloween^000000]";
+			mes "Bien, abriré la tienda.";
+			close2;
+			mes "[^5533ffMáquina de Halloween^000000]";
+			mes "Actualmente tienes:";
+			mes "^ff0000"+countitem(7941)+"^000000 Halloween Tickets.";
+			callshop "hallow_shop",0;
+			end;
+		case 2:
+			mes "[^5533ffMáquina de Halloween^000000]";
+			mes "Los Halloween Tickets los podrás conseguir de dos formas:";
+			mes "- Cazando Jakks de Evento.";
+			mes "- Halloween Dungeon.";
+			next;
+			mes "[^5533ffMáquina de Halloween^000000]";
+			mes "Los Jakks de Evento los podrás encontrar en la mayoría de los mapas de Xcution RO, se caracterizan por su nombre y por su anormal HP.";
+			next;
+			mes "[^5533ffMáquina de Halloween^000000]";
+			mes "No siempre te darán Halloween Tickets.";
+			next;
+			mes "[^5533ffMáquina de Halloween^000000]";
+			mes "El Halloween Dungeon es una Instance especial de la temporada de Halloween, al completarla recibirás una recompenza de Halloween Tickets, y si es la primera vez que la completas recibirás un increhíble premio.";
+			close;
+		case 3:
+			mes "[^5533ffMáquina de Halloween^000000]";
+			mes "Vuelve cuando desees.";
+			close;
+	}
+OnInit:
+end;
+}

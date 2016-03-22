@@ -59,14 +59,14 @@ obj:
 
 login-server: obj $(LOGIN_DIR_OBJ) $(COMMON_AR)  $(MT19937AR_OBJ)
 	@echo "	LD	login-server"
-	@gcc  -flto -L/usr/lib -o ../../login-server $(LOGIN_DIR_OBJ) $(COMMON_AR) $(MT19937AR_OBJ) $(LIBCONFIG_AR) -lpcre -lpthread -lm -lz  -ldl -L/usr/lib/x86_64-linux-gnu -lmysqlclient -lpthread -lz -lm -ldl
+	@gcc  -L/usr/lib -o ../../login-server $(LOGIN_DIR_OBJ) $(COMMON_AR) $(MT19937AR_OBJ) $(LIBCONFIG_AR) -lpthread -lm -lz  -ldl -L/usr/lib/x86_64-linux-gnu -lmysqlclient -lpthread -lz -lm -ldl
 	    
 
 # login object files
 
 obj/%.o: %.c $(LOGIN_H) $(COMMON_H) $(MT19937AR_H) $(LIBCONFIG_H)
 	@echo "	CC	$<"
-	@gcc -g -O2 -pipe -ffast-math -Wall -flto -Wno-unused-parameter -Wno-maybe-uninitialized -Wno-clobbered -Wempty-body -Wno-switch -Wno-missing-field-initializers -Wshadow -fPIC -fno-strict-aliasing $(COMMON_INCLUDE) $(MT19937AR_INCLUDE) $(LIBCONFIG_INCLUDE) -DWITH_SQL -I/usr/include/mysql  -DMAXCONN=16384 -I../common -DHAS_TLS -DHAVE_SETRLIMIT -DHAVE_STRNLEN  -I/usr/include -DHAVE_MONOTONIC_CLOCK -c $(OUTPUT_OPTION) $<
+	@gcc -flto -fuse-linker-plugin -g -O2 -pipe -ffast-math -Wall -Wno-unused-parameter -Wno-maybe-uninitialized -Wno-clobbered -Wempty-body -Wno-switch -Wno-missing-field-initializers -Wshadow -fPIC -fno-strict-aliasing $(COMMON_INCLUDE) $(MT19937AR_INCLUDE) $(LIBCONFIG_INCLUDE) -DWITH_SQL -I/usr/include/mysql  -DMAXCONN=16384 -I../common -DHAS_TLS -DHAVE_SETRLIMIT -DHAVE_STRNLEN  -I/usr/include -DHAVE_MONOTONIC_CLOCK -c $(OUTPUT_OPTION) $<
 
 # missing object files
 $(COMMON_AR):

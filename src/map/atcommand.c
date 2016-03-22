@@ -34,6 +34,8 @@
 #include "mapreg.h"
 #include "quest.h"
 #include "pc.h"
+#include "achievement.h"
+#include "battleground.h"
 
 #include <stdlib.h>
 #include <math.h>
@@ -1248,21 +1250,69 @@ ACMD_FUNC(item)
 
 	for(j--; j>=0; j--){ //produce items in list
 		unsigned short item_id = item_data[j]->nameid;
-		//Check if it's stackable.
-		if (!itemdb_isstackable2(item_data[j]))
-			get_count = 1;
-
-		for (i = 0; i < number; i += get_count) {
-			// if not pet egg
-			if (!pet_create_egg(sd, item_id)) {
-				memset(&item_tmp, 0, sizeof(item_tmp));
-				item_tmp.nameid = item_id;
-				item_tmp.identify = 1;
-				item_tmp.bound = bound;
-				if ((flag = pc_additem(sd, &item_tmp, get_count, LOG_TYPE_COMMAND)))
-					clif_additem(sd, 0, 0, flag);
-			}
+		unsigned short type = 0;
+	if( !strcmpi(command+1,"bounditem") )
+		type = 1;
+	else if( !strcmpi(command+1,"costumeitem") )
+	{
+		if( !battle_config.costume_reserved_char_id )
+		{
+			clif_displaymessage(fd, "Costume convertion is disable. Set a value for costume_reserved_char_id on your eAmod.conf file.");
+			return -1;
 		}
+		if( !(item_data[j]->equip&EQP_HEAD_LOW) &&
+			!(item_data[j]->equip&EQP_HEAD_MID) &&
+			!(item_data[j]->equip&EQP_HEAD_TOP) &&
+			!(item_data[j]->equip&EQP_COSTUME_HEAD_LOW) &&
+			!(item_data[j]->equip&EQP_COSTUME_HEAD_MID) &&
+			!(item_data[j]->equip&EQP_COSTUME_HEAD_TOP) &&
+			!(item_data[j]->equip&EQP_COSTUME_GARMENT) )
+		{
+			clif_displaymessage(fd, "You cannot costume this item. Costume only work for headgears");
+			return -1;
+		}
+		type = 2;
+	}
+
+	item_id = item_data[j]->nameid;
+	get_count = number;
+	//Check if it's stackable.
+	if( !itemdb_isstackable2(item_data[j]) )
+	{
+		if( type == 1 && (item_data[j]->type == IT_PETEGG || item_data[j]->type == IT_PETARMOR) )
+		{
+			clif_displaymessage(fd, "Cannot create bounded pet eggs or pet armors.");
+			return -1;
+		}
+		get_count = 1;
+	}
+	else if( type == 1 )
+	{
+		clif_displaymessage(fd, "Cannot create bounded stackable items.");
+		return -1;
+	}
+
+	for( i = 0; i < number; i += get_count )
+	    {
+		// if not pet egg
+		if( !pet_create_egg(sd, item_id) )
+		{
+			memset(&item_tmp, 0, sizeof(item_tmp));
+			item_tmp.nameid = item_id;
+			item_tmp.identify = 1;
+			if( type == 1 )
+				item_tmp.bound = 1;
+			else if( type == 2 )
+			{ // Costume Item
+				item_tmp.card[0] = CARD0_CREATE;
+				item_tmp.card[2] = GetWord(battle_config.costume_reserved_char_id, 0);
+				item_tmp.card[3] = GetWord(battle_config.costume_reserved_char_id, 1);
+			}
+
+			if( (flag = pc_additem(sd, &item_tmp, get_count,LOG_TYPE_COMMAND)) )
+				clif_additem(sd, 0, 0, flag);
+		}
+	    }
 	}
 
 	if (flag == 0)
@@ -1844,6 +1894,7 @@ ACMD_FUNC(hair_color)
 
 /*==========================================
  * @go [city_number or city_name] - Updated by Harbin
+ * Added Glemior [DanielArt]
  *------------------------------------------*/
 ACMD_FUNC(go)
 {
@@ -1858,10 +1909,10 @@ ACMD_FUNC(go)
 		{ MAP_PRONTERA,    156, 191 }, //  0=Prontera
 		{ MAP_MORROC,      156,  93 }, //  1=Morroc
 		{ MAP_GEFFEN,      119,  59 }, //  2=Geffen
-		{ MAP_PAYON,       162, 233 }, //  3=Payon
-		{ MAP_ALBERTA,     192, 147 }, //  4=Alberta
+		{ MAP_PAYON,       178, 102 }, //  3=Payon
+		{ MAP_ALBERTA,     117,  57 }, //  4=Alberta
 #ifdef RENEWAL
-		{ MAP_IZLUDE,      128, 146 }, //  5=Izlude (Renewal)
+		{ MAP_IZLUDE,      128, 112 }, //  5=Izlude (Renewal)
 #else
 		{ MAP_IZLUDE,      128, 114 }, //  5=Izlude
 #endif
@@ -1875,7 +1926,7 @@ ACMD_FUNC(go)
 		{ MAP_NIFLHEIM,     21, 153 }, // 13=Niflheim
 		{ MAP_LOUYANG,     217,  40 }, // 14=Louyang
 #ifdef RENEWAL
-		{ MAP_NOVICE,       97, 90  }, // 15=Training Grounds (Renewal)
+		{ MAP_NOVICE,       144, 81  }, // 15=Training Grounds (Renewal)
 #else
 		{ MAP_NOVICE,       53, 111 }, // 15=Training Grounds
 #endif
@@ -1899,6 +1950,7 @@ ACMD_FUNC(go)
 		{ MAP_MALANGDO,    140, 114 }, // 33=Malangdo Island
 		{ MAP_MALAYA,      242, 211 }, // 34=Malaya Port
 		{ MAP_ECLAGE,      110,  39 }, // 35=Eclage
+		{ MAP_GUILDTOWN,   200, 319 }, // 36=Guild Town
 	};
 
 	nullpo_retr(-1, sd);
@@ -2018,6 +2070,8 @@ ACMD_FUNC(go)
 		town = 34;
 	} else if (strncmp(map_name, "eclage", 3) == 0) {
 		town = 35;
+	} else if (strncmp(map_name, "guild", 4) == 0) {
+		town = 36;
 	}
 
 	if (town >= 0 && town < ARRAYLENGTH(data))
@@ -2041,7 +2095,6 @@ ACMD_FUNC(go)
 		clif_displaymessage(fd, msg_txt(sd,38)); // Invalid location number or name.
 		return -1;
 	}
-
 	return 0;
 }
 
@@ -7025,6 +7078,8 @@ ACMD_FUNC(mobinfo)
 	unsigned char msize[SZ_ALL][7] = { "Small", "Medium", "Large" };
 	unsigned char mrace[RC_ALL][11] = { "Formless", "Undead", "Beast", "Plant", "Insect", "Fish", "Demon", "Demi-Human", "Angel", "Dragon", "Player" };
 	unsigned char melement[ELE_ALL][8] = { "Neutral", "Water", "Earth", "Fire", "Wind", "Poison", "Holy", "Dark", "Ghost", "Undead" };
+	unsigned int mmodei[15] = { MD_CANMOVE, MD_LOOTER, MD_AGGRESSIVE, MD_ASSIST, MD_CASTSENSOR_IDLE, MD_BOSS, MD_PLANT, MD_CANATTACK, MD_DETECTOR, MD_CASTSENSOR_CHASE, MD_CHANGECHASE, MD_ANGRY, MD_CHANGETARGET_MELEE, MD_CHANGETARGET_CHASE, MD_TARGETWEAK };
+	unsigned char mmode[15][20] = {"Can Move", "Looter", "Aggresive", "Assist", "Cast Sensor Idle", "Boss", "Plant", "Can Attack", "Detector", "Cast Sensor Chase", "Change Chase", "Angry", "Change Target Melee", "Change Target Chase", "Target Weak"};
 	char atcmd_output2[CHAT_SIZE_MAX];
 	struct item_data *item_data;
 	struct mob_db *mob, *mob_array[MAX_SEARCH];
@@ -7065,8 +7120,8 @@ ACMD_FUNC(mobinfo)
 
 #ifdef RENEWAL_EXP
 		if( battle_config.atcommand_mobinfo_type ) {
-			base_exp = base_exp * pc_level_penalty_mod(sd, mob->lv, mob->status.class_, mob->status.mode, 1) / 100;
-			job_exp = job_exp * pc_level_penalty_mod(sd, mob->lv, mob->status.class_, mob->status.mode, 1) / 100;
+			base_exp = base_exp * pc_level_penalty_mod(sd, mob->lv, mob->status.class_, 1) / 100;
+			job_exp = job_exp * pc_level_penalty_mod(sd, mob->lv, mob->status.class_, 1) / 100;
 		}
 #endif
 #ifdef VIP_ENABLE
@@ -7082,10 +7137,10 @@ ACMD_FUNC(mobinfo)
 		else
 			sprintf(atcmd_output, msg_txt(sd,1241), mob->name, mob->jname, mob->sprite, mob->vd.class_); // Monster: '%s'/'%s'/'%s' (%d)
 		clif_displaymessage(fd, atcmd_output);
-		sprintf(atcmd_output, msg_txt(sd,1242), mob->lv, mob->status.max_hp, base_exp, job_exp, MOB_HIT(mob), MOB_FLEE(mob)); //  Lv:%d  HP:%d  Base EXP:%u  Job EXP:%u  HIT:%d  FLEE:%d
+		sprintf(atcmd_output, msg_txt(sd,1242), mob->lv, mob->status.max_hp, mob->base_exp, mob->job_exp, MOB_HIT(mob), MOB_FLEE(mob)); //  Lv:%d  HP:%d  Base EXP:%u  Job EXP:%u  HIT:%d  FLEE:%d
 		clif_displaymessage(fd, atcmd_output);
-		sprintf(atcmd_output, msg_txt(sd,1243), //  DEF:%d  MDEF:%d  STR:%d  AGI:%d  VIT:%d  INT:%d  DEX:%d  LUK:%d
-			mob->status.def, mob->status.mdef,mob->status.str, mob->status.agi,
+		sprintf(atcmd_output, msg_txt(sd,1243),
+			mob->status.def, mob->status.def2, mob->status.mdef, mob->status.mdef2, mob->status.str, mob->status.agi,
 			mob->status.vit, mob->status.int_, mob->status.dex, mob->status.luk);
 		clif_displaymessage(fd, atcmd_output);
 
@@ -7094,6 +7149,29 @@ ACMD_FUNC(mobinfo)
 			mob->range2 , mob->range3, msize[mob->status.size],
 			mrace[mob->status.race], melement[mob->status.def_ele], mob->status.ele_lv);
 		clif_displaymessage(fd, atcmd_output);
+		// Extra Settings
+		if( mob->ffa )
+			clif_displaymessage(fd, "- Free For All Monster");
+		if( mob->hunting )
+			clif_displaymessage(fd, "- Hunting Mission Enable Monster");
+		// modes
+		clif_displaymessage(fd, " Modes:");
+		strcpy(atcmd_output, " ");
+		j = 0;
+		for( i = 0; i < 15; i++ )
+		{
+			if( mob->status.mode&mmodei[i] )
+			{
+				sprintf(atcmd_output2, " - %s", mmode[i]);
+				strcat(atcmd_output, atcmd_output2);
+				if( ++j % 3 == 0 )
+				{
+					clif_displaymessage(fd, atcmd_output);
+					strcpy(atcmd_output, " ");
+				}
+			}
+		}
+		if( j % 3 != 0 ) clif_displaymessage(fd, atcmd_output);
 		// drops
 		clif_displaymessage(fd, msg_txt(sd,1245)); //  Drops:
 		strcpy(atcmd_output, " ");
@@ -7106,7 +7184,7 @@ ACMD_FUNC(mobinfo)
 
 #ifdef RENEWAL_DROP
 			if( battle_config.atcommand_mobinfo_type ) {
-				droprate = droprate * pc_level_penalty_mod(sd, mob->lv, mob->status.class_, mob->status.mode, 2) / 100;
+				droprate = droprate * pc_level_penalty_mod(sd, mob->lv, mob->status.class_, 2) / 100;
 				if (droprate <= 0 && !battle_config.drop_rate0item)
 						droprate = 1;
 			}
@@ -7649,7 +7727,7 @@ ACMD_FUNC(whodrops)
 
 #ifdef RENEWAL_DROP
 				if( battle_config.atcommand_mobinfo_type )
-					dropchance = dropchance * pc_level_penalty_mod(sd, mob_db(item_data->mob[j].id)->lv, mob_db(item_data->mob[j].id)->status.class_, mob_db(item_data->mob[j].id)->status.mode, 2) / 100;
+					dropchance = dropchance * pc_level_penalty_mod(sd, mob_db(item_data->mob[j].id)->lv, mob_db(item_data->mob[j].id)->status.class_,  2) / 100;
 #endif
 #ifdef VIP_ENABLE
 				// Display item rate increase for VIP.
@@ -8832,6 +8910,23 @@ ACMD_FUNC(delitem)
 
 	return 0;
 }
+/*==========================================
+ * Exp Gain Information
+ *------------------------------------------*/
+void atcommand_expinfo_sub(int time, int* day, int* hour, int* minute, int* second)
+{
+	*day = time / 86400; time -= *day * 84600;
+	*hour = time / 3600; time -= *hour * 3600;
+	*minute = time / 60; time -= *minute * 60;
+	*second = time;
+
+	*day = *day > 0 ? *day : 0;
+	*hour = *hour > 0 ? *hour : 0;
+	*minute = *minute > 0 ? *minute : 0;
+	*second = *second > 0 ? *second : 0;
+
+	return;
+}
 
 /*==========================================
  * Custom Fonts
@@ -9524,11 +9619,11 @@ ACMD_FUNC(vip) {
 ACMD_FUNC(showrate) {
 	nullpo_retr(-1,sd);
 	if (!sd->disableshowrate) {
-		sprintf(atcmd_output,msg_txt(sd,718)); //Personal rate information is not displayed now.
+		sprintf(atcmd_output,msg_txt(sd,718),0); //Personal rate information is not displayed now.
 		sd->disableshowrate = 1;
 	}
 	else {
-		sprintf(atcmd_output,msg_txt(sd,719)); //Personal rate information will be shown.
+		sprintf(atcmd_output,msg_txt(sd,719),0); //Personal rate information will be shown.
 		sd->disableshowrate = 0;
 	}
 	clif_displaymessage(fd,atcmd_output);

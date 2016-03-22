@@ -1,0 +1,43 @@
+// Edificio Principal
+roy_in02,76,13,0	warp	guildtown001	1,1,glemior,200,338
+glemior,199,345,0	warp	guildtown001-1	1,1,roy_in02,80,18
+roy_in02,83,13,0	warp	guildtown001-2	1,1,glemior,200,338
+
+roy_in02,63,26,0	warp	guildtown002	1,1,roy_in02,33,98
+roy_in02,95,102,0	warp	guildtown002-1	1,1,roy_in02,93,26
+roy_in02,97,26,0	warp	guildtown002-2	1,1,roy_in02,99,102
+roy_in02,36,98,0	warp	guildtown002-3	1,1,roy_in02,67,26
+
+// Grocery Shop 1
+glemior,135,268,0	warp	guildtown003	1,1,roy_in01,29,32
+roy_in01,28,24,0	warp	guildtown003-1	1,1,glemior,135,263
+
+// Blacksmith
+glemior,100,260,0	warp	guildtown004	1,1,roy_in01,40,144
+roy_in01,44,144,0	warp	guildtown004-1	1,1,glemior,100,256
+
+// Grocery Shop 2
+glemior,247,235,0	warp	guildtown005	1,1,roy_in01,157,174
+roy_in01,162,174,0	warp	guildtown005-1	1,1,glemior,243,235
+
+// Weapon Shop
+glemior,168,176,0	warp	guildtown006	1,1,roy_in01,81,76
+roy_in01,79,76,0	warp	guildtown006-1	1,1,glemior,168,172
+roy_in01,94,96,0	warp	guildtown007	1,1,roy_in01,152,44
+roy_in01,156,44,0	warp	guildtown007-1	1,1,roy_in01,94,90
+
+//Inn
+glemior,136,188,0	warp	guildtown008	1,1,roy_in01,95,167
+roy_in01,95,163,0	warp	guildtown008-1	1,1,glemior,137,193
+
+//Church
+glemior,124,140,0	warp	guildtown009	1,1,roy_church,76,40
+roy_church,76,33,0	warp	guildtown009-1	1,1,glemior,124,144
+roy_church,57,50,0	warp	guildtown010	1,1,roy_church,101,152
+roy_church,106,152,0	warp	guildtown010-1	1,1,roy_church,61,51
+roy_church,57,75,0	warp	guildtown011	1,1,roy_church,48,138
+roy_church,52,138,0	warp	guildtown011-1	1,1,roy_church,61,75
+
+//School
+glemior,69,191,0	warp	guildtown012	1,1,roy_in01,131,91
+roy_in01,127,91,0	warp	guildtown012-1	1,1,glemior,72,191

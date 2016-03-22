@@ -1,0 +1,132 @@
+// Item Produce Database
+//
+// Structure of Database:
+// ID,ProduceItemID,ItemLV,RequireSkill,RequireSkillLv,MaterialID1,MaterialAmount1,......
+//
+// Notes:
+// - ID is used to identify item order that will be used for overwriting on db/import.
+//   Value is started from 0 until 401 (MAX_SKILL_PRODUCE_RESOURCE-1). Use same ID on import file to overwrite original result & requirements
+// - To remove entry by importing, put 0 on 'ProduceItemID'
+// - If MaterialAmount is 0, the player must have that item in their inventory (i.e. guides).
+//   For example, Mine Bottle requires 0x Marine Sphere Creation Guide (ID 7131).
+
+//---- Costura ---- lvl 22 ----
+//-- Cotton <-- Sewing lv 1, 2 Yarn
+264,36010,22,392,1,7038,2
+//-- Silk <-- Sewing lv 1, 2 Cotton
+265,36011,22,392,1,36010,2
+//-- Stamen <-- Sewing lv 1, 2 Silk, 1 Animal Leather
+266,36012,22,392,1,36011,2,36015,1
+//-- Adventurer Backpack <-- Sewing lv 1, Cloth Guidebook, 20 Forest Leather, 60 Desert Leather, 10 Cotton, 10 Silk, 1 Enchanted Leather
+267,2576,22,392,1,36022,0,36016,20,36017,60,36010,10,36011,10,36018,1
+//-- Caterpillar Rucksack <-- Sewing lv 1, Cloth Guidebook, 20 Forest Leather, 60 Desert Leather, 10 Cotton, 10 Silk, 2 Enchanted Leather
+268,35041,22,392,1,36022,0,36016,20,36017,60,36010,10,36011,10,36018,2
+//-- Artic Wings <-- Sewing lv 1, Wing Guidebook, 100 Soft Feather, 40 Animal Leather, 30 Silk, 40 Ice Cubic
+269,36023,22,392,1,36021,0,7063,100,36015,40,36011,30,7066,40
+//-- Blue Fairy Wing <-- Sewing lv 1, Wing Guidebook, 100 Soft Feather, 40 Animal Leather, 20 Desert Leather, 10 Stamen, 20 Blue Herb
+270,36040,22,392,1,36021,0,7063,100,510,20,36015,40,36017,20,36012,10
+//-- Red Fairy Wing <-- Sewing lv 1, Wing Guidebook, 100 Soft Feather, 40 Animal Leather, 20 Desert Leather, 10 Stamen, 20 Red Herb
+271,36041,22,392,1,36021,0,7063,100,507,20,36015,40,36017,20,36012,10
+//-- Angeling Wing <-- Sewing lv 1, Wing Guidebook, 100 Soft Feather, 40 Animal Leather, 20 Desert Leather, 10 Stamen, 20 White Herb
+272,36039,22,392,1,36021,0,7063,100,509,20,36015,40,36017,20,36012,10
+
+//---- Carpintería ---- lvl 3 ----
+//-- Strong Wood <-- Woodcraft lv 1, 20 Normal Wood, 10 Sticky Mucus
+280,36001,3,393,1,36000,20,938,10
+//-- Quality Wood <-- Woodcraft lv 1, 30 Normal Wood, 10 Strong Wood, 10 Sticky Mucus
+281,36002,3,393,1,36000,30,36001,10,938,10
+//-- Refined Wood <-- Woodcraft lv 1, 30 Normal Wood, 10 Quality Wood, 10 Desert Leather, 10 Sticky Mucus
+282,36003,3,393,1,36000,30,36002,10,36017,10,938,10
+//-- Rare Wood <-- Woodcraft lv 1, 30 Refined Wood, 1 Enchanted Leather
+283,36004,3,393,1,36003,30,36018,1
+//-- Big Crossbow <-- Woodcraft Lv 1, Bows Guidebook, 5 Strong Wood, 20 Refined Wood, 10 Rare Wood, 5 Special Wood, 10 Stamen
+284,18110,3,393,1,36043,0,36001,5,36003,20,36004,10,36005,5,36012,10
+//-- Giant Bow <-- Woodcraft Lv 1, Bows Guidebook, 30 Strong Wood, 5 Refined Wood, 5 Rare Wood, 1 Special Wood, 10 Stamen
+285,18122,3,393,1,36043,0,36001,30,36003,5,36004,5,36005,1,36012,10
+//-- Bow <-- Woodcraft lv 1, Bows Guidebook, 10 Normal Wood, 1 Yarn
+286,1701,3,393,1,36008,0,36000,10,7038,1
+//-- Great Bow <-- Woodcraft lv 1, Bows Guidebook, 30 Normal Wood, 5 Yarn
+287,1707,3,393,1,36008,0,36000,30,7038,5
+//-- Gakkung Bow <-- Woodcraft lv 1, Bows Guidebook, 10 Normal Wood, 20 Strong Wood, 1 Yarn
+288,1716,3,393,1,36008,0,36000,10,36001,20,7038,1
+//-- Luna Bow <-- Woodcraft lv 1, Bows Guidebook, 5 Strong Wood, 10 Quality Wood, 5 Yarn
+289,1723,3,393,1,36008,0,36001,5,36002,10,7038,5
+//-- Double Bound <-- Woodcraft lv 1, Bows Guidebook, 10 Rare Wood, 10 Silk, 10 Stamen
+290,1736,3,393,1,36008,0,36004,10,36011,10,36012,10
+//-- Spiritist Bow <-- Woodcraft lv 1, Bows Guidebook, 30 Rare Wood, 10 Special Wood, 1 Enchanted Leather, 10 Stamen
+291,35065,3,393,1,36043,0,36004,30,36005,10,36018,1,36012,10
+//-- Rod <-- Woodcraft lv 1, Rods Guidebook, 10 Normal Wood, 1 Forest Leather
+292,1601,3,393,1,36009,0,36000,10,36016,1
+//-- Staff <-- Woodcraft lv 1, Rods Guidebook, 10 Normal Wood, 1 Forest Leather
+293,1607,3,393,1,36009,0,36000,10,36016,1
+//-- Wing Staff <-- Woodcraft lv 1, Rods Guidebook, 10 Normal Wood, 1 Cotton
+294,1616,3,393,1,36009,0,36000,10,36010,1
+//-- Healing Staff <-- Woodcraft lv 1, Rods Guidebook, 10 Quality Wood, 5 Silk
+295,1625,3,393,1,36009,0,36002,10,36011,5
+//-- Piercing Staff <-- Woodcraft lv 1, Rods Guidebook, 5 Refined Wood, 5 Desert Leather
+296,1626,3,393,1,36009,0,36003,5,36017,5
+//-- Soul Staff <-- Woodcraft lv 1, Rods Guidebook, 10 Refined Wood, 20 Silk
+297,1472,3,393,1,36009,0,36003,10,36011,20
+//-- Wizardy Staff <-- Woodcraft lv 1, Rods Guidebook, 5 Rare Wood, 10 Desert Leather
+298,1473,3,393,1,36009,0,36004,5,36017,10
+//-- Eraser <-- Woodcraft lv 1, Rods Guidebook, 3 Rare Wood, 3 Stamen, 3 Desert Leather
+299,1637,3,393,1,36009,0,36004,3,36012,3,36017,3
+//-- Laphine Staff <-- Woodcraft lv 1, Rods Guidebook, 5 Rare Wood, 5 Special Wood
+300,1649,3,393,1,36009,0,36004,5,36005,5
+//-- Light of Recovery <-- Woodcraft lv 1, Rods Guidebook, 3 Special Wood, 3 Enchanted Leather
+301,1659,3,393,1,36009,0,36005,3,36018,3
+//-- Mental Destroyer <-- Woodcraft lv 1, Rods Guidebook, 5 Special Wood, 50 Desert Leather
+302,1661,3,393,1,36009,0,36005,5,36017,50
+//-- Baculum Daemonicum <-- Woodcraft lv 1, Rods Guidebook, 5 Special Wood, 5 Enchanted Leather
+303,1676,3,393,1,36009,0,36005,5,36018,5
+//-- Spiritist Wand <-- Woodcraft lv 1, Rods Guidebook, 20 Special Wood, 20 Enchanted Leather
+304,35066,3,393,1,36043,0,36005,20,36018,20
+
+//--(FIX) Fabric <- GN_CHANGEMATERIAL Lv1, 2 Soft Silk
+305,1059,26,2494,1,7166,2
+
+//-- Portable Cart <-- Woodcraft lv 1, Accessory Guidebook, 20 Quality Wood, 1 Special Wood, 1 Gemstone
+306,36047,3,393,1,36046,0,36002,20,36005,1,7300,1
+//-- Decorate Cart Skill <-- Woodcraft lv 1, Accessory Guidebook, 10 Refined Wood, 1 Rare Wood, 100 Worn Out Scroll
+307,36048,3,393,1,36046,0,36003,10,36004,1,618,100
+//-- Wood Goblin's Nose <-- Woodcraft lv 1, Accessory Guidebook, 5 Special Wood, 1 Baby Pacifier, 80 Forest Leather
+308,18759,3,393,1,36046,0,36005,5,5110,1,36016,80
+
+//-- Green Surgical Gown <-- Sewing lv 1, Cloth Guidebook, 20 Special Wood, 20 Enchanted Leather, 50 Stamen, 100 Acid Bomb, 100 Bottle Grenade
+309,15044,22,393,1,36022,0,36005,20,36018,20,36012,50,7135,100,7136,100
+
+//-- Crimson Shoes <-- Sewing Lv 1 <-- Sewing lv 1, Master Tailor Guidebook, 10 Water of Fire, 10 Sanctified Fabric
+310,2469,22,392,1,36042,0,,18175,10,18168,10,36017,20
+//-- Crimson Orb <-- Sewing Lv 1 <-- Sewing lv 1, Master Tailor Guidebook, 10 Water of Fire, 10 Sanctified Fabric
+311,2861,22,392,1,36042,0,,18175,10,18168,10,36017,20
+//-- Crimson Robe <-- Sewing Lv 1 <-- Sewing lv 1, Master Tailor Guidebook, 10 Water of Fire, 10 Sanctified Fabric
+312,15027,22,392,1,36042,0,,18175,10,18168,10,36017,20
+//-- Sanctified Fabric<-- Sewing Lv 1 <-- Sewing lv 1, Master Tailor Guidebook, 10 Stamen, 10 Harpy Feather, 10 Peco Peco Feather
+313,18168,3,392,1,36042,0,36012,10,7101,10,7115,10
+
+//-- Crimson Spear <-- Woodcraft lv 1, Master Carpenter Guidebook, 100 Water of Fire, 30 Special Wood, 30 Enchanted Leather, 30 3carat Diamond
+314,1443,3,393,1,36043,0,18175,100,36005,30,36018,30,732,30
+//-- Crimson Lance <-- Woodcraft lv 1, Master Carpenter Guidebook, 100 Water of Fire, 30 Special Wood, 30 Enchanted Leather, 30 3carat Diamond
+315,1498,3,393,1,36043,0,18175,100,36005,30,36018,30,732,30
+//-- Crimson One-Handed Staff <-- Woodcraft lv 1, Master Carpenter Guidebook, 100 Water of Fire, 30 Special Wood, 30 Enchanted Leather, 30 3carat Diamond
+316,1680,3,393,1,36043,0,18175,100,36005,30,36018,30,732,30
+//-- Crimson Knuckles <-- Woodcraft lv 1, Master Carpenter Guidebook, 100 Water of Fire, 30 Special Wood, 30 Enchanted Leather, 30 3carat Diamond
+317,1839,3,393,1,36043,0,18175,100,36005,30,36018,30,732,30
+//-- Crimson Violin <-- Woodcraft lv 1, Master Carpenter Guidebook, 100 Water of Fire, 30 Special Wood, 30 Enchanted Leather, 30 3carat Diamond
+318,1939,3,393,1,36043,0,18175,100,36005,30,36018,30,732,30
+//-- Crimson Whisp <-- Woodcraft lv 1, Master Carpenter Guidebook, 100 Water of Fire, 30 Special Wood, 30 Enchanted Leather, 30 3carat Diamond
+319,1995,3,393,1,36043,0,18175,100,36005,30,36018,30,732,30
+//-- Crimson Staff <-- Woodcraft lv 1, Master Carpenter Guidebook, 100 Water of Fire, 30 Special Wood, 30 Enchanted Leather, 30 3carat Diamond
+320,2009,3,393,1,36043,0,18175,100,36005,30,36018,30,732,30
+//-- Crimson Two-Handed Staff <-- Woodcraft lv 1, Master Carpenter Guidebook, 100 Water of Fire, 30 Special Wood, 30 Enchanted Leather, 30 3carat Diamond
+321,2025,3,393,1,36043,0,18175,100,36005,30,36018,30,732,30
+//-- Crimson Revolver <-- Woodcraft lv 1, Master Carpenter Guidebook, 100 Water of Fire, 30 Special Wood, 30 Enchanted Leather, 30 3carat Diamond
+322,13127,3,393,1,36043,0,18175,100,36005,30,36018,30,732,30
+//-- Crimson Huuma Shuriken <-- Woodcraft lv 1, Master Carpenter Guidebook, 100 Water of Fire, 30 Special Wood, 30 Enchanted Leather, 30 3carat Diamond
+323,13327,3,393,1,36043,0,18175,100,36005,30,36018,30,732,30
+//-- Crimson Saber <-- Woodcraft lv 1, Master Carpenter Guidebook, 100 Water of Fire, 30 Special Wood, 30 Enchanted Leather, 30 3carat Diamond
+324,13454,3,393,1,36043,0,18175,100,36005,30,36018,30,732,30
+//-- Crimson Mace <-- Woodcraft lv 1, Master Carpenter Guidebook, 100 Water of Fire, 30 Special Wood, 30 Enchanted Leather, 30 3carat Diamond
+325,16040,3,393,1,36043,0,18175,100,36005,30,36018,30,732,30
+//-- Crimson Bow <-- Woodcraft lv 1, Master Carpenter Guidebook, 100 Water of Fire, 30 Special Wood, 30 Enchanted Leather, 30 3carat Diamond
+326,18130,3,393,1,36043,0,18175,100,36005,30,36018,30,732,30

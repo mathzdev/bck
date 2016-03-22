@@ -40,12 +40,12 @@ void map_msg_reload(void);
 #define LOOTITEM_SIZE 10
 #define MAX_MOBSKILL 50		//Max 128, see mob skill_idx type if need this higher
 #define MAX_MOB_LIST_PER_MAP 128
-#define MAX_EVENTQUEUE 2
+#define MAX_EVENTQUEUE 10
 #define MAX_EVENTTIMER 32
 #define NATURAL_HEAL_INTERVAL 500
 #define MIN_FLOORITEM 2
 #define MAX_FLOORITEM START_ACCOUNT_NUM
-#define MAX_LEVEL 175
+#define MAX_LEVEL 180
 #define MAX_DROP_PER_MAP 48
 #define MAX_IGNORE_LIST 20 	// official is 14
 #define MAX_VENDING 12
@@ -649,12 +649,14 @@ struct map_data {
 	int16 m;
 	int16 xs,ys; // map dimensions (in cells)
 	int16 bxs,bys; // map dimensions (in blocks)
-	int16 bgscore_lion, bgscore_eagle; // Battleground ScoreBoard
+	int16 bgscore_lion, bgscore_eagle, bgscore_top; // Battleground ScoreBoard
 	int npc_num;
 	int users;
 	int users_pvp;
+	int pjmuertos, mobmuertos;
 	int iwall_num; // Total of invisible walls in this map
 	struct map_flag {
+		unsigned diecounter : 1;
 		unsigned town : 1; // [Suggestion to protect Mail System]
 		unsigned autotrade : 1;
 		unsigned allowks : 1; // [Kill Steal Protection]
@@ -674,7 +676,7 @@ struct map_data {
 		unsigned gvg : 1; // Now it identifies gvg versus maps that are active 24/7
 		unsigned gvg_dungeon : 1; // Celest
 		unsigned gvg_noparty : 1;
-		unsigned battleground : 2; // [BattleGround System]
+		unsigned battleground : 3; // [BattleGround System]
 		unsigned nozenypenalty : 1;
 		unsigned notrade : 1;
 		unsigned noskill : 1;
@@ -847,6 +849,7 @@ int map_clearflooritem_timer(int tid, unsigned int tick, int id, intptr_t data);
 int map_removemobs_timer(int tid, unsigned int tick, int id, intptr_t data);
 void map_clearflooritem(struct block_list* bl);
 int map_addflooritem(struct item *item, int amount, int16 m, int16 x, int16 y, int first_charid, int second_charid, int third_charid, int flags, unsigned short mob_id);
+int map_addflooritem_area(struct block_list* bl, int16 m, int16 x, int16 y, int nameid, int amount); // [Zephyrus]
 
 // instances
 int map_addinstancemap(const char*,int);

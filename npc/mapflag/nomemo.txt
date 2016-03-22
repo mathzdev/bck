@@ -21,6 +21,8 @@
 //============================================================
 
 // Towns  ====================
+lhz_dun_n	mapflag	nomemo
+que_ba	mapflag	nomemo
 ayo_in01	mapflag	nomemo
 ayo_in02	mapflag	nomemo
 alb_ship	mapflag	nomemo
@@ -639,19 +641,6 @@ que_qaru02	mapflag	nomemo
 que_qaru03	mapflag	nomemo
 que_qaru04	mapflag	nomemo
 que_qaru05	mapflag	nomemo
-
-//Sealed Shrine ==================
-1@cata	mapflag	nomemo
-2@cata	mapflag	nomemo
-
-//Endless Tower ==================
-e_tower	mapflag	nomemo
-1@tower	mapflag	nomemo
-2@tower	mapflag	nomemo
-3@tower	mapflag	nomemo
-4@tower	mapflag	nomemo
-5@tower	mapflag	nomemo
-6@tower	mapflag	nomemo
 
 // Battle Grounds ================
 bat_c01	mapflag	nomemo

@@ -1,0 +1,46 @@
+moro_cav,33,67,5	script	Token Trader	705,{
+	cutin "gef_soldier",2;
+	mes "[Token Trader]";
+	if(countitem(6684) > 0) {
+		mes "Te puedo intercambiar tu "+getitemname(6684)+" por un premio al azar, ¿qué dices?";
+		next;
+		if(select("De acuerdo","No, gracias") == 2) {
+			mes "[Token Trader]";
+			mes "Como quieras, no sabes de lo que te pierdes.";
+			close2;
+			emotion e_bzz;
+			cutin "",255;
+			end;
+		}
+		mes "[Token Trader]";
+		mes "De acuerdo, dame un momento...";
+		next;
+		specialeffect 154;
+		delitem 6684,1;
+		getitem .token[rand(0,getarraysize(.token))],1;
+		mes "[Token Trader]";
+		mes "Aquí tienes tu recompenza.";
+		next;
+		mes "[Token Trader]";
+		mes "Vuelve cuando hayas conseguido otra moneda.";
+		close2;
+		cutin "",255;
+		emotion e_thx;
+		end;
+	}
+	mes "Soy un comerciante que busca los logros de los héroes.";
+	next;
+	mes "[Token Trader]";
+	mes "Si llegas a conseguir un objeto que te pruebe como un héroe, con gusto te lo intercambiaré.";
+	close2;
+	emotion e_no1;
+	cutin "",255;
+	end;
+OnInit:
+	setarray .token[0],522,547,608,607,678,12075,12080,12085,12090,12095,12100,12530,12679,12676,12680,12623,12534,13517,15093,15094,15095,15096,15097,15098,22035,22036,22037;
+	end;
+OnPCLoadMapEvent:
+	if(strcharinfo(3) == "moro_cav" && countitem(6684) > 0)
+		showevent 0,1;
+	end;
+}

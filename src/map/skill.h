@@ -14,7 +14,7 @@ struct skill_unit;
 struct skill_unit_group;
 struct status_change_entry;
 
-#define MAX_SKILL_PRODUCE_DB	270 /// Max Produce DB
+#define MAX_SKILL_PRODUCE_DB	401 /// Max Produce DB
 #define MAX_PRODUCE_RESOURCE	12 /// Max Produce requirements
 #define MAX_SKILL_ARROW_DB		150 /// Max Arrow Creation DB
 #define MAX_ARROW_RESULT		5 /// Max Arrow results/created
@@ -22,7 +22,7 @@ struct status_change_entry;
 #define MAX_SKILL_IMPROVISE_DB 30 /// Max Skill for Improvise
 #define MAX_SKILL_LEVEL 13 /// Max Skill Level (for skill_db storage)
 #define MAX_MOBSKILL_LEVEL 100	/// Max monster skill level (on skill usage)
-#define MAX_SKILL_CRIMSON_MARKER 3 /// Max Crimson Marker targets (RL_C_MARKER)
+#define MAX_SKILL_CRIMSON_MARKER 5 /// Max Crimson Marker targets (RL_C_MARKER)
 #define SKILL_NAME_LENGTH 31 /// Max Skill Name length
 #define SKILL_DESC_LENGTH 31 /// Max Skill Desc length
 
@@ -452,6 +452,11 @@ int skill_vfcastfix(struct block_list *bl, double time, uint16 skill_id, uint16 
 #endif
 int skill_delayfix(struct block_list *bl, uint16 skill_id, uint16 skill_lv);
 void skill_toggle_magicpower(struct block_list *bl, uint16 skill_id);
+
+// HamsterGuard [DanielArt]
+int hamsterguard_skill_delay_check( struct map_session_data *sd, uint16 skill_id, uint16 skill_lv,uint16 flag);
+int hamsterguard_skill_delay_penalty( uint16 skill_id);
+int hamsterguard_flood_delay_check (struct map_session_data *sd, uint16 skill_id);
 
 // Skill conditions check and remove [Inkfish]
 bool skill_check_condition_castbegin(struct map_session_data *sd, uint16 skill_id, uint16 skill_lv);

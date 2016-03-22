@@ -1,0 +1,80 @@
+-	script	IGNpoint	-1,{
+OnPCLoginEvent:
+	set @cp,0;
+	query_sql("SELECT `userid` FROM `login` WHERE `account_id` = '"+getcharid(3)+"'"),@accn$;
+	query_sql("SELECT COUNT(*) FROM `sms` WHERE `account` = '"+@accn$+"' AND `Estado` = '0'", @av);
+	if(@av == 0)
+		end;
+	for( set @i,1; @i <= @av; set @i,@i+1) {
+		query_sql("UPDATE `sms` SET `Estado`='1', CuentaAdquisicion = '"+getcharid(3)+"', FechaAdquisicion = '"+gettimestr("%d-%m-%Y %H:%M:%S",21)+"' WHERE `Estado` = '0' AND `account` = '" +@accn$+"'");
+		query_sql("SELECT `Pais` FROM `sms` WHERE `account` = '"+@accn$+"'"),.@pais$;
+		if(.@pais$ == "AR")
+			set @cp,@cp + 3;
+		set @cp,@cp+14;
+	}
+	set #CASHPOINTS,#CASHPOINTS + @cp;
+	set #ESCALA,#ESCALA + @cp;
+	message strcharinfo(0),"[SmS] Se han añadido "+@cp+" IGN Points a tu cuenta.";
+	callfunc "F_FirstBuy";
+	end;
+}
+-	script	IGNcredit	-1,{
+OnPCLoginEvent:
+	set @payl,0;
+	query_sql("SELECT COUNT(*) FROM `cp_credits` WHERE `account_id` = '"+getcharid(3)+"'"),@ppay;
+	if(@ppay == 0)
+		end;
+	query_sql("SELECT `balance` FROM `cp_credits` WHERE `account_id` = '"+getcharid(3)+"'"),@payl;
+	if(@payl < 1)
+		end;
+	query_sql("UPDATE `cp_credits` SET `balance` = '0' WHERE `account_id` = '"+getcharid(3)+"'");
+	set #CASHPOINTS,#CASHPOINTS + @payl;
+	set #ESCALA,#ESCALA + @payl;
+	message strcharinfo(0),"[PayPal] Se han añadido "+@payl+" IGN Points a tu cuenta.";
+	callfunc "F_FirstBuy";
+	end;
+}
+-	script	IGNv4p	-1,{
+OnPCLoginEvent:
+	set @v4p,0;
+	query_sql("SELECT COUNT(*) FROM `cp_v4p_voters` WHERE `account_id` = '"+getcharid(3)+"'"),@v4pp;
+	if(@v4pp == 0)
+		end;
+	query_sql("SELECT `points` FROM `cp_v4p_voters` WHERE `account_id` = '"+getcharid(3)+"'"),@v4p;
+	if(@v4p < 1)
+		end;
+	query_sql("UPDATE `cp_v4p_voters` SET `points` = '0' WHERE `account_id` = '"+getcharid(3)+"'");
+	set #CASHPOINTS,#CASHPOINTS + @v4p;
+	message strcharinfo(0),"[Vote 4 Points] Se han añadido "+@v4p+" IGN Points a tu cuenta.";
+	end;
+}
+function	script	F_FirstBuy	{
+	if(#RECARGA == 0) {
+		mes "[Donaciones]";
+		mes "Gracias por tu donativo, recibirás los siguientes objetos por tu primera recarga.";
+		set #RECARGA,1;
+		sleep2 1000;
+		mes "^ff0000- 3 Dark Mithril";
+		getitem 35036,3;
+		sleep2 1200;
+		getitem 7711,10;
+		mes "- 10 Event Ticket";
+		sleep2 1200;
+		getitem 5100,1;
+		mes "- 1 Sale's Banner";
+		sleep2 1200;
+		mes "- 2 Experience Peach^000000";
+		getitem 35035,2;
+		sleep2 1200;
+		close;
+	}
+return;
+}
+/*
+-	script	publicidad	-1,{
+OnPCLoginEvent:
+	cutin "ESC2",4;
+	sleep2 5000;
+	cutin "",255;
+	end;
+}*/

@@ -1,0 +1,14 @@
+glast_01,210,270,5	script	Ramsus	10084,{
+	mes "[Ramsus]";
+	mes "Estoy recolectando hechizos coagulados para realizar mis hechizos con más poder.";
+	next;
+	mes "[Ramsus]";
+	mes "Si tienes alguno te los puedo intercambiar.";
+	next;
+	if(select("Salir","¿Qué tienes para ofrecer?") == 1)
+		close;
+	close2;
+	callshop "cs-shop",1;
+	end;
+}
+-	itemshop	cs-shop	134,6608:0,4608:250,4609:250

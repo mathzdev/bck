@@ -10,6 +10,7 @@ set( MAP_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}  CACHE INTERNAL "" )
 if( BUILD_SERVERS )
 message( STATUS "Creating target map-server" )
 set( MAP_HEADERS
+	"${MAP_SOURCE_DIR}/achievement.h"
 	"${MAP_SOURCE_DIR}/atcommand.h"
 	"${MAP_SOURCE_DIR}/battle.h"
 	"${MAP_SOURCE_DIR}/battleground.h"
@@ -51,6 +52,7 @@ set( MAP_HEADERS
 	"${MAP_SOURCE_DIR}/channel.h"
 	)
 set( MAP_SOURCES
+	"${MAP_SOURCE_DIR]/achievement.c"
 	"${MAP_SOURCE_DIR}/atcommand.c"
 	"${MAP_SOURCE_DIR}/battle.c"
 	"${MAP_SOURCE_DIR}/battleground.c"

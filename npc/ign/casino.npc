@@ -1,0 +1,428 @@
+//      ______  __    __                                 
+//     /\  _  \/\ \__/\ \                                
+//     \ \ \_\ \ \ ,_\ \ \___      __    ___      __     
+// _____\ \  __ \ \ \/\ \  _ `\  /'__`\/' _ `\  /'__`\   
+///\  __\\ \ \/\ \ \ \_\ \ \ \ \/\  __//\ \/\ \/\ \_\.\_ 
+//\ \_\_/ \ \_\ \_\ \__\\ \_\ \_\ \____\ \_\ \_\ \__/.\_\
+// \/_/    \/_/\/_/\/__/ \/_/\/_/\/____/\/_/\/_/\/__/\/_/
+//
+//========================================================
+// ---                     Casino                      ---
+//========================================================
+// ---                  by DanielArt                   ---
+//========================================================
+vip,65,51,4	script	Letrero	837,{
+	mes "^5533ffPrimera Planta:";
+	mes "^000000 - Casino & PUB.";
+	mes " ";
+	mes "^5533ffSegunda Planta:";
+	mes "^000000 - Sede de Oficios.";
+	close;
+}
+cmd_in02,77,71,3	script	JackPot	563,{
+	if ($coins < 10){
+		set $coins,30;
+	}
+mes "[^cc6600JackPot^000000]";
+mes "==============";
+mes "Acumulado =  ^ff0000"+($coins+3)+" Coins ^000000";
+mes "Tienes =  ^ff0000"+(#coins)+" Coins ^000000";
+mes "==============";
+mes "¡Gana acumulados con los  8´s!";
+mes "Costo por juego : ^ff00005 Coins ^000000";
+	if (select("^5533ffJugar^000000 => ^ff00005 Coins^000000","^777777Salir^000000") == 2) {
+		mes "[^cc6600JackPot^000000]";
+		mes "Vuelve cuando desees divertirte con mis juegos.";
+		close;
+	}
+	if(#coins < 5) {
+		mes "[^cc6600JackPot^000000]";
+		mes "==============";
+		mes "Acumulado =  ^ff0000"+($coins+3)+" Coins ^000000";
+		mes "Tienes =  ^ff0000"+(#coins)+" Coins ^000000";
+		mes "==============";
+		mes "^ff0000Coins insuficientes para participar^000000";
+		mes "Costo : ^ff00005 Coins ^000000";
+		close;
+	}
+	set #coins,#coins-5;
+	set $coins,$coins+3;
+	next;
+	mes "==============";
+	mes "*   ^ff0000COINS JACKPOT ^000000 888´s  *";
+	mes "*   |   $   |   $   |   $   |  *";
+	mes "*   |   ?   |   ?   |   ?   |<<";
+	mes "*   |   $   |   $   |   $   |  *";
+	mes "*   MÁQUINA EN PROCESO   *";
+	mes "==============";
+	set @a,rand(1,5);
+	set @b,rand(1,5);
+	set @c,rand(1,5);
+	set @JACKPOT,0;
+	sleep2 500;
+	next;
+		switch (@a) {
+			case 1: set @e$,"X"; break;
+			case 2: set @e$,"$"; break;
+			case 3: set @d,rand(1,2);
+					switch (@d) {
+						case 1: set @e$,"X"; break;
+						case 2: set @e$,"8"; break;
+					}
+					break;
+			case 4: set @e$,"$"; break;
+			case 5: set @e$,"*"; break;
+		}
+		switch (@b) {
+			case 1: set @f$,"X"; break;
+			case 2: set @f$,"$"; break;
+			case 3: set @d,rand(1,2);
+					switch (@d) {
+						case 1: set @f$,"X"; break;
+						case 2: set @f$,"8"; break;
+					}
+					break;
+			case 4: set @f$,"$"; break;
+			case 5: set @f$,"*"; break;
+		}
+		switch (@c) {
+			case 1: set @g$,"X"; break;
+			case 2: set @g$,"$"; break;
+			case 3: set @d,rand(1,2);
+					switch (@d) {
+						case 1: set @g$,"X"; break;
+						case 2: set @g$,"8"; break;
+					}
+					break;
+			case 4: set @g$,"$"; break;
+			case 5: set @g$,"*"; break;
+		}
+specialeffect 274;
+mes "==============";
+mes "*   ^ff0000COINS JACKPOT ^000000 888´s  *";
+mes "*   |   $   |   $   |   $   |  *";
+mes "*   |   ^ff0000"+@e$+"^000000   |   ?   |   ?   |<<";
+mes "*   |   $   |   $   |   $   |  *";
+mes "*   MÁQUINA EN PROCESO   *";
+mes "==============";
+sleep2 500;
+next;
+specialeffect 274;
+mes "==============";
+mes "*   ^ff0000COINS JACKPOT ^000000 888´s  *";
+mes "*   |   $   |   $   |   $   |  *";
+mes "*   |   ^ff0000"+@e$+"^000000   |   ^ff0000"+@f$+"^000000   |   ?   |<<";
+mes "*   |   $   |   $   |   $   |  *";
+mes "*   MÁQUINA EN PROCESO   *";
+mes "==============";
+sleep2 500;
+next;
+specialeffect 274;
+	if(@e$ == "X" && @f$ == "X" && @g$ == "X"){
+		set @JACKPOT,2;
+	}
+	if(@e$ == "$" && @f$ == "$" && @g$ == "$"){
+		set @JACKPOT,3;
+	}
+	if(@e$ == "*" && @f$ == "*" && @g$ == "*"){
+		set @JACKPOT,4;
+	}
+	if(@e$ == "8" || @f$ == "8" || @g$ == "8") {
+		set @JACKPOT,5;
+	}
+	if (@e$ == "8" && @f$ == "8" && @g$ == "8"){
+		set @JACKPOT,1;
+	}
+	mes "==============";
+	mes "*   ^ff0000COINS JACKPOT ^000000 888´s  *";
+	mes "*   |   $   |   $   |   $   |  *";
+	mes "*   |   ^ff0000"+@e$+"^000000   |   ^ff0000"+@f$+"^000000   |   ^ff0000"+@g$+"^000000   |<<";
+	mes "*   |   $   |   $   |   $   |  *";
+		switch (@JACKPOT) {
+			case 1:
+				mes "*   ^0000FF¡HAS GANADO EL ACUMULADO!^000000   *";
+				mes "==============";
+				announce "Casino : El jugador ["+strcharinfo(0)+"] ha ganado el acumulado de "+$coins+" Coins!",bc_all,0xFF6060;
+				set #coins,#coins+$coins;
+				set $coins,40;
+				specialeffect2 113;
+				close;
+			case 2:
+				mes "*   ^0000FFHAS GANADO 10 COINS!^000000   *";
+				mes "==============";
+				set $coins,$coins-5;
+				set #coins,#coins+10;
+				specialeffect2 371;
+				close;
+			case 3:
+				mes "*   ^0000FFHAS GANADO 30 COINS!^000000   *";
+				mes "==============";
+				set $coins,$coins-15;
+				set #coins,#coins+30;
+				specialeffect2 371;
+				close;
+			case 4:
+				mes "*   ^0000FFHAS GANADO 20 COINS!^000000   *";
+				mes "==============";
+				set $coins,$coins-10;
+				set #coins,#coins+20;
+				specialeffect2 371;
+				close;
+			case 5:
+				mes "*   ^0000FFHAS GANADO 4 COINS!^000000   *";
+				mes "==============";
+				set $coins,$coins-2;
+				set #coins,#coins+4;
+				specialeffect2 371;
+				close;
+			default:
+				mes "*   ^ff0000NO HAS GANADO NADA^000000   *";
+				mes "==============";
+				specialeffect2 372;
+				close;
+		}
+}
+vip,60,51,4	duplicate(JackPot)	JackPot#01	563
+vip,57,51,4	duplicate(JackPot)	JackPot#02	563
+vip,69,51,4	duplicate(JackPot)	JackPot#03	563
+vip,72,51,4	duplicate(JackPot)	JackPot#04	563
+
+//-----------------------------------------------------------------------------
+
+vip,55,77,4	script	Gerente del Casino::GDC	899,{
+
+
+mes "[^FFA500Gerente del Casino^000000]";
+mes "Hola ^ff6060" +strcharinfo(0)+ "^000000.";
+mes "¿En qué puedo ayudarte?";
+	next;
+	switch (select("^5533ffDepositar^000000:^ff0000Retirar^000000:^777777Salir^000000")) {
+
+		case 1:
+			if (countitem(671) < 1) {
+				mes "[^FFA500Gerente del Casino^000000]";
+				mes "No tienes ninguna IGN Coin para depositar.";
+				close2;
+				emotion e_sry;
+				end;
+			}
+
+			mes "[^FFA500Gerente del Casino^000000]";
+			mes "¿Cuántas IGN Coin deseas depositar?";
+			next;
+			input @GC_deposit;
+			mes "[^FFA500Gerente del Casino^000000]";
+			mes "Depositarás ^ff0000"+@GC_deposit+"^000000 IGN Coins.";
+			mes " ";
+			mes "¿Estás seguro?";
+			next;
+			if (select("Depositar.","^777777Salir^000000") == 2) {
+				mes "[^FFA500Gerente del Casino^000000]";
+				mes "Vuelve cuando desees.";
+				close;
+				end;
+			}
+			
+			if(countitem(671) < @GC_deposit){
+				mes "[^FFA500Gerente del Casino^000000]";
+				mes "Acaso deseas verme la cara?";
+				mes "Tu No tienes esa cantidad de Coins Contigo";
+				mes "Vuelve Cuando las tengas";
+				close;
+				end;
+			}
+
+			delitem 671,@GC_deposit;
+			set #coins,#coins+@GC_deposit;
+			mes "[^FFA500Gerente del Casino^000000]";
+			mes "La transacción ha sido correcta.";
+			mes "Ahora posees ^5533ff"+#coins+"^000000 Coins en tu cuenta.";
+			close2;
+			emotion e_thx;
+			end;
+
+		case 2:
+			if (#coins < 1) {
+				mes "[^FFA500Gerente del Casino^000000]";
+				mes "No tienes ninguna Coin en tu cuenta de Casino.";
+				close2;
+				emotion e_sry;
+				end;
+			}
+
+			mes "[^FFA500Gerente del Casino^000000]";
+			mes "Cuentas con ^5533ff"+#coins+"^000000 Coins en tu cuenta.";
+			mes " ";
+			mes "¿Cuántas deseas retirar?";
+			next;
+			input @GC_retrieve;
+				if(@GC_retrieve == 0) {
+					mes "Debes de poner alguna cantidad";
+					close;
+					end;
+				}
+
+			mes "[^FFA500Gerente del Casino^000000]";
+			mes "Retirarás ^ff6060"+@GC_retrieve+"^000000 Coins.";
+			mes " ";
+			mes "'¿Estás seguro?";
+				if (select("^ff6060Retirar.^000000","^777777Salir^000000") == 2) {
+					mes "[^FFA500Gerente del Casino^000000]";
+					mes "Vuelve cuando desees.";
+					close;
+				}
+
+				if(#coins < @GC_retrieve){
+					mes "[^FFA500Gerente del Casino^000000]";
+					mes "Lo Siento, No tienes Suficientes en tu cuenta.";
+					close;
+					end;
+				}
+
+				set #coins,#coins - @GC_retrieve;
+				getitem 671,@GC_retrieve;
+				mes "[^FFA500Gerente del Casino^000000]";
+				mes "Transacción satisfactoria.";
+				mes " ";
+				mes "Ahora posees ^ff0000"+#coins+"^000000 Coins en tu cuenta.";
+				close2;
+				emotion e_thx;
+				end;
+
+		case 3:
+			mes "[^FFA500Gerente del Casino^000000]";
+			mes "Muy Bien, Que tengas un excelente dia.";
+			close;
+			end;
+	}
+
+
+OnInit:
+waitingroom "Gerente",0;
+end;
+
+}
+
+cmd_in02	mapflag	nomemo
+cmd_in02	mapflag	nosave	SavePoint
+cmd_in02	mapflag	novending
+
+//prontera,171,167,0	warp	casino01	2,2,vip,64,46
+prontera,165,167,0	warp	casino01	2,2,vip,64,46
+
+//vip,64,42,0	warp	casino01-1	1,1,prontera,168,167
+vip,64,42,0	warp	casino01-1	1,1,prontera,161,167
+
+vip,84,50,0	warp	casino02	1,1,vip,80,258
+vip,76,252,0	warp	casino02-1	1,1,vip,80,49
+vip,58,266,0	warp	casino03	1,1,vip,279,256
+vip,283,256,0	warp	casino03-1	1,1,vip,63,266
+
+// VIP SYSTEM
+/*
+vip,73,269,5	script	VIP Manager::vip_m	10041,{
+	function setvip;
+	query_sql("SELECT `group_id` FROM `login` WHERE `account_id` = '"+getcharid(3)+"'"),@vip;
+	set .npc$,"[^5533ffVIP Manager^000000]";
+	mes .npc$;
+	mes "Bienvenid"+(Sex?"o ^0000ff":"a ^ff0000")+strcharinfo(0);
+	mes "^000000Yo me encargo de registrar a nuevos integrantes a nuestra jerarquía.";
+	mes "Dime, ¿en qué te puedo ayudar?";
+	next;
+	switch (select("^777777Salir:^5533ffRegistrarme como VIP:^000000¿Qué beneficios obtengo?:¿Cuánto dura la membresía?")) {
+		case 1:
+			mes .npc$;
+			mes "Vuelve cuando requieras información.";
+			close2;
+			emotion e_thx;
+			end;
+		case 2:
+			mes .npc$;
+			mes "Bien, primeramente veamos tu cantidad económica.";
+			mes " ";
+			mes "Actualmente tienes: ^ff0000"+#CASHPOINTS+"^000000 iCash.";
+			next;
+			if(#CASHPOINTS < 1000) {
+				mes .npc$;
+				mes "Lo siento, pero su cantidad poseída no alcanza ni para el paquete más económico.";
+				close2;
+				emotion e_thx;
+				end;
+			}
+			mes .npc$;
+			mes "Excelente, al parecer tiene un precio suficiente, ahora por favor seleccione el paquete que desea:";
+			next;
+			switch (select("1 día ^0000ff=>^ff0000 1,000^000000 iCash:7 días ^0000ff=>^ff0000 5,000^000000 iCash:30 días ^0000ff=>^ff0000 20,000^000000 iCash:^777777Salir^000000")) {
+				case 1: setvip(getcharid(3),1,1000);
+				case 2: setvip(getcharid(3),7,5000);
+				case 3: setvip(getcharid(3),30,20000);
+				case 4:
+					mes .npc$;
+					mes "Vuelve cuando hayas decidido que paquete comprar.";
+					close2;
+					emotion e_thx;
+					end;
+			}
+		case 3:
+			mes .npc$;
+			mes "Al registrarte como miembro VIP obtendrás lo siguiente:";
+			next;
+			mes .npc$;
+			mes "Más experiencia.";
+			mes "Se incrementará tu Base EXP y Job EXP al matar cualquier monstruo y también MvP y Quest Exp.";
+			next;
+			mes .npc$;
+			mes "Más medallas.";
+			mes "Al jugar Battleground te darán más medallas por ser VIP.";
+			next;
+			mes .npc$;
+			mes "Más Drop.";
+			mes "Incrementará tu porcentaje de obtención de los objetos dados por los monstruos.";
+			next;
+			mes .npc$;
+			mes "Otros beneficios menores los podrás notar al transcurso de tu juego.";
+			close;
+		case 4:
+			mes .npc$;
+			mes "Podrás contratar tres tipos:";
+			mes "De 1 día, 7 días o 30 días.";
+			mes " ";
+			mes "Dependiendo cual obtengas tendrá un coste distinto pero el mismo beneficio.";
+			close;
+	}
+	function	setvip	{
+		if(#CASHPOINTS < getarg(2)) {
+			mes .npc$;
+			mes "Lo siento, pero no tiene lo necesario.";
+			close;
+		}
+		mes .npc$;
+		mes "¿Está seguro de obtener este paquete?";
+		next;
+		if(select("Comprar paquete","No, gracias") == 2)
+			close;
+		mes .npc$;
+		mes "Ha comprado su paquete satisfactoriamente.";
+		set #CASHPOINTS,#CASHPOINTS - getarg(2);
+		if(@vip != 5)
+			query_sql("UPDATE `login` SET `vip_time` = DATE_ADD(`vip_time`,'"+gettimestr("%Y-%m-%d",21)+"') WHERE account_id = '"+getarg(0)+"'");
+		query_sql("UPDATE `login` SET `vip_time` = DATE_ADD(`vip_time`,INTERVAL "+getarg(1)+" DAY) WHERE account_id = '"+getarg(0)+"'");
+		query_sql("UPDATE `login` SET `group_id` = '5' WHERE `account_id` = '"+getarg(0)+"'");
+		message strcharinfo(0),"Has obtenido VIP por "+getarg(1)+"d.";
+		close2;
+		emotion e_thx;
+		end;
+	}
+OnPCLoginEvent:
+	query_sql("SELECT `group_id` FROM `login` WHERE `account_id` = '"+getcharid(3)+"'"),@vip;
+	if(@vip == 5) {
+		query_sql("SELECT DATE_FORMAT(`vip_time`,'%Y %m %d') FROM `login` WHERE `account_id` = '"+getcharid(3)+"'"),.@expire_vip;
+		if(gettimestr("%Y %m %d",21) >= .@expire_vip) {
+			query_sql("UPDATE `login` SET `group_id` = '0' WHERE `account_id` = '"+getcharid(3)+"'");
+			query_sql("UPDATE `login` SET `vip_time` = '0' WHERE `account_id` = '"+getcharid(3)+"'");
+			message strcharinfo(0),"Tú membresía VIP ha expirado.";
+		}
+	}
+end;
+}
+*/

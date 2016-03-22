@@ -1,0 +1,866 @@
+//===== rAthena Script ======================================= 
+//= Geffen Magic Tournament
+//===== By: ================================================== 
+//= DanielArt
+//===== Current Version: ===================================== 
+//= 1.2
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Based on Japanese RO server.
+//===== Additional Comments: ================================= 
+//= 1.0 First version. [DanielArt]
+//= 1.1 Every 3 rounds will heal the player 100% [DanielArt]
+//= 1.2 Fixed bug with attachrid [DanielArt]
+//============================================================ 
+
+// Instance Creation :: gef
+//============================================================
+dali02,98,141,4	script	Emmit White::gt_ent	903,{
+	if(BaseLevel < 90) {
+		mes "[Emmit White]";
+		mes "Disculpa, pero no puedes entrar si no eres Nv. 90.";
+		close;
+	}
+	set .@party_id,getcharid(1);
+	set .@p_name$,getpartyname(.@party_id);
+	set .@md_name$,"Geffen Magic Tournament";
+
+	if (!instance_check_party(.@party_id,1)) {
+		mes "[Emmit White]";
+		mes "No hay miembros suficientes.";
+		close;
+	}
+	mes "[Emmit White]";
+	mes "Conmigo puedes acceder al famoso torneo mágico de Geffen, para ello primeramente necesitas registrarte como un participante.";
+	next;
+	if (getcharid(0) == getpartyleader(.@party_id,2))
+		set .@menu$, "Deseo inscribirme.:"+.@md_name$+".:Salir";
+	else {
+		mes "[Emmit White]";
+		mes "Lo siento, pero éste es un torneo individual.";
+		close2;
+		emotion e_sry;
+		end;
+	}
+	switch(select(.@menu$)) {
+		case 1:
+			if (instance_create(.@md_name$) < 0) {
+				mes "[Emmit White]";
+				mes "Nombre de Party: "+.@p_name$;
+				mes "Tú nombre: "+strcharinfo(0);
+				mes "^0000ff"+.@md_name$+" ^000000- no se puede crear!";
+				close;
+		}
+			mes "[Emmit White]";
+			mes "De acuerdo, haz sido registrado correctamente, vuelve a hablar conmigo para accesar.";
+			close;
+		case 2:
+			switch(instance_enter(.@md_name$))
+			{
+				case 0:
+					if (getcharid(0) == getpartyleader(.@party_id,2)) {
+						mapannounce "dali02",strcharinfo(0)+", member of the party "+.@p_name$+" entered the instance "+.@md_name$+".",bc_map,"0x00ff99";
+						specialeffect2 EF_WARP;
+						//warp "1@gef",119,108;
+						end;
+					}
+				//custom @ official server kRO simple when click nothing happens.
+				case 1:
+					mes "[Emmit White]";
+					mes "Only the registered members can enter the instance "+.@md_name$+".";
+					close;
+				case 2:
+					mes "[Emmit White]";
+					mes "The memorial dungeon "+.@md_name$+" does not exist.";
+					mes "The party leader did not generate the dungeon yet.";
+					close;
+				case 3:
+					mes "[Emmit White]";
+					mes "Unknown Error...!";
+					close;
+			}
+		case 3:
+			close;	
+	}
+}
+1@gef,122,58,4	script	Recepcionista#gef01	937,{
+	mes "[Recepcionista]";
+	if(gmt02 == 1) {
+		switch (checkquest(13182,PLAYTIME)) {
+			default:
+			case 2:
+				mes "El torneo consiste de consecuentes rondas donde los enemigos serán más fuertes cada vez.";
+				next;
+				mes "[Recepcionista]";
+				mes "Si alguno te vence saldrás del torneo y no podrás volver a entrar.";
+				next;
+				mes "[Recepcionista]";
+				mes "Así que más te vale tener preparado algún truco para no desfallecer.";
+				next;
+				mes "[Recepcionista]";
+				mes "Los últimos contrincantes se dice que son legendarios guerreros que han viajado por el mundo.";
+				next;
+				mes "[Recepcionista]";
+				mes "Así que deberías irte preparando.";
+				next;
+				mes "[Recepcionista]";
+				mes "¿Todo listo para entrar?";
+				next;
+				if(select("No, aún no.","Geffen Magic Tournament") == 1) {
+					mes "[Recepcionista]";
+					mes "Asegúrate de prepararte bien.";
+					close;
+				}
+				mes "[Recepcionista]";
+				mes "De acuerdo, aquí vamos.";
+				close2;
+				if(.@geftourtime == 2)
+					erasequest 13182;
+				else
+					setquest 13182;
+				set gmt01,1;
+				set .@m$,instance_mapname("1@ge_st");
+				warp .@m$,100,49;
+				end;
+			case 0:
+			case 1:
+				mes "Lo siento, pero no puedes entrar al torneo después de haber perdido.";
+				close;
+		}
+	} else {
+		switch (checkquest(13181,HUNTING)) {
+			case 0:
+				mes "Vence al Desert Wolf antes de que el tiempo se acabe.";
+				close;
+			case 1:
+				mes "Lo siento pero haz sido demasiado lento, lamentablemente no puedo darte otra oportunidad.";
+				next;
+				mes "[Recepcionista]";
+				mes "Adios.";
+				close2;
+				erasequest 13181;
+				instance_destroy instance_id();
+				end;
+			case 2:
+				mes "¡Excelente trabajo!";
+				next;
+				mes "[Recepcionista]";
+				mes "De acuerdo, te permitiré participar en el torneo, deja registrarte...";
+				next;
+				mes "[Recepcionista]";
+				mes "Por favor escribe tu nombre";
+				next;
+				input .@name$;
+				if(.@name$ != strcharinfo(0)) {
+					mes "[Recepcionista]";
+					mes "Por favor asegúrate de escribir tu nombre correctamente.";
+					close;
+				}
+				next;
+				mes "[Recepcionista]";
+				mes "Listo ^5533ff"+strcharinfo(0)+"^000000, ahora estás registrado como un concursante oficial del Torneo Mágico de Geffen.";
+				changequest 13181,13180;
+				set gmt02,1;
+				next;
+				mes "[Recepcionista]";
+				mes "Vuelve a hablar conmigo para finalizar con los preparativos.";
+				close;
+			default:
+				break;
+		}
+	}
+	mes "¿Qué tal?";
+	next;
+	mes "[Recepcionista]";
+	mes "Así que deseas participar en el torneo de Geffen.";
+	next;
+	mes "[Recepcionista]";
+	mes "Pues antes de eso tendrás que pasar una prueba para probar tu fuerza.";
+	next;
+	mes "[Recepcionista]";
+	mes "Convocaré a un Desert Wolf y deberás de matarlo en menos de 60 segundos o fallarás.";
+	next;
+	mes "[Recepcionista]";
+	mes "El tiempo no termina cuando lo matas, si no cuando hablas conmigo.";
+	next;
+	mes "[Recepcionista]";
+	mes "Mucha suerte.";
+	close2;
+	setquest 13181;
+	set .@m$,instance_mapname("1@gef");
+	monster .@m$,120,56,"Desert Wolf",1106,1,instance_npcname("Recepcionista#gef01")+"::OnMyMobDead";
+	end;
+OnMyMobDead:
+	message strcharinfo(0),"Haz matado al Desert Wolf, rápido, habla con el recepcionista antes del límite de tiempo de 60 segundos.";
+	end;
+OnInstanceInit:
+OnEnable:
+	enablenpc instance_npcname("Recepcionista#gef01");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Recepcionista#gef01");
+	end;
+}
+1@ge_st,109,56,0	script	#gesttalk	139,4,4,{
+OnTouch:
+	donpcevent instance_npcname("Tournament Guide#gef01")+"::OnInitEvent";
+	donpcevent instance_npcname("#gesttalk")+"::OnDisable";
+	end;
+OnInstanceInit:
+OnEnable:
+	enablenpc instance_npcname("#gesttalk");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("#gesttalk");
+	end;
+}
+1@ge_st,109,56,5	script	Tournament Guide#gef01	10006,{
+end;
+OnInitEvent:
+	addrid(1,0);
+	npctalk "¡De acuerdo, demos inicio al torneo!";
+	sleep2 5000;
+	npctalk "Recuerda que tienes sólo 5 minutos para vencer a cada contrincante, de no ser así, fallas.";
+	sleep2 5000;
+	npctalk "Como primer contrincante tenemos a Aruhi el Novato.";
+	sleep2 5000;
+	donpcevent instance_npcname("Aruhi#gef01")+"::OnEnable";
+	initnpctimer;
+	end;
+OnGeffen1:
+	addrid(1,0);
+	getitem 6671,1;
+	stopnpctimer;
+	npctalk "El siguiente encuentro comenzará dentro de poco.";
+	sleep2 15000;
+	npctalk "Ahora enfrentarás a Dio Anemos.";
+	sleep2 5000;
+	donpcevent instance_npcname("Dio Anemos#gef01")+"::OnEnable";
+	initnpctimer;
+	end;
+OnGeffen2:
+	addrid(1,0);
+	getitem 6671,2;
+	stopnpctimer;
+	npctalk "El siguiente encuentro comenzará dentro de poco.";
+	sleep2 15000;
+	npctalk "Prepárate a enfrentar a Thief of Geffen.";
+	sleep2 5000;
+	donpcevent instance_npcname("Thief of Geffen#gef01")+"::OnEnable";
+	initnpctimer;
+	end;
+OnGeffen3:
+	addrid(1,0);
+	recovery 3,instance_mapname("1@ge_st");
+	getitem 6671,3;
+	stopnpctimer;
+	npctalk "El siguiente encuentro comenzará dentro de poco.";
+	sleep2 15000;
+	npctalk "¿No te fue suficiente?, pues ahora viene Rogue of Geffen.";
+	sleep2 5000;
+	donpcevent instance_npcname("Rogue of Geffen#gef01")+"::OnEnable";
+	initnpctimer;
+	end;
+OnGeffen4:
+	addrid(1,0);
+	getitem 6671,3;
+	stopnpctimer;
+	npctalk "El siguiente encuentro comenzará dentro de poco.";
+	sleep2 15000;
+	npctalk "El lider de los líderes, Yakuza of Gefen será tu próximo contrincante.";
+	sleep2 5000;
+	donpcevent instance_npcname("Yakuza of Geffen#gef01")+"::OnEnable";
+	initnpctimer;
+	end;
+OnGeffen5:
+	addrid(1,0);
+	getitem 6671,3;
+	stopnpctimer;
+	npctalk "El siguiente encuentro comenzará dentro de poco.";
+	sleep2 15000;
+	npctalk "Una monje con belleza sin igual, Pemon será tu oponente ahora.";
+	sleep2 5000;
+	donpcevent instance_npcname("Pemon#gef01")+"::OnEnable";
+	initnpctimer;
+	end;
+OnGeffen6:
+	addrid(1,0);
+	recovery 3,instance_mapname("1@ge_st");
+	getitem 6671,4;
+	stopnpctimer;
+	npctalk "El siguiente encuentro comenzará dentro de poco.";
+	sleep2 15000;
+	npctalk "Una de las mejores magas, Ordre será tu oponente.";
+	sleep2 5000;
+	donpcevent instance_npcname("Ordre#gef01")+"::OnEnable";
+	initnpctimer;
+	end;
+OnGeffen7:
+	addrid(1,0);
+	getitem 6671,5;
+	stopnpctimer;
+	npctalk "El siguiente encuentro comenzará dentro de poco.";
+	sleep2 15000;
+	npctalk "La guerrera santa que adora matar al mal, Brut Haje deberás combatir ahora.";
+	sleep2 5000;
+	donpcevent instance_npcname("Brut Haje#gef01")+"::OnEnable";
+	initnpctimer;
+	end;
+OnGeffen8:
+	addrid(1,0);
+	getitem 6671,6;
+	stopnpctimer;
+	npctalk "El siguiente encuentro comenzará dentro de poco.";
+	sleep2 15000;
+	npctalk "El ninja que es malo por naturaleza, Black Devil será tu oponente.";
+	sleep2 5000;
+	donpcevent instance_npcname("Black Devil#gef01")+"::OnEnable";
+	initnpctimer;
+	end;
+OnGeffen9:
+	addrid(1,0);
+	recovery 3,instance_mapname("1@ge_st");
+	getitem 6671,7;
+	stopnpctimer;
+	npctalk "El siguiente encuentro comenzará dentro de poco.";
+	sleep2 15000;
+	npctalk "De los mejores espadachines de Geffen, Ifodas será tu oponente.";
+	sleep2 5000;
+	donpcevent instance_npcname("Ifodas#gef01")+"::OnEnable";
+	initnpctimer;
+	end;
+OnGeffen10:
+	addrid(1,0);
+	getitem 6671,8;
+	stopnpctimer;
+	npctalk "El siguiente encuentro comenzará dentro de poco.";
+	sleep2 15000;
+	npctalk "La más querida sacerdotisa, Lechenie enfrentarás ahora.";
+	sleep2 5000;
+	donpcevent instance_npcname("Lechenie#gef01")+"::OnEnable";
+	initnpctimer;
+	end;
+OnGeffen11:
+	addrid(1,0);
+	getitem 6671,9;
+	stopnpctimer;
+	npctalk "El siguiente encuentro comenzará dentro de poco.";
+	sleep2 15000;
+	npctalk "La bailarina más cruel y despiadada, Odolico será tu contrincante.";
+	sleep2 5000;
+	donpcevent instance_npcname("Odolico#gef01")+"::OnEnable";
+	initnpctimer;
+	end;
+OnGeffen12:
+	addrid(1,0);
+	recovery 3,instance_mapname("1@ge_st");
+	getitem 6671,10;
+	stopnpctimer;
+	npctalk "El siguiente encuentro comenzará dentro de poco.";
+	sleep2 15000;
+	npctalk "El más cómico pero poderoso de los sabios, Ju será tu contrincante.";
+	sleep2 5000;
+	donpcevent instance_npcname("Ju#gef01")+"::OnEnable";
+	initnpctimer;
+	end;
+OnGeffen13:
+	addrid(1,0);
+	getitem 6671,15;
+	stopnpctimer;
+	npctalk "El siguiente encuentro comenzará dentro de poco.";
+	sleep2 15000;
+	npctalk "Llamada también la reyna de los sabios, Tidy tendrás que enfrentar.";
+	sleep2 5000;
+	donpcevent instance_npcname("Tidy#gef01")+"::OnEnable";
+	initnpctimer;
+	end;
+OnGeffen14:
+	addrid(1,0);
+	getitem 6671,20;
+	stopnpctimer;
+	npctalk "El siguiente encuentro comenzará dentro de poco.";
+	sleep2 15000;
+	npctalk "La más poderosa Alquimista del mundo, Fei Kanabian será tu oponente.";
+	sleep2 5000;
+	donpcevent instance_npcname("Fei Kanabian#gef01")+"::OnEnable";
+	initnpctimer;
+	end;
+OnGeffen15:
+	addrid(1,0);
+	recovery 3,instance_mapname("1@ge_st");
+	getitem 6671,20;
+	stopnpctimer;
+	npctalk "El siguiente encuentro comenzará dentro de poco.";
+	sleep2 15000;
+	npctalk "¡¿Listo para lo que viene?!";
+	sleep2 3000;
+	npctalk "Ahora enfrentarás a la campeona Fei Kanabian.";
+	sleep2 3000;
+	npctalk "Que la suerte te acompañe.";
+	sleep2 5000;
+	donpcevent instance_npcname("Fenris Fenrir#gef01")+"::OnEnable";
+	initnpctimer;
+	end;
+OnGeffen16:
+	addrid(1,0);
+	getitem 6671,20;
+	stopnpctimer;
+	npctalk "Te felicito por haber finalizado totalmente el Torneo de Geffen.";
+	sleep2 3000;
+	npctalk "En unos segundos saldremos de la sala.";
+	sleep2 10000;
+	mapwarp instance_mapname("1@ge_st"),instance_mapname("1@gef"),119,108;
+	end;
+OnTimer240000:
+	npctalk "¡Sólo te queda un minuto para derrotar a tu enemigo!";
+	end;
+OnTimer315000:
+	npctalk "Lo siento pero no haz derrotado al enemigo a tiempo.";
+	end;
+OnTimer320000:
+	mapwarp instance_mapname("1@ge_st"),instance_mapname("1@gef"),119,108;
+	end;
+OnInstanceInit:
+OnEnable:
+	enablenpc instance_npcname("Tournament Guide#gef01");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Tournament Guide#gef01");
+	end;
+}
+1@ge_st,113,50,4	script	Aruhi#gef01	670,{
+end;
+OnInstanceInit:
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Aruhi#gef01");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Aruhi#gef01");
+	npctalk "¡Estoy listo para el combate, vamos allá!";
+	sleep2 5000;
+	monster instance_mapname("1@ge_st"),113,50,"Aruhi",2549,1,instance_npcname("Tournament Guide#gef01")+"::OnGeffen1";
+	donpcevent instance_npcname("Aruhi#gef01")+"::OnDisable";
+	end;
+}
+1@ge_st,113,50,4	script	Dio Anemos#gef01	669,{
+end;
+OnInstanceInit:
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Dio Anemos#gef01");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Dio Anemos#gef01");
+	npctalk "¡Probarás el poder de mi magia!";
+	sleep2 5000;
+	monster instance_mapname("1@ge_st"),113,50,"Dio Anemos",2550,1,instance_npcname("Tournament Guide#gef01")+"::OnGeffen2";
+	donpcevent instance_npcname("Dio Anemos#gef01")+"::OnDisable";
+	end;
+}
+1@ge_st,113,50,4	script	Thief of Geffen#gef01	671,{
+end;
+OnInstanceInit:
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Thief of Geffen#gef01");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Thief of Geffen#gef01");
+	npctalk "¡Te robaré todo lo que tengas!";
+	sleep2 5000;
+	monster instance_mapname("1@ge_st"),113,50,"Thief of Geffen",2551,1,instance_npcname("Tournament Guide#gef01")+"::OnGeffen3";
+	donpcevent instance_npcname("Thief of Geffen#gef01")+"::OnDisable";
+	end;
+}
+1@ge_st,113,50,4	script	Rogue of Geffen#gef01	681,{
+end;
+OnInstanceInit:
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Rogue of Geffen#gef01");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Rogue of Geffen#gef01");
+	npctalk "¡Sentirás el placer de que te robe y un orgullo de... espera eso no era así!";
+	sleep2 5000;
+	monster instance_mapname("1@ge_st"),113,50,"Rogue of Geffen",2552,1,instance_npcname("Tournament Guide#gef01")+"::OnGeffen4";
+	donpcevent instance_npcname("Rogue of Geffen#gef01")+"::OnDisable";
+	end;
+}
+1@ge_st,113,50,4	script	Yakuza of Geffen#gef01	682,{
+end;
+OnInstanceInit:
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Yakuza of Geffen#gef01");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Yakuza of Geffen#gef01");
+	npctalk "¿Así que haz vencido a mis lacayos?, pues prepárate para lo peor.";
+	sleep2 5000;
+	monster instance_mapname("1@ge_st"),113,50,"Yakuza of Geffen",2553,1,instance_npcname("Tournament Guide#gef01")+"::OnGeffen5";
+	donpcevent instance_npcname("Yakuza of Geffen#gef01")+"::OnDisable";
+	end;
+}
+1@ge_st,113,50,4	script	Pemon#gef01	672,{
+end;
+OnInstanceInit:
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Pemon#gef01");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Pemon#gef01");
+	npctalk "¡Si no te mueves mucho no te dolerá!";
+	sleep2 5000;
+	monster instance_mapname("1@ge_st"),113,50,"Pemon",2554,1,instance_npcname("Tournament Guide#gef01")+"::OnGeffen6";
+	donpcevent instance_npcname("Pemon#gef01")+"::OnDisable";
+	end;
+}
+1@ge_st,113,50,4	script	Ordre#gef01	673,{
+end;
+OnInstanceInit:
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Ordre#gef01");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Ordre#gef01");
+	npctalk "¡Prepárate para sentir la verdadera magia del universo!";
+	sleep2 5000;
+	monster instance_mapname("1@ge_st"),113,50,"Ordre",2555,1,instance_npcname("Tournament Guide#gef01")+"::OnGeffen7";
+	donpcevent instance_npcname("Ordre#gef01")+"::OnDisable";
+	end;
+}
+1@ge_st,113,50,4	script	Brut Haje#gef01	674,{
+end;
+OnInstanceInit:
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Brut Haje#gef01");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Brut Haje#gef01");
+	npctalk "¡El mal ha sido detectado, eliminar, eliminar!";
+	sleep2 5000;
+	monster instance_mapname("1@ge_st"),113,50,"Brut Haje",2556,1,instance_npcname("Tournament Guide#gef01")+"::OnGeffen8";
+	donpcevent instance_npcname("Brut Haje#gef01")+"::OnDisable";
+	end;
+}
+1@ge_st,113,50,4	script	Black Devil#gef01	675,{
+end;
+OnInstanceInit:
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Black Devil#gef01");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Black Devil#gef01");
+	npctalk "¡Insecto novato, vil misero ser que no merece estar vivo, prepárate para perecer!";
+	sleep2 5000;
+	monster instance_mapname("1@ge_st"),113,50,"Black Devil",2557,1,instance_npcname("Tournament Guide#gef01")+"::OnGeffen9";
+	donpcevent instance_npcname("Black Devil#gef01")+"::OnDisable";
+	end;
+}
+1@ge_st,113,50,4	script	Ifodas#gef01	676,{
+end;
+OnInstanceInit:
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Ifodas#gef01");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Ifodas#gef01");
+	npctalk "¡Un caballero de Rune Midgard nunca decaerá!";
+	sleep2 5000;
+	monster instance_mapname("1@ge_st"),113,50,"Ifodas",2558,1,instance_npcname("Tournament Guide#gef01")+"::OnGeffen10";
+	donpcevent instance_npcname("Ifodas#gef01")+"::OnDisable";
+	end;
+}
+1@ge_st,113,50,4	script	Lechenie#gef01	677,{
+end;
+OnInstanceInit:
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Lechenie#gef01");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Lechenie#gef01");
+	npctalk "¿Soy linda? ¿sabías que la lindura puede matar?";
+	sleep2 5000;
+	monster instance_mapname("1@ge_st"),113,50,"Lechenie",2559,1,instance_npcname("Tournament Guide#gef01")+"::OnGeffen11";
+	donpcevent instance_npcname("Lechenie#gef01")+"::OnDisable";
+	end;
+}
+1@ge_st,113,50,4	script	Odolico#gef01	678,{
+end;
+OnInstanceInit:
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Odolico#gef01");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Odolico#gef01");
+	npctalk "¡Cuidado con mi látigo, está lleno de estilo y sed de sangre!";
+	sleep2 5000;
+	monster instance_mapname("1@ge_st"),113,50,"Odolico",2560,1,instance_npcname("Tournament Guide#gef01")+"::OnGeffen12";
+	donpcevent instance_npcname("Odolico#gef01")+"::OnDisable";
+	end;
+}
+1@ge_st,113,50,4	script	Ju#gef01	679,{
+end;
+OnInstanceInit:
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Ju#gef01");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Ju#gef01");
+	npctalk "¡Siente el poder de la naturaleza!";
+	sleep2 5000;
+	monster instance_mapname("1@ge_st"),113,50,"Ju",2561,1,instance_npcname("Tournament Guide#gef01")+"::OnGeffen13";
+	donpcevent instance_npcname("Ju#gef01")+"::OnDisable";
+	end;
+}
+1@ge_st,113,50,4	script	Tidy#gef01	680,{
+end;
+OnInstanceInit:
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Tidy#gef01");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Tidy#gef01");
+	npctalk "¡La arcanidad jamás perecerá, mi sabiduría va más allá del entendimiento!";
+	sleep2 5000;
+	monster instance_mapname("1@ge_st"),113,50,"Tidy",2562,1,instance_npcname("Tournament Guide#gef01")+"::OnGeffen14";
+	donpcevent instance_npcname("Tidy#gef01")+"::OnDisable";
+	end;
+}
+1@ge_st,113,50,4	script	Fei Kanabian#gef01	665,{
+end;
+OnInstanceInit:
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Fei Kanabian#gef01");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Fei Kanabian#gef01");
+	npctalk "¡Es hora de que conozcas a la mejor alquimista de Rune Midgard!";
+	sleep2 5000;
+	monster instance_mapname("1@ge_st"),113,50,"Fei Kanabian",2563,1,instance_npcname("Tournament Guide#gef01")+"::OnGeffen15";
+	donpcevent instance_npcname("Fei Kanabian#gef01")+"::OnDisable";
+	end;
+}
+1@ge_st,113,50,4	script	Fenris Fenrir#gef01	664,{
+end;
+OnInstanceInit:
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Fenris Fenrir#gef01");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Fenris Fenrir#gef01");
+	npctalk "¡Haz llegado lejos joven!";
+	sleep2 3000;
+	npctalk "Te felicito por ello.";
+	sleep2 3000;
+	npctalk "Es un placer conocerte, soy Fenris Fenrir.";
+	sleep2 3000;
+	npctalk "Espero y des tu máximo, porque yo también lo daré.";
+	sleep2 3000;
+	monster instance_mapname("1@ge_st"),113,50,"Fenris Fenrir",2564,1,instance_npcname("Tournament Guide#gef01")+"::OnGeffen16";
+	donpcevent instance_npcname("Fenris Fenrir#gef01")+"::OnDisable";
+	end;
+}
+1@gef,120,104,4	script	Fenris Fenrir#gef02	664,{
+	cutin "fenrir_a",2;
+	mes "[Fenris Fenrir]";
+	mes "¡Oh, hola!";
+	next;
+	mes "[Fenris Fenrir]";
+	mes "¿También estás compitiendo en el torneo?";
+	next;
+	if(gmt01 > 0) {
+		mes "[Fenris Fenrir]";
+		mes "Ten esto para la buena suerte, espero y te sirva.";
+		set gmt01,0;
+		getitem 607,rand(1,5);
+		close2;
+		cutin "",255;
+		end;
+	}
+	mes "[Fenris Fenrir]";
+	mes "Si resultas victorioso o no, ven conmigo, te daré un premio.";
+	close2;
+	cutin "",255;
+	end;
+OnInstanceInit:
+OnEnable:
+	enablenpc instance_npcname("Fenris Fenrir#gef02");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Fenris Fenrir#gef02");
+	end;
+}
+1@gef,117,106,5	script	Lydia#gef01	10010,{
+	cutin "lydia_a",2;
+	mes "[Lydia]";
+	mes "¡¿Vas a participar también?!";
+	next;
+	mes "[Lydia]";
+	mes "¡Dios! ^5533ff*swt^000000";
+	mes "El torneo va a estar dificil.";
+	emotion e_swt;
+	next;
+	mes "[Lydia]";
+	mes "No me escuches, nunca logro vencer a Fenrir, es la gran campeona.";
+	close2;
+	cutin "",255;
+	end;
+OnInstanceInit:
+OnEnable:
+	enablenpc instance_npcname("Lydia#gef01");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Lydia#gef01");
+	end;
+}
+1@gef,123,106,4	script	Chaos#gef01	683,{
+	cutin "h_chaos01",2;
+	mes "[Chaos]";
+	mes "Iris y yo hemos decidido enfrentar a los grandes adversarios de éste torneo.";
+	next;
+	mes "[Chaos]";
+	mes "Pero fallamos en la primera prueba... ¿sabias?";
+	next;
+	mes "[Chaos]";
+	mes "Iris detesta a los perros, fue tan penoso ^5533ff*heh*^000000.";
+	emotion e_heh;
+	close2;
+	cutin "",255;
+	end;
+OnEmote1:
+	emotion e_heh;
+	end;
+OnInstanceInit:
+OnEnable:
+	enablenpc instance_npcname("Chaos#gef01");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Chaos#gef01");
+	end;
+}
+1@gef,125,104,4	script	Iris#gef01	666,{
+	cutin "h_iris01",2;
+	mes "[Iris]";
+	mes "Estaba muy emocionada de participar en éste torneo.";
+	next;
+	mes "[Iris]";
+	mes "Pero nunca pensé que la primera prueba fuese tan dura.";
+	next;
+	mes "[Iris]";
+	mes "Que vergüenza hacer pasar a una dama esos sustos.";
+	next;
+	cutin "h_chaos01",2;
+	mes "[Chaos]";
+	mes "Iris eres una cobarde, ^5533ff*heh*^000000.";
+	donpcevent instance_npcname("Chaos#gef01")+"::OnEmote1";
+	next;
+	cutin "h_iris01",2;
+	emotion e_sob;
+	mes "[Iris]";
+	mes "¡Wah, cállate!";
+	close2;
+	cutin "",255;
+	end;
+OnInstanceInit:
+OnEnable:
+	enablenpc instance_npcname("Iris#gef01");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Iris#gef01");
+	end;
+}
+1@gef,115,104,5	script	Loki#gef01	512,{
+	cutin "ep14_roki01",2;
+	mes "[Loki]";
+	mes "Bienvenido al torneo gran héroe.";
+	next;
+	mes "[Loki]";
+	mes "Muchos grandes aventureros del mundo se reúnen en éste lugar para probar sus habilidades unos con otros.";
+	next;
+	mes "[Loki]";
+	mes "Claro, todos aquí tenemos gran poder, pero sólo hay un campeón.";
+	next;
+	mes "[Loki]";
+	mes "Por el momento la campeona es ^5533ffFenris Fenrir^000000.";
+	next;
+	mes "[Loki]";
+	mes "Pero deja te cuento algo muy importante.";
+	next;
+	mes "[Loki]";
+	mes "Si logras conseguir monedas en el torne, en la ciudad hay muchos mercaderes que te las cambiarán por fabulosos premios.";
+	next;
+	mes "[Loki]";
+	mes "Así que no te desalientes si no logras completar todas las rondas.";
+	next;
+	mes "[Loki]";
+	mes "Con persistencia podrás conseguir muchos objtos de gran valor siempre y cuando tengas las monedas necesarias.";
+	close2;
+	emotion e_no1;
+	cutin "",255;
+	end;
+OnInstanceInit:
+OnEnable:
+	enablenpc instance_npcname("Loki#gef01");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Loki#gef01");
+	end;
+}
+1@gef,124,65,4	script	Kafra Employee#gef01	114,{
+	mes "[Kafra Employee]";
+	mes "Puedo abrir tu almacén por 30z, ¿qué dices?";
+	if(select("Abrir almacén","Salir") == 2) {
+		mes "Vuelve cuando quieras.";
+		close;
+	}
+	if(Zeny < 30) {
+		mes "[Kafra Employee]";
+		mes "No tienes suficiente Zeny.";
+		close;
+	}
+	close2;
+	set Zeny,Zeny-30;
+	openstorage;
+	end;
+OnInstanceInit:
+OnEnable:
+	enablenpc instance_npcname("Kafra Employee#gef01");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Kafra Employee#gef01");
+	end;
+}
+1@gef,131,58,4	script	Coin Machine#gef01	564,{
+	callshop "GMT_COINMACHINE",1;
+	end;
+OnInstanceInit:
+OnEnable:
+	enablenpc instance_npcname("Coin Machine#gef01");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Coin Machine#gef01");
+	end;
+}
+-	itemshop	GMT_COINMACHINE	139,6671:0,2185:900,2186:200,2963:1350,2964:1350,15073:1800,15074:1800

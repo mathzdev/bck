@@ -1,0 +1,791 @@
+//      ______  __    __                                 
+//     /\  _  \/\ \__/\ \                                
+//     \ \ \_\ \ \ ,_\ \ \___      __    ___      __     
+// _____\ \  __ \ \ \/\ \  _ `\  /'__`\/' _ `\  /'__`\   
+///\  __\\ \ \/\ \ \ \_\ \ \ \ \/\  __//\ \/\ \/\ \_\.\_ 
+//\ \_\_/ \ \_\ \_\ \__\\ \_\ \_\ \____\ \_\ \_\ \__/.\_\
+// \/_/    \/_/\/_/\/__/ \/_/\/_/\/____/\/_/\/_/\/__/\/_/
+//
+//========================================================
+// ---                Carrera de Porings               ---
+//========================================================
+// ---                  by DanielArt                   ---
+//========================================================
+-	script	PORACE	-1,{
+OnWhisperGlobal:
+OnClock0210:
+OnClock0610:
+OnClock1010:
+OnClock1810:
+	set $@p_bonus,0;
+	set $@p_race,0;
+	donpcevent "Carrera de Porings::OnEnable";
+	announce "[Carrera de Porings]: ¡Va a comenzar la Carrera de Porings Regordetes!",bc_all,"0xffb6c1";
+	sleep2 5000;
+	announce "[Carrera de Porings]: Los que deseen apostar por uno de nuestros rápidos pero lentos regordetes, diríjase a Prontera, ¡hay enormes premios!.",bc_all,"0xffb6c1";
+	sleep2 5000;
+	announce "[Carrera de Porings]: El evento empezará en 5 minutos.",bc_all,"0xffb6c1";
+	sleep2 60000;
+	announce "[Carrera de Porings]: El evento empezará en 4 minutos.",bc_all,"0xffb6c1";
+	sleep2 60000;
+	announce "[Carrera de Porings]: El evento empezará en 3 minutos.",bc_all,"0xffb6c1";
+	sleep2 60000;
+	announce "[Carrera de Porings]: El evento empezará en 2 minutos.",bc_all,"0xffb6c1";
+	sleep2 60000;
+	announce "[Carrera de Porings]: El evento empezará en 1 minuto.",bc_all,"0xffb6c1";
+	sleep2 60000;
+	announce "[Carrera de Porings]: ¡El evento ha comenzado!.",bc_all,"0xffb6c1";
+	donpcevent "poring_time::OnEnable";
+	end;
+}
+poringrace,58,0,0	script	poring_time	-1,{
+OnEnable:
+	enablenpc "poring_time";
+	initnpctimer;
+	for (set .@i, 1; .@i <= 6; set .@i, .@i + 1)
+		enablenpc "pori_ra#"+.@i;
+	set .@c, 1;
+	while (.@c <= 6) {
+		setd ".@line_"+.@c,rand(1,70);
+		if (getd(".@line_"+.@c) <= 10) {
+			setd "$@por_1_suer"+.@c,getd(".@line_"+.@c);
+			enablenpc "suer"+.@c+"#5";
+			enablenpc "suer"+.@c+"#6";
+			setd "$@por_1_cans"+.@c,rand(50,60);
+			enablenpc "cans"+.@c+"#1";
+		} else if (getd(".@line_"+.@c) <= 30) {
+			setd "$@por_1_suer"+.@c,getd(".@line_"+.@c);
+			enablenpc "suer"+.@c+"#5";
+			set getd(".@cansd"+.@c),rand(40,60);
+			setd "$@por_1_cans"+.@c,getd(".@cansd"+.@c);
+			enablenpc "cans"+.@c+"#1";
+			if (getd(".@cansd"+.@c) >= 50)	enablenpc "cans"+.@c+"#2";
+		} else if (getd(".@line_"+.@c) <= 40) {
+			setd "$@por_1_suer"+.@c,getd(".@line_"+.@c);
+			enablenpc "suer"+.@c+"#1";
+			set getd(".@cansd"+.@c),rand(30,50);
+			setd "$@por_1_cans"+.@c,getd(".@cansd"+.@c);
+			enablenpc "cans"+.@c+"#1";
+			enablenpc "cans"+.@c+"#2";
+			if (getd(".@cansd"+.@c) < 40) enablenpc "cans"+.@c+"#3";
+		} else if (getd(".@line_"+.@c) <= 50) {
+			setd "$@por_1_suer"+.@c,getd(".@line_"+.@c);
+			enablenpc "suer"+.@c+"#1";
+			enablenpc "suer"+.@c+"#2";
+			set getd(".@cansd"+.@c),rand(20,40);
+			setd "$@por_1_cans"+.@c,getd(".@cansd"+.@c);
+			for (set .@i, 1; .@i <= 3; set .@i, .@i + 1)
+				enablenpc "cans"+.@c+"#"+.@i;
+			if (getd(".@cansd"+.@c) < 30) enablenpc "cans"+.@c+"#4";
+		} else if (getd(".@line_"+.@c)) <= 60 {
+			setd "$@por_1_suer"+.@c,getd(".@line_"+.@c);
+			for (set .@i, 1; .@i <= 3; set .@i, .@i + 1)
+				enablenpc "suer"+.@c+"#"+.@i;
+			set getd(".@cansd"+.@c),rand(10,30);
+			setd "$@por_1_cans"+.@c,getd(".@cansd"+.@c);
+			for (set .@i, 1; .@i <= 4; set .@i, .@i + 1)
+				enablenpc "cans"+.@c+"#"+.@i;
+			if (getd(".@cansd"+.@c) < 20) enablenpc "cans"+.@c+"#5";
+		} else if (getd(".@line_"+.@c) <= 70) {
+			setd "$@por_1_suer"+.@c,getd(".@line_"+.@c);
+			for (set .@i, 1; .@i <= 4; set .@i, .@i + 1)
+				enablenpc "suer"+.@c+"#"+.@i;
+			set getd(".@cansd"+.@c),rand(0,20);
+			setd "$@por_1_cans"+.@c,getd(".@cansd"+.@c);
+			for (set .@i, 1; .@i <= 5; set .@i, .@i + 1)
+				enablenpc "cans"+.@c+"#"+.@i;
+			if (getd(".@cansd"+.@c) < 10) enablenpc "cans"+.@c+"#6";
+		}
+		set .@c, .@c + 1;
+	}
+	end;
+OnWhisperGlobal:
+	set $@p_bonus,1;
+	end;
+OnDisable:
+	disablenpc "poring_time";
+	stopnpctimer;
+	end;
+OnTimer1000:
+	enablenpc "Coordinadora de Apuestas";
+	end;
+OnTimer7000:
+	set $@p_bonus,1;
+	mapannounce "poringrace","Bienvenidos a la Carrera de Porings Regordetes.",bc_map,"0xffb6c1";
+	end;
+OnTimer10000:
+	mapannounce "poringrace","Siéntete libre de preguntarle al Coordinador de Ayuda cualquier cosa si tienes dudas de cómo funciona el evento.",bc_map,"0xffb6c1";
+	end;
+OnTimer120000:
+	mapannounce "poringrace","La Carrera de Porings Regordetes comenzará en 3 minutos.",bc_map,"0xffb6c1";
+	donpcevent "Coordinadora de Apuestas::OnTalk";
+	end;
+OnTimer123000:
+	mapannounce "poringrace","Por favor coloca tu apuesta con el NPC 'Coordinadora de Apuestas' antes de que inicie la carrera.",bc_map,"0xffb6c1";
+	donpcevent "Coordinadora de Apuestas::OnTalk";
+	end;
+OnTimer240000:
+	mapannounce "poringrace","¡La Carrera de Porings Regordetes comenzara pronto!.",bc_map,"0xffb6c1";
+	end;
+OnTimer243000:
+	mapannounce "poringrace","Por favor coloca tu apuesta con el NPC 'Coordinadora de Apuestas' antes de que inicie la carrera.",bc_map,"0xffb6c1";
+	donpcevent "Coordinadora de Apuestas::OnTalk";
+	end;
+OnTimer300000:
+	mapannounce "poringrace","¡La Carrera de Porings Regordetes ha comenzado!.",bc_map,"0xffb6c1";
+	set $@p_bonus,0;
+	set $@p_race,0;
+	disablenpc "Coordinadora de Apuestas";
+	for (set .@i, 1; .@i <= 6; set .@i, .@i + 1)
+		donpcevent "Poring N. "+.@i+"::OnEnable";
+	stopnpctimer;
+	end;
+OnInit:
+	disablenpc "poring_time";
+	end;
+}
+
+poringrace,73,22,1	script	Coordinadora de Apuestas	899,{
+	set .npc$,"[^cc0000Coordinadora de Apuestas^000000]";
+	mes .npc$;
+	mes "Bienvenid"+(Sex?"o ^0000ff":"a ^ff0000")+strcharinfo(0)+" a la ^5533ffCarrera de Porings Regordetes.^000000.";
+	next;
+	mes .npc$;
+	mes "Mi trabajo aquí es coordinar las apuestas, es decir, aquí podrás participar dando tanta cantidad de Zeny por un monstruo y dependiendo de esta cantidad podrás ganar otros ^5533ffpremios^000000.";
+	next;
+	mes .npc$;
+	mes "Entonces... ¡por favor elije uno de los regordetes por el que apostarás!";
+	next;
+	if (!checkweight(908,200)) {
+		mes .npc$;
+		mes "¡Espera un momento!";
+		mes "Tienes demaciado peso cargando contigo, te abriré el almacén para que guardes algo.";
+		close2;
+		openstorage;
+		end;
+	}
+	for (set .@i, 1; .@i <= 6; set .@i, .@i + 1)
+		set .@m$, .@m$ + "Poring Regordete N#"+.@i+":";
+	set .@m, select ("^5533ffVer Status de los Porings^000000:"+.@m$) - 1;
+	if (!.@m) {
+		for (set .@i, 1; .@i <= 6; set .@i, .@i + 1)
+			mes "Poring #"+.@i+" [^CC6600Suerte^000000: " + getd("$@por_1_suer"+.@i) + "] [^EE0000HP^000000: " + getd("$@por_1_cans"+.@i) + "]";
+		close;
+	} else {
+		if ($@p_bonus == 1) {
+			if (poring_e) {
+				mes .npc$;
+				mes "Has escogido al Poring N#^5533ff"+poring_e+"^000000 para la carrera.";
+				mes "Se anunciará cuando vaya a comenzar la carrera, así que por favor espera.";
+				close2;
+				emotion e_thx;
+				emotion e_thx,strcharinfo(0);
+				end;
+			}
+			mes .npc$;
+			mes "¿Has elegido al Poring N#"+.@m+"?";
+			next;
+			if(select("Si, he elegido ese","Deseo escoger otro diferente") == 2) {
+				mes .npc$;
+				mes "Apresúrate entonces, no te estaremos esperando todo el día.";
+				close2;
+				emotion e_bzz;
+				end;
+			}
+			mes .npc$;
+			mes "Perfecto, entonces se anunciará cuando la carrera vaya a comenzar, mientras espera.";
+			mes "Si tu monstruo gana, por favor traeme tu ticket para reclamar tu premio.";
+			close2;
+			emotion e_no1;
+			getitem 7514,1;
+			set poring_e,.@m;
+			end;
+		}
+		mes .npc$;
+		mes "Lo siento, pero una Carrera de Porings Regordetes se está llevando a cabo.";
+		mes "Si deseas participar por favor espera a la siguiente carrera.";
+		close;
+	}
+OnTalk:
+	switch(rand(1,3)) {
+		case 1:
+			npctalk "Por favor haz tu apuesta antes de que la carrera empieza, si no, no podrás hacerla hasta el próximo evento.";
+			emotion e_shy;
+			break;
+		case 2:
+			npctalk "Haz tu apuesta antes de que comience la carrera, ¡ven, ven! ¡no te arrepentirás!";
+			emotion e_no1;
+			break;
+		case 3:
+			npctalk "Habla conmigo para hacer tus apuestas a los Poring Regordetes, si pierden los puedes azar a la parilla.";
+			emotion e_slur;
+			break;
+	}
+	end;
+OnInit:
+	disablenpc "Coordinadora de Apuestas";
+	end;
+}
+
+-	script	poring_fnc	-1,{
+	function	WN;
+OnEnable:
+	emotion e_gasp;
+	enablenpc strnpcinfo(0);
+	getmapxy(.@m$,.@x,.@y,1);
+	setarray .@mob[1],1002,1113,1031,1242,1894,1062;
+	monster "poringrace",58,.@y,WN(1)+" Poring Regordete",.@mob[WN(0)],1,strnpcinfo(0)+"::OnMyMobDead";
+	end;
+OnDisable:
+	disablenpc strnpcinfo(0);
+	killmonster "poringrace",strnpcinfo(0)+"::OnMyMobDead";
+	end;
+OnTouchNPC:
+	initnpctimer;
+	set .@n, WN(0);
+	set $@p_race,.@n;
+	for (set .@i, 1; .@i <= 6; set .@i, .@i + 1) {
+		if (.@n == .@i) continue;
+		donpcevent "Poring N. "+.@i+"::OnDisable";
+	}
+	end;
+OnTimer1000:
+	mapannounce "poringrace","¡Tenemos un ganador!",bc_map,"0x33FF66";
+	end;
+OnTimer2000:
+	mapannounce "poringrace","El "+WN(0)+" Poring Regordete es el ganador de esta carrera!",bc_map,"0x33FF66";
+	end;
+OnTimer6000:
+	mapannounce "poringrace","Si apostaste por el "+WN(0)+" Poring Regordete en este carrera, habla con el Encargado de Premios para recibir tu recompenza.",bc_map,"0x33FF66";
+	end;
+OnTimer8000:
+	mapannounce "poringrace","Por favor recuerda que sólo tienes 5 minutos para cobrar tu premio.",bc_map,"0x33FF66";
+	end;
+OnTimer9000:
+	donpcevent "Carrera de Porings::OnDisable";
+	donpcevent "Encargado de Premios::OnEnable";
+	donpcevent strnpcinfo(0)+"::OnDisable";
+	killmonster "poringrace",strnpcinfo(0)+"::OnMyMobDead";
+	stopnpctimer;
+	end;
+
+	function	WN	{
+		set .@n, charat(strnpcinfo(0),getstrlen(strnpcinfo(0))-1);
+		if (!getarg(0))
+			return .@n;
+		return ((.@n <= 3)?((.@n == 1)?"1ro":((.@n == 2)?"2do":"3ro")):.@n+"°"); 
+	}
+}
+poringrace,30,38,0	duplicate(poring_fnc)	Poring N. 1	-1,1,0
+poringrace,30,36,0	duplicate(poring_fnc)	Poring N. 2	-1,1,0
+poringrace,30,34,0	duplicate(poring_fnc)	Poring N. 3	-1,1,0
+poringrace,30,32,0	duplicate(poring_fnc)	Poring N. 4	-1,1,0
+poringrace,30,30,0	duplicate(poring_fnc)	Poring N. 5	-1,1,0
+poringrace,30,28,0	duplicate(poring_fnc)	Poring N. 6	-1,1,0
+
+poringrace,67,45,5	script	Encargado de Premios	845,{
+	set .npc$,"[^5533ffEncargado de Premios^000000]";
+	if (!checkweight(908,200)) {
+		mes .npc$;
+		mes "Tienes demaciadas cosas en tu inventario, te abriré el almacén para que las deposites.";
+		close2;
+		openstorage;
+		end;
+	}
+	set .@insa,rand(1,1000);
+	if (countitem(7514)) {
+		mes .npc$;
+		mes "¡Hola, hola!";
+		mes "Si apostaste por el Poring Regordete que ganó recientemente, lo puedes cambiar por un premio.";
+		next;
+		mes .npc$;
+		mes "Recuerda que los objetos que recibirás son al azar, así que te pueden tocar cosas distintas cada vez que juegues.";
+		next;
+		if ($@p_race) {
+			if (poring_e == $@p_race) {
+				mes .npc$;
+				mes "¡Oh, felicidades!";
+				mes "Tienes un ticket ganador de la Carrera de Poring Regordetes.";
+				next;
+				mes .npc$;
+				mes "Para verificar esto por favor dime tú nombre.";
+				next;
+				input .@input$;
+				if (.@input$ == strcharinfo(0)) {
+					mes .npc$;
+					mes "Ahora para validarlo deberás colocar el nombre de tú ticket. El número de tu ticket es ^ff0000"+.@insa+"^000000.";
+					next;
+					input .@input;
+					if (!.@input) {
+						mes .npc$;
+						mes "¿No quieres cambiarlo?";
+						mes "Por favor intenta nuevamente cuando quieras cambiarlo.";
+						close;
+					} else if (.@input == .@insa) {
+						mes .npc$;
+						mes "De acuerdo, haz colocado el número correcto.";
+						next;
+						mes .npc$;
+						mes "Todo parece estar en orden, prosigamos.";
+						next;
+						mes .npc$;
+						mes "¡Ahora veamos qué premio te toca!";
+						progressbar "008800",5;
+						delitem 7514,1;
+						set poring_e,0;
+						set .@i,1;
+						while (.@i <= 2) {
+							switch (rand(1,3)) {
+								case 1:
+									callfunc "F_Event",1,rand(1,5);
+									break;
+								case 2:
+									callfunc "F_Event",1,rand(5,10);
+									break;
+								case 3:
+									callfunc "F_Event",1,rand(10,15);
+									break;
+							}
+							set .@i,.@i +1;
+							sleep2 800;
+						}
+						next;
+						mes .npc$;
+						mes "Bien, espero verte aquí nuevamente otra vez.";
+						close2;
+						emotion e_thx;
+						emotion e_no1,strcharinfo(0);
+						end;
+					}
+					mes .npc$;
+					mes "El código es incorrecto, por favor verifícalo nuevamente.";
+					close2;
+					emotion e_sry;
+					emotion e_sob,strcharinfo(0);
+					end;
+				}
+				mes .npc$;
+				mes "¿Qué es esto?";
+				mes "Según mis registros ^5533ff"+.@input$+"^000000 no está registrado en el evento, ^ff0000por favor confírmalo^000000.";
+				close2;
+				emotion e_swt;
+				emotion e_swt,strcharinfo(0);
+				end;
+			}
+			mes .npc$;
+			mes "Lamentablemente el Poring Regordete por el que has apostado no ha ganado ningún lugar, por favor vuelve en otro momento.";
+			close2;
+			emotion e_sry;
+			emotion e_omg,strcharinfo(0);
+		}
+	}
+	mes .npc$;
+	mes "¡Hola!";
+	mes "Yo entrego los premios a aquellos participantes que hayan ganado una Carrera de Porings Regordetes.";
+	next;
+	mes .npc$;
+	mes "Si llegas a ganar, por favor ven conmigo y te daré tu premio sin falta.";
+	close2;
+	emotion e_no1;
+	emotion e_ok,strcharinfo(0);
+	end;
+OnEnable:
+	emotion e_gasp;
+	enablenpc "Encargado de Premios";
+	initnpctimer;
+	end;
+OnTimer1000:
+	mapannounce "poringrace","¡La carrera ha terminado, muchísimas felicidades a los ganadores!",bc_map,"0xFFFF00";
+	end;
+OnTimer4000:
+	mapannounce "poringrace","Por favor dale tu Ticket al Encargado de Premios para que puedas recibir tu premio.",bc_map,"0xFFFF00";
+	npctalk "Si ganaste ven a darme tu Ticket, te daré tu premio.";
+	end;
+OnTimer7000:
+	mapannounce "poringrace","Tienes 5 minutos para reclamar tu premio con el Encargado de Premios",bc_map,"0xFFFF00";
+	end;
+OnTimer10000:
+	mapannounce "poringrace","Todos los tickets ganadores en esta ronda serán denegados, y no tendrán premio en caso de que no los cobren a los 5 minutos.",bc_map,"0xFFFF00";
+	end;
+OnTimer13000:
+	mapannounce "poringrace","Por favor sal de la arena antes de que los 5 minutos hayan pasado, gracias.",bc_map,"0xFFFF00";
+	end;
+OnTimer240000:
+	mapannounce "poringrace","Atención, la Carrera de Porings Regordetes cerrará próximamente, por favor salga de la arena.",bc_map,"0xFFFF00";
+	end;
+OnTimer243000:
+	mapannounce "poringrace","La Carrera de Porings Regordetes se cerrará en un minuto.",bc_map,"0xFFFF00";
+	end;
+OnTimer246000:
+	mapannounce "poringrace","Participantes de la anterior carrera por favor salgan.",bc_map,"0xFFFF00";
+	end;
+OnTimer249000:
+	mapannounce "poringrace","Gracias por su cooperación y comprensión.",bc_map,"0xFFFF00";
+	end;
+OnTimer252000:
+	mapannounce "poringrace","Esperamos y hayas disfrutado de la Carrera de Porings Regordetes, te esperamos pronto ~",bc_map,"0xFFFF00";
+	for (set .@i, 1; .@i <= 6; set .@i, .@i + 1) {
+		donpcevent "pori_ra#"+.@i+"::OnDisable";
+		setd "$@por_1_suer"+.@i,0;
+		setd "$@por_1_cans"+.@i,0;
+	}
+	set .@c, 1;
+	while (.@c <= 6) {
+		for (set .@i, 1; .@i <= 6; set .@i, .@i + 1) {
+			disablenpc "cans"+.@c+"#"+.@i;
+			disablenpc "suer"+.@c+"#"+.@i;
+		}
+		set .@c, .@c + 1;
+	}
+	end;
+OnTimer300000:
+	donpcevent "poring_time::OnEnable";
+	set $@p_bonus,2;
+	set $@p_race,0;
+	mapwarp "poringrace","prontera",150,180;
+	end;
+OnTimer306000:
+	donpcevent "poring_time::OnEnable";
+	end;
+OnTimer342000:
+	disablenpc "Encargado de Premios";
+	stopnpctimer;
+	end;
+OnInit:
+	disablenpc "Encargado de Premios";
+	end;
+}
+
+poringrace,76,36,1	script	Guía de Salida	798,{
+	set .npc$,"[^5533ffGuía de Salida^000000]";
+	mes .npc$;
+	mes "Si has ganado una Carrera de Porings Regordetes por favor asegúrate de que hayas reclamado tu premio, todos los ticket no reclamados serán desechados.";
+	next;
+	mes .npc$;
+	mes "Si quieres salir de la Pista de Carreras de Poring Regordetes, yo te puedo guíar.";
+	next;
+	if (select("Salir de la Arena","No, aún no") == 2) {
+		mes .npc$;
+		mes "Ok, ve a hacer los asuntos que tengas pendiente.";
+		next;
+		mes .npc$;
+		mes "Recuerda que cuando transcurran los cinco minutos límites serás hechad"+(Sex?"o":"a")+" automáticamente de la sala.";
+		close;
+	}
+	if (!countitem(7514)) {
+		mes .npc$;
+		mes "Gracias por patrocinarnos, nos vemos aquí nuevamente.";
+	} else {
+		mes .npc$;
+		mes "No puedes salir con un ticket en la mano, por lo cual pasaremos a borrártelo.";
+		next;
+		mes .npc$;
+		mes "Nos vemos pronto.";
+		delitem 7514,1;
+	}
+	set poring_e,0;
+	close2;
+	warp "prontera",150,180;
+	end;
+}
+
+prontera,148,178,4	script	Carrera de Porings	798,{
+	set .npc$,"[^cc0000Carrera de Porings^000000]";
+	mes .npc$;
+	mes "Actualmente está activo el evento de Carrera de Porings Regordetes.";
+	next;
+	if (select("Información:Entrar a la Competición") == 1) {
+		mes .npc$;
+		mes "La carrera de Poring Regordetes es una carrera donde los Poring más obesos del mundo corren por un título, fama, gloria y mujerzuelas.";
+		next;
+		mes .npc$;
+		mes "El evento consiste en que apostarás por uno de los seis poring que corren en esta competición, si llegas a apostarle al ganador, podrás ganar dos de los siguientes objetos:";
+		next;
+		mes .npc$;
+		mes "- Event Ticket.";
+		mes "- Event Coin.";
+		next;
+		mes .npc$;
+		mes "El premio y la cantidad de la misma son completamente al azar.";
+		next;
+		mes .npc$;
+		mes "Para poder participar en el evento deberás de aspotarle a un Poring primeramente, luego esperar y rezar a que dicho poring gane.";
+		next;
+		mes .npc$;
+		mes "Si llegas a ser ganador, tendrás que hablar con el Encargado de Premios y podrás recibir el premio.";
+		next;
+	}
+	mes .npc$;
+	mes "Entonces... ¿quieres participar?";
+	next;
+	if (select("¡A darle!","No, gracias") == 2) {
+		mes .npc$;
+		mes "Ojala y te pongas obeso como los porings de estas carreras.";
+		close;
+	}
+	if (!checkweight(908,700)) {
+		mes .npc$;
+		mes "Tienes demaciado peso, tanto como los Porings... te abriré el almacén para que te quites unas cuantas cosas, pareces ratero.";
+		close2;
+		openstorage;
+		end;
+	}
+	if (countitem(7514)) {
+		mes .npc$;
+		mes "¿Crees que soy idiota?";
+		mes "No puedes entrar con un Ticket antiguo, trae para aca.";
+		dispbottom "Se te ha eliminado tus Monster Ticket.";
+		delitem 7514,countitem(7514);
+		next;
+		if ($@p_bonus == 1) {
+			mes .npc$;
+			mes "Bien, todo parece perfecto para dar inicio a la carrera, allí vamos.";
+			set poring_e,0;
+			close2;
+			warp "poringrace",75,41;
+			end;
+		} else if ($@p_bonus == 2) {
+			mes .npc$;
+			mes "Estamos finalizando las preparaciones para la próxima carrera, por favor sé paciente.";
+			close;
+		} 
+	} else {
+		if ($@p_bonus == 1) {
+			mes .npc$;
+			mes "Bien, todo parece perfecto para dar inicio a la carrera, allí vamos.";
+			set poring_e,0;
+			close2;
+			warp "poringrace",75,41;
+			end;
+		} else if ($@p_bonus == 2) {
+			mes .npc$;
+			mes "Estamos finalizando las preparaciones para la próxima carrera, por favor sé paciente.";
+			close;
+		}
+	}
+	if (!.@p_race) {
+		mes .npc$;
+		mes "Actualmente se está llevando una carrera, por lo cual solo entrarás como espectador.";
+		select("Entrar como espectador");
+		set poring_e,0;
+		close2;
+		warp "poringrace",75,41;
+		end;
+	}
+	mes .npc$;
+	mes "La carrera ya ha terminado, espera al próximo evento.";
+	close;
+OnEnable:
+	enablenpc "Carrera de Porings";
+	end;
+OnDisable:
+OnInit:
+	disablenpc "Carrera de Porings";
+	end;
+}
+
+poringrace,39,49,3	script	Guía de la Carrera	845,{
+	set .npc$,"[^ff6060Guía de la Carrera^000000]";
+	mes .npc$;
+	mes "Bienvenido a la pista de Carrera de Porings Regordetes.";
+	next;
+	mes .npc$;
+	mes "¿En qué te puedo ayudar?";
+	next;
+	switch(select("¿Cómo se juega?:¿Cómo apostar?:¿Cómo reclamar un premio?")) {
+	case 1:
+		mes .npc$;
+		mes "Para jugar deberás primeramente ejecutar una apuesta, para ello por favor consulta la sección ¿Cómo apostar?";
+		next;
+		mes .npc$;
+		mes "Después de haber apostado deberás esperar a que el juego inicie, ya iniciado tendrás que tener suerte para que tu poring elegido gane.";
+		next;
+		mes .npc$;
+		mes "Si llega a ganar podrás reclamar tu premio con el Encargado de Premios.";
+		next;
+		break;
+	case 2:
+		mes .npc$;
+		mes "Para apostar deberás de hablar con la Coordinadora de Apuestas y elegir el Poring al que dedicarás tu suerte.";
+		next;
+		mes .npc$;
+		mes "Te he marcado su coordenadas en el mini-mapa para que le encuentras más facilmente.";
+		viewpoint 1,73,22,1,0xFF3355;
+		next;
+		break;
+	case 3:
+		mes .npc$;
+		mes "Para poder reclamar un premio tu poring elegido deberá de haber ganado.";
+		next;
+		mes .npc$;
+		mes "Posteriormente deberás de ir con el Encargado de Premios y darle tu nombre y código del ticket.";
+		next;
+		mes .npc$;
+		mes "El código del ticket te lo da él mismo pero tú deberás repetírselo únicamente, así que no te angusties si lo olvidas al principio.";
+		next;
+		mes .npc$;
+		mes "Te he marcado la posición del encargado de premios para que te sea más facil llegar con él.";
+		viewpoint 1,67,45,2,0xCE6300;
+		next;
+		break;
+	}
+	mes .npc$;
+	mes "Gracias y espero que tengas mucha suerte apostando a tu poring favorito.";
+	close;
+}
+
+-	script	mob_stat	-1,{
+OnDisable:
+	for(set .@i,1; .@i<7; set .@i,.@i+1)
+		enablenpc "suer1#"+.@i;
+	for(set .@i,1; .@i<7; set .@i,.@i+1)
+		enablenpc "cans1#"+.@i;
+	setd "$@por_1_suer"+strnpcinfo(2),0;
+	setd "$@por_1_cans"+strnpcinfo(2),0;
+	end;
+
+OnTouchNPC:
+	set .@start,rand(1,100);
+	if (.@start < 11) set .@speed,60;
+	else if (.@start < 21) set .@speed,70;
+	else if (.@start < 31) set .@speed,80;
+	else if (.@start < 41) set .@speed,90;
+	else if (.@start < 51) set .@speed,100;
+	else if (.@start < 61) set .@speed,110;
+	else if (.@start < 71) set .@speed,120;
+	else if (.@start < 81) set .@speed,130;
+	else if (.@start < 91) set .@speed,140;
+	else set .@speed,150;
+	sc_start SC_WALKSPEED,5000,.@speed;
+	end;
+	
+OnInit:
+	disablenpc strnpcinfo(0);
+	end;
+
+}
+
+-	script	suer_pr	-1,{
+OnTouchNPC:
+	set .@start,rand(1,100);
+	if (.@start < 61) set .@speed,110;
+	else if (.@start < 71) set .@speed,120;
+	else if (.@start < 81) set .@speed,130;
+	else if (.@start < 91) set .@speed,140;
+	else set .@speed,150;
+	sc_start SC_WALKSPEED,10000,.@speed;
+	end;
+	
+OnInit:
+	disablenpc strnpcinfo(0);
+	end;
+}
+
+-	script	suer2_pr	-1,{
+OnTouchNPC:
+	set .@start,rand(1,100);
+	if (.@start < 61) set .@time,1000;
+	else if (.@start < 71) set .@time,2000;
+	else if (.@start < 81) set .@time,3000;
+	else if (.@start < 91) set .@time,4000;
+	if (.@time) sc_start SC_STUN,.@time,0;
+	end;
+	
+OnInit:
+	disablenpc strnpcinfo(0);
+	end;
+}
+
+-	script	cans_pr	-1,{
+OnTouchNPC:
+	set .@start,rand(1,100);
+	if (.@start < 61) set .@time,1000;
+	else if (.@start < 71) set .@time,2000;
+	else if (.@start < 81) set .@time,3000;
+	else if (.@start < 91) set .@time,4000;
+	if (.@time) sc_start SC_SLEEP,.@time,0;
+	end;
+	
+OnInit:
+	disablenpc strnpcinfo(0);
+	end;
+}
+
+poringrace,56,38,0	duplicate(mob_stat)	pori_ra#1	-1,0,0
+poringrace,56,36,0	duplicate(mob_stat)	pori_ra#2	-1,0,0
+poringrace,56,34,0	duplicate(mob_stat)	pori_ra#3	-1,0,0
+poringrace,56,32,0	duplicate(mob_stat)	pori_ra#4	-1,0,0
+poringrace,56,30,0	duplicate(mob_stat)	pori_ra#5	-1,0,0
+poringrace,56,28,0	duplicate(mob_stat)	pori_ra#6	-1,0,0
+poringrace,33,38,0	duplicate(suer_pr)	suer1#1	-1,0,0
+poringrace,37,38,0	duplicate(suer_pr)	suer1#2	-1,0,0
+poringrace,53,38,0	duplicate(suer_pr)	suer1#3	-1,0,0
+poringrace,45,38,0	duplicate(suer_pr)	suer1#4	-1,0,0
+poringrace,33,36,0	duplicate(suer_pr)	suer2#1	-1,0,0
+poringrace,37,36,0	duplicate(suer_pr)	suer2#2	-1,0,0
+poringrace,53,36,0	duplicate(suer_pr)	suer2#3	-1,0,0
+poringrace,45,36,0	duplicate(suer_pr)	suer2#4	-1,0,0
+poringrace,33,34,0	duplicate(suer_pr)	suer3#1	-1,0,0
+poringrace,37,34,0	duplicate(suer_pr)	suer3#2	-1,0,0
+poringrace,53,34,0	duplicate(suer_pr)	suer3#3	-1,0,0
+poringrace,45,34,0	duplicate(suer_pr)	suer3#4	-1,0,0
+poringrace,33,32,0	duplicate(suer_pr)	suer4#1	-1,0,0
+poringrace,37,32,0	duplicate(suer_pr)	suer4#2	-1,0,0
+poringrace,53,32,0	duplicate(suer_pr)	suer4#3	-1,0,0
+poringrace,45,32,0	duplicate(suer_pr)	suer4#4	-1,0,0
+poringrace,33,30,0	duplicate(suer_pr)	suer5#1	-1,0,0
+poringrace,37,30,0	duplicate(suer_pr)	suer5#2	-1,0,0
+poringrace,53,30,0	duplicate(suer_pr)	suer5#3	-1,0,0
+poringrace,45,30,0	duplicate(suer_pr)	suer5#4	-1,0,0
+poringrace,33,28,0	duplicate(suer_pr)	suer6#1	-1,0,0
+poringrace,37,28,0	duplicate(suer_pr)	suer6#2	-1,0,0
+poringrace,53,28,0	duplicate(suer_pr)	suer6#3	-1,0,0
+poringrace,45,28,0	duplicate(suer_pr)	suer6#4	-1,0,0
+poringrace,49,38,0	duplicate(suer2_pr)	suer1#5	-1,0,0
+poringrace,41,38,0	duplicate(suer2_pr)	suer1#6	-1,0,0
+poringrace,49,36,0	duplicate(suer2_pr)	suer2#5	-1,0,0
+poringrace,41,36,0	duplicate(suer2_pr)	suer2#6	-1,0,0
+poringrace,49,34,0	duplicate(suer2_pr)	suer3#5	-1,0,0
+poringrace,41,34,0	duplicate(suer2_pr)	suer3#6	-1,0,0
+poringrace,49,32,0	duplicate(suer2_pr)	suer4#5	-1,0,0
+poringrace,41,32,0	duplicate(suer2_pr)	suer4#6	-1,0,0
+poringrace,49,30,0	duplicate(suer2_pr)	suer5#5	-1,0,0
+poringrace,41,30,0	duplicate(suer2_pr)	suer5#6	-1,0,0
+poringrace,49,28,0	duplicate(suer2_pr)	suer6#5	-1,0,0
+poringrace,41,28,0	duplicate(suer2_pr)	suer6#6	-1,0,0
+poringrace,43,38,0	duplicate(cans_pr)	cans1#1	-1,0,0
+poringrace,39,38,0	duplicate(cans_pr)	cans1#2	-1,0,0
+poringrace,35,38,0	duplicate(cans_pr)	cans1#3	-1,0,0
+poringrace,55,38,0	duplicate(cans_pr)	cans1#4	-1,0,0
+poringrace,51,38,0	duplicate(cans_pr)	cans1#5	-1,0,0
+poringrace,47,38,0	duplicate(cans_pr)	cans1#6	-1,0,0
+poringrace,43,36,0	duplicate(cans_pr)	cans2#1	-1,0,0
+poringrace,39,36,0	duplicate(cans_pr)	cans2#2	-1,0,0
+poringrace,35,36,0	duplicate(cans_pr)	cans2#3	-1,0,0
+poringrace,55,36,0	duplicate(cans_pr)	cans2#4	-1,0,0
+poringrace,51,36,0	duplicate(cans_pr)	cans2#5	-1,0,0
+poringrace,47,36,0	duplicate(cans_pr)	cans2#6	-1,0,0
+poringrace,43,34,0	duplicate(cans_pr)	cans3#1	-1,0,0
+poringrace,39,34,0	duplicate(cans_pr)	cans3#2	-1,0,0
+poringrace,35,34,0	duplicate(cans_pr)	cans3#3	-1,0,0
+poringrace,55,34,0	duplicate(cans_pr)	cans3#4	-1,0,0
+poringrace,51,34,0	duplicate(cans_pr)	cans3#5	-1,0,0
+poringrace,47,34,0	duplicate(cans_pr)	cans3#6	-1,0,0
+poringrace,43,32,0	duplicate(cans_pr)	cans4#1	-1,0,0
+poringrace,39,32,0	duplicate(cans_pr)	cans4#2	-1,0,0
+poringrace,35,32,0	duplicate(cans_pr)	cans4#3	-1,0,0
+poringrace,55,32,0	duplicate(cans_pr)	cans4#4	-1,0,0
+poringrace,51,32,0	duplicate(cans_pr)	cans4#5	-1,0,0
+poringrace,47,32,0	duplicate(cans_pr)	cans4#6	-1,0,0
+poringrace,43,30,0	duplicate(cans_pr)	cans5#1	-1,0,0
+poringrace,39,30,0	duplicate(cans_pr)	cans5#2	-1,0,0
+poringrace,35,30,0	duplicate(cans_pr)	cans5#3	-1,0,0
+poringrace,55,30,0	duplicate(cans_pr)	cans5#4	-1,0,0
+poringrace,51,30,0	duplicate(cans_pr)	cans5#5	-1,0,0
+poringrace,47,30,0	duplicate(cans_pr)	cans5#6	-1,0,0
+poringrace,43,28,0	duplicate(cans_pr)	cans6#1	-1,0,0
+poringrace,39,28,0	duplicate(cans_pr)	cans6#2	-1,0,0
+poringrace,35,28,0	duplicate(cans_pr)	cans6#3	-1,0,0
+poringrace,55,28,0	duplicate(cans_pr)	cans6#4	-1,0,0
+poringrace,51,28,0	duplicate(cans_pr)	cans6#5	-1,0,0
+poringrace,47,28,0	duplicate(cans_pr)	cans6#6	-1,0,0

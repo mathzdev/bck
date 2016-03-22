@@ -1,0 +1,87 @@
+prontera,153,173,4	script	Gato Legendario::GATOL	556,{
+	set .npc$,"[^5533ffGato Legendario^000000]";
+	switch (Q_GATOL) {
+		case 0:
+			mes .npc$;
+			mes "Así que estás aquí para recibir mi legendario cometido.";
+			next;
+			mes .npc$;
+			mes "Pues dejame decirte que te daré mi mano amputada si cumples con mis requisitos.";
+			next;
+			mes .npc$;
+			mes "Mi sensual mano de gato fue bendecida por el mismísimo Baphomet y bañada en los ríos santos de casados en Jawaii.";
+			next;
+			mes .npc$;
+			mes "Así que dime, ¿aceptas mi reto?";
+			next;
+			if(select("Ni siquiera sé qué es, pero bueno.","No, gracias, gato feo") == 2) {
+				mes .npc$;
+				mes "Fea tu madre, humano-gato de agua dulce.";
+				close;
+			}
+			set Q_GATOL,1;
+			mes .npc$;
+			mes "Bien, entonces vuelve aquí cuando le hayas arrancado su corazón a 50 sirenas.";
+			close2;
+			emotion e_no1;
+			end;
+		case 1:
+			if(countitem(950) < 50) {
+				mes .npc$;
+				mes "Vuelve aquí cuando le hayas arrancado el corazón a 50 sirenas.";
+				close;
+			}
+			delitem 950,50;
+			mes .npc$;
+			mes "Gran trabajo grumete, me estás empezando a probar de que eres digno de mi sensual pata de gato.";
+			next;
+			mes .npc$;
+			mes "Como siguiente misión necesito que venzas a ^5533ffKraken^000000, puedes vencerlo en grupo si gustas.";
+			setquest 15054;
+			set Q_GATOL,2;
+			close;
+		case 2:	if(sp_kraken > 0) goto S_getbug;
+			if(checkquest(15054,HUNTING) == 1) {
+				mes .npc$;
+				mes "Vence a ^5533ffKraken^000000 y vuelve conmigo, puedes derrotarlo en grupo.";
+				close;
+			}
+			if(checkquest(15054,HUNTING) == 2) {
+S_getbug:
+				mes .npc$;
+				mes "Gran trabajo grumete, gran trabajo.";
+				next;
+				erasequest 15054;
+				getexp 100000,100000;
+				mes .npc$;
+				mes "Veo que ahora eres merecedor de mi sensual pata de gato.";
+				next;
+				mes .npc$;
+				mes "Aquí tienes.";
+				specialeffect 154;
+				getitem 35037,1;
+				set Q_GATOL,3;
+				close;
+			}
+			mes .npc$;
+			mes "Gran trabajo grumete, me estás empezando a probar de que eres digno de mi sensual pata de gato.";
+			next;
+			mes .npc$;
+			mes "Como siguiente misión necesito que venzas a ^5533ffKraken^000000, puedes vencerlo en grupo si gustas.";
+			setquest 15054;
+			set Q_GATOL,2;
+			close;
+		case 3:
+			mes .npc$;
+			mes "Ya te he dado mi pata, ¿qué más quieres?";
+			emotion e_gasp;
+			close;
+	}
+OnPCLoadMapEvent:
+	if((strcharinfo(3)=="prontera") && (Q_GATOL < 3))
+		showevent 0,1;
+	end;
+OnInit:
+	waitingroom "¡Me voy mañana! Meow~",0;
+	end;
+}

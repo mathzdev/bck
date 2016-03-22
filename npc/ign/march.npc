@@ -1,0 +1,203 @@
+
+
+prontera,155,176,5	script	Monster Marching	757,{
+if( getgmlevel() < 90 ) end;
+
+.@flower_count = mobcount( .npc_map$,$@npc_name$+"::OnFlowerDied" );
+switch( select( ( $@marching_status )?"":"Set Mob Sprite",( $@marching_status )?"Stop:":( ( !$@sprite_size )?"":"Start" ),( .@flower_count )?"Hide Flower Wall":"Display Flower Wall" ) ){
+	Case 1:
+		mes "Sprite List :";
+		do{
+			if( @menu == 3 ){
+				do{
+					$@sprite[.@size] = rand( 1001,2300 );
+				}while( getmonsterinfo( $@sprite[.@size],MOB_NAME ) == "null" );
+			}else{
+				input $@sprite[.@size],0,2300;
+				if( !$@sprite[.@size] ) close;
+			}
+			.@name$ = getmonsterinfo( $@sprite[.@size],MOB_NAME );
+			if( .@name$ != "null" ){
+				mes " ^777777> "+.@name$+"^000000";
+				.@size++;
+			}
+		}while( select( "Add Another Sprite","Continue","Random Mob" ) != 2 );
+		$@sprite_size = .@size;
+		mes "Speed : ";
+		input $@speed,100,500;
+
+	Case 2:
+		if( $@marching_status ){
+			mes "Marching Cancelled.";
+			$@marching_status  = 0;
+			close2;
+			donpcevent "::OnEnd";
+		}else{
+			mes "Marching Started.";
+			close2;
+			if( callsub( OnSetupNPC ) ){
+				if( !.@flower_count ) donpcevent "::OnFlowerWall";
+				donpcevent "::OnWalk";
+			}else{
+				npctalk "Marching Failed to start.";
+				donpcevent "::OnEnd";
+			}
+		}
+		break;
+	Case 3:
+		mes "Flower Wall "+( ( !.@flower_count )?"Summoned":"Removed" );
+		if( !.@flower_count )
+			donpcevent "::OnFlowerWall";
+		else 
+			killmonster .npc_map$,$@npc_name$+"::OnFlowerDied";
+	default: break;
+}
+end;
+
+OnSetupNPC:
+	$@marching_status = 0;
+	for( .@y = 0; .@y < .y_align_size; .@y++ )
+		for( .@x = 0; .@x < .x_align_size; .@x++ ){
+			if( checkcell( .npc_map$,( .x_align[.@x] + .x_align_offset ),( .y_align[.@y] + .y_align_offset ),cell_chkpass ) ){
+				hideoffnpc "mob#"+$@marching_status;
+				movenpc "mob#"+$@marching_status,( .x_align[.@x] + .x_align_offset ),( .y_align[.@y] + .y_align_offset );
+				specialeffect 344,AREA,"mob#"+$@marching_status;
+				$@marching_status++;
+			}
+		}
+	return $@marching_status;
+
+OnEnd:
+	announce "Marching End.",0;
+	sleep 1000;
+	donpcevent "::OnHide";
+	killmonster .npc_map$,$@npc_name$+"::OnFlowerDied";
+	end;
+	
+// auto start marching if admin configured the npc.
+OnMinute00:
+OnMinute30:
+	if( $@sprite_size ){
+		announce "Marching Started at "+.npc_map$,0;
+		sleep 5000;
+		if( callsub( OnSetupNPC ) ){
+			if( !mobcount( .npc_map$,$@npc_name$+"::OnFlowerDied" ) ) donpcevent "::OnFlowerWall";
+			donpcevent "::OnWalk";
+		}
+	}
+	end;
+
+OnInit:
+// how many step they walk everytime
+$@walk_step = 2;
+// hide npc when reach this y-coordinate
+$@end_y_coordinate = 156;
+
+// offset align for coordinate x and y
+.x_align_offset = 0;
+.y_align_offset = 0;
+
+// npc alignment coordinate ( prefer write in ascending order )
+setarray .x_align,151,153,155,157,159,161;
+setarray .y_align,165,167,169,171,173;
+
+.x_align_size = getarraysize( .x_align );
+.y_align_size = getarraysize( .y_align );
+
+$@y_restart = .y_align[ .y_align_size-1 ] + .y_align_offset;
+$@npc_name$ = strnpcinfo(0);
+.npc_map$ = strnpcinfo(4);
+
+OnWalk:
+OnFlowerDied: end;
+OnFlowerWall:
+killmonster .npc_map$,$@npc_name$+"::OnFlowerDied";
+for( .@i = 175; .@i > 157; .@i-- ){
+	monster .npc_map$,147,.@i,"WALL",rand( 1934,1936 ),1,$@npc_name$+"::OnFlowerDied";
+	monster .npc_map$,164,.@i,"WALL",rand( 1934,1936 ),1,$@npc_name$+"::OnFlowerDied";
+}
+end;
+}
+
+
+
+prontera,1,1,4	script	mob	111,{
+	end;
+OnHide:
+	.@npc_name$ = strnpcinfo(0);
+	setnpcdisplay( .@npc_name$,.@npc_name$,111 );
+	movenpc .@npc_name$,1,1;
+	hideonnpc .@npc_name$;
+	end;
+	
+OnWalk:
+	.@npc_name$ = strnpcinfo(0);
+	npcspeed $@speed;
+	while( .@sprite < $@sprite_size && $@sprite[.@sprite] && $@marching_status ){
+		if( !setnpcdisplay( .@npc_name$,getmonsterinfo( $@sprite[.@sprite],MOB_NAME ),$@sprite[.@sprite] ) ){
+			hideoffnpc .@npc_name$;
+			while( $@marching_status ){
+				getmapxy( .@map$,.@x,.@y,1 );
+
+				if( .@y > $@end_y_coordinate ){
+					npcwalkto .@x,( .@y - $@walk_step );
+				}else if( .@y <= $@end_y_coordinate ){
+					npcstop;
+					break;
+				}
+				sleep 1750;
+			}
+			specialeffect 344;
+		}
+
+		.@sprite++;
+		if( .@sprite < $@sprite_size && $@marching_status ){
+			movenpc .@npc_name$,.@x,$@y_restart;
+			specialeffect 344,AREA,.@npc_name$;
+		}
+	}
+	movenpc .@npc_name$,1,1;
+	hideonnpc .@npc_name$;
+	setnpcdisplay( .@npc_name$,.@npc_name$,111 );
+	if( $@marching_status > 0 ){
+		$@marching_status--;
+		if( $@marching_status == 0 )
+			donpcevent $@npc_name$+"::OnEnd";
+	}
+	end;
+
+}
+
+// duplicate more if you need ..
+prontera,1,1,4	duplicate(mob)	mob#0	111
+prontera,1,1,4	duplicate(mob)	mob#1	111
+prontera,1,1,4	duplicate(mob)	mob#2	111
+prontera,1,1,4	duplicate(mob)	mob#3	111
+prontera,1,1,4	duplicate(mob)	mob#4	111
+prontera,1,1,4	duplicate(mob)	mob#5	111
+prontera,1,1,4	duplicate(mob)	mob#6	111
+prontera,1,1,4	duplicate(mob)	mob#7	111
+prontera,1,1,4	duplicate(mob)	mob#8	111
+prontera,1,1,4	duplicate(mob)	mob#9	111
+prontera,1,1,4	duplicate(mob)	mob#10	111
+prontera,1,1,4	duplicate(mob)	mob#11	111
+prontera,1,1,4	duplicate(mob)	mob#12	111
+prontera,1,1,4	duplicate(mob)	mob#13	111
+prontera,1,1,4	duplicate(mob)	mob#14	111
+prontera,1,1,4	duplicate(mob)	mob#15	111
+prontera,1,1,4	duplicate(mob)	mob#16	111
+prontera,1,1,4	duplicate(mob)	mob#17	111
+prontera,1,1,4	duplicate(mob)	mob#18	111
+prontera,1,1,4	duplicate(mob)	mob#19	111
+prontera,1,1,4	duplicate(mob)	mob#20	111
+prontera,1,1,4	duplicate(mob)	mob#21	111
+prontera,1,1,4	duplicate(mob)	mob#22	111
+prontera,1,1,4	duplicate(mob)	mob#23	111
+prontera,1,1,4	duplicate(mob)	mob#24	111
+prontera,1,1,4	duplicate(mob)	mob#25	111
+prontera,1,1,4	duplicate(mob)	mob#26	111
+prontera,1,1,4	duplicate(mob)	mob#27	111
+prontera,1,1,4	duplicate(mob)	mob#28	111
+prontera,1,1,4	duplicate(mob)	mob#29	111
+prontera,1,1,4	duplicate(mob)	mob#30	111
+                                    

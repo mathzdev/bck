@@ -1,0 +1,34 @@
+nov_gar01,96,48,4	script	#touch	139,10,10,{
+end;
+OnTouch:
+	mes "^008800¡Bienvenid"+(Sex?"o":"a")+"!";
+	mes "¡Antes de comenzar necesitamos que elijas una raza.";
+	next;
+	if(select("^ff7700Doram:^5533ffHumano^000000") == 2) {
+		mes "^008800Humanos^000000:";
+		mes "^777777La población que más habita en Rune Midgard, pueden especializarse en distintas profesiones y realizar gran variedad de cosas.^000000";
+		next;
+		menu "Deseo ser Humano",-,"^5533ffElegir otra raza^000000",OnTouch;
+		undisguise;
+		getitem 1203,1;
+		set doram,0;
+		warp "moonhaven",209,186;
+		close;
+	}
+		mes "^ff7700Doram^000000:";
+		mes "^777777Una raza que posee grandes poderes mágicos y curativos, su raza evolucionó naturalmente de los gatos que han creado su propias organizaciones distribuyendose por todo Midgard.^000000";
+		next;
+		menu "Deseo ser Doram",-,"^5533ffElegir otra raza^000000",OnTouch;
+		undisguise;
+		getitem 35068,1;
+		set doram,1;
+		jobchange 35;
+		setfaction 1;
+		skill 4000,9,0;
+		skill 4010,5,0;
+		setlook 1,71;
+		warp "moonhaven",209,186;
+		close;
+end;
+}
+nov_gar01	mapflag	nocommands

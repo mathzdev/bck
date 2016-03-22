@@ -49,7 +49,8 @@ static bool cashshop_parse_dbrow(char* fields[], int columns, int current) {
 		RECREATE( cash_shop_items[tab].item, struct cash_item_data *, ++cash_shop_items[tab].count );
 		CREATE( cash_shop_items[tab].item[ cash_shop_items[tab].count - 1], struct cash_item_data, 1 );
 		cid = cash_shop_items[tab].item[ cash_shop_items[tab].count - 1];
-	}else{
+
+	} else {
 		cid = cash_shop_items[tab].item[j];
 	}
 
@@ -68,8 +69,7 @@ static void cashshop_read_db_txt( void ){
 	const char* dbsubpath[] = {
 		"",
 		"/"DBIMPORT,
-	};
-	int fi;
+	};	int fi;
 
 	for( fi = 0; fi < ARRAYLENGTH( dbsubpath ); ++fi ){
 		uint8 n1 = (uint8)(strlen(db_path)+strlen(dbsubpath[fi])+1);
@@ -80,13 +80,15 @@ static void cashshop_read_db_txt( void ){
 		if(fi==0) {
 			safesnprintf(dbsubpath1,n1,"%s%s",db_path,dbsubpath[fi]);
 			safesnprintf(dbsubpath2,n2,"%s/%s%s",db_path,DBPATH,dbsubpath[fi]);
-		}
+  		}
+
 		else {
 			safesnprintf(dbsubpath1,n1,"%s%s",db_path,dbsubpath[fi]);
 			safesnprintf(dbsubpath2,n1,"%s%s",db_path,dbsubpath[fi]);
 		}
 
 		sv_readdb(dbsubpath2, "item_cash_db.txt",          ',', 3, 3, -1, &cashshop_parse_dbrow, fi);
+
 
 		aFree(dbsubpath1);
 		aFree(dbsubpath2);
@@ -115,6 +117,7 @@ static int cashshop_read_db_sql( void ){
 
 			++lines;
 
+
 			for( i = 0; i < 3; ++i ){
 				Sql_GetData( mmysql_handle, i, &str[i], NULL );
 
@@ -125,7 +128,7 @@ static int cashshop_read_db_sql( void ){
 
 			if( !cashshop_parse_dbrow( str, 3, lines ) ) {
 				ShowError("cashshop_read_db_sql: Cannot process table '%s' at line '%d', skipping...\n", cash_db_name[fi], lines);
-				continue;
+  				continue;
 			}
 
 			++count;

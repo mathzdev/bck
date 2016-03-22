@@ -18,6 +18,7 @@
 #include "pet.h"
 #include "instance.h"
 #include "chat.h"
+#include "achievement.h"
 
 #include <stdlib.h>
 #include <errno.h>
@@ -1603,6 +1604,7 @@ uint8 npc_buylist(struct map_session_data* sd, uint16 n, struct s_npc_buy_list *
 	new_ = 0;
 
 	shop = nd->u.shop.shop_item;
+	achievement_validate_zeny(sd,ATZ_USE_SHOP,(int)z);
 
 	memset(market_index, 0, sizeof(market_index));
 	// process entries in buy list, one by one

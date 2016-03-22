@@ -25,6 +25,7 @@ set( CHAR_HEADERS
 	"${SERVER_CHAR_SOURCE_DIR}/int_pet.h"
 	"${SERVER_CHAR_SOURCE_DIR}/int_quest.h"
 	"${SERVER_CHAR_SOURCE_DIR}/int_storage.h"
+	"${SERVER_CHAR_SOURCE_DIR}/int_achievement.h"
 	"${SERVER_CHAR_SOURCE_DIR}/inter.h"
 	)
 set( CHAR_SOURCES
@@ -43,6 +44,7 @@ set( CHAR_SOURCES
 	"${SERVER_CHAR_SOURCE_DIR}/int_pet.c"
 	"${SERVER_CHAR_SOURCE_DIR}/int_quest.c"
 	"${SERVER_CHAR_SOURCE_DIR}/int_storage.c"
+	"${SERVER_CHAR_SOURCE_DIR}/int_achievement.c"
 	"${SERVER_CHAR_SOURCE_DIR}/inter.c"
 	)
 set( DEPENDENCIES common )

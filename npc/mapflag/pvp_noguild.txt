@@ -55,7 +55,7 @@ pvp_y_8-4	mapflag	pvp_noguild
 pvp_y_8-5	mapflag	pvp_noguild
 pvp_n_1-1	mapflag	pvp_noguild
 pvp_n_1-2	mapflag	pvp_noguild
-pvp_n_1-3	mapflag	pvp_noguild
+//pvp_n_1-3	mapflag	pvp_noguild
 pvp_n_1-4	mapflag	pvp_noguild
 pvp_n_1-5	mapflag	pvp_noguild
 pvp_n_2-1	mapflag	pvp_noguild

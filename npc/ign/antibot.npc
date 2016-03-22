@@ -1,0 +1,583 @@
+// [========================================================]
+// [============            AntiBot             ============]
+// [========================================================]
+// [ Versión 13                                             ]
+// [========================================================]
+// [ Script original: Ivion                                 ]
+// [========================================================]
+// [ Descripción:                                           ]
+// [                                                        ]
+// [ - Script antibot basado en NPCKillEvent.               ]
+// [ - Sistema de preguntas aleatorias.                     ]
+// [ - Los gms pueden añadir sus propias frases desde el npc]
+// [   AntiBot. Es recomendable añadir alrededor de 20      ]
+// [   frases nuevas cada semana, para evitar que los bots  ]
+// [   las memoricen. El script irá sustituyendo las frases ]
+// [   más antiguas.                                        ]
+// [========================================================]
+// [ 5 últimas actualizaciones:                             ]
+// [                                                        ]
+// [ v9: [Ivion]                                            ]
+// [ - Números en casteo de skill.                          ]
+// [ - Bugfix para evitar varios antibots simultaneos.      ]
+// [ - Configuración de oportunidades.                      ]
+// [                                                        ]
+// [ v10: [Ivion]                                           ]
+// [ - Reparado bug de variables de la v9.                  ]
+// [                                                        ]
+// [ v11: [Ivion]                                           ]
+// [ - Añadido npc y lista de sancionados.                  ]
+// [                                                        ]
+// [ v12: [Ivion]                                           ]
+// [ - BugFix: Para evitar mal uso de perfect hide.         ]
+// [ - BugFix: deltimer en jail.                            ]
+// [ - Añadido save en jail.                                ]
+// [                                                        ]
+// [ v13: [Ivion]                                           ]
+// [ - Reconstruido practicamente todo el script.           ]
+// [ - Nuevo sistema de preguntas aleatorias. Los GMs pueden]
+// [   añadir sus propias frases a través del npc AntiBot.  ]
+// [ - Los GMs pueden reportar bots mediante el npc AntiBot.]
+// [ - El antibot avisará a los jugadores un minuto antes de]
+// [   aparecer para que estén preparados.                  ]
+// [ - Uso de variables $@ para evitar encarcelamientos al  ]
+// [   hacer @reloadscript o al apagar el servidor.         ]
+// [ - Bugfix: Añadidos timers con sleep2. El comando       ]
+// [   addtimer parece estar un poco bugeado.               ]
+// [ - Bugfix: Arreglado el trigger en las partys.          ]
+// [========================================================]
+// [ http://www.eathena.ws/board/index.php?showtopic=233981 ]
+// [========================================================]
+
+-	script	antibot_main	-1,{
+
+OnInit:
+
+// [--------------------------------------------------------]
+// [ Configuración:                                         ]
+// [========================================================]
+
+	set $@AB$,"Sistema AntiBot";	// Nombre del npc.
+	set $@ABr,5;		// Probabilidad de que aparezca el AntiBot al matar un monstruo. (x/10000)
+	set .t1,60;		// Tiempo disponible antes de que el antibot se active automáticamente. (segundos)
+	set $@ABt2,300;		// Tiempo disponible para responder. (segundos)
+	set $@ABc,3;		// Número de oportunidades para responder.
+
+	set .gm1,50;		// Nivel de gm necesario para evitar el AntiBot.
+	set $@ABgm2,50;		// Nivel de gm necesario para acceder a las opciones de control del AntiBot.
+
+	set .b$,"@ban +1m";	// Comando de penalización por uso de bot. También podeis usar @jail o @block.
+	set .bl,20;		// Número máximo de datos almacenados en la lista de sancionados.
+
+	// Lista de mapas donde AntiBot permanecerá desactivado:
+	setarray .m$,"bat_","g_cas","guild_vs","nguild","poring","pvp","rwc","cell_game","poringrace","findporing","princesa";
+
+// [--------------------------------------------------------]
+// [ Final de la configuración.                             ]
+// [========================================================]
+
+	if(!getarraysize($AB$))
+		setarray $AB$[0],"Blancanieves y los 7 enanitos","Caperucita Roja","La Bella Durmiente","Los tres cerditos","Alicia en le país de las maravillas";
+
+	// NPC names:
+	set .@a,1;
+	while(!setnpcdisplay("AB#"+.@a,$@AB$+"#"+.@a)) set .@a,.@a + 1;
+	end;
+
+OnNPCKillEvent:
+	if(!rand(10000 / $@ABr)) {
+		set .@m$,strcharinfo(3);
+		set .@a,getarraysize(.m$);
+		while(.@a) {
+			set .@a,.@a - 1;
+			if(compare(.@m$,.m$[.@a])) {
+				set .@b,1;
+				break;
+			}
+		}
+		if(!.@b) {
+			if(getcharid(1)) {
+				getpartymember getcharid(1),2;
+				set .@a,$@partymembercount;
+				if(.@a > 1) {
+					copyarray .@b[0],$@partymemberaid[0],.@a;
+					while(.@a) {
+						set .@a,.@a - 1;
+						if(attachrid(.@b[.@a]))
+							if(.@m$ == strcharinfo(3)) continue;
+						deletearray .@b[.@a],1;
+					}
+					set .@a,rand(getarraysize(.@b));
+					attachrid .@b[.@a];
+				}
+				cleararray $@partymemberaid[0],0,.@a;
+				set $@partymembercount,0;
+			}
+On0:
+			set .@i,getcharid(0) - 149999;
+			if(!getd("$@AB"+.@i) && (getgmlevel() < .gm1)) {
+				setd "$@AB"+.@i,1;
+				set .@t,.t1;
+				while((getd("$@AB"+.@i) == 1) && .@t) {
+					if(!((.t1 - .@t) % 3)) {
+						if(!((.t1 - .@t) % 2))	announce "["+$@AB$+"]: ¡¡No te desconectes!!",bc_self,"0xff"+rand(5)+"0"+rand(5)+"0";
+						else			announce "["+$@AB$+"]: Utiliza el comando '@antibot' para comenzar el test Antibot.",bc_self,"0xff"+rand(5)+"0"+rand(5)+"0";
+						emotion 0,1;
+					}
+					set .@t,.@t - 1;
+					specialeffect2 548;
+					sleep2 1000;
+				}
+				if(getd("$@AB"+.@i) == 1) {
+					setd "$@AB"+.@i,2;
+					addtimer 1,"antibot::On0";
+				}
+				set .@t,$@ABt2;
+				while((getd("$@AB"+.@i) == 2) && .@t) {
+					itemskill 674,.@t;
+					announce "["+$@AB$+"]: Te quedan "+.@t+" segundos para responder.",bc_self,"0xff"+rand(5)+"0"+rand(5)+"0";
+					set .@t,.@t - 1;
+					sleep2 1000;
+				}
+				itemskill 674,0;
+				if(getd("$@AB"+.@i)) callsub OnBan;
+			}
+		}
+	}
+	end;
+
+OnPCLoginEvent:
+OnPCLogoutEvent:
+	if(getd("$@AB"+(getcharid(0) - 149999))) callsub OnBan;
+	end;
+
+OnBan:
+	setd "$@AB"+(getcharid(0) - 149999),0;
+	set .@a$,strcharinfo(0);
+	sleep 1000;
+	atcommand .b$+" "+.@a$;
+	announce .@a$+" ha sido sancionado por uso de bot.",bc_all,0xdd8833;
+	set .@a,getarraysize($AB1$);
+	if(.@a >= .bl) {
+		deletearray $AB1$[0],1;
+		deletearray $AB2$[0],1;
+		set .@a,.bl - 1;
+	}
+	set $AB1$[.@a],.@a$;
+	setarray .@b[0],gettime(5),gettime(6),gettime(3),gettime(2),gettime(1);
+	set .@c,5;
+	while(.@c) {
+		set .@c,.@c - 1;
+		set .@b$[.@c],.@b[.@c];
+		if(.@b[.@c] < 10) set .@b$[.@c],"0"+.@b$[.@c];
+	}
+	set $AB2$[.@a],.@b$[0]+"/"+.@b$[1]+"/"+gettime(7)+" - "+.@b$[2]+":"+.@b$[3]+":"+.@b$[4];
+	end;
+}
+
+-	script	antibot	-1,{
+OnCommand:
+OnWhisperGlobal:
+	if(getd("$@AB"+(getcharid(0) - 149999)) == 1) {
+On0:
+		set .@i,getcharid(0) - 149999;
+		setd "$@AB"+.@i,2;
+		setoption 0x40,1;
+		atcommand "@option 14 0 0";
+		specialeffect2 159;
+		specialeffect2 160;
+		set .@n$,"^008888"+$@AB$+"^000000";
+		mes .@n$;
+		mes "Hola, "+strcharinfo(0);
+		mes "No te asustes al leer este mensaje.";
+		mes "Este es el Sistema AntiBot del servidor. Sigue mis instrucciones y no te pasará nada.";
+		next;
+		mes .@n$;
+		mes "Para comprobar que no eres un bot, deberás completar un sencillo test.";
+		mes "Si no consigues responder a tiempo, o si te desconectas antes de contestar, serás inmediatamente enviado a la cárcel.";
+		set .@a,$@ABc;
+		do {
+			next;
+			set .@a,.@a - 1;
+			set .@b,rand(getarraysize($AB$));
+			set .@c,getstrlen($AB$[.@b]);
+			cleararray .@d[0],0,getarraysize(.@d);
+			set .@e,0;
+			while(.@c) {
+				set .@c,.@c - 1;
+				if(compare("0123456789abcdefghijklmnñopqrstuvwxyz",charat($AB$[.@b],.@c))) {
+					set .@d[.@e],.@c;
+					set .@e,.@e + 1;
+				}
+			}
+			set .@e,.@d[rand(.@e)];
+			set .@c$,charat($AB$[.@b],.@e);
+			set .@a$,"";
+			while(.@c < getstrlen($AB$[.@b])) {
+				if(.@c == .@e)	set .@a$,.@a$+"#";
+				else		set .@a$,.@a$+""+charat($AB$[.@b],.@c);
+				set .@c,.@c + 1;
+			}
+			mes .@n$;
+			mes "Lee atentamente la frase que se muestra a continuación:";
+			mes " ";
+			mes "^"+rand(3,9)+"0"+rand(3,9)+"0ff"+.@a$+"^000000";
+			mes " ";
+			mes "Seguro que te has dado cuenta de que falta una letra marcada con un símbolo #.";
+			mes "¿Cual es esa letra?";
+			next;
+			input .@b$;
+			if(compare(.@c$,.@b$)) setd "$@AB"+.@i,0;
+			else if(.@a) {
+				specialeffect2 611;
+				mes .@n$;
+				mes "Lo siento, esa no es la respuesta correcta.";
+				mes "No te preocupes, un fallo lo puede tener cualquiera.";
+				mes "Te daré un nuevo intento.";
+			}
+			else setd "$@AB"+.@i,3;
+		} while(.@a && getd("$@AB"+.@i));
+		if(!getd("$@AB"+.@i)) {
+			deltimer "antibot::On3";
+			emotion 21,1;
+			mes .@n$;
+			mes "Bien, puedes continuar jugando.";
+			if(Hp) {
+				getmapxy .@m$,.@x,.@y,0;
+				setarray .@a$,"Aquí mismo.","En un punto aleatorio del mapa.","Volver al Punto de Inicio";
+				set .@b,0;
+				set .@c,0;
+				while(.@b < 3) {
+					if(	((.@b == 1) && getmapflag(.@m$,mf_noteleport)) ||
+						((.@b == 2) && getmapflag(.@m$,mf_noreturn))
+					)
+						deletearray .@a$[.@b],1;
+					else {
+						set .@a[.@c],.@b + 1;
+						set .@c,.@c + 1;
+					}
+					set .@b,.@b + 1;
+				}
+				if(.@c > 1) {
+					mes "¿Donde quieres que te deje?";
+					next;
+					set .@c,prompt(.@a$[0],.@a$[1],.@a$[2]);
+				}
+				if(.@c < 255) {
+					set .@c,.@a[.@c - 1];
+					close2;
+					if(.@c == 2) set .@m$,"Random";
+					if(.@c == 3) set .@m$,"SavePoint";
+				}
+				warp .@m$,.@x,.@y;
+				skilleffect 350,0;
+				skilleffect 8,0;
+				skilleffect 73,0;
+				sc_start 60,20000,0;
+				sc_start 21,20000,10;
+				sc_start 39,20000,10;
+			}
+			else close2;
+		}
+		setoption 0x40,0;
+		atcommand "@option 0 0 0";
+	}
+	end;
+OnInit:
+	bindatcmd "antibot","antibot::OnCommand",0,0;
+	end;
+}
+
+-	script	AB#0::AB	-1,{
+OnCommand:
+	set .@n$,"^008888"+$@AB$+"^000000";
+	mes .@n$;
+	mes "Bienvenido al Panel de Control del Antibot.";
+	mes "¿En qué te puedo ayudar?";
+	next;
+	if(getgmlevel() >= $@ABgm2) setarray .@a$[0],"Investigar posible bot","Ver lista de frases.","Añadir nueva frase.","Eliminar frase.";
+	set .@a,select("^aa0000Salir^000000","Información sobre el AntiBot.","Ver lista de sancionados.",.@a$[0],.@a$[1],.@a$[2],.@a$[3]);
+	mes .@n$;
+	switch(.@a) {
+		case 2:
+			mes "^888888¿Qué es un bot?^000000";
+			mes "Un bot es un programa informático creado para imitar el comportamiento de un humano.";
+			next;
+			mes .@n$;
+			mes "^888888¿Qué es un bot?^000000";
+			mes "Estos bots son utilizados de forma indeseada por algunos jugadores de Ragnarok Online para mantener a su personaje entrenando y buscando items sin necesidad de estar controlándolo.";
+			next;
+			mes .@n$;
+			mes "^888888¿Qué es un bot?^000000";
+			mes "Logicamente esto está totalmente prohibido en este servidor, pues desequilibra el juego respecto a los jugadores sensatos que quieren disfrutar de sus personajes por sí mismos.";
+			next;
+			mes .@n$;
+			mes "^888888¿Qué es un sistema AntiBot?^000000";
+			mes "Un sistema AntiBot es un script cuyo objetivo es mantener el servidor limpio de bots.";
+			next;
+			mes .@n$;
+			mes "^888888¿Qué es un sistema AntiBot?^000000";
+			mes "Estos sistemas principalmente buscan diferenciar el comportamiento de un bot del de un jugador real, y en el caso de detectar la presencia de un bot, le expulsan del juego y banean la cuenta de su propietario.";
+			next;
+			mes .@n$;
+			mes "^888888¿Cómo funciona éste sistema AntiBot?^000000";
+			mes "Este script AntiBot está basado el el método NPCKillEvent.";
+			mes "Cada vez que un jugador mate un monstruo en el juego, existirá una muy pequeña probabilidad de activar el sistema AntiBot.";
+			next;
+			mes .@n$;
+			mes "^888888¿Cómo funciona éste sistema AntiBot?^000000";
+			mes "Entonces el AntiBot formulará una sencilla pregunta que el jugador deberá responder correctamente en un tiempo máximo de "+$@ABt2+" segundos.";
+			next;
+			mes .@n$;
+			mes "^888888¿Cómo funciona éste sistema AntiBot?^000000";
+			mes "Si el jugador falla tras "+$@ABc+" intentos, abandona el juego o simplemente no contesta a la pregunta en el tiempo estimado, será considerado un bot y será consecuentemente sancionado.";
+			next;
+			mes .@n$;
+			mes "^888888¿Y los bots no pueden responder a esas preguntas?^000000";
+			mes "A diferencia de otros scripts AntiBot, las preguntas formuladas por este AntiBot no son generadas por ningún algoritmo aleatorio, que podría ser detectado por un bot adecuadamente programado.";
+			next;
+			mes .@n$;
+			mes "^888888¿Y los bots no pueden responder a esas preguntas?^000000";
+			mes "En cambio, son los propios GMs del servidor los encargados de crear estas preguntas.";
+			mes "Éstos deberán asegurarse de actualizar con frecuencia las preguntas para que los bots no puedan memorizarlas.";
+			next;
+			mes .@n$;
+			mes "Para familiarizarte un poco con el funcionamiento del AntiBot, a continuación puedes realizar una sencilla demostración.";
+			next;
+			set .@a,select("^aa0000Salir^000000","Realizar demostración") - 1;
+			if(.@a) {
+				set .@t$,"Blancanieves y los 7 enanitos";
+				set .@b,getstrlen(.@t$);
+				set .@c,0;
+				while(.@b) {
+					set .@b,.@b - 1;
+					if(compare("0123456789abcdefghijklmnñopqrstuvwxyz",charat(.@t$,.@b))) {
+						set .@d[.@c],.@b;
+						set .@c,.@c + 1;
+					}
+				}
+				while(.@a) {
+					set .@e,.@d[rand(.@c)];
+					set .@c$,charat(.@t$,.@e);
+					set .@a$,"";
+					set .@b,0;
+					while(.@b < getstrlen(.@t$)) {
+						if(.@b == .@e)	set .@a$,.@a$+"#";
+						else		set .@a$,.@a$+""+charat(.@t$,.@b);
+						set .@b,.@b + 1;
+					}
+					mes .@n$;
+					mes "Lee atentamente la frase que se muestra a continuación:";
+					mes " ";
+					mes "^"+rand(3,9)+"0"+rand(3,9)+"0ff"+.@a$+"^000000";
+					mes " ";
+					mes "Seguro que te has dado cuenta de que falta una letra marcada con un símbolo #.";
+					mes "¿Cual es esa letra?";
+					next;
+					input .@b$;
+					if(compare(.@c$,.@b$)) set .@a,0;
+					else {
+						specialeffect2 611;
+						mes .@n$;
+						mes "Lo siento, esa no es la respuesta correcta.";
+						mes "No te preocupes, un fallo lo puede tener cualquiera.";
+						mes "Te daré un nuevo intento.";
+						next;
+					}
+				}
+				emotion 21;
+				mes .@n$;
+				mes "¡Muy bien!";
+				mes "¿A que no es tan difícil?";
+				next;
+			}
+			mes .@n$;
+			break;
+		case 3:
+			mes "Esta lista muestra las últimas 20 penalizaciones por uso de bot realizadas por el AntiBot.";
+			mes "Espera unos segundos mientras envío la lista de sancionados a tu ventana de chat.";
+			close2;
+			emotion 5;
+			announce "[ Fecha - Hora ]  -  Nombre",bc_self,0xff7700;
+			set .@a,getarraysize($AB1$);
+			if(!.@a) announce "No se han encontrado resultados.",bc_self,"0x"+rand(7,9)+"0"+rand(7,9)+"0"+rand(7,9)+"0";
+			while(.@a) {
+				set .@a,.@a - 1;
+				announce "[ "+$AB2$[.@a]+" ]  -  "+$AB1$[.@a],bc_self,"0x"+rand(7,9)+"0"+rand(7,9)+"0"+rand(7,9)+"0";
+			}
+			announce "----------",bc_self,0xff7700;
+			end;
+		case 4:
+			mes "Escribe el nombre del personaje que deseas investigar.";
+			next;
+			input .@a$;
+			mes .@n$;
+			set .@a,getcharid(3,.@a$);
+			if(.@a) {
+				set .@b,getcharid(3);
+				attachrid .@a;
+				doevent "antibot_main::On0";
+				attachrid .@b;
+				mes "Muy bien.";
+				mes "Se ha iniciado un test AntiBot para comprobar si el jugador "+.@a$+" es realmente un bot.";
+				mes "Gracias por la colaboración.";
+				emotion 21;
+			}
+			else {
+				mes "No se ha encontrado ningún personaje actualmente conectado con ese nombre.";
+				mes "Comprueba que lo has escrito bien e intentalo más tarde.";
+				emotion 40;
+			}
+			next;
+			mes .@n$;
+			break;
+		case 5:
+			mes "Esta lista contiene todas las posibles frases de los tests del AntiBot.";
+			mes "Espera unos segundos mientras envío la lista de frases a tu ventana de chat.";
+			close2;
+			emotion 5;
+			announce "[ nº ]  -  Frase",bc_self,0xff7700;
+			set .@a,getarraysize($AB$);
+			if(!.@a) announce "No se han encontrado resultados.",bc_self,"0x"+rand(7,9)+"0"+rand(7,9)+"0"+rand(7,9)+"0";
+			while(.@b < .@a) {
+				set .@b,.@b + 1;
+				announce "[ "+.@b+" ]  -  "+$AB$[.@b - 1],bc_self,"0x"+rand(7,9)+"0"+rand(7,9)+"0"+rand(7,9)+"0";
+			}
+			announce "----------",bc_self,0xff7700;
+			end;
+		case 6:
+			mes "Escribe la frase que deseas añadir a la lista del AntiBot.";
+			next;
+			input .@a$;
+			set .@a,getstrlen(.@a$);
+			while(.@a) {
+				set .@a,.@a - 1;
+				if(compare("0123456789abcdefghijklmnñopqrstuvwxyz",charat(.@a$,.@a)))
+					set .@b,.@b + 1;
+			}
+			mes .@n$;
+			if(.@b >= 5) {
+				set .@a,getarraysize($AB$);
+				if(.@a == 128) {
+					deletearray $AB$[0],1;
+					set .@a,127;
+				}
+				set $AB$[.@a],.@a$;
+				mes "Tu frase ha sido añadida a la lista del AntiBot:";
+				mes "[ "+(.@a + 1)+" ]  -  ^"+rand(3,9)+"0"+rand(3,9)+"0ff"+.@a$+"^000000";
+				emotion 21;
+			}
+			else {
+				mes "Lo siento, tu frase no contiene suficientes carácteres simples.";
+				emotion 40;
+			}
+			next;
+			mes .@n$;
+			break;
+		case 7:
+			mes "Selecciona el número de frase que quieres eliminar:";
+			next;
+			input .@a;
+			mes .@n$;
+			if((.@a > 0) && (.@a < getarraysize($AB$))) {
+				deletearray $AB$[.@a - 1],1;
+				mes "Muy bien.";
+				mes "La frase nº "+.@a+" ha sido eliminada.";
+				emotion 21;
+			}
+			else {
+				mes "Lo siento, el número seleccionado no se corresponde con ninguna frase de la lista.";
+				emotion 40;
+			}
+			next;
+			mes .@n$;
+			break;
+	}
+	mes "Recuerda:";
+	mes "El juego limpio siempre es más divertido.";
+	close2;
+	emotion 12;
+	end;
+OnInit:
+	bindatcmd "antibot2","AB::OnCommand",50,50;
+	end;
+}
+alberta,195,134,4	duplicate(AB)	Sistema Anti-Bot#1	852
+alberta,55,250,5	duplicate(AB)	Sistema Anti-Bot#2	852
+aldebaran,133,112,6	duplicate(AB)	Sistema Anti-Bot#3	852
+aldebaran,133,232,6	duplicate(AB)	Sistema Anti-Bot#4	852
+alde_gld,234,146,4	duplicate(AB)	Sistema Anti-Bot#5	852
+amatsu,240,275,6	duplicate(AB)	Sistema Anti-Bot#6	852
+amatsu,95,262,4	duplicate(AB)	Sistema Anti-Bot#7	852
+amatsu,207,96,4	duplicate(AB)	Sistema Anti-Bot#8	852
+ayothaya,212,200,4	duplicate(AB)	Sistema Anti-Bot#9	852
+ayothaya,157,74,4	duplicate(AB)	Sistema Anti-Bot#10	852
+comodo,180,325,4	duplicate(AB)	Sistema Anti-Bot#11	852
+comodo,205,108,4	duplicate(AB)	Sistema Anti-Bot#12	852
+comodo,312,183,4	duplicate(AB)	Sistema Anti-Bot#13	852
+comodo,40,223,6	duplicate(AB)	Sistema Anti-Bot#14	852
+einbech,66,88,6	duplicate(AB)	Sistema Anti-Bot#15	852
+einbech,131,241,6	duplicate(AB)	Sistema Anti-Bot#16	852
+einbech,46,201,8	duplicate(AB)	Sistema Anti-Bot#17	852
+einbroch,70,187,2	duplicate(AB)	Sistema Anti-Bot#18	852
+einbroch,145,313,6	duplicate(AB)	Sistema Anti-Bot#19	852
+einbroch,152,45,4	duplicate(AB)	Sistema Anti-Bot#20	852
+einbroch,253,239,2	duplicate(AB)	Sistema Anti-Bot#21	852
+geffen,123,65,4	duplicate(AB)	Sistema Anti-Bot#22	852
+geffen,41,103,6	duplicate(AB)	Sistema Anti-Bot#23	852
+geffen,124,173,4	duplicate(AB)	Sistema Anti-Bot#24	852
+geffen,175,123,6	duplicate(AB)	Sistema Anti-Bot#25	852
+gef_fild13,195,240,4	duplicate(AB)	Sistema Anti-Bot#26	852
+gonryun,152,106,6	duplicate(AB)	Sistema Anti-Bot#27	852
+gonryun,164,178,2	duplicate(AB)	Sistema Anti-Bot#28	852
+gonryun,149,14,6	duplicate(AB)	Sistema Anti-Bot#29	852
+hugel,101,126,4	duplicate(AB)	Sistema Anti-Bot#30	852
+hugel,180,166,4	duplicate(AB)	Sistema Anti-Bot#31	852
+izlude,121,90,6	duplicate(AB)	Sistema Anti-Bot#32	852
+jawaii,137,251,4	duplicate(AB)	Sistema Anti-Bot#33	852
+yuno,175,85,4	duplicate(AB)	Sistema Anti-Bot#34	852
+yuno,72,199,4	duplicate(AB)	Sistema Anti-Bot#35	852
+sch_gld,291,119,4	duplicate(AB)	Sistema Anti-Bot#36	852
+lighthalzen,209,91,6	duplicate(AB)	Sistema Anti-Bot#37	852
+lighthalzen,218,318,4	duplicate(AB)	Sistema Anti-Bot#38	852
+lighthalzen,311,295,4	duplicate(AB)	Sistema Anti-Bot#39	852
+louyang,199,104,6	duplicate(AB)	Sistema Anti-Bot#40	852
+louyang,57,242,4	duplicate(AB)	Sistema Anti-Bot#41	852
+xmas,139,302,6	duplicate(AB)	Sistema Anti-Bot#42	852
+xmas,165,106,4	duplicate(AB)	Sistema Anti-Bot#43	852
+morocc,166,72,4	duplicate(AB)	Sistema Anti-Bot#44	852
+morocc,51,174,4	duplicate(AB)	Sistema Anti-Bot#45	852
+morocc,166,285,4	duplicate(AB)	Sistema Anti-Bot#46	852
+morocc,283,197,8	duplicate(AB)	Sistema Anti-Bot#47	852
+morocc,37,286,4	duplicate(AB)	Sistema Anti-Bot#48	852
+moscovia,238,202,4	duplicate(AB)	Sistema Anti-Bot#49	852
+moscovia,161,60,4	duplicate(AB)	Sistema Anti-Bot#50	852
+niflheim,33,160,6	duplicate(AB)	Sistema Anti-Bot#51	852
+niflheim,197,192,4	duplicate(AB)	Sistema Anti-Bot#52	852
+payon,213,68,6	duplicate(AB)	Sistema Anti-Bot#53	852
+payon,156,49,2	duplicate(AB)	Sistema Anti-Bot#54	852
+payon,232,312,4	duplicate(AB)	Sistema Anti-Bot#55	852
+payon,63,116,6	duplicate(AB)	Sistema Anti-Bot#56	852
+pay_gld,201,153,4	duplicate(AB)	Sistema Anti-Bot#57	852
+prontera,165,67,4	duplicate(AB)	Sistema Anti-Bot#58	852
+prontera,44,212,6	duplicate(AB)	Sistema Anti-Bot#59	852
+prontera,166,191,4	duplicate(AB)	Sistema Anti-Bot#60	852
+prontera,255,213,4	duplicate(AB)	Sistema Anti-Bot#61	852
+prontera,161,308,4	duplicate(AB)	Sistema Anti-Bot#62	852
+prt_gld,166,71,4	duplicate(AB)	Sistema Anti-Bot#63	852
+rachel,268,136,4	duplicate(AB)	Sistema Anti-Bot#64	852
+rachel,150,148,4	duplicate(AB)	Sistema Anti-Bot#65	852
+rachel,135,41,4	duplicate(AB)	Sistema Anti-Bot#66	852
+rachel,43,131,6	duplicate(AB)	Sistema Anti-Bot#67	852
+aru_gld,179,322,6	duplicate(AB)	Sistema Anti-Bot#68	852
+umbala,125,126,8	duplicate(AB)	Sistema Anti-Bot#69	852
+umbala,163,245,4	duplicate(AB)	Sistema Anti-Bot#70	852
+veins,213,232,4	duplicate(AB)	Sistema Anti-Bot#71	852
+veins,222,348,4	duplicate(AB)	Sistema Anti-Bot#72	852
+veins,161,62,6	duplicate(AB)	Sistema Anti-Bot#73	852
+mid_camp,223,287,4	duplicate(AB)	Sistema Anti-Bot#74	852
+mid_camp,142,237,6	duplicate(AB)	Sistema Anti-Bot#75	852
+mid_camp,248,234,8	duplicate(AB)	Sistema Anti-Bot#76	852
+manuk,277,124,2	duplicate(AB)	Sistema Anti-Bot#77	852
+manuk,179,173,6	duplicate(AB)	Sistema Anti-Bot#78	852
+splendide,181,133,6	duplicate(AB)	Sistema Anti-Bot#79	852

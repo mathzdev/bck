@@ -1,0 +1,101 @@
+-	script	OnMvPKillEvent	-1,{
+OnOrcLord:			callfunc("mvpd","Orc Lord",1,"0xFF7F24",28,rand(1,5));
+OnOrcHero:			callfunc("mvpd","Orc Hero",1,"0xFF7F24",28,rand(1,5));
+OnGarm:				callfunc("mvpd","Garm",1,"0xFF7F24",28,rand(1,5));
+OnMistress:			callfunc("mvpd","Mistress",1,"0xFF7F24",28,rand(1,5));
+OnPhreeoni:			callfunc("mvpd","Phreeoni",1,"0xFF7F24",28,rand(1,5));
+OnAtroce:			callfunc("mvpd","Atroce",1,"0xFF7F24",28,rand(1,5));
+OnTendrilion:			callfunc("mvpd","Tendrilion",1,"0xFF7F24",28,rand(1,5));
+OnHardrockMammoth:		callfunc("mvpd","Hardrock Mammoth",1,"0xFF7F24",28,rand(1,5));
+OnFallenBishop:			callfunc("mvpd","Fallen Bishop Hibram",1,"0xFF7F24",28,rand(1,5));
+OnBeelzebub:			callfunc("mvpd","Beelzebub",1,"0xFF7F24",28,rand(1,5));
+OnDetardeurus:			callfunc("mvpd","Detardeurus",1,"0xFF7F24",28,rand(1,5));
+OnSamuraiSpecter:		callfunc("mvpd","Samurai Specter",1,"0xFF7F24",28,rand(1,5));
+OnMaya:				callfunc("mvpd","Maya",1,"0xFF7F24",28,rand(1,5));
+OnLadyTanee:			callfunc("mvpd","Lady Tanee",1,"0xFF7F24",28,rand(1,5));
+OnTaoGunka:			callfunc("mvpd","Tao Gunka",1,"0xFF7F24",28,rand(1,5));
+OnBoitata:			callfunc("mvpd","Boitata",1,"0xFF7F24",28,rand(1,5));
+OnLeak:				callfunc("mvpd","Leak",1,"0xFF7F24",28,rand(1,5));
+OnScarabaQueen:			callfunc("mvpd","Queen Scaraba",1,"0xFF7F24",28,rand(1,5));
+OnGoldQueenScaraba:		callfunc("mvpd","Golden Queen Scaraba",1,"0xFF7F24",28,rand(1,5));
+//OnFaithfulManager:		callfunc("mvpd","Faithful Manager",1,"0xFF7F24",28,rand(1,5));
+OnMobXSR:			callfunc("mvpd","RSX-0806",1,"0xFF7F24",28,rand(1,5));
+OnDracula:			callfunc("mvpd","Dracula",1,"0xFF7F24",28,rand(1,5));
+OnDoppelganger:			callfunc("mvpd","Doppelganger",1,"0xFF7F24",28,rand(1,5));
+OnDarkLord:			callfunc("mvpd","Dark Lord",1,"0xFF7F24",28,rand(1,5));
+OnMoonlightFlower:		callfunc("mvpd","Moonlight Flower",1,"0xFF7F24",28,rand(1,5));
+OnGeneralDaehyun:		callfunc("mvpd","General Daehyun",1,"0xFF7F24",28,rand(1,5));
+OnGioia:			callfunc("mvpd","Gioia",1,"0xFF7F24",28,rand(1,5));
+OnBaphomet:			callfunc("mvpd","Baphomet",1,"0xFF7F24",28,rand(1,5));
+OnAngryStudentPyuriel:		callfunc("mvpd","Angry Student Pyuriel",1,"0xFF7F24",28,rand(1,5));
+OnDarkGuadianKades:		callfunc("mvpd","Dark Guardian Kades",1,"0xFF7F24",28,rand(1,5));
+OnEvilSnakeLord:		callfunc("mvpd","Evil Snake Lord",1,"0xFF7F24",28,rand(1,5));
+OnPharaoh:			callfunc("mvpd","Pharaoh",1,"0xFF7F24",28,rand(1,5));
+OnKraken:			callfunc("mvpd","Kraken",1,"0xFF7F24",28,rand(1,5));
+OnVesper:			callfunc("mvpd","Vesper",1,"0xFF7F24",28,rand(1,5));
+OnKiel:				callfunc("mvpd","Kiel D-01",1,"0xFF7F24",28,rand(1,5));
+OnEgnigemCenia:			callfunc("mvpd","Egnigem Cenia",1,"0xFF7F24",28,rand(1,5));
+OnAssassinCrossEremes:		callfunc("mvpd","Assassin Cross Eremes",1,"0xFF7F24",28,rand(1,5));
+OnHighWizardKathryne:		callfunc("mvpd","High Wizard Kathryne",1,"0xFF7F24",28,rand(1,5));
+OnLordKnightSeyren:		callfunc("mvpd","Lord Knight Seyren",1,"0xFF7F24",28,rand(1,5));
+OnSniperCecil:			callfunc("mvpd","Sniper Cecil",1,"0xFF7F24",28,rand(1,5));
+OnWhitesmithHoward:		callfunc("mvpd","Whitesmith Howard",1,"0xFF7F24",28,rand(1,5));
+OnHighPriestMargaretha:		callfunc("mvpd","High Priest Margaretha",1,"0xFF7F24",28,rand(1,5));
+OnPaladinRandel:		callfunc("mvpd","Paladin Randel",1,"0xFF7F24",28,rand(1,5));
+OnCreatorFlamel:		callfunc("mvpd","Creator Flamel",1,"0xFF7F24",28,rand(1,5));
+OnProfessorCelia:		callfunc("mvpd","ProfessorCelia",1,"0xFF7F24",28,rand(1,5));
+OnChampionChen:			callfunc("mvpd","Champion Chen",1,"0xFF7F24",28,rand(1,5));
+OnStalkerGertie:		callfunc("mvpd","Stalker Gertie",1,"0xFF7F24",28,rand(1,5));
+OnClownAlphoccio:		callfunc("mvpd","Clown Alphoccio",1,"0xFF7F24",28,rand(1,5));
+OnGypsyTrentini:		callfunc("mvpd","Gypsy Trentini",1,"0xFF7F24",28,rand(1,5));
+OnWhiteLady:			callfunc("mvpd","White Lady",1,"0xFF7F24",28,rand(1,5));
+OnOsiris:			callfunc("mvpd","Osiris",1,"0xFF7F24",28,rand(1,5));
+OnAmonRa:			callfunc("mvpd","Amon Ra",1,"0xFF7F24",28,rand(1,5));
+OnNightmareAmonRa:		callfunc("mvpd","Nightmare Amon Ra",1,"0xFF7F24",28,rand(1,5));
+OnGopinich:			callfunc("mvpd","Gopinich",1,"0xFF7F24",28,rand(1,5));
+OnValkyrieRandgriss:		callfunc("mvpd","Valkyrie Randgriss",1,"0xFF7F24",28,rand(1,5));
+OnGoldenThiefBug:		callfunc("mvpd","Golden Thief Bug",1,"0xFF7F24",28,rand(1,5));
+OnGloomUnderNight:		callfunc("mvpd","Gloom Under Night",1,"0xFF7F24",28,rand(1,5));
+OnIfrit:			callfunc("mvpd","Ifrit",1,"0xFF7F24",28,rand(1,5));
+OnDrake:			callfunc("mvpd","Drake",1,"0xFF7F24",28,rand(1,5));
+OnTurtleGeneral:		callfunc("mvpd","Turtle General",1,"0xFF7F24",28,rand(1,5));
+OnStormyKnight:			callfunc("mvpd","Stormy Knight",1,"0xFF7F24",28,rand(1,5));
+OnGuillotineCrossEremes:	callfunc("mvpd","Guillotine Cross Eremes",1,"0xFF7F24",28,rand(1,5));
+OnArchbishopMagaleta:		callfunc("mvpd","Arch Bishop Magaleta",1,"0xFF7F24",28,rand(1,5));
+OnRangerCecil:			callfunc("mvpd","Ranger Cecil",1,"0xFF7F24",28,rand(1,5));
+OnMechanicHoward:		callfunc("mvpd","Mechanic Howard",1,"0xFF7F24",28,rand(1,5));
+OnWarlockKathryne:		callfunc("mvpd","Warlock Kathryne",1,"0xFF7F24",28,rand(1,5));
+OnRuneKnightSeyren:		callfunc("mvpd","Rune Knight Seyren",1,"0xFF7F24",28,rand(1,5));
+OnRoyalGuardRandel:		callfunc("mvpd","Royal Guard Randel",1,"0xFF7F24",28,rand(1,5));
+OnGeneticFlamel:		callfunc("mvpd","Genetic Flamel",1,"0xFF7F24",28,rand(1,5));
+OnSorcererCelia:		callfunc("mvpd","Sorcerer Celia",1,"0xFF7F24",28,rand(1,5));
+OnSuraChen:			callfunc("mvpd","Sura Chen",1,"0xFF7F24",28,rand(1,5));
+OnShadowChaserGertie:		callfunc("mvpd","Shadow Chaser Gertie",1,"0xFF7F24",28,rand(1,5));
+OnMinstrelAlphoccio:		callfunc("mvpd","Minstrel Alphoccio",1,"0xFF7F24",28,rand(1,5));
+OnWandererTrentini:		callfunc("mvpd","Wanderer Trentini",1,"0xFF7F24",28,rand(1,5));
+OnTimeHolder:			callfunc("mvpd","Time Holder",1,"0xFF7F24",28,rand(1,5));
+OnLordOfDeath:			callfunc("mvpd","Lord of Death",1,"0xFF7F24",28,rand(1,5));
+OnEddga:			callfunc("mvpd","Eddga",1,"0xFF7F24",28,rand(1,5));
+end;//				callfunc("mvpd","",1,"0xFF7F24",28,rand(1,5));
+}
+function	script	mvpd	{
+		setarray .frase$[0],"mandado al otro mundo","mutilado","sepultado","enterrado","aniquilado","sodomizado","masacrado","asesinado","ejecutado","liquidado","hecho puré","pisoteado","extinguido","derrotado","vencido","destronado","exorcisado";
+		getitem 673,getarg(1);
+		set @GID,getcharid(2);
+		if(@GID)
+			getitem 18174,getarg(4);
+		if( getd("achi"+getarg(3)) < 1) {
+			achieve getarg(3);
+			setd "achi"+getarg(3),1;
+		}
+		dispbottom "Haz obtenido "+getarg(1)+"x MvP Coin, felicidades.";
+		message strcharinfo(0),"[Ranker]: Haz obtenido 1 punto en el Rank MvP.";
+		query_sql("INSERT INTO `char_rank` SET `char_id`='"+getcharid(0)+"',`name`='"+strcharinfo(0)+"',`mvp`='1' ON DUPLICATE KEY UPDATE `mvp`=`mvp`+1");
+		announce "<< [ "+ getarg(0) +" ] ha sido "+.frase$[rand(0,getarraysize(.frase$))]+" por [ "+strcharinfo(0)+" ] >>",bc_all,getarg(2);
+		sleep2 2500;
+			if(title_mvp == 1)
+				announce "<< ["+strcharinfo(0)+"]: "+title_mvp$+" >>",bc_all,getarg(2),800,16;
+			else
+				message strcharinfo(0),"No cuentas con título, elígelo en el Ranker de Prontera para anunciarlo cuando mates un MvP.";
+	end;
+}

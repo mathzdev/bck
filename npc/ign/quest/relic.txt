@@ -1,0 +1,894 @@
+//===== eAthena Script ======================================= 
+//= Midgard Relics Event (fRO)
+//===== By: ================================================== 
+//= Ziu
+//===== Current Version: ===================================== 
+//= -.-
+//===== Compatible With: ===================================== 
+//= eAthena TRUNK 14980+ data Rev z293.
+//===== Description: ========================================= 
+//= Contains Quests:
+//= [Aegis Playing Conversion]
+//= Drake’s Treasure quest (fRO)
+//= Midgard Relics Event (fRO)
+//===== Additional Comments: ================================= 
+//= -.- [Ziu]
+//============================================================
+
+//Drake’s Treasure quest (fRO)
+//=============================
+vip,60,70,4	script	Sola Summers#froevent1	845,{
+	if (drake_treasure == 0) {
+		mes "[Sola Summers]";
+		mes "Hola, encantada de conocerte aventurero";
+		next;
+		switch(select("Dejad de hablar","Continuar hablando"))
+		{
+			case 1:
+				mes "[Sola Summers]";
+				mes "Disfruta de tu viaje";
+				close;
+			case 2:
+				mes "[Sola Summers]";
+				mes "es maravilloso estar fuera y disfrutar del verano, ¿vedad?";
+				next;
+				switch(select("No","Si"))
+				{
+					case 1:
+						mes "[Sola Summers]";
+						mes "Disfruta de tu viaje";
+						close;
+					case 2:
+						mes "[Sola Summers]";
+						mes "¡Genial!Yo también amo el verano, y disfruto del sol y el calor, ¡es maravilloso!";
+						next;
+						mes "[Sola Summers]";
+						mes "Me gustaría ir a la playa entre la ciudad de prontera y izlude pronto, tu ya sabes";
+						next;
+						mes "[Sola Summers]";
+						mes "Pero...un monstruo ha aparecido allí, asique no es aconsejable ir allí...";
+						set drake_treasure,1;
+						close;
+				}
+		}
+	}
+	if ((drake_treasure > 0) && (drake_treasure < 13)) {
+		mes "[Sola Summers]";
+		mes "Me gustaría ir a la playa entre la ciudad de prontera y izlude pronto, tu ya sabes";
+		next;
+		mes "[Sola Summers]";
+		mes "Pero...un monstruo ha aparecido allí, asique no es aconsejable ir allí...";
+		close;
+	}
+	if (drake_treasure == 13) {
+		mes "[Sola Summers]";
+		mes "Yo lo entiendo. El monstruo no le hará daño a nadie. ¡¡Es maravilloso!!";
+		next;
+		mes "[Sola Summers]";
+		mes "Así que todo el mundo puede ir de nuevo a la playa. ¡Muchas gracias por tu ayuda!";
+		next;
+		set .@sola_ran,rand(1,2);
+		if (.@sola_ran == 1) {
+			mes "[Sola Summers]";
+			mes "¡Disfruta del sol y el calor!";
+			getitem 5147,1; //Baseball Cap
+			set drake_treasure,14;
+			close;
+		}
+		if (.@sola_ran == 2) {
+			mes "[Sola Summers]";
+			mes "¡Disfruta del sol y el calor!";
+			getitem 4415,1; //4415
+			set drake_treasure,14;
+			close;
+		}
+	}
+	if (drake_treasure == 14) {
+		mes "[Sola Summers]";
+		mes "Hola Viajero";
+		next;
+		mes "[Sola Summers]";
+		mes "es maravilloso estar fuera y disfrutar del verano, ¿vedad?";
+		next;
+		mes "[Sola Summers]";
+		mes "Si tú quieres te pueden hacer 50 trajes de verano,no traigas sobrepeso.... solo necesitas los siguientes items:";
+		next;
+		mes "[Sola Summers]";
+		mes "1x Broken Needle, 1x Yarn, 1x Adventurer's Suit and 1x Clothing Dye Coupon.";
+		set drake_treasure,15;
+		close;
+	}
+	if (drake_treasure == 15) {
+		if ((countitem(7215) > 0) && (countitem(7038) > 0) && (countitem(2305) > 0) && (countitem(6046) > 0)) {
+			if (checkweight(12260,50) == 0) {
+				mes "[Sola Summers]";
+				mes "No puedes cojerlo ya que no puedes llevar más peso";
+				close;
+			} else {
+				mes "[Sola Summers]";
+				mes "Aquí tienes";
+				delitem 7215,1; //broken needle
+				delitem 7038,1; //yarn
+				delitem 2305,1; // adventurer's suit
+				delitem 6046,1; // clothing dye coupon
+				getitem 12260,50; // summer event suit
+				set drake_treasure,14;
+				next;
+				mes "[Sola Summers]";
+				mes "¡Disfruta del verano!";
+				close;
+			}
+		} else {
+			mes "[Sola Summers]";
+			mes "Si tú quieres te pueden hacer 50 trajes de verano,no traigas sobrepeso.... solo necesitas los siguientes items:";
+			next;
+			mes "[Sola Summers]";
+			mes "1x Broken Needle, 1x Yarn, 1x Adventurer's Suit and 1x Clothing Dye Coupon.";
+			close;
+		}
+	}
+OnPCLoadMapEvent:
+	if((strcharinfo(3)=="vip") && (drake_treasure < 15))
+		showevent 0,1;
+	end;
+}
+prt_fild08,342,291,3	script	Ghostring#froevent2	950,{
+	if (drake_treasure == 0) {
+		mes "[Ghostring]";
+		mes "...";
+		close;
+	}
+	if (drake_treasure == 1) {
+		mes "[Ghostring]";
+		mes "...";
+		next;
+		mes "[Ghostring]";
+		mes "...";
+		next;
+		switch(select("Le ignoras","Le atacas","Hablar con él"))
+		{
+			case 1:
+				mes "[Ghostring]";
+				mes "...";
+				close;
+			case 2:
+				mes "[Ghostring]";
+				mes "...";
+				close;
+			case 3:
+				mes "[Ghostring]";
+				mes "...";
+				next;
+				mes "[Ghostring]";
+				mes "Parece que usted es un aventurero interesante";
+				next;
+				mes "[Ghostring]";
+				mes "Humhumhum...";
+				next;
+				mes "[Ghostring]";
+				mes "Yo soy miembro del legendario pirata drake";
+				next;
+				mes "[Ghostring]";
+				mes "El maestro drake desea conocer aventureros fuertes.";
+				mes "Por eso los estoy buscando";
+				next;
+				mes "[Ghostring]";
+				mes "Humhumhum...¿tú eres un aventurero fuerte?";
+				next;
+				switch(select("no","Si"))
+				{
+					case 1:
+						mes "[Ghostring]";
+						mes "...";
+						close;
+					case 2:
+						mes "[Ghostring]";
+						mes "Humhumhum... ¡perfecto!";
+						next;
+						mes "[Ghostring]";
+						mes "Esto es algo que nosotros estabamos buscando.Tú tenias que encontrarnos";
+						next;
+						mes "[Ghostring]";
+						mes "Dentro de Byalan Island's Cave,hay cinco partes del mapa del tesoro escondido. Al menos hay una parte en cada uno de los niveles";
+						next;
+						mes "[Ghostring]";
+						mes "Tu tienes que encontrar todoas las partes, una en cada nivel, antes de ir al siguiente";
+						next;
+						mes "[Ghostring]";
+						mes "Sin embargo, no te descuides. Hay muchos peligros";
+						next;
+						mes "[Ghostring]";
+						mes "Si te caes dentro de un agujero, por ejemplo..tu caeras a la profundidad, humhumhum...";
+						next;
+						mes "[Ghostring]";
+						mes "Por eso aventurero...traeme las 5 partes mapa del tesoro";
+						set drake_treasure,2;
+						close;
+				}
+		}
+	}
+	if ((drake_treasure > 1) && (drake_treasure < 8)) {
+		mes "[Ghostring]";
+		mes "Dentro de Byalan Island's Cave,hay cinco partes del mapa del tesoro escondido. Al menos hay una parte en cada uno de los niveles";
+		next;
+		mes "[Ghostring]";
+		mes "Tu tienes que encontrar todoas las partes, una en cada nivel, antes de ir al siguiente";
+		next;
+		mes "[Ghostring]";
+		mes "Sin embargo, no te descuides. Hay muchos peligros";
+		next;
+		mes "[Ghostring]";
+		mes "Si te caes dentro de un agujero, por ejemplo..tu caeras a la profundidad, humhumhum...";
+		next;
+		mes "[Ghostring]";
+		mes "Por eso aventurero...traeme las 5 partes mapa del tesoro";
+		if(drake_treasure > 1 && drake_treasure < 3)
+			set drake_treasure,2;
+		close;
+	}
+	if (drake_treasure == 8) {
+		mes "[Ghostring]";
+		mes "Humhumhum... excelente.";
+		next;
+		mes "[Ghostring]";
+		mes "El maestro drake esta esperando cerca de su sunken ship";
+		next;
+		mes "[Ghostring]";
+		mes "Divertete.. humhumhum...";
+		set drake_treasure,9;
+		close;
+	}
+	if (drake_treasure > 9) {
+		mes "[Ghostring]";
+		mes "...";
+		close;
+	}
+}
+iz_dun00,323,109,0	script	?#froevent3	723,{
+	if (drake_treasure == 2) {
+		mes "Tu has encontrado 1 parte del mapa del tesoro.";
+		set drake_treasure,3;
+		close;
+	} else if(drake_treasure >= 3) {
+		mes "Ya haz encontrado éste mapa.";
+		close;
+	} else {
+		mes "^777777Sólo los aventureros fuertes pueden interactuar conmigo.^000000";
+		close;
+	}
+}
+iz_dun01,228,206,0	script	?#froevent4	723,{
+	if (drake_treasure == 3) {
+		mes "Tu has encontrado 1 parte del mapa del tesoro.";
+		set drake_treasure,4;
+		close;
+	} else if(drake_treasure >= 4) {
+		mes "Ya haz encontrado éste mapa.";
+		close;
+	} else {
+		mes "^777777Al parecer aún no haz encontrado la pieza del piso anterior.^000000";
+		close;
+	}
+}
+iz_dun02,210,338,0	script	?#froevent5	723,{
+	if (drake_treasure == 4) {
+		mes "Tu has encontrado 1 parte del mapa del tesoro.";
+		set drake_treasure,5;
+		close;
+	} else if(drake_treasure >= 5) {
+		mes "Ya haz encontrado éste mapa.";
+		close;
+	} else {
+		mes "^777777Al parecer aún no haz encontrado la pieza del piso anterior.^000000";
+		close;
+	}
+}	
+iz_dun03,260,117,0	script	?#froevent6	723,{
+	if (drake_treasure == 5) {
+		mes "Tu has encontrado 1 parte del mapa del tesoro.";
+		set drake_treasure,6;
+		close;
+	} else if(drake_treasure >= 6) {
+		mes "Ya haz encontrado éste mapa.";
+		close;
+	} else {
+		mes "^777777Al parecer aún no haz encontrado la pieza del piso anterior.^000000";
+		close;
+	}
+}
+iz_dun04,48,255,0	script	?#froevent7	723,{
+	if (drake_treasure == 6) {
+		mes "Tu has encontrado 1 parte del mapa del tesoro.";
+		set drake_treasure,7;
+		close;
+	} else if(drake_treasure >= 7) {
+		mes "Ya haz encontrado éste mapa.";
+		close;
+	} else {
+		mes "^777777Al parecer aún no haz encontrado la pieza del piso anterior.^000000";
+		close;
+	}
+}
+iz_dun05,96,122,0	script	?#froevent8	723,{
+	if (drake_treasure == 7) {
+		mes "Tu has encontrado 1 parte del mapa del tesoro.";
+		mes " ";
+		mes "^777777Felicidades, haz encontrado todos los mapas.^000000";
+		set drake_treasure,8;
+		close;
+	} else if(drake_treasure >= 8) {
+		mes "Vuelve con Ghostring, haz encontrado todos los mapas.";
+		close;
+	} else if(drake_treasure >= 9) {
+		mes "No tengo nada más que decirte.";
+		close;
+	} else {
+		mes "^777777Al parecer aún no haz encontrado la pieza del piso anterior.^000000";
+		close;
+	}
+}
+iz_dun01,137,135,0	script	?#froevent9	723,{
+	mes "Te estás cayendo dentro del agujero.";
+	close2;
+	warp "iz_dun02",0,0;
+	end;
+}
+iz_dun02,152,47,0	script	?#froevent10	723,{
+	mes "Te estás cayendo dentro del agujero.";
+	close2;
+	warp "iz_dun03",0,0;
+	end;
+}
+iz_dun02,244,214,0	script	?#froevent11	723,{
+	mes "Te estás cayendo dentro del agujero.";
+	close2;
+	warp "iz_dun03",0,0;
+	end;
+}
+iz_dun03,229,38,0	script	?#froevent12	723,{
+	mes "Te estás cayendo dentro del agujero.";
+	close2;
+	warp "iz_dun04",0,0;
+	end;
+}
+iz_dun03,132,74,0	script	?#froevent13	723,{
+	mes "Te estás cayendo dentro del agujero.";
+	close2;
+	warp "iz_dun04",0,0;
+	end;
+}
+iz_dun03,68,225,0	script	?#froevent14	723,{
+	mes "Te estás cayendo dentro del agujero.";
+	close2;
+	warp "iz_dun04",0,0;
+	end;
+}
+alb2trea,93,116,4	script	Drake#froevent15	969,{
+	if (drake_treasure < 9) {
+		mes "[Drake]";
+		mes "Arr! Yo soy Drake, el jefe Drake Pirates";
+		next;
+		mes "[Drake]";
+		mes "Yo voy keelhaul ya?!";
+		close;
+	}
+	if (drake_treasure == 9) {
+		mes "[Drake]";
+		mes "Arr! Yo soy Drake, el jefe Drake Pirates";
+		next;
+		mes "[Drake]";
+		mes "Yo estoy buscando algunos aventureros muy fuertes";
+		next;
+		mes "[Drake]";
+		mes "Yo los estoy buscando ya!!";
+		next;
+		mes "[Drake]";
+		mes "Veo que haz encontrado todas las piezas del mapa, ¡¿eres tan poderoso como dicen?!";
+		next;
+		mes "[Drake]";
+		mes "Bueno, como haz cumplido con las misiones de mis subordinados de encontrar las piezas del mapa, tengo una misión para tí.";
+		next;
+		mes "[Drake]";
+		mes "Solo los más valientes han podido encontrar las 5 piezas. Y tu eres uno de ellos.";
+		next;
+		mes "[Drake]";
+		mes "Aye! Pero no estoy seguro... mejor te haré otra prueba.";
+		next;
+		mes "[Drake]";
+		mes "Traeme algunos objetos dentro del Sunken Ship.";
+		next;
+		mes "[Drake]";
+		mes "10x Tentacle, 10x Skel-Bone, 1x Well-Dried Bone, 10x Fabric, 10x Coral Reef, 1x Skull.";
+		next;
+		mes "[Drake]";
+		mes "¡¿Sigues aquí?! ¡¿Quieres que te patee?!";
+		set drake_treasure,10;
+		close;
+	}
+	if (drake_treasure == 10) {
+		if (countitem(962) >= 10 && countitem(932) >= 10 && countitem(628) >= 1 && countitem(1059) >= 10 && countitem(7013) >= 10 && countitem(7005) >= 1) {
+			mes "[Drake]";
+			mes "Now, because of yar strength, I think that ya're able to find my treasure.";
+			delitem 962,10; //Tentacle
+			delitem 932,10; //Skel-Bone
+			delitem 628,1; //Well-Dried Bone
+			delitem 1059,10; //Fabric
+			delitem 7013,10; //Coral Reef
+			delitem 7005,1; //Skull
+			next;
+			mes "[Drake]";
+			mes "Aye! I'm looking for very strong adventurers, because I want them to search for my treasure.";
+			next;
+			mes "[Drake]";
+			mes "If they find my treasure, I'd know that I have to hide all the gold better.";
+			next;
+			mes "[Drake]";
+			mes "Adventurer! I have to activate the treasure, so that ya can find him.";
+			next;
+			mes "[Drake]";
+			mes "He remains activated for 200 seconds, so hurry up!";
+			next;
+			mes "[Drake]";
+			mes "If ya don't manage to find him, come back and bring me the same items as before. Then I'll activate the treasure one more time.";
+			next;
+			mes "[Drake]";
+			mes "Yohoho! Good luck!!";
+			donpcevent "?#froevent16::OnEnable";
+			disablenpc "Drake#froevent15";
+			enablenpc "Drake#froevent17";
+			set drake_treasure,11;
+			close;
+		} else {
+			mes "[Drake]";
+			mes "Bring me some items from inside my ship!";
+			next;
+			mes "[Drake]";
+			mes "10x Tentacle, 10x Skel-Bone, 1x Well-Dried Bone, 10x Fabric, 10x Coral Reef and 1x Skull.";
+			next;
+			mes "[Drake]";
+			mes "Why are ya still here?! Shall I keelhaul ya?!";
+			close;
+		}
+	}
+	if (drake_treasure == 11) {
+		if (countitem(962) >= 10 && countitem(932) >= 10 && countitem(628) >= 1 && countitem(1059) >= 10 && countitem(7013) >= 10 && countitem(7005) >= 1) {
+			mes "[Drake]";
+			mes "Adventurer! I have to activate the treasure, so that ya can find him.";
+			delitem 962,10; //Tentacle
+			delitem 932,10; //Skel-Bone
+			delitem 628,1; //Well-Dried Bone
+			delitem 1059,10; //Fabric
+			delitem 7013,10; //Coral Reef
+			delitem 7005,1; //Skull
+			next;
+			mes "[Drake]";
+			mes "He remains activated for 200 seconds, so hurry up!";
+			next;
+			mes "[Drake]";
+			mes "If ya don't manage to find him, come back and bring me the same items as before. Then I'll activate the treasure one more time.";
+			donpcevent "?#froevent16::OnEnable";
+			disablenpc "Drake#froevent15";
+			enablenpc "Drake#froevent17";
+			close;
+		} else {
+			mes "[Drake]";
+			mes "Bring me some items from inside my ship!";
+			next;
+			mes "[Drake]";
+			mes "10x Tentacle, 10x Skel-Bone, 1x Well-Dried Bone, 10x Fabric, 10x Coral Reef and 1x Skull.";
+			next;
+			mes "[Drake]";
+			mes "Why are ya still here?! Shall I keelhaul ya?!";
+			close;
+		}
+	}
+	if (drake_treasure == 12) {
+		mes "[Drake]";
+		mes "Yohoho! Ya have my treasure!! Congratulations!!";
+		mes "But that means that I have to hide all my gold better.";
+		mes "Well, thank ya for yar help, adventurer.";
+		mes "...";
+		mes "What?!";
+		mes "Because of my subordinate, it isn't possible to enter the beach between Prontera Town and Izlude?";
+		mes "I see.";
+		mes "But... don't shatter, adventurer. My subordinate won't hurt anybody. You can tell this to the others.";
+		mes "Enjoy yar journey!!";
+		getexp 300000,300000;
+		set drake_treasure,13;
+		close;
+	}
+	if ((drake_treasure > 12) && (drake_treasure < 14)) {
+		mes "[Drake]";
+		mes "Enjoy yar journey!!";
+		close;
+	}
+	if (drake_treasure > 13) {
+		if (midgard_relics < 2) {
+			mes "[Drake]";
+			mes "Enjoy yar journey!!";
+			close;
+		}
+		else if (midgard_relics == 2) {
+			mes "[Drake]";
+			mes "Ya... que quieres de nuevo grumete";
+			next;
+			mes "[Drake]";
+			mes "¿El robo de una escavación?";
+			next;
+			mes "[Drake]";
+			mes "Si me suena....¿quieres negociar?";
+			next;
+			switch(select("No","Si"))
+			{
+				case 1:
+					mes "[Drake]";
+					mes "Enjoy yar journey!!";
+					close;
+					
+				case 2:
+					mes "[Drake]";
+					mes "Me demostraste tu poder...y no quiero enfrentarme a ti";
+					next;
+					mes "[Drake]";
+					mes "Págame unos pocos zenys te de daré lo que me encontre en la excavación";
+					next;
+					mes "[Drake]";
+					mes "¿Estás deacuerdo?";
+					next;
+					switch(select("No","Si"))
+					{
+						case 1:
+							mes "[Drake]";
+							mes "Yah... como gustes ahora largo de mi vista";
+							close;
+						case 2:
+							if(Zeny >= 10000) {
+								set Zeny, Zeny-10000;
+								mes "[Drake]";
+								mes "Pefecto... encontre un trozo de papel donde estaba escrito donde se situan los altares de invocación";
+								next;
+								mes "[Drake]";
+								mes "El primero está situado al sur de la ciudad mágica de geffen";
+								next;
+								mes "[Drake]";
+								mes "El segundo está situado al sur-este de einbroch";
+								next;
+								mes "[Drake]";
+								mes "El tercero está situado al sur de la ciudad de prontera...";
+								next;
+								mes "[Drake]";
+								mes "Ya no tengo más información para ti... yah ahora largate de mi vista..YohOhoho";
+								set midgard_relics,3;
+								close;
+							} else {
+								mes "[Drake]";
+								mes "Yah no tienes suficientes zenys....";
+								close;
+							}
+					}
+			}
+		}
+		else if (midgard_relics == 3) {
+			mes "[Drake]";
+			mes "El primero está situado al sur de la ciudad mágica de geffen";
+			next;
+			mes "[Drake]";
+			mes "El segundo está situado al sur-este de einbroch";
+			next;
+			mes "[Drake]";
+			mes "El tercero está situado al oeste de la ciudad de venis...";
+			next;
+			mes "[Drake]";
+			mes "Ya no tengo más información para ti... yah ahora largate de mi vista..YohOhoho";
+			close;
+		}
+		else if (midgard_relics > 3) {
+			mes "[Drake]";
+			mes "Enjoy yar journey!!";
+			close;
+		}
+	}
+}
+alb2trea,93,116,4	script	Drake#froevent17	969,{
+	if (drake_treasure < 9) {
+		mes "[Drake]";
+		mes "Arr! Yo soy Drake, el jefe Drake Pirates";
+		next;
+		mes "[Drake]";
+		mes "Yo voy keelhaul ya?!";
+		close;
+	}
+	if (drake_treasure == 9) {
+		mes "[Drake]";
+		mes "Arr! Yo soy Drake, el jefe Drake Pirates";
+		next;
+		mes "[Drake]";
+		mes "Yo estoy buscando algunos aventureros muy fuertes";
+		next;
+		mes "[Drake]";
+		mes "Yo los estoy buscando ya!!";
+		next;
+		mes "[Drake]";
+		mes "Ya've found these parts of the treasure map, so ya have to be pretty strong. But are ya strong enough?!";
+		next;
+		mes "[Drake]";
+		mes "Well, ya have to know that my subordinates hid the treasure map parts. It was a test";
+		next;
+		mes "[Drake]";
+		mes "Only the brave ones are able to find all 5 parts. Ya're one of them!";
+		next;
+		mes "[Drake]";
+		mes "Aye! But I'm not sure... so ya have to pass another test!";
+		next;
+		mes "[Drake]";
+		mes "Bring me some items from inside my ship!";
+		next;
+		mes "[Drake]";
+		mes "10x Tentacle, 10x Skel-Bone, 1x Well-Dried Bone, 10x Fabric, 10x Coral Reef, 1x Skull.";
+		next;
+		mes "[Drake]";
+		mes "Why are ya still here?! Shall I keelhaul ya?!";
+		set drake_treasure,10;
+		close;
+	}
+	if ((drake_treasure > 9) && (drake_treasure < 12)) {
+		mes "[Drake]";
+		mes "Why are ya still here?! Shall I keelhaul ya?!";
+		close;
+	}
+	if (drake_treasure > 12) {
+		mes "[Drake]";
+		mes "Enjoy yar journey!!";
+		close;
+	}
+OnInit:
+	disablenpc "Drake#froevent17";
+	end;
+}
+treasure01,20,167,0	script	?#froevent16	723,{
+	if (drake_treasure == 11) {
+		mes "¡¡Tu has encontrado el tesoro!!";
+		getitem 7444,1;
+		set drake_treasure,12;
+		close;
+	}
+OnInit:
+	hideonnpc "?#froevent16";
+	end;
+OnEnable:
+	hideoffnpc "?#froevent16";
+	initnpctimer;
+	end;
+OnTimer200000:
+	stopnpctimer;
+	hideonnpc "?#froevent16";
+	disablenpc "Drake#froevent17";
+	enablenpc "Drake#froevent15";
+	end;
+}
+
+prontera,146,154,5	script	Archaeologist#relic	804,{
+	if (drake_treasure > 13) {
+		if (midgard_relics == 0) {
+			mes "[Metz]";
+			mes "Hola, aventurero soy uno de los mejores arqueologos del reino de prontera";
+			cutin "mets_alpha",2;
+			next;
+			mes "[Metz]";
+			mes "Hemos sufrido un robo en una de nuestras escavaciones..perpetrado por un pirata";
+			next;
+			mes "[Metz]";
+			mes "Su nombre es drake, y saqueo unos importantes tesoros";
+			next;
+			mes "[Metz]";
+			mes "Pero lo qué más me preocupa esque puede haber liberado un gran poder que en malas manos....";
+			next;
+			mes "[Metz]";
+			mes "Veo que ya conoces a este pirata... ¿te gusaría ayudarme?";
+			next;
+			switch(select("No","Si"))
+			{
+				case 1:
+					mes "[Metz]";
+					mes "Ten un buen viaje...";
+					close;
+				case 2:
+					mes "[Metz]";
+					mes "Perfecto, necesito que hables con el principal encargado de la excavación";
+					next;
+					mes "[Metz]";
+					mes "Este se encuentra actualmente en schwartzwalt republic";
+					set midgard_relics,1;
+					cutin "mets_alpha",255;
+					close;
+			}
+		}
+		else if (midgard_relics == 1) {
+			mes "[Metz]";
+			mes "Perfecto, necesito que hables con el principal encargado de la excavación";
+			cutin "mets_alpha",2;
+			next;
+			mes "[Metz]";
+			mes "Este se encuentra actualmente en schwartzwalt republic";
+			close2;
+			cutin "mets_alpha",255;
+			end;
+		}
+	} else {
+		mes "[Metz]";
+		mes "Estoy ocupandome de una importante excavación...y tenemos ciertos problemas de robos..";
+		cutin "mets_alpha",2;
+		close2;
+		cutin "mets_alpha",255;
+		end;
+	}
+OnPCLoadMapEvent:
+	if((strcharinfo(3)=="prontera") && (drake_treasure > 13) && (midgard_relics < 1))
+		showevent 0,1;
+	end;
+}
+yuno,295,283,3	script	Jefe Excavación#relic	743,{
+	if (midgard_relics == 0) {
+		mes "[Steve]";
+		mes "En estos momentos estoy muy preocupado ya que hemos sufrio un robo en una de nuestras más importantes exacavciones";
+		close;
+	}
+	if (midgard_relics == 1) {
+		mes "[Steve]";
+		mes "Veo que metz te puso al día....";
+		next;
+		mes "[Steve]";
+		mes "Estamos tratando con uno poder muy antiguo y el robo que hemos sufrido a echo que comience una catastroficas consecuencias para todo el reino";
+		next;
+		mes "[Steve]";
+		mes "Te hablo de la desaparición de todo el reino schwarzwald";
+		next;
+		mes "[Steve]";
+		mes "Hace unas semanas encontramos cerca de los campos al sur/este de aquí unas antiguas reliquias...mucho más antiguas que el propio reino";
+		next;
+		mes "[Steve]";
+		mes "Estas estaban adornadas con tres elementos básicos para la vida";
+		next;
+		mes "[Steve]";
+		mes "El sol, el agua y la tierra";
+		next;
+		mes "[Steve]";
+		mes "Representados como amarillo, azul y rojo";
+		next;
+		mes "[Steve]";
+		mes "Debido al robo que hemos sufrido este equilibro se ha roto...y ahora está en peligro la estabilidad del propio reino";
+		next;
+		mes "[Steve]";
+		mes "Sino recuperamos rapido lo que el pirata drake robo podemos sufrir las peores de las consecuencias";
+		next;
+		mes "[Steve]";
+		mes "Veo que conoces a drake... tienes que intentar recuperar lo que robo...y restaurar rapidamente el equilibro...";
+		next;
+		mes "[Steve]";
+		mes "Busca a drake y ayudanos...mucha suerte";
+		set midgard_relics,2;
+		close;
+	}
+	if (midgard_relics == 2) {
+		mes "[Steve]";
+		mes "Sino recuperamos rapido lo que el pirata drake robo podemos sufrir las peores de las consecuencias";
+		next;
+		mes "[Steve]";
+		mes "Veo que conoces a drake... tienes que intentar recuperar lo que robo...y restaurar rapidamente el equilibro...";
+		next;
+		mes "[Steve]";
+		mes "Busca a drake y ayudanos...mucha suerte";
+		close;
+	}
+}
+
+gef_fild09,242,223,3	script	Ancient Relic#redgem	406,3,3,{
+	if (midgard_relics == 3) {
+		mes "Encontraste el primer altar... y tiene el simbolo rojo...";
+		next;
+		mes "¿Quieres usarlo?";
+		next;
+		switch(select("No","Si"))
+		{
+			case 1:
+				close;
+			case 2:
+				if (countitem(716) > 0) {
+					mes "Un extraño ruido sale del fondo del pequeño altar...parece que ha surjido efecto y has cerrado el altar";
+					delitem 716,1; //red gem
+					set midgard_relics,4;
+					close;
+				} else {
+					mes "................";
+					close;
+				}
+		}
+	} else {
+		mes ".........";
+		close;
+	}
+OnTouch:
+	specialeffect EF_LEVEL99_4;
+	end;
+}
+ein_fild09,300,67,3	script	Ancient Relic#bluegem	406,3,3,{
+	if (midgard_relics == 4) {
+		mes "Encontraste el segundo altar... y tiene el simbolo azul...";
+		next;
+		mes "¿Quieres usarlo?";
+		next;
+		switch(select("No","Si"))
+		{
+			case 1:
+				close;
+			case 2:
+				if (countitem(717) > 0) {
+					mes "Un extraño ruido sale del fondo del pequeño altar...parece que ha surjido efecto y has cerrado el altar";
+					delitem 717,1; //blue gemstone
+					set midgard_relics,5;
+					close;
+				} else {
+					mes "................";
+					close;
+				}
+		}
+	} else {
+		mes ".........";
+		close;
+	}
+OnTouch:
+	specialeffect EF_LEVEL99_4;
+	end;
+}
+prt_fild08,56,55,3	script	Ancient Relic#yellogem	406,3,3,{
+	if (midgard_relics == 5) {
+		mes "Encontraste el último altar... y tiene el simbolo amarillo...";
+		next;
+		mes "¿Quieres usarlo?";
+		next;
+		switch(select("No","Si"))
+		{
+			case 1:
+				close;
+			case 2:
+				if (countitem(715) > 0) {
+					mes "Un extraño ruido sale del fondo del pequeño altar...parece que ha surjido efecto y has cerrado el altar";
+					delitem 715,1; //Yellow gemstone
+					set midgard_relics,6;
+					getexp 1500000,180000;
+					getitem 35008,1;
+					set .@buff_ran,rand(1,6);
+					if (.@buff_ran == 1) {
+						sc_start SC_STRFOOD, 1200000, 10;
+					}
+					else if (.@buff_ran == 2) {
+						sc_start SC_AGIFOOD, 1200000, 10;
+					}
+					else if (.@buff_ran == 2) {
+						sc_start SC_VITFOOD, 1200000, 10;
+					}
+					else if (.@buff_ran == 2) {
+						sc_start SC_INTFOOD, 1200000, 10;
+					}
+					else if (.@buff_ran == 2) {
+						sc_start SC_DEXFOOD, 1200000, 10;
+					}
+					else if (.@buff_ran == 2) {
+						sc_start SC_LUKFOOD, 1200000, 10;
+						
+					}
+					close2;
+					end;
+				} else {
+					mes "................";
+					close;
+				}
+		}
+	} else {
+		mes ".........";
+		close;
+	}
+OnTouch:
+	specialeffect EF_LEVEL99_4;
+	end;
+}

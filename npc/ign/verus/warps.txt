@@ -1,0 +1,11 @@
+// Warps
+juperos_01,246,88,0	warp	verus001	1,1,ver_eju,14,148
+ver_eju,9,148,0	warp	verus001-1	1,1,juperos_01,241,88
+ver_tunn,83,86,0	warp	verus002	1,1,ver_eju,106,37
+ver_eju,98,35,0	warp	verus002-1	1,1,ver_tunn,83,79
+verus03,170,259,0	warp	verus003	1,1,ver_tunn,16,38
+ver_tunn,10,36,0	warp	verus003-1	1,1,verus03,170,253
+verus03,122,14,0	warp	verus004	1,1,verus04,122,259
+verus04,122,267,0	warp	verus004-1	1,1,verus03,122,22
+verus03,44,13,0	warp	verus005	1,1,verus04,44,261
+verus04,44,267,0	warp	verus005-1	1,1,verus03,44,20

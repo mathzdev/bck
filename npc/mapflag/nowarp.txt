@@ -22,6 +22,7 @@ ama_test	mapflag	nowarp
 gon_test	mapflag	nowarp
 
 // Guild Castles =============
+que_ba	mapflag	nowarp
 aldeg_cas01	mapflag	nowarp
 aldeg_cas02	mapflag	nowarp
 aldeg_cas03	mapflag	nowarp

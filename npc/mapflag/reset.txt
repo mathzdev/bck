@@ -18,6 +18,7 @@ aldebaran	mapflag	reset
 amatsu	mapflag	reset
 ayothaya	mapflag	reset
 comodo	mapflag	reset
+glemior	mapflag	reset
 einbroch	mapflag	reset
 einbech	mapflag	reset
 geffen	mapflag	reset

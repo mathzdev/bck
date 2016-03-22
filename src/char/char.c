@@ -393,6 +393,18 @@ int char_mmo_char_tosql(uint32 char_id, struct mmo_charstatus* p){
 			errors++;
 	}
 
+	/* Mercenary Owner */
+	if( (p->mer_id != cp->mer_id) ||
+		(p->arch_calls != cp->arch_calls) || (p->arch_faith != cp->arch_faith) ||
+		(p->spear_calls != cp->spear_calls) || (p->spear_faith != cp->spear_faith) ||
+		(p->sword_calls != cp->sword_calls) || (p->sword_faith != cp->sword_faith) )
+	{
+		if (mercenary_owner_tosql(char_id, p))
+			strcat(save_status, " mercenary");
+		else
+			errors++;
+	}
+
 	//memo points
 	if( memcmp(p->memo_point, cp->memo_point, sizeof(p->memo_point)) )
 	{
@@ -1268,7 +1280,6 @@ int char_mmo_char_fromsql(uint32 char_id, struct mmo_charstatus* p, bool load_ev
 	}
 	StringBuf_AppendStr(&msg_buf, " hotkeys");
 #endif
-
 	/* Mercenary Owner DataBase */
 	mercenary_owner_fromsql(char_id, p);
 	StringBuf_AppendStr(&msg_buf, " mercenary");
@@ -1478,12 +1489,10 @@ int char_make_new_char_sql(struct char_session_data* sd, char* name_, int str, i
 			schema_config.charlog_db, "make new char", sd->account_id, slot, esc_name, str, agi, vit, int_, dex, luk, hair_style, hair_color) )
 			Sql_ShowDebug(sql_handle);
 	}
-
 #if PACKETVER >= 20151001
 	if (start_job != JOB_NOVICE)
 		return -2; // Invalid job
 #endif
-
 	//Insert the new char entry to the database
 #if PACKETVER >= 20151001
 	if( SQL_ERROR == Sql_Query(sql_handle, "INSERT INTO `%s` (`account_id`, `char_num`, `name`, `class`, `zeny`, `status_point`, `str`, `agi`, `vit`, `int`, `dex`, `luk`, `max_hp`, `hp`,"
@@ -1495,7 +1504,7 @@ int char_make_new_char_sql(struct char_session_data* sd, char* name_, int str, i
 #elif PACKETVER >= 20120307
 	if( SQL_ERROR == Sql_Query(sql_handle, "INSERT INTO `%s` (`account_id`, `char_num`, `name`, `zeny`, `status_point`, `str`, `agi`, `vit`, `int`, `dex`, `luk`, `max_hp`, `hp`,"
 		"`max_sp`, `sp`, `hair`, `hair_color`, `last_map`, `last_x`, `last_y`, `save_map`, `save_x`, `save_y`) VALUES ("
-		"'%d', '%d', '%s', '%d',  '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%s', '%d', '%d', '%s', '%d', '%d')",
+		"'%d', '%d', '%s', '%d',  '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d','%d', '%d','%d', '%d', '%s', '%d', '%d', '%s', '%d', '%d')",
 		schema_config.char_db, sd->account_id , slot, esc_name, charserv_config.start_zeny, 48, str, agi, vit, int_, dex, luk,
 		(40 * (100 + vit)/100) , (40 * (100 + vit)/100 ),  (11 * (100 + int_)/100), (11 * (100 + int_)/100), hair_style, hair_color,
 		mapindex_id2name(charserv_config.start_point[start_point_idx].map), charserv_config.start_point[start_point_idx].x, charserv_config.start_point[start_point_idx].y, mapindex_id2name(charserv_config.start_point[start_point_idx].map), charserv_config.start_point[start_point_idx].x, charserv_config.start_point[start_point_idx].y) )
@@ -2233,7 +2242,7 @@ bool char_checkdb(void){
                 schema_config.guild_skill_db, schema_config.guild_position_db, schema_config.guild_storage_db,
 		schema_config.party_db, schema_config.pet_db, schema_config.friend_db, schema_config.mail_db, 
                 schema_config.auction_db, schema_config.quest_db, schema_config.homunculus_db, schema_config.skill_homunculus_db,
-                schema_config.mercenary_db, schema_config.mercenary_owner_db,
+                schema_config.mercenary_db, schema_config.mercenary_owner_db, schema_config.achievement_db,
 		schema_config.elemental_db, schema_config.ragsrvinfo_db, schema_config.skillcooldown_db, schema_config.bonus_script_db
 	};
 	ShowInfo("Start checking DB integrity\n");
@@ -2415,6 +2424,11 @@ bool char_checkdb(void){
 		Sql_ShowDebug(sql_handle);
 		return false;
 	}
+
+	//checking achievement_db
+	if( SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `%s` WHERE `char_id` = '%d'", schema_config.achievement_db ) )
+		Sql_ShowDebug(sql_handle);
+
 	//checking elemental_db
 	if( SQL_ERROR == Sql_Query(sql_handle, "SELECT  `ele_id`,`char_id`,`class`,`mode`,`hp`,`sp`,`max_hp`,`max_sp`,"
 		"`atk1`,`atk2`,`matk`,`aspd`,`def`,`mdef`,`flee`,`hit`,`life_time` "
@@ -2556,6 +2570,8 @@ void char_sql_config_read(const char* cfgName) {
 			safestrncpy(schema_config.acc_reg_str_table, w2, sizeof(schema_config.acc_reg_str_table));
 		else if(!strcmpi(w1,"acc_reg_num_table"))
 			safestrncpy(schema_config.acc_reg_num_table, w2, sizeof(schema_config.acc_reg_num_table));
+		else if(!strcmpi(w1,"achievement_db"))
+			safestrncpy(schema_config.achievement_db, w2, sizeof(schema_config.achievement_db));
 		//support the import command, just like any other config
 		else if(!strcmpi(w1,"import"))
 			char_sql_config_read(w2);
@@ -2603,6 +2619,7 @@ void char_set_default_sql(){
 	safestrncpy(schema_config.char_reg_str_table,"char_reg_str",sizeof(schema_config.char_reg_str_table));
 	safestrncpy(schema_config.acc_reg_str_table,"acc_reg_str",sizeof(schema_config.acc_reg_str_table));
 	safestrncpy(schema_config.acc_reg_num_table,"acc_reg_num",sizeof(schema_config.acc_reg_num_table));
+	safestrncpy(schema_config.achievement_db,"achievement",sizeof(schema_config.achievement_db));
 }
 
 //set default config
@@ -2696,9 +2713,7 @@ static void char_config_split_startpoint(char *w2_value)
 #else
 	strcat(config_name, "start_point_pre");
 #endif
-
 	charserv_config.start_point_count = 0; // Reset to begin reading
-
 	fields = (char **)aMalloc(fields_length * sizeof(char *));
 	if (fields == NULL)
 		return; // Failed to allocate memory.
@@ -2712,7 +2727,6 @@ static void char_config_split_startpoint(char *w2_value)
 			lineitem = strtok(NULL, ":"); //next lineitem
 			continue;
 		}
-
 		charserv_config.start_point[i].map = mapindex_name2id(fields[1]);
 		if (!charserv_config.start_point[i].map) {
 			ShowError("Start point %s not found in map-index cache. Setting to default location.\n", charserv_config.start_point[i].map);
@@ -2722,9 +2736,8 @@ static void char_config_split_startpoint(char *w2_value)
 		} else {
 			charserv_config.start_point[i].x = max(0, atoi(fields[2]));
 			charserv_config.start_point[i].y = max(0, atoi(fields[3]));
-		}
+  		}
 		charserv_config.start_point_count++;
-
 		lineitem = strtok(NULL, ":"); //next lineitem
 		i++;
 	}
@@ -2757,12 +2770,10 @@ static void char_config_split_startitem(char *w2_value)
 			lineitem = strtok(NULL, ":"); //next lineitem
 			continue;
 		}
-
 		// TODO: Item ID verification
 		charserv_config.start_items[i].nameid = max(0, atoi(fields[1]));
 		charserv_config.start_items[i].amount = max(0, atoi(fields[2]));
 		charserv_config.start_items[i].pos = max(0, atoi(fields[3]));
-
 		lineitem = strtok(NULL, ":"); //next lineitem
 		i++;
 	}

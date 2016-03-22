@@ -1,0 +1,27 @@
+-	script	title_set	-1,{
+OnPCLoginEvent:
+OnPCBaseLvUpEvent:
+OnPCJobLvUpEvent:
+OnPCLoadMapEvent:
+	query_sql("SELECT `group_id` FROM `login` WHERE `account_id` = '" + getcharid(3) + "'", @groupid);
+	switch (@groupid) {
+		case 1:
+			setlook 5,970;
+			end;
+		case 3:
+			setlook 5,971;
+			end;
+		case 2:
+		case 4:
+		case 6:
+			setlook 5,972;
+			end;
+		case 99:
+			if(strcharinfo(0) == "Celsius" || strcharinfo(0) == "Bee Summer")
+				setlook 5,972;
+			else
+				setlook 5,969;
+			end;
+	}
+end;
+}

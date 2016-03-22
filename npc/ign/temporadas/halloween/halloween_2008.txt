@@ -1,0 +1,283 @@
+//===== eAthena Script =======================================
+//= iRO Halloween (2008)
+//===== By: ==================================================
+//= Kisuka
+//===== Translate: ===========================================
+//= DanielArt [Spanish]
+//===== Current Version: =====================================
+//= 1.2
+//===== Compatible With: =====================================
+//= eAthena SVN
+//===== Description: =========================================
+//= iRO Halloween (2008)
+//= Run away from the zombies for tickets.
+//= Redeem tickets for prizes.
+//===== Notes: ===============================================
+//= You must enable the event monsters in mob_db2.
+//===== Additional Comments: =================================
+//= 1.0 First version. [Kisuka]
+//= 1.1 Some small changes. [Kisuka]
+//= 1.2 Cambiado 'evt_zombie' a 'pvp_y_4-3'. [DanielArt]
+//============================================================
+
+prontera,157,192,4	script	Maga de Halloween#iRO08	704,{
+	
+	if(Hallow08 < 1) {
+			mes "[Maga de Halloween]";
+			mes "Kkkkkkkkk!";
+			mes "Tengo un evento especial para éste Halloween, para poder poner a prueba su suerte y velocidad.";
+			mes "¿Estás interesado?";
+			next;
+			mes "[Maga de Halloween]";
+			mes "¡Vamos! ¡No seas flojo!";
+			mes "¡Si recoges unos cuantos tickets podrás obtener fantásticos premios!";
+			mes "Entonces, ¿Qué dices?";
+			next;
+			goto MainMenu;
+	}
+
+	if (Hallow08Kill == 1) {
+		mes "[Maga de Halloween]";
+		mes "¡¿Eres un gatito miedoso?!";
+		mes "Tu sabes que puedes intentarlo de nuevo...";
+		mes "¿Conoces las reglas?";
+		next;
+		set Hallow08Kill,0;
+		if(select("Si, las conosco.:No, no las conosco.") == 2) {
+			goto Rules;
+		}
+		goto Participate;
+	}
+
+	if (Hallow08Kill == 2) {
+		mes "[Maga de Halloween]";
+		mes "Oh, ¡todo listo! ¡vamos al máximo!";
+		mes "¿¿No es divertido con Zombies??";
+		mes "¡Tu sabes, los Zombies son personas también!";
+		mes "¡Ha!";
+		mes "Kkkkkkk.";
+		next;
+		getitem 7941,1;
+		set Hallow08Kill,0;
+		mes "[Maga de Halloween]";
+		mes "Como yo he prometido";
+		mes "Puedes obtener Tickets de Halloween para cambiarlos por fantásticos premios.";
+		close;
+	}
+
+	if(Hallow08 > 0) {
+		mes "[Maga de Halloween]";
+		mes "Bueno, ¿necesitas leer las reglas nuevamente o deseas participar ya?...";
+		next;
+		goto MainMenu2;
+	}
+	
+		Rules:
+			mes "[Maga de Halloween]";
+			mes "Esta villa es como un Payon Virtual.";
+			mes "Aquí hay Zombies y Ghouls rondando en las tres salidas del sur, pero sólo una sirve.";
+			mes "Lo que tienes que hacer es encontrarla.";
+			next;
+			mes "[Maga de Halloween]";
+			mes "No puedes usar ninguna magia para matar a los Zombies y Ghouls.";
+			mes "Y una cosa más...";
+			mes "que no debes olvidar...";
+			next;
+			mes "[Maga de Halloween]";
+			mes "Todos los participantes no pueden vestir nada.";
+			mes "Pon todo en tu almacén hasta que tu peso sea '0'.";
+			next;
+			mes "[Maga de Halloween]";
+			mes "Oh, ¡una cosa más!";
+			mes "No puedes entrar montado en un peco peco o tener un carro, ¿Lo has entendido?";
+			next;
+			if (Hallow08 > 0) {
+				mes "[Maga de Halloween]";
+				mes "Hey...";
+				mes "Vuelve cuando estés listo.";
+				close;
+			}else{
+				goto MainMenu;
+			}
+			
+		Participate:
+			mes "[Maga de Halloween]";
+			mes "Ok, estás listo.";
+			mes "Dejame revisar tu peso.";
+			next;
+			if (Weight > 0) {
+				mes "[Maga de Halloween]";
+				mes "¡Gosh!";
+				mes "Aquí hay una obeja negra.";
+				next;
+				mes "[Maga de Halloween]";
+				mes "¿No te avisé? Tu peso debe ser '0'";
+				mes "Y no tienes ese peso...";
+				close;
+			}else{
+				mes "[Maga de Halloween]";
+				mes "Ok tu peso está excelente.";
+				next;
+				mes "[Maga de Halloween]";
+				mes "Te podría traer de vuelta con mi magia, pero estoy exhausta.";
+				next;
+				mes "[Maga de Halloween]";
+				mes "Y algunas veces olvido a quién envió adentro...";
+				next;
+				mes "[Maga de Halloween]";
+				mes "Pero confió en que volverás.";
+				close2;
+				if (Hallow08 < 1) {
+					set Hallow08,1;
+				}
+				set Hallow08Kill,1;
+				set @Hallow08Warp, rand(1,3);
+				percentheal -98,0;
+				setriding 0;
+				setcart 0;
+				warp "pvp_y_4-3",155,246;
+				end;
+			}
+			
+		TicketExchange:
+			mes "[Maga de Halloween]";
+			mes "¿Quieres cambiar tickets por premios?";
+			mes "¡Buen trabajo! Kkkkkk!";
+			next;
+			mes "[Maga de Halloween]";
+			mes "Dime cuantos tickets quieren cambiar por cada cosa.";
+			next;
+			mes "[Maga de Halloween]";
+			mes "5 tickets por Pumpkin Pie.";
+			mes "20 tickets por Pumpkin-Head.";
+			mes "50 tickets por Old Blue Box.";
+			mes "70 tickets por Old Purple Box.";
+			mes "200 tickets por Old Card Album.";
+			next;
+			mes "[Maga de Halloween]";
+			mes "¿Qué deseas cambiar?";
+			next;
+			switch(select("Pumpkin Pie:Pumpkin-Head:Old Blue Box:Old Purple Box:Old Card Album")) {
+				case 1:
+					if(countitem(7941) < 5) {
+						goto NotEnough;
+					}else{
+						delitem 7941,5;
+						getitem 12192,1;
+						goto Enough;
+					}
+					break;
+				case 2:
+					if(countitem(7941) < 20) {
+						goto NotEnough;
+					}else{
+						delitem 7941,20;
+						getitem 5134,1;
+						goto Enough;
+					}
+					break;
+				case 3:
+					if(countitem(7941) < 50) {
+						goto NotEnough;
+					}else{
+						delitem 7941,50;
+						getitem 603,1;
+						goto Enough;
+					}
+					break;
+				case 4:
+					if(countitem(7941) < 70) {
+						goto NotEnough;
+					}else{
+						delitem 7941,70;
+						getitem 617,1;
+						goto Enough;
+					}
+					break;			
+				case 5:
+					if(countitem(7941) < 200) {
+						goto NotEnough;
+					}else{
+						delitem 7941,200;
+						getitem 616,1;
+						goto Enough;
+					}
+			}
+					
+		NextTime:
+			mes "[Maga de Halloween]";
+			mes "Ok, nos vemos después.";
+			mes "Kkkkkkkk.";
+			close;
+
+	MainMenu:
+		menu "Explicame.",Rules,"Quiero participar.",Participate,"Quiero cambiar tickets por premios.",TicketExchange,"Salir.",NextTime;
+
+	MainMenu2:
+		menu "Quiero participar!",Participate,"Porfavor, cuentame las reglas",Rules,"Quiero cambiar tickets por premios.",TicketExchange,"Salir.",NextTime;
+
+	NotEnough:
+		mes "[Maga de Halloween]";
+		mes "¡No tienes los tickets!";
+		mes "¿No sabes contar?";
+		mes "Porfavor ven cuando tengas los suficientes tickets.";
+		close;
+
+	Enough:
+		mes "[Maga de Halloween]";
+		mes "Aquí están.";
+		mes "Tu necesitas...";
+		mes "¿algo más?";
+		next;
+		if (Hallow08 == 1) {
+			goto MainMenu2;
+		}else{
+			goto MainMenu;
+		}
+}
+	
+// --------------- MapFlags ---------------
+
+
+pvp_y_4-3,16,142,1	script	zombiewarp001	45,2,2,{
+	OnTouch:
+	if (@Hallow08Warp == 1) {
+		set Hallow08Kill,2;
+		specialeffect 16;
+		warp "prontera",160,196;
+	}
+	end;
+}
+
+pvp_y_4-3,122,27,1	script	zombiewarp002	45,2,2,{
+	OnTouch:
+	if (@Hallow08Warp == 2) {
+		set Hallow08Kill,2;
+		specialeffect 16;
+		warp "prontera",160,196;
+	}
+	end;
+}
+
+pvp_y_4-3,267,89,1	script	zombiewarp003	45,2,2,{
+	OnTouch:
+	if (@Hallow08Warp == 3) {
+		set Hallow08Kill,2;
+		specialeffect 16;
+		warp "prontera",160,196;
+	}
+	end;
+}
+pvp_y_4-3	mapflag	leaves
+//pvp_y_4-3	mapflag	nocommands
+pvp_y_4-3	mapflag	pvp	off
+pvp_y_4-3	mapflag	nowarp
+pvp_y_4-3	mapflag	nightenabled
+pvp_y_4-3	mapflag	noloot
+pvp_y_4-3	mapflag	nomemo
+pvp_y_4-3	mapflag	nosave
+pvp_y_4-3	mapflag	noreturn
+pvp_y_4-3	mapflag	nowarpto
+pvp_y_4-3,0,0,0,0	monster	Zombie	1015,100,0,0,0
+pvp_y_4-3,0,0,0,0	monster	Ghoul	1036,80,0,0,0
+pvp_y_4-3,0,0,0,0	monster	Zombie Master	1298,35,0,0,0

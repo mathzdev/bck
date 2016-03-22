@@ -1,0 +1,127 @@
+prontera,145,187,5	script	Gato Reseteador	548,{
+mes "[^5533ffGato Reseteador^000000]"; 
+mes "Bienvenid"+(Sex?"o":"a")+" "+strcharinfo(0);
+mes "Reset Actuales: ^ff0000"+(reset_cnt-1)+"^000000";
+next;
+mes "[^5533ffGato Reseteador^000000]";
+mes "¿En que te puedo ayudar hoy?";
+next;
+	switch (select("Resetear:Informacion:^777777Salir^000000")) {
+		case 1:
+			if(BaseLevel < 76) {
+				mes "[^5533ffGato Reseteador^000000]";
+				mes "¿Que deseas resetear?";
+					switch (select("Status ^5533ff=>^000000 ^ff0000125,000^000000z:Skills ^5533ff=>^000000 ^ff0000125,000^000000z:Ambos ^5533ff=>^000000 ^ff0000200,000^000000z")) {
+						case 1:
+							if (Zeny < 125000) {
+								mes "No tienes el Zeny suficiente.";
+								close;
+							}
+							set Zeny,Zeny - 125000;
+							set $loteria,$loteria+10000;
+							dispbottom "Haz añadido 10000z a la loteria.";
+							ResetStatus;
+							mes "Hecho.";
+							close;
+						case 2:
+							if (Zeny < 125000) {
+								mes "No tienes el Zeny suficiente.";
+								close;
+							}
+							set Zeny,Zeny - 125000;
+							set $loteria,$loteria+10000;
+							dispbottom "Haz añadido 10000z a la loteria.";
+							ResetSkill;
+							mes "Hecho.";
+							close;
+						case 3:
+							if (Zeny < 200000) {
+								mes "No tienes el Zeny suficiente.";
+								close;
+							}
+							set Zeny,Zeny - 200000;
+							set $loteria,$loteria+10000;
+							dispbottom "Haz añadido 10000z a la loteria.";
+							ResetStatus;
+							ResetSkill;
+							mes "Hecho.";
+							close;
+					}
+			}
+			if (reset_cnt == 0) { set reset_cnt,1; }
+			set reset_prc,(300000*reset_cnt);
+				if(countitem(671) < 1) {
+					mes "[^5533ffGato Reseteador^000000]";
+					mes "Necesitas tener al menos una Gold Coin.";
+					close;
+				}
+				mes "[^5533ffGato Reseteador^000000]";
+				mes "¿Que deseas resetear?";
+					switch (select("Status ^5533ff=>^000000 ^ff0000"+reset_prc+"^000000z:Skills ^5533ff=>^000000 ^ff0000"+reset_prc+"^000000z:Ambos ^5533ff=>^000000 ^ff0000"+((reset_prc*2)-(100000*reset_cnt))+"^000000z")) {
+						case 1:
+							if (Zeny < reset_prc) {
+								mes "No tienes el Zeny suficiente.";
+								close;
+							}
+							set Zeny,Zeny - reset_prc;
+							set $loteria,$loteria+(reset_prc/100);
+							dispbottom "Haz añadido "+(reset_prc/100)+"z a la loteria.";
+							delitem 671,1;
+							ResetStatus;
+							set reset_cnt,reset_cnt+1;
+							mes "Hecho.";
+							close;
+						case 2:
+							if (Zeny < reset_prc) {
+								mes "No tienes el Zeny suficiente.";
+								close;
+							}
+							set Zeny,Zeny - reset_prc;
+							set $loteria,$loteria+(reset_prc/100);
+							dispbottom "Haz añadido "+(reset_prc/100)+"z a la loteria.";
+							delitem 671,1;
+							ResetSkill;
+							set reset_cnt,reset_cnt+1;
+							mes "Hecho.";
+							close;
+						case 3:
+							if (Zeny < ((reset_prc*2)-(100000*reset_cnt))) {
+								mes "No tienes el Zeny suficiente.";
+								close;
+							}
+							if (countitem(671) < 2) {
+								mes "Necesitas dos Gold Coin.";
+								close;
+							}
+							set Zeny,Zeny - ((reset_prc*2)-(100000*reset_cnt));
+							set $loteria,$loteria+((reset_prc*2)*(reset_cnt));
+							dispbottom "Haz añadido "+((reset_prc*2)*(reset_cnt))+"z a la loteria.";
+							delitem 671,2;
+							ResetStatus;
+							ResetSkill;
+							set reset_cnt,reset_cnt+1;
+							mes "Hecho.";
+							close;
+					}
+		case 2:
+			mes "[^5533ffGato Reseteador^000000]";
+			mes "Te puedo resetear Status y Skills por un precio razonable.";
+			next;
+			mes "[^5533ffGato Reseteador^000000]";
+			mes "Primero comenzarás con 300,000 z y 1 Gold Coin.";
+			next;
+			mes "[^5533ffGato Reseteador^000000]";
+			mes "Dependiendo de cuantas veces hayas reseteado esa cantidad de 300,000z se multiplicará por dos.";
+			next;
+			mes "[^5533ffGato Reseteador^000000]";
+			mes "Ten cuidado de cuantas veces lo haces, que llegará a precios inimaginables.";
+			next;
+			mes "[^5533ffGato Reseteador^000000]";
+			mes "Si eres menor de nivel 75 te costará solo 200,000 z el paquete completo.";
+			close;
+		case 3:
+			mes "[^5533ffGato Reseteador^000000]";
+			mes "Nos vemos pronto.";
+			close;
+	}
+}

@@ -1,0 +1,276 @@
+louyang,218,117,4	script	Guardia::laf_ent	653,{
+	set .@party_id,getcharid(1);
+	set .@md_name$,"Lafayette Palace";
+
+	if (!.@party_id || BaseLevel < 150) {
+		mes "[Guardia]";
+		mes "Lo siento, pero no puedes venir sólo y sin experiencia..";
+		close2; cutin "",255; end;
+	}
+	mes "[Guardia]";
+	mes "Entra sin ningún miedo..";
+	next;
+	while(1) {
+		switch(select("Lafayette Palace.:Salir.")) {
+			case 1:
+				if (getcharid(0) == getpartyleader(.@party_id,2)) {
+					set .@playtime, checkquest(13183,PLAYTIME);
+					if (.@playtime == 0 || .@playtime == 1) {
+						switch(instance_enter("Lafayette Palace")) {
+							case 3:
+								mes "[Guardia]";
+								mes "Aún no es tiempo, vuelve luego.";
+								close2; cutin "",255; end;
+							case 2:
+							case 1:
+								mes "[Guardia]";
+								mes "Lo siento, pero los dragones se han reunido, no puedes entrar..";
+								close2; cutin "",255; end;
+							case 0:
+								mapannounce "louyang", getpartyname(getcharid(1))+"  ha entrado a "+.@md_name$+"!",bc_map,"0x00ff99";
+								if (checkquest(13183) == -1) setquest 13183;
+								close2; cutin "",255; end;
+							default:
+								mes "[Guardia]";
+								mes "No estás enlistado para el combate.";
+								close2; cutin "",255; end;
+						}
+						mes "[Guardia]";
+						mes "El portal está presentando fallos por el momento, vuelve más tarde.";
+						close2; cutin "",255; end;
+					}
+					if (.@playtime == 2) erasequest 13183;
+					if (instance_create(.@md_name$) < 0) {
+						mes "[Guardia]";
+						mes "Nombre de party es... "+getpartyname(.@party_id)+".";
+						mes "El lider es... "+strcharinfo(0)+".";
+						mes "^0000ff"+.@md_name$+"^000000, No la puedo abrir ahora";
+						mes "No es el tiempo, vuelve luego.";
+						close2; cutin "",255; end;
+					}
+					switch(instance_enter("Lafayette Palace")) {
+						case 3:
+							mes "[Guardia]";
+							mes "Aún no es tiempo, vuelve luego.";
+							close2; cutin "",255; end;
+						case 2:
+						case 1:
+							mes "[Guardia]";
+							mes "No es momento para que entres...";
+									close2; cutin "",255; end;
+						case 0:
+							mapannounce "dali", getpartyname(getcharid(1))+"  ha entrado a "+.@md_name$+"!",bc_map,"0x00ff99";
+							if (checkquest(13183) == -1) setquest 13183;
+							close2; cutin "",255; end;
+						default:
+							mes "[Guardia]";
+							mes "No estás enlistado para el combate.";
+							close2; cutin "",255; end;
+					}
+				}
+				switch(instance_enter("Lafayette Palace")) {
+					case 3:
+						mes "[Guardia]";
+						mes "Aún no es tiempo, vuelve luego.";
+						close2; cutin "",255; end;
+					case 2:
+					case 1:
+						mes "[Guardia]";
+						mes "No es momento para que entres...";
+						close2; cutin "",255; end;
+					case 0:
+						mapannounce "louyang", getpartyname(getcharid(1))+"  ha entrado a "+.@md_name$+"!",bc_map,"0x00ff99";
+						if (checkquest(13183) == -1) setquest 13183;
+						close2; cutin "",255; end;
+					default:
+						mes "[Guardia]";
+						mes "No estás enlistado para el combate.";
+						close2; cutin "",255; end;
+				}
+			case 2:
+				mes "[Guardia]";
+				mes "Vuelve después.";
+				close2; cutin "",255; end;
+		}
+	}
+}
+lafayette,202,50,0	script	#ontalk1	139,2,2,{
+OnTouch:
+	if (getcharid(0) == getpartyleader(getcharid(1),2)) {
+		donpcevent instance_npcname("Guardia Imperial#laf01")+"::OnConversation";
+		donpcevent instance_npcname("#ontalk1")+"::OnDisable";
+	}
+	end;
+OnInstanceInit:
+OnEnable:
+	enablenpc instance_npcname("#ontalk1");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("#ontalk1");
+	end;
+}
+lafayette,202,50,4	script	Guardia Imperial#laf01	653,{
+end;
+OnConversation:
+	npctalk "Señor, se han avistado gran cantidad de monstruos en el territorio del antiguo castillo.";
+	sleep2 3000;
+	donpcevent instance_npcname("General#laf01")+"::OnChat1";
+	sleep2 3000;
+	npctalk "Varios de nuestros hombres ya han caído en combate, no tenemos idea de qué vamos hacer.";
+	sleep2 3000;
+	npctalk "Se cuenta la leyenda de un gran dragon que habitaba en éste castillo.";
+	sleep2 3000;
+	npctalk "El cual se dice que había sido vencido por un guerrero legendario.";
+	sleep2 3000;
+	donpcevent instance_npcname("General#laf01")+"::OnChat2";
+	sleep2 3000;
+	npctalk "¿En serio? no lo puedo creer.";
+	sleep2 3000;
+	npctalk "Por el momento creo que . . . .";
+	sleep2 3000;
+	npctalk " . . . ¡cuidado señor! hay monstruos al frente.";
+	sleep2 3000;
+	donpcevent instance_npcname("General#laf01")+"::OnChat3";
+	sleep2 3000;
+	donpcevent instance_npcname("#spawnmoblf1")+"::OnEnable";
+	donpcevent instance_npcname("General#laf01")+"::OnDisable";
+	donpcevent instance_npcname("Guardia Imperial#laf01")+"::OnDisable";
+	end;
+OnInstanceInit:
+OnEnable:
+	enablenpc instance_npcname("Guardia Imperial#laf01");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Guardia Imperial#laf01");
+	end;
+}
+lafayette,198,48,5	script	General#laf01	852,{
+end;
+OnChat1:
+	npctalk "En efecto, éste lugar siempre ha estado plagado de numerosos dragones.";
+	end;
+OnChat2:
+	npctalk "Lamentablemente no lo venció, cuenta la leyenda que únicamente lo puso a dormir.";
+	end;
+OnChat3:
+	npctalk "¡a las armas soldado!";
+	end;
+OnInstanceInit:
+OnEnable:
+	enablenpc instance_npcname("General#laf01");
+	end;
+OnDisable:
+	disablenpc instance_npcname("General#laf01");
+	end;
+}
+lafayette,0,0,0	script	#spawnmoblf1	139,{
+end;
+OnInstanceInit:
+OnDisable:
+	disablenpc instance_npcname("#spawnmoblf1");
+	end;
+OnEnable:
+	enablenpc instance_npcname("#spawnmoblf1");
+	set .@m$,instance_mapname("lafayette");
+	monster .@m$,196,75,"Fan Lizard",3505,10,instance_npcname("#spawnmoblf1")+"::OnMyMobDead";
+	end;
+OnMyMobDead:
+	set .@m$,instance_mapname("lafayette");
+	if(mobcount(.@m$,instance_npcname("#spawnmoblf1")+"::OnMyMobDead") < 1) {
+		donpcevent instance_npcname("Guardia#laf02")+"::OnEnable";
+		donpcevent instance_npcname("#ontalk2")+"::OnEnable";
+		end;
+	}
+}
+lafayette,195,75,0	script	#ontalk2	139,2,2,{
+OnTouch:
+	if (getcharid(0) == getpartyleader(getcharid(1),2)) {
+		donpcevent instance_npcname("Guardia#laf02")+"::OnConversation";
+		donpcevent instance_npcname("#ontalk2")+"::OnDisable";
+	}
+	end;
+OnInstanceInit:
+OnDisable:
+	disablenpc instance_npcname("#ontalk2");
+	end;
+OnEnable:
+	specialeffect EF_BASH;
+	enablenpc instance_npcname("#ontalk2");
+	end;
+}
+lafayette,195,75,4	script	Guardia#laf02	653,{
+end;
+OnConversation:
+	npctalk "Todos han muerto...";
+	sleep2 3000;
+	npctalk "Soy el único que . . . .";
+	sleep2 3000;
+	npctalk "Ugh . . .";
+	sleep2 3000;
+	npctalk "Por... por favor, véncelos p-por ... nosotros...";
+	sleep2 3000;
+	donpcevent instance_npcname("#instancelaf")+"::OnEnable";
+	sleep2 500;
+	instance_announce instance_id(),"[Sistema] Vence a todos los Dragones del mapa para despertar al Gran Dragón",bc_map,0xFF8800;
+	donpcevent instance_npcname("Guardia#laf02")+"::OnDisable";
+	end;
+OnInstanceInit:
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Guardia#laf02");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Guardia#laf02");
+	specialeffect EF_BASH;
+	end;
+}
+lafayette,0,0,0	script	#instancelaf	139,{
+OnInstanceInit:
+OnDisable:
+	disablenpc instance_npcname("#instancelaf");
+	end;
+OnEnable:
+	enablenpc instance_npcname("#instancelaf");
+	set .@m$,instance_mapname("lafayette");
+	monster .@m$,0,0,"Chibcha",3504,20,instance_npcname("#instancelaf")+"::OnMyMobDead";
+	monster .@m$,0,0,"Fan Lizard",3505,20,instance_npcname("#instancelaf")+"::OnMyMobDead";
+	monster .@m$,0,0,"Flat Salamander",3506,20,instance_npcname("#instancelaf")+"::OnMyMobDead";
+	monster .@m$,0,0,"Larva",3507,20,instance_npcname("#instancelaf")+"::OnMyMobDead";
+	end;
+OnMyMobDead:
+	set .@m$,instance_mapname("lafayette");
+	set .@n,mobcount(.@m$,instance_npcname("#instancelaf")+"::OnMyMobDead");
+	if(.@n < 1) {
+		instance_announce instance_id(),"[Sistema] El Gran Dragón te observa ferozmente desde la cima de un edificio, usa los puentes para llegar a él.",bc_map,0xFF0000;
+		monster .@m$,261,132,"Ancestral Dragon",3508,1,instance_npcname("#instancelaf")+"::OnMyMobDead2";
+		end;
+	}
+	instance_announce instance_id(),"[Sistema] Dragones en el mapa: "+.@n,bc_map,0x5533FF;
+	end;
+OnMyMobDead2:
+	set .@m$,instance_mapname("lafayette");
+	instance_announce instance_id(),"[Espíritus] Gracias por vengar nuestra muerte...",bc_map,0xFF0000;
+	sleep2 15000;
+	mapwarp .@m$,"louyang",218,117;
+	end;
+}
+lafayette,67,93,0	script	#warplaf001	45,1,1,{
+OnTouch:
+	set .@m$,instance_mapname("lafayette");
+	warp .@m$,59,81;
+	end;
+OnInstanceInit:
+	enablenpc instance_npcname("#warplaf001");
+	end;
+}
+lafayette,60,85,0	script	#warplaf002	45,1,1,{
+OnTouch:
+	set .@m$,instance_mapname("lafayette");
+	warp .@m$,74,91;
+	end;
+OnInstanceInit:
+	enablenpc instance_npcname("#warplaf002");
+	end;
+}

@@ -1,0 +1,257 @@
+vip,78,64,4	script	Niño#q_glob	877,{
+	if(BaseLevel < 80) {
+		mes "[Niño]";
+		mes "Eres un niño como yo, ven cuando crezcas.";
+		close;
+	}
+	switch(q_hat1) {
+		case 0:
+		default:
+			mes "[Niño]";
+			mes "Hoy es mi cumpleaños y nadie se ha acordado, sólo queria ver un par de globos.";
+			next;
+			mes "[Niño]";
+			mes "Mi familia de seguro me odia, ni siquiera me han felicitado.";
+			emotion e_sob;
+			next;
+			mes "[Niño]";
+			mes "Ellos viven el Hugel, en la tienda de Fiestas, y ni así me han hecho una fiesta.";
+			set q_hat1,1;
+			close;
+		case 1:
+			mes "[Niño]";
+			mes "¿Podrías ver por qué no me han felicitado?";
+			emotion e_hmm;
+			next;
+			mes "[Niño]";
+			mes "Ellos viven en Hugel en la tienda para fiestas.";
+			close;
+		case 2:
+			mes "[Niño]";
+			mes "¿Qué dice mi hermano?";
+			next;
+			input @palabra$;
+			if(@palabra$ == "Estoy de compras") {
+				mes "[Niño]";
+				mes "¿De compras?, oh.";
+				emotion e_swt;
+				next;
+				mes "[Niño]";
+				mes "De seguro me está consiguiendo un regalo, dile que quiero un globo, pero yo no te dije.";
+				next;
+				mes "[Niño]";
+				mes "Disimula, por favor...";
+				set q_hat1,3;
+				close;
+			}
+			mes "[Niño]";
+			mes "No creo que haya dicho eso.";
+			close;
+		case 3:
+			mes "[Niño]";
+			mes "Ve a decirle que quiero un globo, pero yo no te dije.";
+			close;
+		case 4:
+		case 5:
+			mes "[Niño]";
+			mes "Me pregunto qué estará haciendo mi hermano.";
+			close;
+		case 6:
+			mes "[Niño]";
+			mes "Oh, esto es justo lo que quería.";
+			emotion e_thx;
+			next;
+			mes "[Niño]";
+			mes "Muchas, muchas, pero muchas gracias.";
+			emotion e_thx;
+			next;
+			mes "[Niño]";
+			mes "Ten esto como recompenza.";
+			getexp 342333,434343;
+			getitem 5934,1;
+			npctalk "Muchas gracias "+strcharinfo(0)+", ten ésto como regalo.";
+			set q_hat1,7;
+			close;
+		case 7:
+			if(BaseLevel > 120) {
+				set q_hat1,8;
+				mes "[Niño]";
+				mes "Descubrí cómo hacer un globo muy especial.";
+				next;
+				mes "[Niño]";
+				mes "Resulta que si llenas un Deviruchi de Polvora, su piel no se destruye y queda como un globo.";
+				next;
+				mes "[Niño]";
+				mes "Puedo fabricártelo si gustas, sólo traeme un ^5533ffDeviruchi Egg^000000, ^ff880050 Little Evil Wing^000000 y ^ff000030 Explosive Powder^000000.";
+				close;
+			}
+			mes "[Niño]";
+			mes "Gracias, me hiciste muy feliz.";
+			close;
+		case 8:
+			if(countitem(6213) < 30 || countitem(1039) < 50 || countitem(9023) < 1) {
+				mes "[Niño]";
+				mes "Lo siento pero no tienes los objetos necesarios.";
+				next;
+				mes "[Niño]";
+				mes "Puedo fabricártelo si gustas, sólo traeme un ^5533ffDeviruchi Egg^000000, ^ff880050 Little Evil Wing^000000 y ^ff000030 Explosive Powder^000000.";
+				close;
+			}
+			delitem 6213,30;
+			delitem 1039,50;
+			delitem 9023,1;
+			if(rand(1,100) < 50) {
+				specialeffect 155;
+				mes "[Niño]";
+				mes "Lo siento, pero fallé al crear el globo.";
+				close;
+			}
+			getitem 35006,1;
+			specialeffect 154;
+			mes "[Niño]";
+			mes "Aquí tienes.";
+			close2;
+			set q_hat1,9;
+			end;
+		case 9:
+			if(BaseLevel >= 140 && q_musical < 1) {
+				mes "[Niño]";
+				mes "Oye, he escuchado algo nuevo por las calles.";
+				next;
+				mes "[Niño]";
+				mes "Dicen que al Casino de Prontera han llegado unos músicos bien extraños.";
+				next;
+				mes "[Niño]";
+				mes "Deberías de ir a verlos.";
+				close2;
+				set q_musical,1;
+				setquest 17501;
+				end;
+			} else if(q_musical) {
+				mes "[Niño]";
+				mes "Dicen que esos músicos están en la segunda planta del Casino.";
+				close;
+			}
+			mes "[Niño]";
+			mes "Si descubro cómo hacer más globos, serás el primero al que le contaré.";
+			close;
+	}
+OnPCLoadMapEvent:
+	if((strcharinfo(3)=="vip") && (BaseLevel >= 80) && (q_hat1 < 7))
+		showevent Q_TYPE_QUEST,1;
+	if((strcharinfo(3)=="vip") && (BaseLevel >= 120) && (q_hat1 < 9))
+		showevent Q_TYPE_QUEST,1;
+	if((strcharinfo(3)=="vip") && (BaseLevel >= 140) && (q_musical < 1))
+		showevent Q_TYPE_QUEST,1;
+	end;
+}
+hu_in01,21,244,4	script	Hermano Nervioso#q1	841,{
+	switch (q_hat1) {
+		case 0:
+		default:
+			mes "[Hermano Preocupado]";
+			mes "¿Qué hago?, ¡¿qué hago?!";
+			emotion e_wah;
+			close;
+		case 1:
+			mes "[Hermano Preocupado]";
+			mes "Pero qué hago, no encuentro globos, cómo puede que tengamos una tienda de fiestas y no tengamos globos.";
+			next;
+			mes "[Hermano Preocupado]";
+			mes "Oh tú, tú haz visto a mi hermano, por favor dile que estoy... ^ff0000Estoy de compras^000000.";
+			emotion e_no1;
+			next;
+			mes "[Hermano Preocupado]";
+			mes "Volveré pronto con él, por favor distraelo.";
+			set q_hat1,2;
+			close;
+		case 2:
+			mes "[Hermano Preocupado]";
+			mes "Por favor ve con mi hermano y distraelo, dile que ^ff0000Estoy de compras^000000.";
+			close;
+		case 3:
+			mes "[Hermano Preocupado]";
+			mes "Gracias por hacer tiempo...";
+			emotion e_thx;
+			next;
+			mes "[Hermano Preocupado]";
+			mes "¿Que mi hermano quiere qué?";
+			next;
+			if(select("Una cobija","Un globo") == 1) {
+				mes "[Hermano Preocupado]";
+				mes "No creo que el quiera eso.";
+				close;
+			}
+			mes "[Hermano Preocupado]";
+			mes "Lo suponía, él quiere un globo, pero no veo qué hacer, no venden en ésta tienda.";
+			next;
+			mes "[Hermano Preocupado]";
+			mes "Dicen que en la Ciudad de Gremios hay un vendedor de globos, por favor ve a pedirle uno para mi hermano.";
+			set q_hat1,4;
+			close;
+		case 4:
+			mes "[Hermano Preocupado]";
+			mes "Ve a la Ciudad de Gremios por un globo, te recompenzaré.";
+			close;
+		case 5:
+			mes "[Hermano Preocupado]";
+			mes "¿Qué sucedio?";
+			next;
+			select("Una carta, ten...");
+			mes "[Hermano Preocupado]";
+			mes "Oh... esto dice que hay un globo escondido aquí...";
+			sleep2 1000;
+			mes "hmm....";
+			emotion e_hmm;
+			sleep2 3000;
+			mes "No lo enc....";
+			emotion e_swt;
+			sleep2 1000;
+			mes "¡Aquí está!";
+			emotion e_no1;
+			next;
+			mes "[Hermano Preocupado]";
+			mes "Rápido ve con mi hermano y dáselo.";
+			delitem 6546,1;
+			set q_hat1,6;
+			close;
+		case 6:
+			mes "[Hermano Preocupado]";
+			mes "Ve con mi hermano y daselo.";
+			close;
+		case 7:
+			mes "[Hermano Preocupado]";
+			mes "Gracias por todo.";
+			close;
+	}
+}
+glemior,276,294,4	script	Globero#q1	772,{
+	mes "[Vendedor de Globos]";
+	mes "Oh hola, ¿en qué te puedo servir?";
+	next;
+	if(q_hat1 == 4)
+		menu "Ver Tienda",L_shop,"^5533ffDame un Globo Especial^000000",-,"^777777Salir^000000",L_close;
+	else
+		menu "Ver Tienda",L_shop,"^777777Salir^000000",L_close;
+	mes "[Vendedor de Globos]";
+	mes "Pero claro que sí, oh espera, ¿vienes de hugel?";
+	next;
+	mes "[Vendedor de Globos]";
+	mes "En ese caso no es necesario, en la tienda de Hugel escondí algo muy especial.";
+	next;
+	mes "[Vendedor de Globos]";
+	mes "Dale ésta carta al hermano que me dices.";
+	emotion e_no1;
+	getitem 6546,1;
+	set q_hat1,5;
+	close;
+L_shop:
+	close2;
+	callshop "balloon_shop",1;
+	end;
+L_close:
+	mes "[Vendedor de Globos]";
+	mes "Vuelve pronto.";
+	close;
+}
+-	itemshop	balloon_shop	136,18174:0,35017:100,35003:100,35009:100,35027:100,35024:100,35019:2000,35018:2000,35007:2000

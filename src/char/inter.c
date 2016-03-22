@@ -21,6 +21,7 @@
 #include "int_auction.h"
 #include "int_quest.h"
 #include "int_elemental.h"
+#include "int_achievement.h"
 
 #include <stdlib.h>
 
@@ -49,7 +50,7 @@ int inter_recv_packet_length[] = {
 	-1,10,-1,14, 14,19, 6,-1, 14,14, 6, 0,  0, 0,  0, 0,	// 3020- Party
 	-1, 6,-1,-1, 55,19, 6,-1, 14,-1,-1,-1, 18,19,186,-1,	// 3030-
 	-1, 9, 0, 0,  0, 0, 0, 0,  7, 6,10,10, 10,-1,  0, 0,	// 3040-
-	-1,-1,10,10,  0,-1,12, 0,  0, 0, 0, 0,  0, 0,  0, 0,	// 3050-  Auction System [Zephyrus]
+	-1,-1,10,10,  0,-1, 0, 0,  0, 0, 6,-1,  0, 0,  0, 0,	// 3050-  Auction System [Zephyrus] + Achievement System
 	 6,-1, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0,  0, 0,	// 3060-  Quest system [Kevin] [Inkfish]
 	-1,10, 6,-1,  0, 0, 0, 0,  0, 0, 0, 0, -1,10,  6,-1,	// 3070-  Mercenary packets [Zephyrus], Elemental packets [pakpil]
 	48,14,-1, 6,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0,  0, 0,	// 3080-
@@ -1275,6 +1276,7 @@ int inter_parse_frommap(int fd)
 		  || inter_mail_parse_frommap(fd)
 		  || inter_auction_parse_frommap(fd)
 		  || inter_quest_parse_frommap(fd)
+		  || inter_achievement_parse_frommap(fd)
 		   )
 			break;
 		else

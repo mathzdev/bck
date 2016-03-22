@@ -1,0 +1,186 @@
+//============================================================ 
+//= Funciones
+//============================================================ 
+function	script	rent_pvp	{
+	if (getmapxy(@mapa$,@mapx,@mapy,0,strcharinfo(0)) != 0) end;
+	mes "[Switch]";
+	mes "¿Qué deseas hacer?";
+	next;
+	menu "Activar PVP",L_PvpOn,"Desactivar PVP",L_PvpOff,"Nada",-;
+	mes "[Switch]";
+	mes "Buen día.";
+	close;
+
+L_PvpOn:
+	mes "[Switch]";
+	mes "Ahora PvP está activado.";
+	pvpon @mapa$;
+	close;
+
+L_PvpOff:
+	mes "[Switch]";
+	mes "Ahora PvP está desactivado.";
+	pvpoff @mapa$;
+	close;
+}
+function	script	rent_camas	{
+	mes "¿Tomar una siesta?";
+	menu "¡T-tengo sueño!",-,"No",L_No;
+	close2;
+	sc_start SC_BLIND,500000,1;
+	emotion e_yawn,1;
+	sleep2(4000);
+	
+	warp "rentin" + getarg(0) + ".gat",getarg(1),getarg(2);
+	percentheal 100,100;
+	sc_end SC_BLIND;
+	end;
+L_No:
+	close;
+}
+function	script	rent_pianoStart	{
+	if (getmapxy(@mapa$,@mapx,@mapy,0,strcharinfo(0)) != 0) end;
+	mes "[Automatic Piano]";
+	if (getd("$@Piano" + getarg(0)) > 0) {
+		mes "Espera un poco después de que las canciones terminen para reproducir otra.";
+		close;
+	}
+	mes "Por favor selecciona una canción..";
+	set @Tema, select ("Song 01","Chaos of Eternity","Song 03","Song 04","Bragis Poem","Song 06","Ring of Nibelungen","Song 08","Song 09","Song 10","Dont Forget Me Not","In To The Abyss","Song 13","Assassin of Sunset","Song 15","Song 16","Song 17","Song 18","Song 19","None");
+	if (@Tema >= 20) close;
+	if (@Tema < 10) set @Tema$, "m0" + @Tema + ".wav";
+	else set @Tema$, "m" + @Tema + ".wav";
+	close2;
+	if (getd("$@Piano" + getarg(0)) <= 0) {
+		// Sonar el Tema Elegido
+		setd "$@Piano" + getarg(0), 1; // Reproduciendo
+		initnpctimer;
+		switch (@Tema) {
+			case 14: soundeffectall "assassin_of_sunset.wav",1,@mapa$,0,0,50,50; break;
+			case 12: soundeffectall "in_to_the_abyss.wav",1,@mapa$,0,0,50,50; break;
+			case 11: soundeffectall "dont_forget_me_not.wav",1,@mapa$,0,0,50,50; break;
+			case 7:  soundeffectall "ring_of_nibelungen.wav",1,@mapa$,0,0,50,50; break;
+			case 5:  soundeffectall "bragis_poem.wav",1,@mapa$,0,0,50,50; break;
+			case 2:  soundeffectall "chaos_of_eternity.wav",1,@mapa$,0,0,50,50; break;
+			default: soundeffectall @Tema$,1,@mapa$,0,0,50,50; break;
+		}
+	}
+	end;
+}
+
+function	script	rent_pianoStop	{
+	emotion e_no1;
+	stopnpctimer;
+	setd "$@Piano" + getarg(0), 0; // Finishes the song
+	end;
+}
+function	script	rent_aliceXY	{
+	set .@CP, getarg(0); // Present position XoY
+	set .@DST, rand(1,5); // Distance to cross
+	if (rand(2)) // Direccion a tomar (izq der arr abj)
+		set .@CP, .@CP + .@DST;
+	else
+		set .@CP, .@CP - .@DST;
+	if (.@CP < getarg(1))
+		set .@CP, .@CP + .@DST; // If the new point is smaller, thats the minimum
+	if (.@CP > getarg(2))
+		set .@CP, .@CP - .@DST; // If the new point is greater, thats the maximum
+	return .@CP;
+}
+function	script	rent_serviceInit	{
+	disablenpc "AliceR" + getarg(0) + "";
+	end;
+}
+function	script	rent_serviceCall	{
+	set @alicecost,5000;	// Variable to change service cost [Brainstorm]
+	mes "[Cleaning Service]";
+	if (getd("$@house" + getarg(0) + "_alice") == 0) {
+		mes "¿Deseas tener una Alice que limpie por 8 horas?";
+		mes "Mientras esté limpiando, no habrá insectos.";
+		mes "El servicio cuesta 5000z.";
+		mes "¿Quieres que la llame?";
+		next;
+		menu "Si",-,"No",L_No;
+		if (Zeny < @alicecost) goto L_NoZeny;
+		if (getd("$@house" + getarg(0) + "_alice") == 1) goto L_Activo;
+		setd "$@house" + getarg(0) + "_alice", 1; // Activo
+		set Zeny, Zeny - @alicecost;
+		// Bug extermination
+		setd "$house" + getarg(0) + "_bugs", 0;
+		killmonsterall "rentin" + getarg(0) + ".gat";
+		mes "[Cleaning Service]";
+		mes "La Alice vendrá a tu casa de gremio rápidamente.";
+		enablenpc "AliceR" + getarg(0) + ""; // This shows the npc
+		donpcevent "AliceR" + getarg(0) + "::OnEmpezar"; // Initiates the event
+		initnpctimer;
+	} else {
+		mes "¿Deseas despedir a la Alice?";
+		next;
+		menu "Si",-,"No",L_No;
+		if (getd("$@house" + getarg(0) + "_alice") == 0) goto L_Activo;
+		setd "$@house" + getarg(0) + "_alice", 0; // Inactive
+		mes "[Cleaning Service]";
+		mes "La Alice se va ahora..";
+		stopnpctimer;
+		donpcevent "AliceR" + getarg(0) + "::OnTerminar";
+		disablenpc "AliceR" + getarg(0) + "";
+	}
+	close;
+
+L_Activo:
+	mes "[Cleaning Service]";
+	mes "Ya has contratado a la Alice.";
+	mes "Buen día.";
+	close;
+
+L_NoZeny:
+	mes "[Cleaning Service]";
+	mes "Lo siento, no tienes suficiente Zeny para contratar el servicio.";
+	close;
+
+L_No:
+	mes "[Cleaning Service]";
+	mes "Cuéntamelo nuevamente cuando desees contratar sus servicios.";
+	close;
+}
+function	script	rent_serviceFinish	{
+	stopnpctimer;
+	setd "$@house" + getarg(0) + "_alice", 0; // Inactivo
+	donpcevent "AliceR" + getarg(0) + "::OnTerminar";
+	disablenpc "AliceR" + getarg(0) + "";
+	end;
+}
+function	script	rent_aliceInit	{
+	npcspeed 100;
+	end;
+}
+function	script	rent_aliceStart	{
+	npctalk "¡Haré que este lugar esté en orden!";
+	initnpctimer;
+	return 0;
+}
+function	script	rent_aliceWalk	{
+	emotion e_ho;
+	getmapxy .@map$,.@x,.@y,1;
+	set .@curX, callfunc("rent_aliceXY",.@x,8,35);
+	set .@curY, callfunc("rent_aliceXY",.@y,5,27);
+	npcwalkto .@curX, .@curY;
+	stopnpctimer;
+	initnpctimer;
+	end;
+}
+function	script	rent_aliceTalk	{
+	switch (rand(1,5)) {
+		case 1: npctalk "Si señor, estoy hecha para limpiar."; break;
+		case 2: npctalk "Si deseas algo para comer, ve a la cocina y prepáratelo tú"; break;
+		case 3: npctalk "¡Ellos no me han pagado nada por ésto!"; emotion e_pif; break;
+		case 4: npctalk "Wow, fui una suertuda, sólo tengo que limpiar esto."; emotion e_heh; break;
+		case 5: npctalk "¡Esta casa está asquerosa, vamos a limpiarla!"; emotion e_wah; break;
+	}
+	end;
+}
+function	script	rent_aliceStop	{
+	npctalk "¡Todo está hecho y en orden!";
+	stopnpctimer;
+	return 0;
+}

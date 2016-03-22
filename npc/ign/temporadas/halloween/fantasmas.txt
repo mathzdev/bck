@@ -1,0 +1,120 @@
+niflheim,96,226,4	script	Alma en Pena::hwins01	10029,{
+	if( Q_HAW > 0)
+		switch (Q_HAW) {
+			case 1:
+				mes "[^5533ffAlma en Pena^000000]";
+				mes "¡Ve a buscar diez almas en pena en los campos de Niflheim, cuando las hayas encontrado ven conmigo!";
+				close2;
+				emotion e_bzz;
+				end;
+			case 2:
+				mes "[^5533ffAlma en Pena^000000]";
+				mes "Vaya, vaya.";
+				next;
+				mes "[^5533ffAlma en Pena^000000]";
+				mes "No me esperé que encontraras a mis amigos tan rápido.";
+				next;
+				mes "[^5533ffAlma en Pena^000000]";
+				mes "Ten aquí tu recompenza.";
+				getexp 1500000,1700000;
+				sleep2 1000;
+				set Zeny,Zeny + 250000;
+				dispbottom "Gained 250,000z.";
+				sleep2 1000;
+				getitem 5143,1;
+				next;
+				mes "[^5533ffAlma en Pena^000000]";
+				mes "Vuelve conmigo en otro momento, posiblemente te encuentre algo interesante qué hacer.";
+				close2;
+				set Q_HAW,3;
+				end;
+			case 3:
+				mes "[^5533ffAlma en Pena^000000]";
+				mes "Vuelve conmigo en otro momento, posiblemente te encuentre algo interesante qué hacer.";
+				close;
+			default:
+				break;
+		}
+	mes "[^5533ffAlma en Pena^000000]";
+	mes "El terror se asona cerca de Niflheim, el día en que los muertos vuelven a la vida, y las almas vengativas buscan su... venganza, se acerca.";
+	next;
+	mes "[^5533ffAlma en Pena^000000]";
+	mes "Se dice que sólo aquel que tenga la autorización de un alma en pena puede accesar a éstos misteriosos lugares.";
+	next;
+	mes "[^5533ffAlma en Pena^000000]";
+	mes "Para tu suerte, yo soy una.";
+	next;
+	mes "[^5533ffAlma en Pena^000000]";
+	mes "Puedo hacerte el favor de darte el permiso especial de entrar al otro mundo siendo un ser vivo.";
+	next;
+	mes "[^5533ffAlma en Pena^000000]";
+	mes "¿De qué forma?, ¡pues con magia!";
+	next;
+	mes "[^5533ffAlma en Pena^000000]";
+	mes "Pero es todo lo que te diré...";
+	next;
+	mes "[^5533ffAlma en Pena^000000]";
+	mes "Si quieres más información busca en los bosques de ^cc6600Niflheim^000000 diez almas en pena, y ven cuando lo hayas hecho.";
+	close2;
+	set Q_HAW,1;
+	end;
+OnPCLoadMapEvent:
+	if(strcharinfo(3) == "niflheim" && Q_HAW < 3)
+		showevent 0,1;
+	end;
+}
+-	script	Alma en Pena#hw	-1,{
+	mes "[^5533ffAlma en Pena^000000]";
+	mes "Veo que andas perdido, ten cuidado que alguno de nosotros te puede poseer.";
+	if(Q_HAW == 1) {
+		if (q_ghostf < 10) {
+			next;
+			q_ghostf++;
+			message strcharinfo(0),"Fantasmas [ "+q_ghostf+" / 10 ].";
+			if (q_ghostf == 10) {
+				mes "¡Bien, he encontrado a las 10 almas!.";
+				mes "Ahora debo de volver a ^cc6600Niflheim^000000.";
+				q_ghostf = 0;
+				set Q_HAW,2;
+			}
+			else {
+				mes "[^5533ffAlma en Pena^000000]";
+				mes "Veo que te han enviado a buscarme, entiendo, le diré a los demás que me haz encontrado, suerte.";
+			}
+			if (compare(strnpcinfo(2),"1"))
+				setarray .@i[0],2,3;
+			else if (compare(strnpcinfo(2),"2"))
+				setarray .@i[0],1,3;
+			else
+				setarray .@i[0],1,2;
+			donpcevent "Alma en Pena#"+charat(strnpcinfo(2),0)+.@i[rand(2)]+"::OnEnable";
+			hideonnpc strnpcinfo(0);
+		}
+	}
+	close;
+
+OnInit:
+	if (!compare(strnpcinfo(2),"1"))
+		hideonnpc strnpcinfo(0);
+	end;
+OnEnable:
+	hideoffnpc strnpcinfo(0);
+	end;
+OnDisable:
+	hideonnpc strnpcinfo(0);
+	end;
+}
+
+nif_fild01,149,290,4	duplicate(Alma en Pena#hw)	Alma en Pena#a1	10029
+nif_fild01,250,129,4	duplicate(Alma en Pena#hw)	Alma en Pena#a2	10029
+nif_fild01,94,166,4	duplicate(Alma en Pena#hw)	Alma en Pena#a3	10029
+nif_fild01,117,216,4	duplicate(Alma en Pena#hw)	Alma en Pena#b1	10029
+nif_fild01,315,55,4	duplicate(Alma en Pena#hw)	Alma en Pena#b2	10029
+nif_fild01,139,263,4	duplicate(Alma en Pena#hw)	Alma en Pena#b3	10029
+nif_fild01,312,136,4	duplicate(Alma en Pena#hw)	Alma en Pena#c1	10029
+nif_fild02,364,205,4	duplicate(Alma en Pena#hw)	Alma en Pena#c2	10029
+nif_fild02,294,218,4	duplicate(Alma en Pena#hw)	Alma en Pena#c3	10029
+nif_fild02,125,227,4	duplicate(Alma en Pena#hw)	Alma en Pena#d1	10029
+nif_fild02,87,259,4	duplicate(Alma en Pena#hw)	Alma en Pena#d2	10029
+nif_fild02,49,114,4	duplicate(Alma en Pena#hw)	Alma en Pena#d3	10029
+

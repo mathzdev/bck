@@ -1,0 +1,73 @@
+-	script	broadhora	-1,{
+OnMinute05:
+OnInit:
+	announce "~ IGN Ragnarok Online ~ [ "+getusers(1)+" ] Jugadores Online.",bc_all,0x55ff99;
+	announce "¡Esperamos que te estés divirtiendo jugando IGN RO!",bc_all,0x55ff99;
+	announce "Recuerda recomendarnos, dar like en Facebook y votar por el servidor en la página web.",bc_all,0x55ff99;
+	announce "Web: http://www.ign.do/ragnarok",bc_all,0x55ff99;
+	announce "Foro: http://www.ign.do/foro",bc_all,0x55ff99;
+	announce "Facebok: http://www.facebook.com/igndo",bc_all,0x55ff99;
+	end;
+}
+-	script	#cityname	-1,{
+OnPCLoadMapEvent:
+	setarray .map$[0], "dewata","alberta","aldebaran","amatsu","ayothaya","brasilis","comodo","dicastes01","eclage","einbech","einbroch","geffen","gonryun","glemior","hugel","Hyrule","izlude","sec_pri","jawaii","vip","lighthalzen","louyang","xmas","malangdo","malaya","manuk","mid_camp","mora","morocc","moscovia","niflheim","payon","prontera","rachel","splendide","ilyo_kwan","umbala","veins","yuno";
+	setarray .file$[0],"dewata","alberta","aldebaran","amatsu","ayothaya","brasilis","comodo","dicastes","eclage","einbech","einbroch","geffen","gonryun","guildtown","hugel","hyrule","izlude","jail","jawaii","vip","lighthalzen","louyang","lutie","malangdo","malaya","manuk","midgarcamp","mora","morroc","moscovia","niflheim","payon","prontera","rachel","splendide","training","umbala","veins","yuno";
+	getmapxy(@map$,@x,@y,0);
+	for( @i = 0; @i < getarraysize(.map$); @i++ ) {
+		if(@map$ == .map$[@i]) {
+			cutin .file$[@i],0;
+			sleep2 4300;
+			cutin "",255;
+			end;
+		}
+	}
+	end;
+}
+dewata	mapflag	loadevent
+alberta	mapflag	loadevent
+aldebaran	mapflag	loadevent
+amatsu	mapflag	loadevent
+ayothaya	mapflag	loadevent
+brasilis	mapflag	loadevent
+comodo	mapflag	loadevent
+dicastes01	mapflag	loadevent
+eclage	mapflag	loadevent
+einbech	mapflag	loadevent
+einbroch	mapflag	loadevent
+geffen	mapflag	loadevent
+gonryun	mapflag	loadevent
+glemior	mapflag	loadevent
+hugel	mapflag	loadevent
+Hyrule	mapflag	loadevent
+izlude	mapflag	loadevent
+sec_pri	mapflag	loadevent
+jawaii	mapflag	loadevent
+vip	mapflag	loadevent
+lighthalzen	mapflag	loadevent
+louyang	mapflag	loadevent
+xmas	mapflag	loadevent
+malangdo	mapflag	loadevent
+malaya	mapflag	loadevent
+manuk	mapflag	loadevent
+mid_camp	mapflag	loadevent
+mora	mapflag	loadevent
+morocc	mapflag	loadevent
+moscovia	mapflag	loadevent
+niflheim	mapflag	loadevent
+payon	mapflag	loadevent
+prontera	mapflag	loadevent
+rachel	mapflag	loadevent
+splendide	mapflag	loadevent
+ilyo_kwan	mapflag	loadevent
+umbala	mapflag	loadevent
+veins	mapflag	loadevent
+yuno	mapflag	loadevent
+-	script	#cutincmd	-1,{
+OnCommand:
+	cutin .@atcmd_parameters$[0],.@atcmd_parameters$[1];
+	end;
+OnInit:
+	bindatcmd "cutin","#cutincmd::OnCommand",99,99;
+	end;
+}

@@ -1,0 +1,639 @@
+//===== rAthena Script ======================================= 
+//= NPCs related to 'Heroes' Trails'(kRO Servers)
+//===== By: ================================================== 
+//= Ziu
+//===== Current Version: ===================================== 
+//= 1.1 (Spanish Scene)
+//===== Compatible With: ===================================== 
+//= rAthena TRUNK 16921+ ziu data rev.379 @ 20/11/2012 23:57
+//===== Additional Comments: ================================= 
+//= [AEGIS Playing Conversion]
+//= Official Korean Texts [Ziu]
+//= Need update arrow price @ renewal kRO Price [Ziu]
+//= 1.1 Translated to Spanish [DanielArt]
+//============================================================
+
+mid_camp,207,290,5	script	Guardia#soldali	852,{
+	mes "[Guardia]";
+	mes "Vigilamos la entrada, cuidando que alguien sospechoso entre, si deseas pasar, adelante";
+	//mes "³»ºÎ´Â ¾ÆÁ÷ Å½»çÁßÀÌ´Ï ±æÀ» ÀÒÁö ¾Êµµ·Ï Á¶½ÉÇÏ½Ê½Ã¿À.";
+	close;
+}
+mid_camp,212,290,3	script	Guardia#soldadi	852,{
+	mes "[Guardia Vigilante]";
+	mes "¿Qué haces aquí?";
+	mes "¿Estás interesado en los portales?";
+	next;
+	switch(select("¿Qué son ésas cosas?","Salir"))
+	{
+		case 1:
+			mes "[Guardia Vigilante]";
+			mes "Así que estás interesado, pues permíteme contarte.";
+			next;
+			mes "[Guardia Vigilante]";
+			mes "Éstas orbes verdes gigantes que vez, se deben al colapso dimensional que ocurrió hace poco.";
+			next;
+			mes "[Guardia Vigilante]";
+			mes "Ahora se ha descubierto un pasadiso dimensional perfecto para poder hacer uso de éstos seres como transporte.";
+			next;
+			mes "[Guardia Vigilante]";
+			mes "Es decir, descubrimos la aclamada forma de viajar en el tiempo y espacio.";
+			next;
+			mes "[Guardia Vigilante]";
+			mes "Si deseas probarlo, puedes pasar con toda libertad.";
+			close;
+		case 2:
+			close;
+	}
+}
+mid_camp,210,291,0	script	Portal Dimensional#camp	10007,{
+	mes "¿Deseas hacer uso de éste portal e ir a Dimensional Crack?";
+	next;
+	switch(select("Viajar","No, gracias."))
+	{
+		case 1:
+			close2;
+			warp "dali",141,82;
+			end;
+		case 2:
+			close;
+	}
+OnPCLoadMapEvent:
+	if(strcharinfo(3)=="mid_camp") showevent 0,1;
+	end;
+}
+bif_fild01,320,154,3	script	Guardia#soldali1	852,{
+	mes "[Guardia]";
+	mes "Vigilamos la entrada, cuidando que alguien sospechoso entre, si deseas pasar, adelante";
+	//mes "³»ºÎ´Â ¾ÆÁ÷ Å½»çÁßÀÌ´Ï ±æÀ» ÀÒÁö ¾Êµµ·Ï Á¶½ÉÇÏ½Ê½Ã¿À.";
+	close;
+}
+bif_fild01,314,154,5	script	Guardia#soldadi1	852,{
+	mes "[Guardia Vigilante]";
+	mes "¿Qué haces aquí?";
+	mes "¿Estás interesado en los portales?";
+	next;
+	switch(select("¿Qué son ésas cosas?","Salir"))
+	{
+		case 1:
+			mes "[Guardia Vigilante]";
+			mes "Así que estás interesado, pues permíteme contarte.";
+			next;
+			mes "[Guardia Vigilante]";
+			mes "Éstas orbes verdes gigantes que vez, se deben al colapso dimensional que ocurrió hace poco.";
+			next;
+			mes "[Guardia Vigilante]";
+			mes "Ahora se ha descubierto un pasadiso dimensional perfecto para poder hacer uso de éstos seres como transporte.";
+			next;
+			mes "[Guardia Vigilante]";
+			mes "Es decir, descubrimos la aclamada forma de viajar en el tiempo y espacio.";
+			next;
+			mes "[Guardia Vigilante]";
+			mes "Si deseas probarlo, puedes pasar con toda libertad.";
+			close;
+		case 2:
+			close;
+	}
+}
+bif_fild01,318,159,0	script	Portal Dimensional#bi	10007,{
+	mes "¿Deseas hacer uso de éste portal e ir a Dimensional Crack?";
+	next;
+	switch(select("Viajar","No, gracias."))
+	{
+		case 1:
+			close2;
+			warp "dali",43,92;
+			end;
+		case 2:
+			close;
+	}
+OnPCLoadMapEvent:
+	if(strcharinfo(3)=="bif_fild01") showevent 0,1;
+	end;
+}
+dic_fild02,236,33,3	script	Guardia#soldali2	852,{
+	mes "[Guardia]";
+	mes "Vigilamos la entrada, cuidando que alguien sospechoso entre, si deseas pasar, adelante";
+	//mes "³»ºÎ´Â ¾ÆÁ÷ Å½»çÁßÀÌ´Ï ±æÀ» ÀÒÁö ¾Êµµ·Ï Á¶½ÉÇÏ½Ê½Ã¿À.";
+	close;
+}
+dic_fild02,239,36,5	script	Guardia#soldadi2	852,{
+	mes "[Guardia Vigilante]";
+	mes "¿Qué haces aquí?";
+	mes "¿Estás interesado en los portales?";
+	next;
+	switch(select("¿Qué son ésas cosas?","Salir"))
+	{
+		case 1:
+			mes "[Guardia Vigilante]";
+			mes "Así que estás interesado, pues permíteme contarte.";
+			next;
+			mes "[Guardia Vigilante]";
+			mes "Éstas orbes verdes gigantes que vez, se deben al colapso dimensional que ocurrió hace poco.";
+			next;
+			mes "[Guardia Vigilante]";
+			mes "Ahora se ha descubierto un pasadiso dimensional perfecto para poder hacer uso de éstos seres como transporte.";
+			next;
+			mes "[Guardia Vigilante]";
+			mes "Es decir, descubrimos la aclamada forma de viajar en el tiempo y espacio.";
+			next;
+			mes "[Guardia Vigilante]";
+			mes "Si deseas probarlo, puedes pasar con toda libertad.";
+			close;
+		case 2:
+			close;
+	}
+}
+dic_fild02,241,31,0	script	Portal Dimensional#di	10007,{
+	mes "¿Deseas hacer uso de éste portal e ir a Dimensional Crack?";
+	next;
+	switch(select("Viajar","No, gracias."))
+	{
+		case 1:
+			close2;
+			warp "dali",41,134;
+			end;
+		case 2:
+			close;
+	}
+OnPCLoadMapEvent:
+	if(strcharinfo(3)=="dic_fild02") showevent 0,1;
+	end;
+}
+moc_fild22b,223,203,3	script	Guardia#soldali3	852,{
+	mes "[Guardia]";
+	mes "Vigilamos la entrada, cuidando que alguien sospechoso entre, si deseas pasar, adelante";
+	//mes "³»ºÎ´Â ¾ÆÁ÷ Å½»çÁßÀÌ´Ï ±æÀ» ÀÒÁö ¾Êµµ·Ï Á¶½ÉÇÏ½Ê½Ã¿À.";
+	close;
+}
+moc_fild22b,225,198,5	script	Guardia#soldadi3	852,{
+	mes "[Guardia Vigilante]";
+	mes "¿Qué haces aquí?";
+	mes "¿Estás interesado en los portales?";
+	next;
+	switch(select("¿Qué son ésas cosas?","Salir"))
+	{
+		case 1:
+			mes "[Guardia Vigilante]";
+			mes "Así que estás interesado, pues permíteme contarte.";
+			next;
+			mes "[Guardia Vigilante]";
+			mes "Éstas orbes verdes gigantes que vez, se deben al colapso dimensional que ocurrió hace poco.";
+			next;
+			mes "[Guardia Vigilante]";
+			mes "Ahora se ha descubierto un pasadiso dimensional perfecto para poder hacer uso de éstos seres como transporte.";
+			next;
+			mes "[Guardia Vigilante]";
+			mes "Es decir, descubrimos la aclamada forma de viajar en el tiempo y espacio.";
+			next;
+			mes "[Guardia Vigilante]";
+			mes "Si deseas probarlo, puedes pasar con toda libertad.";
+			close;
+		case 2:
+			close;
+	}
+}
+moc_fild22b,221,201,0	script	Portal Dimensional#moc	10007,{
+	mes "¿Deseas hacer uso de éste portal e ir a Dimensional Crack?";
+	next;
+	switch(select("Viajar","No, gracias."))
+	{
+		case 1:
+			close2;
+			warp "dali",119,56;
+			end;
+		case 2:
+			close;
+	}
+OnPCLoadMapEvent:
+	if(strcharinfo(3)=="moc_fild22b") showevent 0,1;
+	end;
+}
+//dimensional crack NPCS
+
+
+dali,137,87,3	script	Guardia de Portal	997,{
+	mes "[Guardia de Portal]";
+	mes "Éste portal se dirige a Midgar Camp.";
+	close;
+}
+
+dali,119,76,7	script	Shadow Chaser#SHADOW	482,{
+	end;
+OnChat12:
+	npctalk "¿Acaso no sabes?, todos los países están involucrados en ésto.";
+	end;
+OnChat16:
+	npctalk "Deberían prestar más atención a su alrededor.";
+	end;
+OnChat23:
+	npctalk "Pues yo soy un ladrón ~";
+	end;
+OnChat31:
+	npctalk "Ustedes decidan, yo únicamente los sigo.";
+	end;
+}
+dali,120,77,4	script	Sura#SURA	484,{
+	end;
+OnChat10:
+	emotion e_yawn;
+	npctalk "¿Nos podemos ir?, me estoy durmiendo aquí...";
+	end;
+OnChat13:
+	emotion e_an;
+	npctalk "¿Guardias?, ¿qué clase de grosería es esa?";
+	end;
+OnChat19:
+	emotion e_an;
+	end;
+OnChat20:
+	npctalk "Me refiero a que por qué envían guardias, ni que fueramos extranjeros o ladrones.";
+	end;
+OnChat22:
+	emotion e_an;
+	end;
+OnChat27:
+	emotion e_yawn;
+	npctalk "Ahora que me doy cuenta, creo que tienes razón.";
+	end;
+}
+dali,119,78,2	script	Guillotine Cross#GDU	466,{
+	end;
+OnChat5:
+	npctalk "¿Tienes miedo, patético Crusader?";
+	end;
+OnChat9:
+	npctalk "Estoy de acuerdo con eso, me pregunto que clase de tesoros habrán aquí.";
+	end;
+OnChat13:
+	npctalk "Estoy de acuerdo con eso, me pregunto que clase de ";
+	end;
+OnChat18:
+	npctalk "Nos podemos ir cuando dejen de platicar.";
+	end;
+OnChat23:
+	npctalk "Desde que se descubrío el nuevo mundo, las fronteras se miran más abiertas!";
+	end;
+OnChat25:
+	npctalk "Pues yo si soy un asesino ~";
+	end;
+OnChat30:
+	emotion e_ag;
+	npctalk "¡¡¡¡¡¡¡¡¡¡¡¡VAMOS!!!!!!!!!";
+	end;
+}
+dali,117,79,5	script	Crusader#CRU	745,{
+	end;
+OnChat4:
+	npctalk "No tomes ésto a la ligera, no sabemos con qué clase de poder tratamos.";
+	end;
+OnChat7:
+	npctalk "Yo doy mi vida por salvar la de las demás, más miedo tendrías tú, cobarde asesino.";
+	end;
+OnChat11:
+	npctalk "¿Acaso no sabes?";
+	end;
+OnChat15:
+	npctalk "¿Grosería?";
+	end;
+OnChat21:
+	npctalk "Creo que hasta guardías estarían faltando.";
+	end;
+OnChat24:
+	emotion e_gg;
+	npctalk "¿Entonces partimos?";
+	end;
+OnChat28:
+	emotion e_gg;
+	npctalk "¡Partamos!";
+	end;
+}
+dali,120,81,3	script	Einold#EINOLD	847,{
+	end;
+OnChat18:
+	npctalk "Hemos mandado guardias de cada país, a que supervisen sus zonas.";
+	end;
+OnChat28:
+	npctalk "¡Supervisen las zonas y comencemos a explorar!";
+	end;
+}
+dali,117,81,7	script	Wanderer#WANDERER	485,{
+	end;
+OnChat2:
+	npctalk "¡Yo sé sobre eso!, sólo podemos viajar a donde haya una orbe de tiempo.";
+	end;
+OnChat6:
+	npctalk "Tenía que hablar el arrogante...";
+	end;
+OnChat12:
+	npctalk "Yo soy una bailarina ~";
+	end;
+OnChat17:
+	npctalk "¿De qué hablan?";
+	end;
+OnChat23:
+	npctalk "Si están estresados puedo tocarles algo...";
+	end;
+OnChat28:
+	npctalk "Ahora que lo pienso no sé tocar ningún instrumento...";
+	end;
+OnChat31:
+	npctalk "Mejor canto y bailo...";
+	end;
+	
+}
+dali,118,83,3	script	Monk#MONK	746,{
+	end;
+OnChat1:
+	npctalk "Yo, ¿se puede viajar a otros mundos?";
+	end;
+OnChat3:
+	npctalk "¡Así que para eso servían!";
+	end;
+OnChat8:
+	npctalk "¡Dejen de pelear y comencemos a investigar!";
+	end;
+OnChat10:
+	npctalk "¿Ir a donde?, ni siquiera conocemos éste lugar.";
+	end;
+OnChat14:
+	npctalk "¿Grosería?";
+	end;
+OnChat21:
+	npctalk "¡Impertinentes!";
+	emotion e_ag;
+	end;
+OnChat26:
+	emotion e_gg;
+	npctalk "No se me ocurre que haces con ustedes.";
+	end;
+OnChat30:
+	npctalk "Pues vamos~";
+	end;
+}
+dali,115,85,5	script	Sword Master#SWORDMASTER	119,{
+	hideonnpc "Sword Master#SWORDMASTER";
+	hideoffnpc "Sword Master#SD2";
+	donpcevent "#dalichat::OnEnable";
+	end;
+}
+dali,115,85,0	script	#dalichat	-1,{
+	end;
+OnInit:
+	disablenpc "#dalichat";
+	end;
+OnEnable:
+	enablenpc "#dalichat";
+	initnpctimer;
+	end;
+OnTimer1000:
+	donpcevent "Sword Master#SD2::OnChat1";
+	end;
+OnTimer2000:
+	donpcevent "Sword Master#SD2::OnChat2";
+	end;
+OnTimer3000:
+	donpcevent "Sword Master#SD2::OnChat3";
+	end;
+OnTimer4000:
+	donpcevent "Sword Master#SD2::OnChat4";
+	end;
+OnTimer6000:
+	donpcevent "Monk#MONK::OnChat1";
+	end;
+OnTimer7500:
+	donpcevent "Wanderer#WANDERER::OnChat2";
+	end;
+OnTimer9000:
+	donpcevent "Monk#MONK::OnChat3";
+	end;
+OnTimer10500:
+	donpcevent "Crusader#CRU::OnChat4";
+	end;
+OnTimer12000:
+	donpcevent "Guillotine Cross#GDU::OnChat5";
+	end;
+OnTimer13500:
+	donpcevent "Wanderer#WANDERER::OnChat6";
+	end;
+OnTimer15000:
+	donpcevent "Crusader#CRU::OnChat7";
+	end;
+OnTimer16500:
+	donpcevent "Monk#MONK::OnChat8";
+	end;
+OnTimer18000:
+	donpcevent "Guillotine Cross#GDU::OnChat9";
+	end;
+OnTimer19500:
+	donpcevent "Sura#SURA::OnChat10";
+	end;
+OnTimer20000:
+	donpcevent "Monk#MONK::OnChat10";
+	end;
+OnTimer21000:
+	donpcevent "Crusader#CRU::OnChat11";
+	end;
+OnTimer22500:
+	donpcevent "Wanderer#WANDERER::OnChat12";
+	donpcevent "Shadow Chaser#SHADOW::OnChat12";
+	end;
+OnTimer24000:
+	donpcevent "Sura#SURA::OnChat13";
+	end;
+OnTimer24500:
+	donpcevent "Guillotine Cross#GDU::OnChat13";
+	end;
+OnTimer25500:
+	donpcevent "Monk#MONK::OnChat14";
+	end;
+OnTimer27000:
+	donpcevent "Crusader#CRU::OnChat15";
+	end;
+OnTimer28500:
+	donpcevent "Shadow Chaser#SHADOW::OnChat16";
+	end;
+OnTimer30000:
+	donpcevent "Wanderer#WANDERER::OnChat17";
+	end;
+OnTimer31500:
+	donpcevent "Guillotine Cross#GDU::OnChat18";
+	end;
+OnTimer32000:
+	donpcevent "Einold#EINOLD::OnChat18";
+	end;
+OnTimer33000:
+	donpcevent "Sura#SURA::OnChat19";
+	end;
+OnTimer34000:
+	donpcevent "Sura#SURA::OnChat20";
+	end;
+OnTimer36000:
+	donpcevent "Monk#MONK::OnChat21";
+	donpcevent "Crusader#CRU::OnChat21";
+	end;
+OnTimer37500:
+	donpcevent "Sura#SURA::OnChat22";
+	end;
+OnTimer39000:
+	donpcevent "Wanderer#WANDERER::OnChat23";
+	donpcevent "Guillotine Cross#GDU::OnChat23";
+	donpcevent "Shadow Chaser#SHADOW::OnChat23";
+	end;
+OnTimer40500:
+	donpcevent "Crusader#CRU::OnChat24";
+	end;
+OnTimer42000:
+	donpcevent "Guillotine Cross#GDU::OnChat25";
+	end;
+OnTimer43500:
+	donpcevent "Monk#MONK::OnChat26";
+	end;
+OnTimer45000:
+	donpcevent "Sura#SURA::OnChat27";
+	end;
+OnTimer46500:
+	donpcevent "Crusader#CRU::OnChat28";
+	donpcevent "Wanderer#WANDERER::OnChat28";
+	donpcevent "Einold#EINOLD::OnChat28";
+	end;
+OnTimer48000:
+	donpcevent "Sword Master#SD2::OnChat29";
+	end;
+OnTimer49500:
+	donpcevent "Guillotine Cross#GDU::OnChat30";
+	donpcevent "Monk#MONK::OnChat30";
+	end;
+OnTimer51000:
+	donpcevent "Sword Master#SD2::OnChat31";
+	end;
+OnTimer52500:
+	donpcevent "Sword Master#SD2::OnChat32";
+	stopnpctimer;
+	disablenpc "#dalichat";
+	end;
+}
+
+dali,115,85,3	script	Sword Master#SD2	119,{
+	end;
+OnInit:
+	hideonnpc "Sword Master#SD2";
+	end;
+OnChat1:
+	npctalk "¡Atención!";
+	end;
+OnChat2:
+	npctalk "Hemos llegado a un nuevo mundo o universo, no sabemos lo que es.";
+	end;
+OnChat3:
+	npctalk "Hay que ser precavidos con lo que hagan y toquen.";
+	end;
+OnChat4:
+	npctalk "¿Alguna duda?";
+	end;
+OnChat29:
+	npctalk "De acuerdo vayamos.";
+	end;
+OnChat31:
+	emotion e_sob;
+	npctalk "Que crueles son....";
+	end;
+OnChat32:
+	hideonnpc "Sword Master#SD2";
+	hideoffnpc "Sword Master#SWORDMASTER";
+	end;
+}
+
+//Usefull NPC & Warps
+dali,112,96,3	script	Almacén Gatuno	496,{
+	mes "[Almacén Gatuno]";
+	mes "Hola, meoh! ~";
+	mes "Aquí te puedo ofrecer el servicio de almacenamiento de objetos.";
+	next;
+	switch(select("Almacén.- 200z","Salir."))
+	{
+		case 1:
+			mes "[Almacén Gatuno]";
+			mes "De acuerdo, dame un momento.";
+			callfunc "F_Kafra",5,2,1,200,0;
+		
+		case 2:
+			mes "[Almacén Gatuno]";
+			mes "De acuerdo, vuelve cuando necesites guardar algo.";
+			close;
+	}
+}
+dali,56,126,3	script	Vigilante Benkuni#b1	449,{
+	mes "[Vigilante Benkuni]";
+	mes "Por éste portal llegarás a los campos de Dicastes.";
+	close;
+}
+dali,51,104,5	script	Vigilante Sapha#FAIRYSO	447,{
+	mes "[Vigilante Sapha]";
+	mes "Por éste portal llegarás a la tierra santa de Bifrost.";
+	close;
+}
+dali,122,60,3	script	Vigilante Morroc#m1	707,{
+	mes "[Vigilante Morroc]";
+	mes "Por éste portal llegarás a la dimensión de Satan Morroc.";
+	close;
+}
+
+// Segunda dimensión
+dali02,58,123,3	script	Knight#KY_KNT	418,{
+	mes "[Knight]";
+	mes "Estoy encargado de vigilar la segunda dimensión bajo el costo de mi vida, es muy importante.";
+	next;
+	mes "[Knight]";
+	mes "A diferencia de la primera dimensión, se dice que aquí podrás viajar en el tiempo.";
+	close;
+}
+dali02,51,112,5	script	Soldado Morroc#m2	939,{
+	mes "[Soldado de Morroc]";
+	mes "La gente del desierto no confía en éstos caballeruchos.";
+	next;
+	mes "[Soldado de Morroc]";
+	mes "Me han enviado aquí a vigilar el área y evitar que una catástrofe como la del demonio vuelva a ocurrir.";
+	close;
+}
+dali02,65,115,5	script	Raphel#ra1	516,{
+	mes "[Raphel]";
+	mes "No hemos alejado un poco de nuestra casa chicos.";
+	close;
+}
+dali02,68,117,5	script	Raphel#ra2	516,{
+	mes "[Raphel]";
+	mes "Creo que no deberíamos haber venido aquí.";
+	close;
+}
+dali02,65,119,5	script	Raphel#ra3	516,{
+	mes "[Raphel]";
+	mes "De qué hablan, no por ser pequeños no podemos ser aventureros, en nuestra sávia corre el valor.";
+	close;
+}
+dali02,69,122,5	script	Raphel#ra4	516,{
+	mes "[Raphel]";
+	mes "Aquí no puedo echar raíces. ^5533ff*sob*^000000";
+	emotion e_sob;
+	close;
+}
+
+dali,109,94,3	shop	Tool Shop	496,611:200,1750:-1,1065:120
+dali,149,82,0	warp	dalimidcamp	1,1,mid_camp,210,289
+dali,40,87,0	warp	dalibifrost	1,1,bif_fild01,318,155
+dali,35,139,0	warp	dalidicast	1,1,dic_fild02,237,32
+dali,122,49,0	warp	dalimoc	1,1,moc_fild22b,227,200
+dali,64,129,0	warp	dalidali02	1,1,dali02,66,101
+dali02,66,98,0	warp	dali02dali	1,1,dali,64,125
+
+//mapflags
+mid_camp	mapflag	loadevent
+bif_fild01	mapflag	loadevent
+dic_fild02	mapflag	loadevent
+moc_fild22b	mapflag	loadevent
+dali	mapflag	nomemo
+dali02	mapflag	nomemo
+dali	mapflag	noteleport
+dali02	mapflag	noteleport
+
+dali,107,88,4	duplicate(kaf_pro)	Servicios#495	763

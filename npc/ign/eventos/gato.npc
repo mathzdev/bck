@@ -1,0 +1,223 @@
+prontera,149,199,4	script	Gato Viajero::GATO	555,{
+if(BaseLevel < 60) {
+	mes "[^ff6060Gato Viajero^000000]";
+	mes "Eres muy pequeño para ayudarme en mi mision, ve a conseguir mas experiencia.";
+	close;
+}
+	switch (Q_GATO) {
+		case 1:
+			if(countitem(7173) > 0)
+				set Q_GATO,2;
+			if(countitem(7539) > 0)
+				set Q_GATO,6;
+			if(countitem(7042) > 0)
+				set Q_GATO,4;
+			if (countitem(6509) >= 50) {
+				mes "[^ff6060Gato Viajero^000000]";
+				mes "Bienvenid"+(Sex?"o":"a")+" de nuevo "+strcharinfo(0);
+				mes "Veo que has juntando todas las hierbas que te he pedido.";
+				next;
+				mes "[^ff6060Gato Viajero^000000]";
+				mes "Bien, aqui esta una parte de la mochila.";
+				getexp 100000,100000;
+				getitem 7173,1;
+				delitem 6509,50;
+				set Q_GATO,2;
+				next;
+				mes "[^ff6060Gato Viajero^000000]";
+				mes "Ahora necesito que colecciones todos los tipos de muñecos (^ff0000dos cada uno^000000) que existen en Rune Midgard, necesito dormir agusto en las noches de campamento.";
+				close2;
+				emotion e_thx;
+				end;
+			}
+			mes "[^ff6060Gato Viajero^000000]";
+			mes "Puedes visitar el Hospital de Malaya.";
+			mes "Alli crecian muchas de estas hierbas.";
+			close;
+		case 2:
+			if (countitem(754) >= 2 && countitem(740) >= 2 && countitem(741) >= 2 && countitem(742) >= 2 && countitem(743) >= 2 && countitem(750) >= 2 && countitem(751) >= 2 && countitem(752) >= 2) {
+				mes "[^ff6060Gato Viajero^000000]";
+				mes "Muy bien, ahora dormire muy comodo en todos mis campamentos.";
+				mes "Ten aqui otra pieza de la mochila.";
+				delitem 740,2;
+				delitem 741,2;
+				delitem 742,2;
+				delitem 743,2;
+				delitem 750,2;
+				delitem 751,2;
+				delitem 752,2;
+				delitem 753,2;
+				delitem 754,2;
+				getitem 7539,1;
+				getexp 450000,450000;
+				set Q_GATO,6;
+				next;
+				mes "[^ff6060Gato Viajero^000000]";
+				mes "Ahora necesito ^5533ff3x "+getitemname(6223)+"^000000 para poder hacer fogatas en la noche.";
+				next;
+				mes "[^ff6060Gato Viajero^000000]";
+				mes "Te espero aqui mismo.";
+				close;
+			}
+				mes "[^ff6060Gato Viajero^000000]";
+				mes "Lo siento pero no tienes todos los tipos de muñecos en Rune Midgard.";
+				close2;
+				dispbottom "Puppet, Poring Doll, Chonchon Doll, Spore Doll, Baphomet Doll, Osiris Doll, Rocker Doll, Yoyo Doll, Racoon Doll.";
+				end;
+		case 3:
+			if(countitem(7065) < 300) {
+				mes "[^ff6060Gato Viajero^000000]";
+				mes "Lo siento pero no puedo hacer una bolsa de infinidad con tan pocas telas.";
+				close2;
+				emotion e_sry;
+				end;
+			}
+			mes "[^ff6060Gato Viajero^000000]";
+			mes "Muy bien, aqui tienes el ultimo ingrediente de la mochila.";
+			delitem 7065,300;
+			getitem 7042,1;
+			getexp 200000,100000;
+			next;
+			mes "[^ff6060Gato Viajero^000000]";
+			mes "Ahora podras fabricar la mochila en el menu principal, ^ff0000hay probabilidad de que falle^000000, mucha suerte.";
+			close2;
+			set Q_GATO,4;
+			emotion e_no1;
+			end;
+		case 4:
+			mes "[^ff6060Gato Viajero^000000]";
+			mes "Bienvenid"+(Sex?"o":"a")+" nuevamente "+strcharinfo(0);
+			next;
+			mes "[^ff6060Gato Viajero^000000]";
+			mes "Veo que vienes con la dedicacion de fabricar una Mochila de Aventurero.";
+			next;
+			mes "[^ff6060Gato Viajero^000000]";
+			mes "Debo advertirte que existe probabilidad que el proceso ^ff0000falle^000000 y pierdas los ingredientes para fabricar la mochila.";
+			mes "¿Estas seguro de continuar?";
+				if (select("Volvere luego","Fabricar ^5533ffHeroic Backpack^")== 1) {
+					mes "[^ff6060Gato Viajero^000000]";
+					mes "Aqui estare esperando hasta que estes seguro de lo que estas haciendo.";
+					close;
+				}
+				if(countitem(7173) >= 1 && countitem(7539) >= 1 && countitem(7042) >= 1) {
+				specialeffect2 EF_MAPPILLAR;
+				progressbar "ffff00",7;
+				set @mochila,rand(1,100);
+					if(@mochila < 20) {
+						soundeffect "goat_die.wav",0;
+						specialeffect2 611;
+						set Q_GATO,0;
+						delitem 7173,1;
+						delitem 7539,1;
+						delitem 7042,1;
+						mes "[^ff6060Gato Viajero^000000]";
+						mes "Lo siento pero el proceso ha fallado.";
+						close2;
+						emotion e_sry;
+						end;
+					}
+				soundeffect "tming_success.wav",0;
+				specialeffect2 610;
+				delitem 7173,1;
+				delitem 7539,1;
+				delitem 7042,1;
+				getitem 2576,1;
+				mes "[^ff6060Gato Viajero^000000]";
+				mes "Felicidades "+strcharinfo(0);
+				mes "Aqui tienes tu nueva mochila.";
+				set Q_GATO,5;
+				announce "["+strcharinfo(0)+"] ha fabricado con exito una [Heroic Backpack].",bc_all,0x5533FF;
+				next;
+				mes "[^ff6060Gato Viajero^000000]";
+				mes "Mucha suerte con tu aventura.";
+				close;
+				}
+		case 5:
+			if(countitem(2576) > 0) {
+				mes "[^ff6060Gato Viajero^000000]";
+				mes "Ya has obtenido tu nueva mochila.";
+				next;
+				mes "[^ff6060Gato Viajero^000000]";
+				mes "Suerte con tu aventura.";
+			}
+			mes "[^ff6060Gato Viajero^000000]";
+			mes "¿Qué le pasó a tu mochila?";
+			mes "Habla conmigo de nuevo.";
+			set Q_GATO,0;
+			close;
+		case 6:
+			if(countitem(6223) >= 3) {
+				delitem 6223,3;
+				getexp 100000,100000;
+				mes "[^ff6060Gato Viajero^000000]";
+				mes "Ahora necesitamos la bolsa de la infinidad, que te otorgara la mejor carga en tu mochilita.";
+				next;
+				mes "[^ff6060Gato Viajero^000000]";
+				mes "Necesito que recolectes ^008800300x "+getitemname(7065)+"^000000.";
+				next;
+				mes "[^ff6060Gato Viajero^000000]";
+				mes "Te esperare aqui.";
+				set Q_GATO,3;
+				close;
+			}
+			mes "[^ff6060Gato Viajero^000000]";
+			mes "Necesito que recolectes tres Carnium para poder hacer fogatas en la noche.";
+			close;
+	}
+mes "[^ff6060Gato Viajero^000000]";
+mes "Bienvenid"+(Sex?"o":"a")+" "+strcharinfo(0);
+mes "Soy un gato que viaja por todo el mundo.";
+next;
+mes "[^ff6060Gato Viajero^000000]";
+mes "Este dia llegue a Rune Midgard pero necesito recolectar provisiones.";
+next;
+mes "[^ff6060Gato Viajero^000000]";
+mes "Para eso necesito tu ayuda.";
+mes "A cambio te dare una mochila muy genial que te ayudara a transportar cosas.";
+next;
+mes "[^ff6060Gato Viajero^000000]";
+mes "¿Aceptarias ayudarme?";
+next;
+	if (select("Estoy ocupado, luego.","Te ayudare, dime que hacer.") == 1) {
+		mes "[^ff6060Gato Viajero^000000]";
+		mes "Algun dia se te ofrecera tambien, tal ves no hoy, tal ves no mañana, pero algun dia.";
+		close;
+	}
+	mes "[^ff6060Gato Viajero^000000]";
+	mes "Primero necesito que juntes hierbas medicinales, las consigues en los hospitales de la selva de Malaya.";
+	next;
+	mes "[^ff6060Gato Viajero^000000]";
+	mes "El nombre de esta hierba es:";
+	mes " -^008800"+getitemname(6509)+"^000000";
+	mes "Traeme ^ff000050^000000 por favor.";
+	close2;
+	emotion e_thx;
+	set Q_GATO,1;
+	end;
+OnInit:
+	setarray .@m0$[0], "G","a","t","o"," ","V","i","a","j","e","r","o";
+	setarray .@m1$[0], "O","b","t","e","n"," ","t","u"," ","B","a","c","k","p","a","c","k";
+	do {
+		if (.@i == 2) set .@i, 0;
+		for (set .@c, 0; .@c < getarraysize(getd(".@m" + .@i + "$")); set .@c, .@c + 1) {
+			set .@f$, .@f$ + getd(".@m" + .@i + "$[" + .@c + "]");
+			waitingroom .@f$,0;
+			sleep 350;
+			delwaitingroom;
+		}
+		for (set .@c, 0; .@c < 6; set .@c, .@c + 1) {
+			waitingroom "",0;
+			sleep 250;
+			delwaitingroom;
+			waitingroom .@f$,0;
+			sleep 250;
+			delwaitingroom;
+		}
+		waitingroom .@f$,0;
+		sleep 3000;
+		set .@f$, "";
+		delwaitingroom;
+		set .@i, .@i + 1;
+	} while(1);
+end;
+}

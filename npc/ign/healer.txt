@@ -1,0 +1,48 @@
+prontera,161,186,4	script	Healer	749,{
+if(healdelay < gettimetick(2) || healdelay == 0){
+	emotion e_hp;
+	percentheal 100,100;
+	specialeffect2 312,1;
+	specialeffect2 363,1;
+	set healdelay, gettimetick(2) + 3;
+	end;
+}
+	dispbottom "[Healer] Por favor espera 3 segundos antes de curarte de nuevo.";
+	end;
+}
+alberta,41,252,4	duplicate(Healer)	Healer#02	749
+aldebaran,146,115,4	duplicate(Healer)	Healer#03	749
+amatsu,102,157,5	duplicate(Healer)	Healer#04	749
+ayothaya,220,184,4	duplicate(Healer)	Healer#05	749
+brasilis,204,226,4	duplicate(Healer)	Healer#06	749
+comodo,183,158,5	duplicate(Healer)	Healer#07	749
+einbech,183,140,5	duplicate(Healer)	Healer#08	749
+einbroch,81,204,4	duplicate(Healer)	Healer#29	749
+brasilis,80,203,4	duplicate(Healer)	Healer#09	749
+geffen,128,68,4	duplicate(Healer)	Healer#10	749
+gonryun,162,120,4	duplicate(Healer)	Healer#11	749
+hugel,96,168,4	duplicate(Healer)	Healer#12	749
+izlude,136,120,4	duplicate(Healer)	Healer#13	749
+jawaii,254,129,4	duplicate(Healer)	Healer#14	749
+lighthalzen,167,102,4	duplicate(Healer)	Healer#15	749
+louyang,226,108,4	duplicate(Healer)	Healer#16	749
+xmas,154,138,4	duplicate(Healer)	Healer#17	749
+manuk,294,246,4	duplicate(Healer)	Healer#18	749
+mid_camp,203,289,4	duplicate(Healer)	Healer#19	749
+morocc,164,97,4	duplicate(Healer)	Healer#20	749
+moscovia,220,191,4	duplicate(Healer)	Healer#21	749
+payon,184,104,4	duplicate(Healer)	Healer#22	749
+rachel,114,144,5	duplicate(Healer)	Healer#23	749
+splendide,190,187,5	duplicate(Healer)	Healer#24	749
+umbala,126,137,5	duplicate(Healer)	Healer#25	749
+veins,210,133,5	duplicate(Healer)	Healer#26	749
+yuno,167,187,4	duplicate(Healer)	Healer#27	749
+bat_room,148,153,5	duplicate(Healer)	Healer#28	749
+malaya,244,197,5	duplicate(Healer)	Healer#300	749
+dicastes01,200,193,5	duplicate(Healer)	Healer#30	749
+dewata,197,185,5	duplicate(Healer)	Healer#31	749
+malangdo,193,135,5	duplicate(Healer)	Healer#32	749
+mora,105,106,5	duplicate(Healer)	Healer#33	749
+eclage,304,233,5	duplicate(Healer)	Healer#34	749
+ayo_in01,184,133,3	duplicate(Healer)	Healer#301	749
+verus04,129,214,5	duplicate(Healer)	Healer#302	749

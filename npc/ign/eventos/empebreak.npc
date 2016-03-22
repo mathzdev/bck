@@ -1,0 +1,55 @@
+-	script	EMP	-1,{
+OnEmpeBreak:
+OnWhisperGlobal:
+announce "¡El Emperium ha aparecido en Prontera!",bc_all,0xFF8800;
+enablenpc "EMPER";
+disablenpc "#warp_empe";
+sleep2 3000;
+announce "Habla con el NPC para ir a la sala y competir por ser el primero en romperlo y ganar un premio",bc_all,0xFF8800;
+donpcevent "EMPER::OnSpawnEmp";
+end;
+}
+prontera,163,176,4	script	Rompe el Emperium::EMPER	1288,{
+mes "[^ff8800Emperium^000000]";
+mes "Rompe el Emperium en esta sala donde el PvP esta activo antes que todo, y llevate un premio.";
+next;
+	if(select("Entrar al Evento ^5533ff["+getmapusers("pvp_valk")+"]^000000","^777777Salir^000000") == 2) {
+		mes "[^ff8800Emperium^000000]";
+		mes "Habla conmigo cuando desees entrar al Evento.";
+		close;
+	}
+	warp "pvp_valk",0,0;
+	close;
+OnSpawnEmp:
+monster "pvp_valk",96,89,"--ja--",1288,1,"EMPER::OnEmpeKill";
+end;
+OnEmpeKill:
+announce "[ "+strcharinfo(0)+" ] ha destruido el Emperium.",bc_all,0xFF8800;
+callfunc "F_Event",1,rand(1,5);
+set Zeny,Zeny+(rand(1000,200000));
+disablenpc "EMPER";
+enablenpc "#warp_empe";
+end;
+OnInit:
+disablenpc "EMPER";
+end;
+}
+pvp_valk,96,89,0	script	#warp_empe	45,3,3,{
+end;
+OnTouch:
+warp "prontera",150,180;
+end;
+OnInit:
+disablenpc "#warp_empe";
+end;
+}
+//pvp_valk	mapflag	allow_bg_items
+pvp_valk	mapflag	pvp	on
+pvp_valk	mapflag	noexppenalty
+pvp_valk	mapflag	gvg	off
+pvp_valk	mapflag	noreturn
+pvp_valk	mapflag	noteleport
+pvp_valk	mapflag	nowarp
+pvp_valk	mapflag	nobranch
+pvp_valk	mapflag	pvp_noguild
+pvp_valk	mapflag	pvp_noparty

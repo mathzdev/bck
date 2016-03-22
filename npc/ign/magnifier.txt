@@ -1,0 +1,121 @@
+/* ========================================================================*
+****************************************************************************
+           ######      #                                                                 
+R          #     #     #                               www.xeonro.net
+  H        #     #     #                               toblerhon@yahoo.com
+    O      ######      #####      #####      #####
+      N    #    #      #    #    #     #    #     #    Ragnarok:
+           #     #     #    #    #     #    #     #    Developer/Coder
+           #      #    #    #     #####     #     #    Web Coder
+ 
+****************************************************************************
+*======================================================================== */
+// ---> Magnifier
+// Dec. 13, 2010
+
+prontera,187,209,4	script	Magnifier	57,{
+
+// Language System
+// ===============
+// You'll need to set this variable for Players by another NPC
+// or set it here (set @language to 0 or 1 if you want the NPC
+// to be in one language all the time, if you want it to be in
+// english you don't have to change it, english is default).
+// 0 = english (default) | 1 = german
+
+set @language, #language;
+if (@language > 1) set @language, 0;
+
+// Price
+// =====
+// This is the Price in Zeny for one identified Item
+
+set @price, 100;
+// Actual Script Begins Here
+// =========================
+
+mes "[^3355FFDeckard Cain^000000]";
+	if (@language == 0) mes "Bienvenido!";
+	if (@language == 0) mes "Puedo identificar todos tus objetos si así lo deseas.";
+	if (@language == 0) mes " ";
+	if (@language == 0) mes "Serán ^800080"+@price+"^000000 zeny por objeto.";
+	if (@language == 1) mes "Hallo Reisender!";
+	if (@language == 1) mes "Ich kann all Deine unidentifizierten Items f?r Dich identifizieren.";
+	if (@language == 1) mes " ";
+	if (@language == 1) mes "Es kostet nur ^800080"+@price+"^000000 Zeny je Item.";
+	next;
+	if (@language == 0) menu "Identificar.",-,"Cancelar",L_Bye;
+	if (@language == 1) menu "Gerne.",-,"Nein Danke...",L_Bye;
+
+	getinventorylist;
+	set @identify, 0;
+
+	for(set @i, 0; @i < @inventorylist_count; set @i, @i + 1) {
+	if (@inventorylist_identify[@i] == 0) set @identify, @identify + 1;
+	}
+
+	if (@identify == 0) goto L_Nothing;
+
+	mes "[^3355FFDeckard Cain^000000]";
+	if (@identify < 2) {
+	if (@language == 0) mes "Tienes ^000088one^000000 objetos sin identificar en tu inventario.";
+	if (@language == 0) mes "Te los identificaré todos por ^800080"+@price+"^000000 zeny.";
+	if (@language == 1) mes "Du hast ^000088ein^000000 unidentifiziertes Items in Deinem Inventar.";
+	if (@language == 1) mes "F?r ^800080"+@price+"^000000 zeny kann ich es identifizieren.";
+	} else {
+	if (@language == 0) mes "Tienes ^000088"+@identify+"^000000 objetos sin identificar en tu inventario.";
+	if (@language == 0) mes "Te los identificaré todos por ^800080"+(@identify * @price)+"^000000 zeny.";
+	if (@language == 1) mes "Du hast ^000088"+@identify+"^000000 unidentifizierte Items in Deinem Inventar.";
+	if (@language == 1) mes "F?r ^800080"+(@identify * @price)+"^000000 Zeny kann ich sie alle identifizieren.";
+	}
+	if (@language == 0) mes "Si tienes algun ^00AA00Magnifiers^000000, los usaré por tí.";
+	if (@language == 0) mes "¿Debo empezar ahora?";
+	if (@language == 1) mes "Wenn Du einige ^00AA00Magnifier^000000 hast, werde ich die benutzen.";
+	if (@language == 1) mes "Soll ich jetzt anfangen?";
+	next;
+	if (@language == 0) menu "De acuerdo",-,
+	"Cancelar",L_Bye;
+	if (@language == 1) menu "Ok, leg los!",-,
+	"Was f?r ein Wucher...",L_Bye;
+
+	getinventorylist;
+	set @identified, 0;
+
+	for(set @i, 0; @i < @inventorylist_count; set @i, @i + 1) {
+	if (@inventorylist_identify[@i] == 0) {
+	if (countitem(611) > 0) delitem 611,1;
+	else if (Zeny < @price) goto L_NoZeny;
+	else set Zeny, Zeny - @price;
+	delitem2 @inventorylist_id[@i],1,0,0,0,0,0,0,0;
+	getitem @inventorylist_id[@i],1;
+	set @identified, @identified + 1;
+	}
+}
+
+	mes "[^3355FFDeckard Cain^000000]";
+	if (@language == 0) mes "¡Completado!";
+	if (@language == 0) mes "He identificado ^000088"+@identified+"^000000 objetos.";
+	if (@language == 1) mes "So, alles identifiziert!";
+	if (@language == 1) mes "Ich habe insgesamt ^000088"+@identified+"^000000 Items f?r Dich identifiziert.";
+	mes " ";
+	mes "Bye~";
+	close;
+
+L_Nothing:
+	mes "[^3355FFDeckard Cain^000000]";
+	if (@language == 0) mes "^CD0000No tienes objetos sin identificar.^000000";
+	if (@language == 1) mes "^CD0000Du hast keinerlei nicht identifizierte Items.^000000";
+	close;
+
+L_NoZeny:
+	mes "[^3355FFDeckard Cain^000000]";
+	if (@language == 0) mes "^CD0000No tienes suficiente zeny.^000000";
+	if (@language == 1) mes "^CD0000Du hast nicht gen gend zeny.^000000";
+close;
+
+L_Bye:
+	mes "[^3355FFDeckard Cain^000000]";
+	mes "...";
+	close;
+}
+

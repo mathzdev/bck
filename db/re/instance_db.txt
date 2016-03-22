@@ -15,4 +15,18 @@
 10,Bakonawa Lake,7200,1@ma_b,64,51,1@ma_b
 11,Wolfchev's Laboratory,14400,1@lhz,45,148,1@lhz
 12,Old Glast Heim,3600,1@gl_k,150,20,1@gl_k,2@gl_k
-13,Eclage Interior,1200,1@ecl,60,50,1@ecl
+13,Old Glast Heim Nightmare,3600,1@gl_kh,150,120,1@gl_kh,2@gl_kh
+14,Nightmare of Jitterbug,3600,1@jtb,13,18,1@jtb
+15,Charleston Crisis,7200,1@mcd,127,282,1@mcd
+16,Airship Assault,3600,1@air1,244,73,1@air1,1@air2
+17,Sara's Memories,3600,1@sara,250,155,1@sara
+18,Faceworm Nest,3600,1@face,112,375,1@face
+19,Devil's Tower,3600,1@tnm1,51,102,1@tnm1,1@tnm2,1@tnm3
+20,Sarah's Versus,3600,1@def03,80,69,1@def03
+21,Ghost Palace,3600,1@spa,42,196,1@spa
+22,Haunted Mansion,3600,1@haunt,22,158,1@haunt
+23,Dead Branch Room,7200,pvp_n_1-3,101,97,pvp_n_1-3
+24,Lafayette Palace,3600,lafayette,199,31,lafayette
+25,Isle of Bios,3600,1@dth1,20,93,1@dth1,1@dth2,1@dth3
+26,Geffen Magic Tournament,7200,1@gef,119,108,1@gef,1@ge_st
+27,Eclage Interior,1200,1@ecl,60,50,1@ecl

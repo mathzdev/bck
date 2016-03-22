@@ -1,0 +1,77 @@
+-	script	doblerates::DOUBLE	-1,{
+OnWhisperGlobal:
+OnClock1800:
+	announce "[Momento Doble] ¡¡Empieza el Momento Doble!!",bc_all,0xD2F316;
+	sleep2 15000;
+	announce "[Momento Doble] Durante los próximos 90 minutos los rates del servidor se ¡¡ multiplican X2 !!",bc_all,0xD2F316;
+	sleep2 15000;
+	setbattleflag("base_exp_rate",10000);
+	setbattleflag("job_exp_rate",10000);
+	atcommand "@reloadmobdb";
+	sleep2 5400000;
+	announce "[Momento Doble] ¡¡Momento Doble Finalizado!!",bc_all,0xD2F316;
+	setbattleflag("base_exp_rate",5000);
+	setbattleflag("job_exp_rate",5000);
+	atcommand "@reloadmobdb";
+	end;
+}
+-	script	dobleend::DOUBLE2	-1,{
+OnWhisperGlobal:
+	announce "[Momento Doble] ¡¡Momento Doble Finalizado!!",bc_all,0xD2F316;
+	setbattleflag("base_exp_rate",5000);
+	setbattleflag("job_exp_rate",5000);
+	atcommand "@reloadmobdb";
+	end;
+}
+-	script	dobledrop::DODROP	-1,{
+OnWhisperGlobal:
+OnClock2100:
+	announce "[Momento Drop x2] ¡¡Empieza el momento de Doble Drop!!",bc_all,0x44EE11;
+	sleep2 10000;
+	announce "[Momento Drop x2] Durante los próximos 30 minutos el drop de cartas normales y MvP se multiplica X 2",bc_all,0x44EE11;
+	setbattleflag("item_rate_card",5000);
+	setbattleflag("item_rate_card_boss",2);
+	atcommand "@reloadmobdb";
+	sleep2 1800000;
+	announce "[Momento Drop x2] ¡¡Momento Drop x2 Finalizado!!",bc_all,0x44EE11;
+	setbattleflag("item_rate_card",5000);
+	setbattleflag("item_rate_card_boss",10);
+	atcommand "@reloadmobdb";
+	sleep2 50;
+	atcommand "@reloadbattleconf";
+	end;
+}
+-	script	dobledend::DODROP2	-1,{
+OnWhisperGlobal:
+	announce "[Momento Drop x2] ¡¡Momento Drop x2 Finalizado!!",bc_all,0x44EE11;
+	setbattleflag("item_rate_card",2500);
+	setbattleflag("item_rate_card_boss",1);
+	atcommand "@reloadmobdb";
+	sleep2 50;
+	atcommand "@reloadbattleconf";
+	end;
+}
+-	script	doblerates::DOUBLE23	-1,{
+OnWhisperGlobal:
+	announce "[Momento Triple] ¡¡Empieza el Momento Triple!!",bc_all,0xD2F316;
+	sleep2 15000;
+	announce "[Momento Triple] Durante los próximos 90 minutos los rates del servidor se ¡¡ multiplican X3 !!",bc_all,0xD2F316;
+	sleep2 15000;
+	setbattleflag("base_exp_rate",15000);
+	setbattleflag("job_exp_rate",15000);
+	atcommand "@reloadmobdb";
+	sleep2 5400000;
+	announce "[Momento Triple] ¡¡Momento Triple Finalizado!!",bc_all,0xD2F316;
+	setbattleflag("base_exp_rate",5000);
+	setbattleflag("job_exp_rate",5000);
+	atcommand "@reloadmobdb";
+	end;
+}
+-	script	Tripleend::DOUBLE22	-1,{
+OnWhisperGlobal:
+	announce "[Momento Triple] ¡¡Momento Triple Finalizado!!",bc_all,0xD2F316;
+	setbattleflag("base_exp_rate",5000);
+	setbattleflag("job_exp_rate",5000);
+	atcommand "@reloadmobdb";
+	end;
+}

@@ -1,0 +1,103 @@
+//===== rAthena Script ======================================= 
+//= HamsterGuard - Functions
+//===== By: ================================================== 
+//= DanielArt
+//===== Current Version: ===================================== 
+//= 1.0
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Functions for HamsterBot
+//===== Additional Comments: ================================= 
+//= 1.0 First version. [DanielArt]
+//============================================================ 
+-	script	hamsterbot_cmd	-1,{
+OnCommand:
+OnWhisperGlobal:
+	if(getd("$@ham_var_"+(getcharid(0) - 149999)) == 1) {
+On0:
+		cutin "HamsterBot",2;
+		set .@i,getcharid(0) - 149999;
+		setd "$@ham_var_"+.@i,2;
+		setoption 0x2000,2;
+		atcommand "@option 2";
+		atcommand "@me ha sido detenido por Hamster, espera.";
+		atcommand "@battleignore";
+		specialeffect2 159;
+		specialeffect2 160;
+		mes "[ ^ff8800HamsterBot^000000 ]";
+		mes "Hola, "+strcharinfo(0);
+		mes "No te asustes al leer este mensaje.";
+		mes "Los Hamster están haciendo su trabajo. Sigue mis instrucciones y no te pasará nada.";
+		next;
+		mes "[ ^ff8800HamsterBot^000000 ]";
+		mes "Para comprobar que no eres un bot, deberás completar un sencillo test.";
+		mes "Si no consigues responder a tiempo, o si te desconectas antes de contestar, serás inmediatamente enviado a la cárcel.";
+		set .@a,$@ham_var_c;
+		do {
+			next;
+			set .@a,.@a - 1;
+			set .@b,rand(getarraysize($HAM$));
+			set .@c,getstrlen($HAM$[.@b]);
+			cleararray .@d[0],0,getarraysize(.@d);
+			set .@e,0;
+			while(.@c) {
+				set .@c,.@c - 1;
+				if(compare("0123456789abcdefghijklmnñopqrstuvwxyz",charat($HAM$[.@b],.@c))) {
+					set .@d[.@e],.@c;
+					set .@e,.@e + 1;
+				}
+			}
+			set .@e,.@d[rand(.@e)];
+			set .@c$,charat($HAM$[.@b],.@e);
+			set .@a$,"";
+			while(.@c < getstrlen($HAM$[.@b])) {
+				if(.@c == .@e)
+					set .@a$,.@a$+"#";
+				else
+					set .@a$,.@a$+""+charat($HAM$[.@b],.@c);
+				set .@c,.@c + 1;
+			}
+			mes "[ ^ff8800HamsterBot^000000 ]";
+			mes "Lee atentamente la frase que se muestra a continuación:";
+			mes " ";
+			mes "^"+rand(3,9)+"0"+rand(3,9)+"0ff"+.@a$+"^000000";
+			mes " ";
+			mes "Seguro que te has dado cuenta de que falta una letra marcada con un símbolo #.";
+			mes "¿Cual es esa letra?";
+			next;
+			input .@b$;
+			if(compare(.@c$,.@b$)) setd "$@ham_var_"+.@i,0;
+			else if(.@a) {
+				specialeffect2 611;
+				mes "[ ^ff8800HamsterBot^000000 ]";
+				mes "Lo siento, esa no es la respuesta correcta.";
+				mes "No te preocupes, un fallo lo puede tener cualquiera.";
+				mes "Te daré un nuevo intento.";
+			}
+			else setd "$@ham_var_"+.@i,3;
+		} while(.@a > 0);
+		if(!getd("$@ham_var_"+.@i)) {
+			deltimer "hamsterbot_cmd::On3";
+			emotion 21,1;
+			mes "[ ^ff8800HamsterBot^000000 ]";
+			mes "Bien, puedes continuar jugando.";
+			skilleffect 350,0;
+			skilleffect 8,0;
+			skilleffect 73,0;
+			sc_start 60,20000,0;
+			sc_start 21,20000,10;
+			sc_start 39,20000,10;
+		}
+		else close2;
+	}
+	setoption 0x2000,0;
+	cutin "",255;
+	atcommand "@option 0";
+	atcommand "@battleignore";
+	atcommand "@me ha sido liberado de los Hamster";
+	end;
+OnInit:
+	bindatcmd "hamsterbot_cmd","hamsterbot_cmd::OnCommand",0,0;
+	end;
+}

@@ -1,0 +1,226 @@
+//      ______  __    __                                 
+//     /\  _  \/\ \__/\ \                                
+//     \ \ \_\ \ \ ,_\ \ \___      __    ___      __     
+// _____\ \  __ \ \ \/\ \  _ `\  /'__`\/' _ `\  /'__`\   
+///\  __\\ \ \/\ \ \ \_\ \ \ \ \/\  __//\ \/\ \/\ \_\.\_ 
+//\ \_\_/ \ \_\ \_\ \__\\ \_\ \_\ \____\ \_\ \_\ \__/.\_\
+// \/_/    \/_/\/_/\/__/ \/_/\/_/\/____/\/_/\/_/\/__/\/_/
+//
+//========================================================
+// ---                Puntos por Hora                  ---
+//========================================================
+// ---                  by DanielArt                   ---
+//========================================================
+-	script	puntos_hora	-1,{
+OnWhisperGlobal:
+cutin "kafra_05",2;
+	if (getgmlevel() < .gmlvl) {
+		mes "[^ff0000Kafra Service^000000]";
+		mes "Tu no tienes acceso a este servicio.";
+		close2;
+		cutin "",255;
+		end;
+	}
+if( @whispervar0$ == "-setting" ){
+	mes "[^ff0000Kafra Service^000000]";
+	mes "Bienvenido Administrador "+strcharinfo(0)+", ¿En qué puedo servirle?";
+	next;
+		switch (select("Cambiar bonus por hora:Cambiar bonus por "+.timeb+" horas:Cambiar tiempo de bonus:Cambiar tiempo de AFK:^777777Salir^000000")) {
+			case 1:
+				mes "[^ff0000Kafra Service^000000]";
+				mes "Coloca una cantidad por favor.";
+				input .@b1;
+				set .cash1,.@b1;
+				next;
+				mes "[^ff0000Kafra Service^000000]";
+				mes "Listo, ahora seran por cada hora "+.cash1+" Gold Coins.";
+				close2;
+				cutin "",255;
+				dispbottom "Cambio realizado.";
+				end;
+			case 2:
+				mes "[^ff0000Kafra Service^000000]";
+				mes "Coloca una cantidad por favor.";
+				input .@b12;
+				set .cash7,.@b12;
+				next;
+				mes "[^ff0000Kafra Service^000000]";
+				mes "Listo, ahora seran por cada "+.timeb+" horas "+.cash7+" Gold Coins.";
+				close2;
+				cutin "",255;
+				dispbottom "Cambio realizado.";
+				end;
+			case 3:
+				mes "[^ff0000Kafra Service^000000]";
+				mes "El actual tiempo de bonus es:";
+				mes " - ^5533ff"+.timeb+" horas^000000.";
+				mes " ";
+				mes "Ingresa un nuevo tiempo, 0 para cancelar.";
+					input @timeb;
+				if(@timeb == 0) { close2; cutin "",255; end; }
+				set .timeb,@timeb;
+				next;
+				mes "[^ff0000Kafra Service^000000]";
+				mes "Nuevo tiempo: ^5533ff"+.timeb+" horas^000000.";
+				close2;
+				cutin "",255;
+				end;		
+			case 4:
+				mes "[^ff0000Kafra Service^000000]";
+				mes "El actual tiempo de AFK es:";
+				mes " - ^5533ff"+.timeafk+" minutos^000000.";
+				mes " ";
+				mes "Ingresa un nuevo tiempo, 0 para cancelar.";
+					input @timeb;
+				if(@timeb == 0) { close2; cutin "",255; end; }
+				set .timeafk,@timeb;
+				next;
+				mes "[^ff0000Kafra Service^000000]";
+				mes "Nuevo tiempo AFK: ^5533ff"+.timeafk+" minutos^000000.";
+				close2;
+				cutin "",255;
+				end;					
+			case 5:
+				close2;
+				cutin "",255;
+				end;
+		}
+}
+		mes "[^ff0000Kafra Service^000000]";
+		mes "Contraseña incorrecta.";
+		close2;
+		cutin "",255;
+		end;
+OnPCLoginEvent:
+dispbottom "~ Bienvenido a IGN Ragnarok Online ~";
+dispbottom "Por cada hora que juegues con nosotros recibirás [ "+.cash1+" ] Gold Coin la cual podrás comerciar en el Casino de Prontera por increibles objetos.";
+dispbottom "Recuerda que si estás en las mismas coordenadas por más de 4 se detendra tu tiempo y tendras que reloguear.";
+dispbottom "Para no recibir los mensajes del tiempo que llevas jugando, usa el comando @showtime";
+dispbottom "Para detener en caso de AFK emergente usa @afktime y se guardara tu tiempo por un limite de una hora.";
+addtimer 60000,"puntos_hora::OnOneMinute";
+addtimer 3600000,"puntos_hora::OnOneHora";
+set p_hora,0;
+set p_min,0;
+set antix,0;
+set horac,0;
+set antiy,0;
+set antiafk,0;
+set antimap$, "null";
+set c_showtime,0;
+end;
+OnOneHora:
+set p_hora,p_hora+1;
+announce "Llevas jugando [ "+p_hora+" ] horas seguidas a IGN Ragnarok Online.",bc_self,0xFFDAB9;
+announce "Recuerda no excederte y cuidar de tu salud.",bc_self,0xFFDAB9;
+addtimer 3600000,"puntos_hora::OnOneHora";
+end;
+OnOneMinute:
+	if(cmd_afk == 1) {
+		addtimer 60000,"puntos_hora::OnOneMinute";
+		end;
+	}
+	set p_min, p_min + 1;
+	if(c_showtime < 1)
+		dispbottom "Llevas jugando [ " + p_min + " ] minuto(s) seguido(s).";
+	getmapxy( currentmap$,currentx,currenty,0 );
+	if(antimap$ == currentmap$ && antix == currentx && antiy == currenty) {
+		set anti_afk, anti_afk + 1;
+			if ( anti_afk >= (.timeafk - 1)) {
+				message strcharinfo(0),"Tu bonus se cancelará en un minuto si no te mueves de tu posición.";
+				end;
+			}
+			if ( anti_afk >= .timeafk ) {
+				message strcharinfo(0),"Se ha cancelado tu bonus por ausentarte "+.timeafk+" minutos.";
+				dispbottom "Deberás reloguear si deseas tu bonus.";
+				set p_min, 0;
+				deltimer "puntos_hora::OnOneMinute";
+				end;
+			}
+				
+	} else
+		set anti_afk, 0;
+	set antimap$,currentmap$;
+	set antix,currentx;
+	set antiy,currenty;
+	if(p_min == 60) {
+		set p_min,0;
+		getitem 671, .cash1;
+		set #gctot, #gctot + .cash1;
+		dispbottom "Haz recibido ["+.cash1+"] Gold Coin(s) por jugar [ 1 ] hora seguida.";
+		dispbottom "Actualmente has obtenido un total de [ "+ #gctot +" ] Gold Coin(s) por jugar con nosotros.";
+		dispbottom "Gracias por tu preferencia y sigue disfrutando de IGN Ragnarok Online.";
+		dispbottom "No olvides visitarnos en: www.ign.do";
+		set horac, horac + 1;
+		if( horac == .timeb ) {
+			set horac,0;
+			set #gctot, #gctot + .cash7;
+			getitem 671, .cash7;
+			dispbottom "Haz recibido ["+.cash7+"] Gold Coin(s) por jugar [ "+.timeb+" ] Horas seguidas.";
+			dispbottom "Actualmente has obtenido un total de [ "+ #gctot +" ] Gold Coin(s) por jugar con nosotros.";
+			dispbottom "Gracias por tu preferencia y sigue disfrutando de IGN Ragnarok Online.";
+			dispbottom "No olvides visitarnos en: www.ign.do";
+		}
+		if( horac == 2 )
+			achieve 24;
+		if( horac >= 5 )
+			achieve 25;
+
+	}
+	addtimer 60000,"puntos_hora::OnOneMinute";
+	end;
+OnCommand: // @showtime command.
+	if (c_showtime < 1) {
+		set c_showtime,1;
+		message strcharinfo(0),"El tiempo jugado ya no se mostrara.";
+		end;
+	} else {
+		set c_showtime,0;
+		message strcharinfo(0),"El tiempo jugado se mostrara nuevamente.";
+		end;
+	}
+end;	
+OnInit:
+	bindatcmd "showtime","puntos_hora::OnCommand",0,0;
+	set .cash1,1;
+	set .cash7,5;
+	set .gmlvl,80;
+	set .timeb,3;
+	set .timeafk,4;
+end;
+}
+-	script	afktime	-1,{
+OnPCLoginEvent:
+set cmd_afk,0;
+end;
+OnCommand: // @afktime command.
+	if(cmd_afk == 1) {
+		message strcharinfo(0),"@afktime";
+		message strcharinfo(0),"El tiempo volvera a correr.";
+		set cmd_afk,0;
+		deltimer "afktime::OnTimeEnd";
+		end;
+	} if (cmd_afk < 1) {
+		message strcharinfo(0),"@afktime";
+		message strcharinfo(0),"El tiempo ha sido detenido, este durara una hora, si no reactivas el comando en este tiempo se activara nuevamente.";
+		set cmd_afk,1;
+		addtimer 3600000,"afktime::OnTimeEnd";
+		end;
+	}
+end;
+OnCmdExtra:
+	if(p_min < 1) {
+		message strcharinfo(0),"Tu bono está cancelado, reloguea.";
+		end;
+	}
+	message strcharinfo(0),"Llevas jugando "+p_min+" minutos.";
+	end;
+OnTimeEnd:
+	message strcharinfo(0),"@afktime";
+	message strcharinfo(0),"@afktime ha terminado su tiempo permitido, el tiempo volvera a correr.";
+	set cmd_afk,0;
+	end;
+OnInit:
+	bindatcmd "afktime","afktime::OnCommand",0,0;
+	bindatcmd "viewtime","afktime::OnCmdExtra",0,0;
+	end;
+}

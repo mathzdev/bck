@@ -1,0 +1,124 @@
+dali02,42,133,4	script	Sarah::srvs	10066,{
+	cutin "sarah_hero3",2;
+	mes "[Sarah]";
+	mes "Mi nombre es Sarah, y soy considerada la aventurera más poderosa que ha alcanzado el rango de héroe.";
+	next;
+	if(sarah_q1 && sarah_q2 && sarah_q3 && sarah_q4) {
+		mes "[Sarah]";
+		mes "Veo que te haz ganado el honor de enfrentarme, ¿eso deseas?";
+		mes "Ten encuenta que si te derroto ^ff0000no podrás volver a entrar^000000.";
+		next;
+		if(select("Deseo enfrentarte","No, gracias.") == 2) {
+			mes "[Sarah]";
+			mes "Pff, cobarde.";
+			close2;
+			cutin "",255;
+			emotion e_heh;
+			end;
+		}
+		set .@party_id,getcharid(1);
+		set .@p_name$,getpartyname(.@party_id);
+		set .@md_name$,"Sarah's Versus";
+		
+		if (!instance_check_party(.@party_id,1)) {
+			mes "No hay miembros suficientes";
+			close2;
+			cutin "",255;
+			end;
+		}
+		if (getcharid(0) == getpartyleader(.@party_id,2))
+			switch(select("Crear instancia","Enfrentar a Sarah","Salir")) 
+			{
+				case 1:
+					if (instance_create(.@md_name$) < 0) {
+						mes "Nombre de la party: "+.@p_name$;
+						mes "Líder de party "+strcharinfo(0);
+						mes "^0000ff"+.@md_name$+" ^000000- no puede ser creado!";
+						close2; cutin "",255; end;
+					} else {
+						switch(instance_enter(.@md_name$))
+						{
+							case 0:
+								set sarah_q1,0;
+								set sarah_q2,0;
+								set sarah_q3,0;
+								set sarah_q4,0;
+								mapannounce "dali02",strcharinfo(0)+", member of the party "+.@p_name$+" entered the instance "+.@md_name$+".",bc_map,"0x00ff99";
+								specialeffect2 EF_WARP;
+								end;
+							case 1:
+								mes "Sólo miembros registrados pueden entrar a la instance "+.@md_name$+".";
+								close2; cutin "",255; end;
+							case 2:
+								mes "La instancia "+.@md_name$+" no existe.";
+								mes "El líder de la party debe registrarla antes de entrar.";
+								close2; cutin "",255; end;
+							case 3:
+								mes "Unkwnon error";
+								close2; cutin "",255; end;
+						}
+					}
+				case 2:
+					switch(instance_enter(.@md_name$))
+					{
+						case 0:
+							set sarah_q1,0;
+							set sarah_q2,0;
+							set sarah_q3,0;
+							set sarah_q4,0;
+							mapannounce "dali02",strcharinfo(0)+", member of the party "+.@p_name$+" entered the instance "+.@md_name$+".",bc_map,"0x00ff99";
+							specialeffect2 EF_WARP;
+							end;
+						case 1:
+							mes "Sólo miembros registrados pueden entrar a la instance "+.@md_name$+".";
+							close2; cutin "",255; end;
+						case 2:
+							mes "La instancia "+.@md_name$+" no existe.";
+							mes "El líder de la party debe registrarla antes de entrar.";
+							close2; cutin "",255; end;
+						case 3:
+							mes "Unkwnon error";
+							close2; cutin "",255; end;
+					}
+				case 3:
+					close2; cutin "",255; end;
+			}
+	}
+	mes "[Sarah]";
+	mes "Si logras completar todos los Memorial Dungeon de Dimensional Crack como un Maestro de Party, te daré el honor de enfrentarme.";
+	close2;
+	emotion e_no1;
+	cutin "",255;
+	end;
+OnPCLoadMapEvent:
+	if(strcharinfo(3) == "dali02" && (sarah_q1 && sarah_q2 && sarah_q3 && sarah_q4))
+		showevent 0,1;
+	end;
+}
+1@def03,81,69,4	script	#ctrlsara	139,5,5,{
+OnTouch:
+	instance_announce instance_id(),"[Sarah]: Me alegra que hayas aceptado mi desafío aventurero.",bc_map,0xFF8800;
+	sleep2 2500;
+	instance_announce instance_id(),"[Sarah]: Ahora te enfrentarás a mi gran poder, y al derrotarme tendrás la posibilidad de obtener mi poder igualmente.",bc_map,0xFF8800;
+	sleep2 2500;
+	instance_announce instance_id(),"[Sarah]: Recuerda que este enfrentamiento es 1vs1 y si mueres tendrás que pasar todo el reto nuevamente y no podrás volver a entrar.",bc_map,0xFF8800;
+	sleep2 2500;
+	set .@m$,instance_mapname("1@def03");
+	monster .@m$,109,40,"Sarah",3190,1,"#ctrlsara::OnMyMobDead";
+	end;
+OnMyMobDead:
+	set .@m$,instance_mapname("1@def03");
+	instance_announce instance_id(),"[Sarah]: Eso fue todo un espectáculo aventurero, espero y hayas tenido suerte de obtener mi poder, si no, vuelve a intentarlo en otra ocasión.",bc_map,0xFF8800;
+	sleep2 7500;
+	mapwarp .@m$,"dali02",47,128;
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#ctrlsara")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#ctrlsara");
+	end;
+OnDisable:
+	disablenpc instance_npcname("#ctrlsara");
+	end;
+}

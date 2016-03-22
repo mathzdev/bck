@@ -1,0 +1,208 @@
+prontera,162,191,4	script	Lotería	790,{
+	mes "[^cc6600Lotería^000000]";
+	if($LastLotId > 0) {
+		mes "¡Qué tal!, los últimos números ganadores son:";
+		mes "^5533ff"+$n1l+"-"+$n2l+"-"+$n3l+"-"+$n4l+"^000000";
+		mes "^ff0000De la Lotería #"+$LastLotId+"^000000.";
+	} else	mes "¡Todavía no se lleva ninguna Lotería a cabo!";
+	if( ticket > 0 ) {
+		mes "Tú boleto es: ^ff8800"+b1l+"-"+b2l+"-"+b3l+"-"+b4l+"^000000.";
+		mes "Para la ^ff8800Lotería #"+LotId+"^000000.";
+	}
+	if($LotId) mes "^5533ffActual Lotería #"+$LotId+"^000000";
+	mes "^008800Hora de Sorteo: 18:00hrs.^000000";
+	next;
+	switch(select("Comprar Ticket:Premios:Reclamar Premio:^777777Salir^000000")) {
+		case 1:
+			if(LotId == $LotId && ticket > 0) {
+				mes "[^cc6600Lotería^000000]";
+				mes "Ya haz comprado un boleto para la próxima Lotería.";
+				close2;
+				emotion e_sry;
+				end;
+			}
+			set LotId,0;
+			set b1l,0;
+			set b2l,0;
+			set b3l,0;
+			set b4l,0;
+			set ticket,0;
+			mes "[^cc6600Lotería^000000]";
+			mes "El costo por participación es de ^5533ffuna IGN Coin^000000.";
+			mes "¿Estás de acuerdo?";
+			next;
+			if(select("Pagar.","No, gracias") == 2) {
+				mes "[^cc6600Lotería^000000]";
+				mes "Vuelve cuando desees.";
+				close2;
+				emotion e_no1;
+				end;
+			}
+			if(countitem(671) < 1) {
+				mes "[^cc6600Lotería^000000]";
+				mes "Lo siento, pero no tienes ninguna IGN Coin.";
+				close2;
+				emotion e_sry;
+				end;
+			}
+			mes "[^cc6600Lotería^000000]";
+			mes "Por favor elige los números o ¿deseas que sea al azar?";
+			next;
+			if(select("Al azar","Seleccionar manualmente") == 1) {
+				set b1l,rand(1,40);
+				set b2l,rand(1,40);
+				set b3l,rand(1,40);
+				set b4l,rand(1,40);
+				mes "[^cc6600Lotería^000000]";
+				mes "Bien, tu boleto es el siguiente:";
+				mes "^ff8800"+b1l+"-"+b2l+"-"+b3l+"-"+b4l+"^000000.";
+				mes "^ff0000Lotería #"+$LotId+"^000000.";
+				set ticket,1;
+				set LotID,$LotID;
+				delitem 671,1;
+				close2;
+				emotion e_no1;
+				end;
+			}
+			mes "[^cc6600Lotería^000000]";
+			mes "Selecciona el orden de los números, recuerda que no puede ser mayor de 40.";
+			next;
+			mes "[^cc6600Lotería^000000]";
+			mes "Ingresa el primer número:";
+			next;
+			input b1l;
+			if(b1l < 1 || b1l > 40) {
+				mes "[^cc6600Lotería^000000]";
+				mes "El número no puede ser mayor a 40.";
+				close;
+			}
+			mes "[^cc6600Lotería^000000]";
+			mes "Ingresa el segundo número:";
+			next;
+			input b2l;
+			if(b2l < 1 || b2l > 40) {
+				mes "[^cc6600Lotería^000000]";
+				mes "El número no puede ser mayor a 40.";
+				close;
+			}
+			mes "[^cc6600Lotería^000000]";
+			mes "Ingresa el tercer número:";
+			next;
+			input b3l;
+			if(b3l < 1 || b3l > 40) {
+				mes "[^cc6600Lotería^000000]";
+				mes "El número no puede ser mayor a 40.";
+				close;
+			}
+			mes "[^cc6600Lotería^000000]";
+			mes "Ingresa el cuarto número:";
+			next;
+			input b4l;
+			if(b4l < 1 || b4l > 40) {
+				mes "[^cc6600Lotería^000000]";
+				mes "El número no puede ser mayor a 40.";
+				close;
+			}
+			mes "[^cc6600Lotería^000000]";
+			mes "Bien, tu boleto es el siguiente:";
+			mes "^ff8800"+b1l+"-"+b2l+"-"+b3l+"-"+b4l+"^000000.";
+			mes "^ff0000Lotería #"+$LotId+"^000000.";
+			set LotID,$LotID;
+			delitem 671,1;
+			close2;
+			emotion e_no1;
+			end;
+		case 2:
+			mes "[^cc6600Lotería^000000]";
+			mes "Premio mayor: ^5533ff"+.premios[2]+"^000000c";
+			mes "Premio menor: ^5533ff"+.premios[1]+"^000000c";
+			mes "Premio consolación: ^5533ff"+.premios[0]+"^000000c";
+			close;
+		case 3:
+			if(LotId != $LotId) {
+				mes "[^cc6600Lotería^000000]";
+				mes "Lo siento pero tu boleto ya no es válido.";
+				close2;
+				set LotId,0;
+				set b1l,0;
+				set b2l,0;
+				set b3l,0;
+				set b4l,0;
+				end;
+			}
+			set @p,0;
+			if($n1l == b1l) set @p,@p+1;
+			if($n2l == b2l) set @p,@p+1;
+			if($n3l == b3l) set @p,@p+1;
+			if($n4l == b4l) set @p,@p+1;
+			switch (@p) {
+				case 1:
+					getitem 671,.premios[0];
+					mes "[^cc6600Lotería^000000]";
+					mes "Al parecer atinaste a un número, felicidades.";
+					close;
+				case 2:
+					getitem 671,.premios[0]*2;
+					mes "[^cc6600Lotería^000000]";
+					mes "Al parecer atinaste a dos números, felicidades.";
+					close;
+				case 3:
+					getitem 671,.premios[1];
+					mes "[^cc6600Lotería^000000]";
+					mes "¡Excelente, haz atinado a tres números!";
+					close;
+				case 4:
+					getitem 671,.premios[2];
+					mes "[^cc6600Lotería^000000]";
+					mes "¡Impresionante, haz atinado a todos los números!";
+					announce "["+strcharinfo(0)+"] ha obtenido el premio mayor en la Lotería.",bc_all;
+					close;
+			}
+		case 4:
+			mes "[^cc6600Lotería^000000]";
+			mes "Vuelve cuando quieras.";
+			close;
+	}
+OnClock1800:
+	set $n1l,rand(1,40);
+	set $n2l,rand(1,40);
+	set $n3l,rand(1,40);
+	set $n4l,rand(1,40);
+	announce "A continuación se darán a conocer los números ganadores de la Lotería Diaria:",bc_all,0xEEE328;
+	set $LastLotId,$LotId;
+	set $LotId,rand(10000,99999);
+	sleep2 3000;
+	announce "["+$n1l+"] - ["+$n2l+"] - ["+$n3l+"] - ["+$n4l+"].",bc_all,0xEEE328;
+	sleep2 5000;
+	announce "Si alguno de tus números es igual a los premiados, acércate con el NPC de Lotería.",bc_all,0xEEE328;
+	end;
+OnInit:
+	if($LotId < 1)
+		set $LotId,rand(10000,99999);
+	setarray .premios[0],2,10,30;
+	setarray .@m0$[0], "L","o","t","e","r","i","a"," ","I","G","N"," ","R","O";
+	setarray .@m1$[0], "¡","G","a","n","a"," ","I","G","N"," ","C","o","i","s","!";
+	do {
+		if (.@i == 2) set .@i, 0;
+		for (set .@c, 0; .@c < getarraysize(getd(".@m" + .@i + "$")); set .@c, .@c + 1) {
+			set .@f$, .@f$ + getd(".@m" + .@i + "$[" + .@c + "]");
+			waitingroom .@f$,0;
+			sleep 350;
+			delwaitingroom;
+		}
+		for (set .@c, 0; .@c < 6; set .@c, .@c + 1) {
+			waitingroom "",0;
+			sleep 250;
+			delwaitingroom;
+			waitingroom .@f$,0;
+			sleep 250;
+			delwaitingroom;
+		}
+		waitingroom .@f$,0;
+		sleep 3000;
+		set .@f$, "";
+		delwaitingroom;
+		set .@i, .@i + 1;
+	} while(1);
+end;
+}

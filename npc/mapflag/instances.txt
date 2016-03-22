@@ -1,0 +1,141 @@
+// Devil's Tower ==================
+1@tnm1	mapflag	noteleport
+1@tnm2	mapflag	noteleport
+1@tnm3	mapflag	noteleport
+1@tnm1	mapflag	nosave	SavePoint
+1@tnm2	mapflag	nosave	SavePoint
+1@tnm3	mapflag	nosave	SavePoint
+1@tnm1	mapflag	nomemo
+1@tnm2	mapflag	nomemo
+1@tnm3	mapflag	nomemo
+1@tnm1	mapflag	nowarp
+1@tnm2	mapflag	nowarp
+1@tnm3	mapflag	nowarp
+1@tnm1	mapflag	nowarpto
+1@tnm2	mapflag	nowarpto
+1@tnm3	mapflag	nowarpto
+1@tnm1	mapflag	noicewall
+1@tnm2	mapflag	noicewall
+1@tnm3	mapflag	noicewall
+
+// Ghost Palace ==================
+1@spa	mapflag	noteleport
+1@spa	mapflag	nosave	SavePoint
+1@spa	mapflag	nomemo
+1@spa	mapflag	nowarp
+1@spa	mapflag	nowarpto
+1@spa	mapflag	noicewall
+
+// Orc's Memory ===================
+1@orcs	mapflag	nosave	SavePoint
+2@orcs	mapflag	nosave	SavePoint
+1@orcs	mapflag	noicewall
+2@orcs	mapflag	noicewall
+
+// Nidhoggr's Instance ============
+1@nyd	mapflag	nosave	SavePoint
+2@nyd	mapflag	nosave	SavePoint
+1@nyd	mapflag	noicewall
+2@nyd	mapflag	noicewall
+
+//Sealed Shrine ==================
+1@cata	mapflag	noteleport
+1@cata	mapflag	monster_noteleport
+2@cata	mapflag	noteleport
+2@cata	mapflag	monster_noteleport
+1@cata	mapflag	nosave	SavePoint
+2@cata	mapflag	nosave	SavePoint
+1@cata	mapflag	nomemo
+2@cata	mapflag	nomemo
+
+//Endless Tower ==================
+e_tower	mapflag	noteleport
+1@tower	mapflag	noteleport
+1@tower	mapflag	monster_noteleport
+2@tower	mapflag	noteleport
+2@tower	mapflag	monster_noteleport
+3@tower	mapflag	noteleport
+3@tower	mapflag	monster_noteleport
+4@tower	mapflag	noteleport
+4@tower	mapflag	monster_noteleport
+5@tower	mapflag	noteleport
+5@tower	mapflag	monster_noteleport
+6@tower	mapflag	noteleport
+6@tower	mapflag	monster_noteleport
+e_tower	mapflag	nosave	SavePoint
+1@tower	mapflag	nosave	SavePoint
+2@tower	mapflag	nosave	SavePoint
+3@tower	mapflag	nosave	SavePoint
+4@tower	mapflag	nosave	SavePoint
+5@tower	mapflag	nosave	SavePoint
+6@tower	mapflag	nosave	SavePoint
+1@tower	mapflag	noicewall
+2@tower	mapflag	noicewall
+3@tower	mapflag	noicewall
+4@tower	mapflag	noicewall
+5@tower	mapflag	noicewall
+6@tower	mapflag	noicewall
+e_tower	mapflag	nomemo
+1@tower	mapflag	nomemo
+2@tower	mapflag	nomemo
+3@tower	mapflag	nomemo
+4@tower	mapflag	nomemo
+5@tower	mapflag	nomemo
+6@tower	mapflag	nomemo
+
+//Jitterbug ==================
+1@jtb	mapflag	noteleport
+1@jtb	mapflag	monster_noteleport
+1@jtb	mapflag	nosave	SavePoint
+1@jtb	mapflag	noicewall
+1@jtb	mapflag	nomemo
+
+//Faceworm Nest ==================
+1@face	mapflag	noteleport
+1@face	mapflag	monster_noteleport
+1@face	mapflag	nosave	SavePoint
+1@face	mapflag	noicewall
+1@face	mapflag	nomemo
+
+// Airship Assault ==================
+1@air1	mapflag	noteleport
+1@air1	mapflag	monster_noteleport
+1@air2	mapflag	noteleport
+1@air2	mapflag	monster_noteleport
+1@air1	mapflag	nosave	SavePoint
+1@air2	mapflag	nosave	SavePoint
+1@air1	mapflag	noicewall
+1@air2	mapflag	noicewall
+1@air1	mapflag	nomemo
+1@air2	mapflag	nomemo
+
+// Sara's Memories ==================
+1@sara	mapflag	noteleport
+1@sara	mapflag	monster_noteleport
+1@sara	mapflag	nosave	SavePoint
+1@sara	mapflag	noicewall
+1@sara	mapflag	nomemo
+
+// Lafayette Palace =================
+lafayette	mapflag	noteleport
+lafayette	mapflag	monster_noteleport
+lafayette	mapflag	nosave	SavePoint
+lafayette	mapflag	noicewall
+lafayette	mapflag	nomemo
+
+// Isle of Bios =====================
+1@dth1	mapflag	noteleport
+1@dth1	mapflag	monster_noteleport
+1@dth1	mapflag	nosave	SavePoint
+1@dth1	mapflag	noicewall
+1@dth1	mapflag	nomemo
+1@dth2	mapflag	noteleport
+1@dth2	mapflag	monster_noteleport
+1@dth2	mapflag	nosave	SavePoint
+1@dth2	mapflag	noicewall
+1@dth2	mapflag	nomemo
+1@dth3	mapflag	noteleport
+1@dth3	mapflag	monster_noteleport
+1@dth3	mapflag	nosave	SavePoint
+1@dth3	mapflag	noicewall
+1@dth3	mapflag	nomemo

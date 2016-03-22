@@ -1,0 +1,57 @@
+lighthalzen,321,218,5	script	Ono Tohiro	934,{
+	mes "[Ono Tohiro]";
+	mes "¡Ey!, tú, si tú, ven aquí.";
+	next;
+	if(countitem(35032) > 1) {
+		mes "[Ono Tohiro]";
+		mes "Dime ¿qué quieres?";
+		next;
+		if(select("Mejorar mi Manteu of Dead","Entrar al Dungeon")== 1) {
+			if(countitem(6469) < 50) {
+				mes "[Ono Tohiro]";
+				mes "Bien, primero traeme aquí 50 Will of Warrior y la mejoraré.";
+				close;
+			}
+			mes "[Ono Tohiro]";
+			mes "Bien, dame un momento.";
+			next;
+			delitem 35032,1;
+			delitem 6469,50;
+			getitem 35033,1;
+			specialeffect 154;
+			mes "[Ono Tohiro]";
+			mes "Aquí tienes.";
+			close;
+		}
+	}
+	mes "[Ono Tohiro]";
+	mes "He descubierto la entrada a un lugar horrible.";
+	mes "¿Te interesa ir?";
+	next;
+	if(select("Claro","No, no no no...") == 2) {
+		mes "[Ono Tohiro]";
+		mes "Pues tú te lo pierdes.";
+		close;
+	}
+	mes "[Ono Tohiro]";
+	mes "Oh ya veo, pero mi información no es gratis.";
+	mes "Si quieres entrar deberás de darme 30,000 Zeny y 10 Research Chart.";
+	next;
+	if(Zeny < 30000 || countitem(7347) < 10) {
+		mes "[Ono Tohiro]";
+		mes "Vuelve cuando los hayas obtenido.";
+		close;
+	}
+	if(select("De acuerdo, ten","Muy caro") == 2) {
+		mes "[Ono Tohiro]";
+		mes "Pues es barato ...";
+		close;
+	}
+	set Zeny,Zeny - 30000;
+	delitem 7347,10;
+	mes "[Ono Tohiro]";
+	mes "De acuerdo, aquí vamos.";
+	close2;
+	warp "lhz_dun_n",98,203;
+	end;
+}

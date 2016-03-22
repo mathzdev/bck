@@ -1,0 +1,134 @@
+//===== rAthena Script ======================================= 
+//= Reciclador de Cartas
+//===== By: ================================================== 
+//= DanielArt
+//===== Current Version: ===================================== 
+//= 1.0
+//===== Compatible With: ===================================== 
+//= rAthena Mod.
+//===== Additional Comments: ================================= 
+// - Te permite entregarle cartas que no desees y te da una
+//   nueva al azar.
+//============================================================
+prt_in,33,63,3	script	Reciclador de Cartas::reciclador	754,{
+	cutin "lhz_benkaistin01",2;
+	function getcardvalidate;
+	disable_items;
+	mes "[^cc6600Reciclador de Cartas^000000]";
+	mes "Buen día, aventurer"+(Sex ? "o":"a")+" ~";
+	next;
+	mes "[^cc6600Reciclador de Cartas^000000]";
+	mes "He venido desde lejanas tierras a compartir mi basta colección de cartas.";
+	mes "Pero si simplemente las doy me quedaré sin nada.";
+	next;
+	mes "[^cc6600Reciclador de Cartas^000000]";
+	mes "Así que si me das ^ff00003 cartas^000000 te daré una nueva al azar.";
+	mes "¿Qué dices?";
+	next;
+	switch(select("^777777Salir^000000:^008800Reciclar Cartas^000000")) {
+		case 1:
+			mes "[^cc6600Reciclador de Cartas^000000]";
+			mes "Como usted desee, vuelva cuando guste.";
+			close2;
+			cutin "",255;
+			end;
+		case 2:
+			mes "[^cc6600Reciclador de Cartas^000000]";
+			mes "Por favor escriba a continuación las ^ff0000ID^000000 de las cartas que desee reciclar, puede usar el comando ^5533ff@iteminfo o @ii^000000 para consultar la ^FF0000ID^000000.";
+			mes "^ff0000Deben ser cartas distintas.^000000";
+			next;
+			input @c1;
+			set @c1,getcardvalidate(@c1,1);
+			setarray @card[0],@c1;
+			mes "[^cc6600Reciclador de Cartas^000000]";
+			mes "Por favor ingrese su 2da carta:";
+			input @c2;
+			next;
+			set @c2,getcardvalidate(@c2,1);
+			if(@c2 == @card[0]) {
+				mes "[^cc6600Reciclador de Cartas^000000]";
+				mes "Lo siento, pero deben de ser cartas distintas.";
+				close2;
+				emotion e_sry;
+				cutin "",255;
+				end;
+			}
+			setarray @card[1],@c2;
+			mes "[^cc6600Reciclador de Cartas^000000]";
+			mes "Por favor ingrese su 3era carta:";
+			input @c3;
+			next;
+			set @c3,getcardvalidate(@c3,1);
+			if(@c3 == @card[1] || @c3 == @card[0]) {
+				mes "[^cc6600Reciclador de Cartas^000000]";
+				mes "Lo siento, pero deben de ser cartas distintas.";
+				close2;
+				emotion e_sry;
+				cutin "",255;
+				end;
+			}
+			setarray @card[2],@c3;
+			mes "[^cc6600Reciclador de Cartas^000000]";
+			mes "Las cartas a reciclar serán:";
+			for(set @i,0; @i < getarraysize(@card); @i++)
+				mes "^ff8800 * "+getitemname(@card[@i])+"^000000";
+			mes "¿Está usted segur"+(Sex ? "o":"a")+"?";
+			next;
+			if(select("Estoy segur"+(Sex ? "o":"a"),"No lo estoy") == 2) {
+				mes "[^cc6600Reciclador de Cartas^000000]";
+				mes "Pues asegúrese de colocar bien las ID de las cartas.";
+				close2;
+				emotion e_bzz;
+				cutin "",255;
+				end;
+			}
+			mes "[^cc6600Reciclador de Cartas^000000]";
+			mes "Bien, espere un momento por favor.";
+			specialeffect 18;
+			for(set @i,0; @i < getarraysize(@card); @i++)
+				delitem @card[@i],1;
+			progressbar "008800",3;
+			specialeffect 154;
+			getitem groupranditem(3),1;
+			npctalk "Aquí tienes tu nueva carta "+strcharinfo(0)+", vuelve cuando quieras.";
+			close2;
+			emotion e_no1;
+			cutin "",255;
+			end;
+	}
+	function	getcardvalidate	{
+		switch (getarg(1)) {
+			case 1:
+				if(countitem(getarg(0)) < 1) {
+					mes "[^cc6600Reciclador de Cartas^000000]";
+					mes "Usted no posee esa carta en su inventario.";
+					close2;
+					emotion e_sry;
+					cutin "",255;
+					end;
+				} else if(getarg(0) >= 4001 && getarg(0) <= 4632) {
+					mes "[^cc6600Reciclador de Cartas^000000]";
+					mes "¿Usted eligió la carta ^5533ff"+getitemname(getarg(0))+"^000000?";
+					next;
+					if(select("Si, esa es.","No, esa no es") == 2) {
+						mes "[^cc6600Reciclador de Cartas^000000]";
+						mes "Asegúrese de colocar bien la ID.";
+						close2;
+						emotion e_hmm;
+						cutin "",255;
+						end;
+					}
+					return getarg(0);
+				} else {
+					mes "[^cc6600Reciclador de Cartas^000000]";
+					mes "Lo siento pero ha ingresado una carta inválida.";
+					close2;
+					emotion e_bzz;
+					cutin "",255;
+					end;
+				}
+				end;
+		}
+	}
+end;
+}

@@ -1,0 +1,27 @@
+lhz_dun_n,0,0,0,0	monster	Eremes Guile	3208,30,72000,36000,0
+lhz_dun_n,0,0,0,0	monster	Magaretha Sorin	3209,30,72000,36000,0
+lhz_dun_n,0,0,0,0	monster	Kathryne Keyron	3210,30,72000,36000,0
+lhz_dun_n,0,0,0,0	monster	Cecil Damon	3211,30,72000,36000,0
+lhz_dun_n,0,0,0,0	monster	Howard Alt-Eisen	3212,30,72000,36000,0
+lhz_dun_n,0,0,0,0	monster	Seyren	3213,30,72000,36000,0
+lhz_dun_n,0,0,0,0	monster	Randel	3226,30,72000,36000,0
+lhz_dun_n,0,0,0,0	monster	Flamel	3227,30,72000,36000,0
+lhz_dun_n,0,0,0,0	monster	Celia	3228,30,72000,36000,0
+lhz_dun_n,0,0,0,0	monster	Chen	3229,30,72000,36000,0
+lhz_dun_n,0,0,0,0	monster	Gertie	3230,30,72000,36000,0
+lhz_dun_n,0,0,0,0	monster	Alphoccio	3231,30,72000,36000,0
+lhz_dun_n,0,0,0,0	monster	Trentini	3232,30,72000,36000,0
+
+lhz_dun_n,0,0,0,0	boss_monster	Guillotine Cross Eremes	3220,1,3600000,600000,0,"OnMvPKillEvent::OnGuillotineCrossEremes"
+lhz_dun_n,0,0,0,0	boss_monster	Archbishop Magaleta	3221,1,3600000,600000,0,"OnMvPKillEvent::OnArchbishopMagaleta"
+lhz_dun_n,0,0,0,0	boss_monster	Ranger Cecil	3222,1,3600000,600000,0,"OnMvPKillEvent::OnRangerCecil"
+lhz_dun_n,0,0,0,0	boss_monster	Mechanic Howard	3223,1,3600000,600000,0,"OnMvPKillEvent::OnMechanicHoward"
+lhz_dun_n,0,0,0,0	boss_monster	Warlock Kathryne	3224,1,3600000,600000,0,"OnMvPKillEvent::OnWarlockKathryne"
+lhz_dun_n,0,0,0,0	boss_monster	Rune Knight Seyren	3225,1,3600000,600000,0,"OnMvPKillEvent::OnRuneKnightSeyren"
+lhz_dun_n,0,0,0,0	boss_monster	Royal Guard Randel	3233,1,3600000,600000,0,"OnMvPKillEvent::OnRoyalGuardRandel"
+lhz_dun_n,0,0,0,0	boss_monster	Genetic Flamel	3234,1,3600000,600000,0,"OnMvPKillEvent::OnGeneticFlamel"
+lhz_dun_n,0,0,0,0	boss_monster	Sorcerer Celia	3235,1,3600000,600000,0,"OnMvPKillEvent::OnSorcererCelia"
+lhz_dun_n,0,0,0,0	boss_monster	Sura Chen	3236,1,3600000,600000,0,"OnMvPKillEvent::OnSuraChen"
+lhz_dun_n,0,0,0,0	boss_monster	Shadow Chaser Gertie	3237,1,3600000,600000,0,"OnMvPKillEvent::OnShadowChaserGertie"
+lhz_dun_n,0,0,0,0	boss_monster	Minstrel Alphoccio	3238,1,3600000,600000,0,"OnMvPKillEvent::OnMinstrelAlphoccio"
+lhz_dun_n,0,0,0,0	boss_monster	Wanderer Trentini	3239,1,3600000,600000,0,"OnMvPKillEvent::OnWandererTrentini"

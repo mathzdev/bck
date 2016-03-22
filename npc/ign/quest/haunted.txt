@@ -1,0 +1,7 @@
+//===== rAthena Script =======================================
+//= Haunted House Warps
+//===== By: ==================================================
+haunt_e,151,200,0	warp	haunt01	1,1,haunt_h,22,158
+haunt_h,19,155,0	warp	haunt02	1,1,haunt_e,151,194
+haunt_h,172,82,0	warp	haunt03	1,1,haunt_h,191,105
+haunt_h,186,105,0	warp	haunt04	1,1,haunt_h,169,82

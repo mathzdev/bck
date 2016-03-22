@@ -1,0 +1,121 @@
+-	script	announce_nvz	-1,{
+OnWhisperGlobal:
+OnNoviceZombie:
+announce "En Prontera a aparecido el Npc ' Novice Vs. Zombie '!",bc_all,0xFF6060;
+enablenpc "nvz";
+sleep2 5000;
+announce "El evento Novice Vs. Zombie comenzará en 3 minutos",bc_all,0xFF6060;
+killmonsterall "quiz_01";
+set .numzom, 0;
+sleep2 60000;
+announce "El evento Novice Vs. Zombie comenzará en 2 minutos!",bc_all,0xFF6060;
+sleep 60000; //60 s
+announce "El evento Novice Vs. Zombie comenzará en 1 minutos!",bc_all,0xFF6060;
+sleep 30000; //30 s
+mapannounce "quiz_01","El evento comenzará en 30 segundos!",bc_all,0xFF6060;
+sleep 25000; //25 s
+mapannounce "prontera","El evento Novice Vs. Zombie comenzará en ~5~",bc_all,0xFF6060;
+sleep 1000; //1 s
+mapannounce "prontera","El evento Novice Vs. Zombie comenzará en ~4~",bc_all,0xFF6060;
+sleep 1000; //1 s
+mapannounce "prontera","El evento Novice Vs. Zombie comenzará en ~3~",bc_all,0xFF6060;
+sleep 1000;// 1 s
+mapannounce "prontera","El evento Novice Vs. Zombie comenzará en ~2~",bc_all,0xFF6060;
+sleep 1000; //1 s
+mapannounce "prontera","El evento Novice Vs. Zombie comenzará en ~1~",bc_all,0xFF6060;
+sleep 1000; //1 s
+announce "¡¡El evento Novice Vs. Zombie ya comenzó!!",bc_all,0xFF8800;
+monster "quiz_01",42,369,"Zombie",1015,1;
+disablenpc "nvz";
+sleep 10000;
+monster "quiz_01",42,369,"Zombie",1015,1;
+sleep 10000;
+monster "quiz_01",42,369,"Zombie",1015,1;
+sleep 10000;
+monster "quiz_01",42,369,"Zombie",1015,1;
+initnpctimer;
+end;
+OnTimer10000:
+if ( getmapusers("quiz_01") == 0 ) {
+	killmonsterall "quiz_01";
+	announce "El evento Novice Vs. Zombie ha terminado, todos los Novice murieron",bc_all,0xFF6060;
+	disablenpc "Prize";
+	stopnpctimer;
+	end;
+} else if ( getmapusers("quiz_01") > 1 ) {
+	mapannounce "quiz_01","Aún hay "+getmapusers("quiz_01") +" usuarios en el evento.",0,0x00FF00;
+	set .numzom, .numzom +1;
+	areamonster "quiz_01",40,371,44,367,"Zombie",1015,.numzom;
+	initnpctimer;
+	end;
+}
+initnpctimer;
+end;
+OnPCDieEvent:
+getmapxy .@mapnvz$,.@xnvz,.@ynvz,0;
+if ( .@mapnvz$ == "quiz_01") {
+	sleep2 50;
+	warp "prontera",156,223;
+	percentheal 100,100;
+	dispbottom "Un zombie te ha devorado, has perdido.";
+}
+sleep2 1000;
+if ( .@mapnvz$ == "quiz_01" && getmapusers("quiz_01") == 1 ) {
+	killmonsterall "quiz_01";
+	mapannounce "quiz_01","Ganaste, acercate al Npc Prize para recibir tu premio.",0;
+	enablenpc "Prize";
+	stopnpctimer;
+	end;
+}
+end;
+}
+quiz_01,42,369,3	script	Prize	72,{
+announce strcharinfo (0)+" ha ganado el evento Novice Vs. Zombie, ¡Felicidades!",0;
+callfunc "F_Event",1,rand(1,5);
+warp "prontera",156,223;
+sleep2 250;
+disablenpc "Prize";
+end;
+}
+prontera,161,178,4	script	Novice vs. Zombie::nvz	1015,{
+if (BaseLevel > 15 || JobLevel > 10 || class > 0) {
+	mes "[^0000FFZombie Vs. Novice^000000]";
+	mes "No puedes ser mayor a Nv. 15/10";
+	close;
+} else if (class == 0) {
+	mes "[^0000FFZombie Vs. Novice^000000]";
+	mes "¿Quiéres entrar en el evento Novice Vs. Zombie?";
+	mes " ";
+	mes "^ff6060Si hay un sólo participante el evento NO es válido^000000";
+	next;
+		if (select("Entrar al evento [^ff0000"+getmapusers("quiz_01")+"^000000]","No entrar")==2) {
+			mes "[^0000FFZombie Vs. Novice^000000]";
+			mes "Está bien, vuelve cuando quieras.";
+			close;
+		} else {
+				if (Weight > 0) {
+					mes "[^0000FFZombie Vs. Novice^000000]";
+					mes "¡Alto ahí!";
+					mes "No puedes llevar nada cargando en tu inventario, vacíalo y te dejaré entrar.";
+					close;
+				} else {
+					sc_end SC_ALL;
+					sc_start SC_DECREASEAGI,300000,10;
+					percentheal 100,100;
+					announce "[ "+strcharinfo(0)+" ] ha entrado al evento Novice Vs. Zombie",bc_all,0xFF6060;
+					warp "quiz_01",42,369;
+					end;
+				}
+		}
+}
+OnInit:
+disablenpc "nvz";
+disablenpc "Prize";
+end;
+}
+quiz_01	mapflag	nowarpto
+quiz_01	mapflag	restricted	5
+quiz_01	mapflag	nocommand
+quiz_01	mapflag	noreturn
+quiz_01	mapflag	nowarp
+quiz_01	mapflag	nomemo

@@ -1,0 +1,317 @@
+roy_church,76,77,5	script	Sacerdotisa::QGT01	501,{
+	mes "[^ff6060Sacerdotisa^000000]";
+	if(checkquest(14052) == 2) {
+		mes "Vuelve con la Encargada de Quest para obtener tu recompenza.";
+		close;
+	}
+	if(checkquest(14052) == 1) {
+		for(set .@i,1;.@i < 33;set .@i,.@i+1) {
+			if(@fg_plant[.@i] == 1)
+				set @plant,@plant+1;
+		}
+		if(@plant < 30) {
+			mes "Llevas regadas ^5533ff"+@plant+"^000000 plantas.";
+			next;
+			set @plant,0;
+			mes "[^ff6060Sacerdotisa^000000]";
+			mes "Necesitas ^5533ffHoly Water^000000 para poder regar estas plantas.";
+			close;
+		} else {
+			mes "Estupendo, ahora vuelve con la Encargada de Misiones.";
+			completequest 14052;
+			close;
+		}
+		close;
+	}
+	mes "Cuida de tu salud, es lo que te conserva con vida.";
+	close;
+OnWhisperGlobal:
+	if(getgmlevel() == 99)
+		setarray @fg_plant[1],1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1;
+	end;
+}
+function	script	Fg_Plant	{
+	if(checkquest(14052) == 1) {
+		setarray @fg_plant[getarg(0)],1;
+	} else
+		end;
+}
+glemior,93,142,4	script	Planta#planta01	1080,{ callfunc "Fg_Plant",1; }
+glemior,103,153,4	script	Planta#planta02	1080,{ callfunc "Fg_Plant",2; }
+glemior,216,120,4	script	Planta#planta03	1080,{ callfunc "Fg_Plant",3; }
+glemior,104,135,4	script	Planta#planta04	1080,{ callfunc "Fg_Plant",4; }
+glemior,223,330,4	script	Planta#planta05	1080,{ callfunc "Fg_Plant",5; }
+glemior,179,330,4	script	Planta#planta06	1080,{ callfunc "Fg_Plant",6; }
+glemior,166,311,4	script	Planta#planta07	1080,{ callfunc "Fg_Plant",7; }
+glemior,150,303,4	script	Planta#planta08	1080,{ callfunc "Fg_Plant",8; }
+glemior,245,301,4	script	Planta#planta09	1080,{ callfunc "Fg_Plant",9; }
+glemior,288,187,4	script	Planta#planta10	1080,{ callfunc "Fg_Plant",10; }
+glemior,284,173,4	script	Planta#planta11	1080,{ callfunc "Fg_Plant",11; }
+glemior,275,191,4	script	Planta#planta12	1080,{ callfunc "Fg_Plant",12; }
+glemior,264,205,4	script	Planta#planta13	1080,{ callfunc "Fg_Plant",13; }
+glemior,219,234,4	script	Planta#planta14	1080,{ callfunc "Fg_Plant",14; }
+glemior,253,246,4	script	Planta#planta15	1080,{ callfunc "Fg_Plant",15; }
+glemior,118,319,4	script	Planta#planta16	1080,{ callfunc "Fg_Plant",16; }
+glemior,108,330,4	script	Planta#planta17	1080,{ callfunc "Fg_Plant",17; }
+glemior,121,361,4	script	Planta#planta18	1080,{ callfunc "Fg_Plant",18; }
+glemior,100,372,4	script	Planta#planta19	1080,{ callfunc "Fg_Plant",19; }
+glemior,101,361,4	script	Planta#planta20	1080,{ callfunc "Fg_Plant",20; }
+glemior,107,354,4	script	Planta#planta21	1080,{ callfunc "Fg_Plant",21; }
+glemior,279,135,4	script	Planta#planta22	1080,{ callfunc "Fg_Plant",22; }
+glemior,267,139,4	script	Planta#planta23	1080,{ callfunc "Fg_Plant",23; }
+glemior,321,170,4	script	Planta#planta24	1080,{ callfunc "Fg_Plant",24; }
+glemior,328,176,4	script	Planta#planta25	1080,{ callfunc "Fg_Plant",25; }
+glemior,331,216,4	script	Planta#planta26	1080,{ callfunc "Fg_Plant",26; }
+glemior,310,219,4	script	Planta#planta27	1080,{ callfunc "Fg_Plant",27; }
+glemior,318,260,4	script	Planta#planta28	1080,{ callfunc "Fg_Plant",28; }
+glemior,320,296,4	script	Planta#planta29	1080,{ callfunc "Fg_Plant",29; }
+glemior,320,315,4	script	Planta#planta30	1080,{ callfunc "Fg_Plant",30; }
+glemior,138,138,4	script	Planta#planta31	1080,{ callfunc "Fg_Plant",31; }
+glemior,159,138,4	script	Planta#planta32	1080,{ callfunc "Fg_Plant",32; }
+glemior,169,146,4	script	Planta#planta33	1080,{ callfunc "Fg_Plant",33; }
+
+roy_in01,26,49,5	script	Gerente::QGT02	514,{
+	mes "[^008800Gerente^000000]";
+	if(checkquest(14053) == 2) {
+		mes "Vuelve con la Encargada de Quest para recibir tu recompenza.";
+		close;
+	}
+	if(checkquest(14053) == 1) {
+		if(countitem(1082) < 1 && gq_caja == 5) {
+			mes "Gran trabajo, vuelve con la Encargada de Quest para recibir tu recompenza.";
+			set gq_caja,0;
+			set gq_caja1,0;
+			set gq_caja2,0;
+			set gq_caja3,0;
+			set gq_caja4,0;
+			set gq_caja5,0;
+			set caja_e,0;
+			completequest 14053;
+			close;
+		}
+		mes "Perfecto, ya me hacían falta manos de un aventurero.";
+		next;
+		mes "[^008800Gerente^000000]";
+		mes "Necesito que lleves estas 5 cajas a los comerciantes de la ciudad.";
+		next;
+		mes "[^008800Gerente^000000]";
+		mes "Asegúrate de entregárselo a cada uno.";
+		close2;
+		if(caja_e == 1)
+			end;
+		getitem 1082,5;
+		set caja_e,1;
+		end;
+	}
+	mes "Compra lo que te guste, todo es para tí.";
+	close;
+}
+function	script	F_Caja	{
+	if(checkquest(14053) == 1 && getd("gq_caja"+getarg(0)) != 1 && countitem(1082) > 0) {
+		setd "gq_caja"+getarg(0),1;
+		set gq_caja,gq_caja+1;
+		delitem 1082,1;
+		message strcharinfo(0),"Paquetes Entregados [ "+gq_caja+" / 5 ]";
+		end;
+	}
+	mes "[^cc6600Comerciante^000000]";
+	mes "Según me iban a entregar un paquete, dónde estará";
+	close;
+}
+glemior,114,86,5	script	Comerciante#01	496,{ callfunc "F_Caja",1; }
+glemior,173,135,5	script	Comerciante#02	496,{ callfunc "F_Caja",2; }
+glemior,155,321,4	script	Comerciante#03	496,{ callfunc "F_Caja",3; }
+glemior,323,192,5	script	Comerciante#04	496,{ callfunc "F_Caja",4; }
+glemior,218,236,4	script	Comerciante#05	496,{ callfunc "F_Caja",5; }
+
+glemior,215,100,4	script	Máquina de Dulces::MDD	506,{
+	callfunc "F_Maqui",1,12225;
+	mes "^777777Una máquina de dulces, los clientes la adoran.^000000";
+	close;
+}
+glemior,218,100,4	script	Máquina de Refrescos::MDR	564,{
+	callfunc "F_Maqui",2,11512;
+	mes "^777777Una máquina de refrescos, tiene muchas clases de bebidas.^000000";
+	close;
+}
+glemior,221,100,4	script	Máquina de Peluches::MDP	562,{
+	callfunc "F_Maqui",3,741;
+	mes "^777777Una máquina de peluches, muchos clientes es gusta para dormir.^000000";
+	close;
+}
+glemior,209,103,5	script	Gerente de la Playa::GDLP	579,{
+	mes "[^cc6600Gerente de la Playa^000000]";
+	if(checkquest(14054) == 2) {
+		mes "Vuelve con la Encargada de Misiones para recibir tu recompenza.";
+		close;
+	}
+	if(checkquest(14054) == 1) {
+		if(q_playa_2 == 4) {
+			mes "Grandioso trabajo atendiendo a los clientes, vuelve con la Encargada de Misiones.";
+			completequest 14054;
+			set q_playa,0;
+			set q_playa_2,0;
+			close;
+		}
+		mes "Al fin han enviado una mano para ayudar con los clientes de la playa.";
+		next;
+		mes "[^cc6600Gerente de la Playa^000000]";
+		mes "Para que no te sea dificil, habla sólo con uno y te pedirá que vengas a una de estas máquinas.";
+		next;
+		mes "[^cc6600Gerente de la Playa^000000]";
+		mes "Como el servicio es gratuito para nuestros clientes, gastarás de tu Zeny al intentar obtener los objetos.";
+		set q_playa,1;
+		close;
+	}
+	mes "Es dificil atender a todas las personas en la playa, ojala alguien me ayudara.";
+	close;
+}
+function	script	F_Bani	{
+	mes "[^5533ffBañista^000000]";
+	if(q_playa_2 == 4) {
+		mes "Ve con el gerente de la playa, seguro se alegrará.";
+		close;
+	}
+	if(checkquest(14054) == 1 && q_playa == 1) {
+		if(q_playa_2 == 0)
+			set q_playa_2,rand(1,3);
+		set @ite,callsub(S_ItemCheck);
+		if(countitem(@ite) > 0) {
+			mes "Grandioso, gracias por satisfacerme, tienes mi recomendación.";
+			delitem @ite,1;
+			set q_playa_2,4;
+			close;
+		}
+		switch (q_playa_2) {
+			case 1:
+				mes "Oye tú, ve a las máquinas de la entrada y traeme un caramelo.";
+				close;
+			case 2:
+				mes "Dios, tengo mucha sed, ve a las máquinas de la entrada y traeme algo refrescante para beber.";
+				close;
+			case 3:
+				mes "Tengo tanto sueño, pero no puedo dormir sin un peluche, ve a comprarme uno.";
+				close;
+		}
+	}
+	mes "Uff que calor, ¿acaso nadie atiende aquí?";
+	close;
+S_ItemCheck:
+	switch (q_playa_2) {
+		case 1: return 12225;
+		case 2: return 11512;
+		case 3: return 741;
+	}
+	return 0;
+}
+function	script	F_Maqui	{
+	switch(getarg(0)) {
+		case 1: set .npc$,"[Máquina de Dulces]"; break;
+		case 2: set .npc$,"[Máquina de Refrescos]"; break;
+		case 3: set .npc$,"[Máquina de Peluches]";
+	}
+	mes .npc$;
+	mes "Para intentar con esta máquina necesitas 1,000z";
+	next;
+	if(select("¡Adelante!","Cancelar") == 2)
+		close;
+	mes .npc$;
+	if(Zeny < 1000) {
+		mes "Zeny insuficiente.";
+		close;
+	}
+	set Zeny,Zeny-1000;
+	switch (rand(1,5)) {
+		case 1:
+			mes "Has obtenido 500z.";
+			set Zeny,Zeny+500;
+			close;
+		case 2:
+			mes "Has obtenido 1,000z.";
+			set Zeny,Zeny+1000;
+			close;
+		case 3:
+			mes "Has obtenido una masa rara.";
+			getitem 13265,1;
+			close;
+		case 4:
+			mes "No has obtenido nada.";
+			close;
+		case 5:
+			mes "Has obtenido "+getitemname(getarg(1));
+			getitem getarg(1),1;
+			close;
+	}
+}
+glemior,224,75,4	script	Bañista#01	519,{ callfunc "F_Bani",1; }
+glemior,251,52,4	script	Bañista#02	499,{ callfunc "F_Bani",2; }
+glemior,211,64,4	script	Bañista#03	585,{ callfunc "F_Bani",3; }
+glemior,181,91,4	script	Bañista#04	567,{ callfunc "F_Bani",4; }
+glemior,207,64,4	script	Bañista#05	584,{ callfunc "F_Bani",5; }
+
+roy_in01,33,147,5	script	Herrero::QGT03	603,{
+	mes "[^ff6060Herrero^000000]";
+	if(checkquest(14055) == 2) {
+		mes "Vuelve con la Encargada de Misiones para obtener tu recompenza.";
+		close;
+	}
+	if(q_maq == 3 && checkquest(14055) == 1) {
+		mes "Muchisimas gracias por ayudarme a reparar mi máquina.";
+		completequest 14055;
+		next;
+		mes "[^ff6060Herrero^000000]";
+		mes "Vuelve con la encargada de misiones.";
+		close;
+	}
+	if(q_maq == 1 && countitem(7345) < 20 && countitem(7093) < 20 && countitem(18171) < 1) {
+		mes "Trae los siguientes objetos:";
+		mes " - 20 "+getitemname(7345);
+		mes " - 20 "+getitemname(7093);
+		mes " - 1 "+getitemname(18171);
+		close;
+	} else if(q_maq == 1) {
+		mes "Perfecto, por favor ve a la máquina y repárala por mí.";
+		set q_maq,2;
+		close;
+	} else if(q_maq == 2) {
+		mes "Perfecto, por favor ve a la máquina y repárala por mí.";
+		close;
+	}
+	if(checkquest(14055) == 1) {
+		mes "Necesito ayuda, ¡rápido, RÁPIDO!";
+		next;
+		mes "[^ff6060Herrero^000000]";
+		mes "Mi máquina ha comenzado a fallar, tal ves no lo parezca pero esta máquina mantiene la isla con vida.";
+		next;
+		mes "[^ff6060Herrero^000000]";
+		mes "Rápido, necesito ayuda para repararla.";
+		next;
+		mes "[^ff6060Herrero^000000]";
+		mes "Trae los siguientes objetos:";
+		mes " - 20 "+getitemname(7345);
+		mes " - 20 "+getitemname(7093);
+		mes " - 1 "+getitemname(18171);
+		set q_maq,1;
+		close;
+	}
+	mes "Esta máquina es mi vida, si algo le pasara, no sé que haría.";
+	close;
+}
+roy_in01,31,142,1	script	Máquina::MQ01	111,{
+	mes "^777777Una máquina desconocida.^000000";
+	if(checkquest(14055) == 1 && q_maq == 2) {
+		next;
+		message strcharinfo(0),"Reparando !!";
+		progressbar "008800",120;
+		delitem 7345,20;
+		delitem 7093,20;
+		delitem 18171,1;
+		set q_maq,3;
+		message strcharinfo(0),"Máquina Reparada !!";
+		mes "^777777Se escucha un gran ruido proveniente de la máquina.^000000";
+	}
+	close;
+}
+glemior,0,0,0,0	monster	Thief Bug	2209,50,0,0,0
+glemior,0,0,0,0	monster	Wild Rose	1261,25,0,0,0
+glemior,232,50,143,75	monster	Penomena	1216,25,0,0,0

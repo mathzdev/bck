@@ -1,0 +1,177 @@
+// Quest Database
+//
+// Structure of Database:
+// Quest ID,Time Limit,Target1,Val1,Target2,Val2,Target3,Val3,MobID1,NameID1,Rate1,MobID2,NameID2,Rate2,MobID3,NameID3,Rate3,Quest Title
+//
+// The MobID*, NameID*, and Rate* reflect special values for quests that can drop an item at given rate from given mob.
+// If no MobID* is given, then any mob has a chance to drop the given ItemID*.
+//P.Quest 121~135
+13107,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Explorar Thanatos Tower"
+13108,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Explorar Holy Ground"
+13109,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Explorar Abbey Monastery"
+13110,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Explorar Abyss Lake"
+13111,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Explorar Thanatos Tower"
+13112,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Explorar Holy Ground"
+13113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Explorar Abbey Monastery"
+13114,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Explorar Abyss Lake"
+13115,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Explorar Thanatos Tower (Espera 22 horas)"
+13116,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Explorar Holy Ground (Espera 22 horas)"
+13117,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Explorar Abbey Monastery (Espera 22 horas)"
+13118,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Explorar Abyss Lake(Espera 22 horas)"
+13119,0,1702,30,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Retribution"
+13120,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Retribution (Delay)"
+13121,0,1703,30,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Lady Solace"
+13122,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Lady Solace (Delay)"
+13123,0,1701,30,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Shelter"
+13124,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Shelter (Delay)"
+13125,0,1700,30,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Sentinel"
+13126,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Sentinel (Delay)"
+13127,0,1772,20,1771,20,0,0,0,0,0,0,0,0,0,0,0,"Cazar Isilla & Vanberk"
+13128,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Isilla & Vanberk (Delay)"
+13129,0,1773,30,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Hodremlin"
+13130,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Hodremlin (Delay)"
+13131,0,1769,20,1770,20,0,0,0,0,0,0,0,0,0,0,0,"Cazar Agav & Echio"
+13132,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Agav & Echio (Delay)"
+13133,0,1865,30,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Ragged Zombie"
+13134,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Ragged Zombie (Delay)"
+13135,0,1864,30,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Zombie Slaughter"
+13136,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Zombie Slaughter (Delay)"
+13137,0,1867,30,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Banshee"
+13138,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Banshee (Delay)"
+13139,0,1717,30,1714,30,0,0,0,0,0,0,0,0,0,0,0,"Cazar Green & Red Ferus"
+13140,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Green & Red Ferus (Delay)"
+13141,0,1716,30,1713,30,0,0,0,0,0,0,0,0,0,0,0,"Cazar Blue & Gold Acidus"
+13142,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Blue & Gold Acidus (Delay)"
+
+// Geffen Magic Tournament
+13180,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Participante del Torneo"
+13181,60,1106,1,0,0,0,0,0,0,0,0,0,0,0,0,0,"Prueba de Inicio"
+13182,72000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Geffen Magic Tournament - Delay"
+
+// Lafayette Palace
+13183,72000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Lafayette Palace - Delay"
+
+// Charleston crisis.
+13184,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Vence a Charleston"
+13185,72000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Charleston Crisis - Delay"
+13186,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"¡Charleston Vencido!"
+13187,0,3125,50,0,0,0,0,0,0,0,0,0,0,0,0,0,"Step Hunt"
+13188,72000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Step Hunt - Delay"
+
+// Devil's Tower
+13994,72000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Devil's Tower (Delay)"
+13995,0,2939,7,2940,7,2941,7,0,0,0,0,0,0,0,0,0,"The Shadows"
+13996,0,2942,1,0,0,0,0,0,0,0,0,0,0,0,0,0,"The Devil Lord"
+
+// Ghost Palace
+13997,72000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Ghost Palace (Delay)"
+
+//Faceworm Nest
+13998,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Faceworm Nest"
+13999,72000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Faceworm Nest - Delay"
+
+// Eden [DanielArt]
+// 100-120
+14000,0,1106,40,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Desert Wolf"
+14001,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Desert Wolf (Delay)"
+14002,0,1836,40,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Magmaring"
+14003,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Magmaring (Delay)"
+14004,0,1781,15,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Drosera"
+14005,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Drosera (Delay)"
+14006,0,1379,40,1385,40,0,0,0,0,0,0,0,0,0,0,0,"Cazar Nightmare & Deleter"
+14007,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cazar Nightmare & Deleter (Delay)"
+// 136-145
+14008,0,1655,30,1653,30,1654,30,0,0,0,0,0,0,0,0,0,"Bio Laboratory Clean"
+14009,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Bio Laboratory Clean(Delay)"
+14010,0,2137,30,2132,30,2133,30,0,0,0,0,0,0,0,0,0,"Mora Infection"
+14011,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Mora Infection (Delay)"
+14012,0,2136,50,0,0,0,0,0,0,0,0,0,0,0,0,0,"So much Fatums"
+14013,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"So much Fatums (Delay)"
+// 146-160
+14014,0,3020,30,3026,30,3027,30,0,0,0,0,0,0,0,0,0,"Explore Morroc Volcano"
+14015,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Explore Morroc Volcano (Delay)"
+14016,0,2363,30,2364,30,2366,30,0,0,0,0,0,0,0,0,0,"Eclage Bugs"
+14017,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Eclage Bugs (Delay)"
+14018,0,2367,30,2368,30,2369,30,0,0,0,0,0,0,0,0,0,"Bifrost Linchtern"
+14019,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Bifrost Linchtern (Delay)"
+// 161-175
+14020,0,1252,1,0,0,0,0,0,0,0,0,0,0,0,0,0,"Frozen as Garm"
+14021,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Frozen as Garm (Delay)"
+14022,0,1115,1,0,0,0,0,0,0,0,0,0,0,0,0,0,"Eddga the Badass"
+14023,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Eddga the Baddass (Delay)"
+14024,0,1785,1,0,0,0,0,0,0,0,0,0,0,0,0,0,"Atroce the tormentor"
+14025,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Atroce the tormentor (Delay)"
+// Epic Quest
+//14026,0,2538,1,0,0,0,0,0,0,0,0,0,0,0,0,0,"Recuperando el trono"
+//14027,0,3029,1,0,0,0,0,0,0,0,0,0,0,0,0,0,"Rey de la muerte"
+14028,0,1002,100,0,0,0,0,0,0,0,0,0,0,0,0,0,"Provocando a las multitudes"
+14029,0,1929,1,0,0,0,0,0,0,0,0,0,0,0,0,0,"Las profundidades del lago"
+14030,0,1956,1,0,0,0,0,0,0,0,0,0,0,0,0,0,"Tocando el cielo"
+14031,0,2022,1,0,0,0,0,0,0,0,0,0,0,0,0,0,"Arrancar desde la raíz"
+14032,0,2322,1,0,0,0,0,0,0,0,0,0,0,0,0,0,"Asusta a Bakonawa"
+14033,0,2317,1,0,0,0,0,0,0,0,0,0,0,0,0,0,"Rescata a los enfermos"
+14034,0,2319,1,0,0,0,0,0,0,0,0,0,0,0,0,0,"Roba el tesoro de Malaya"
+14035,0,2131,1,0,0,0,0,0,0,0,0,0,0,0,0,0,"El camino del laberinto"
+14036,0,2186,1,0,0,0,0,0,0,0,0,0,0,0,0,0,"Destapa la cañería"
+14037,0,2194,1,0,0,0,0,0,0,0,0,0,0,0,0,0,"Prepara Sushi"
+14038,0,2476,1,0,0,0,0,0,0,0,0,0,0,0,0,0,"La oscuridad de Glast Heim"
+//14039,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Recuperando el trono (Delay)"
+//14040,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Rey de la muerte (Delay)"
+14041,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Provocando a las multitudes (Delay)"
+14042,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Las profundidades del lago (Delay)"
+14043,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Tocando el cielo (Delay)"
+14044,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Arrancar desde la raíz (Delay)"
+14045,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Asusta a Bakonawa (Delay)"
+14046,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Rescata a los enfermos (Delay)"
+14047,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Roba el tesoro de Malaya (Delay)"
+14048,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"El camino del laberinto (Delay)"
+14049,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Destapa la cañería (Delay)"
+14050,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Prepara Sushi (Delay)"
+14051,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"La oscuridad de Glast Heim (Delay)"
+
+//Gremiales
+14052,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Ayuda a Cultivar"
+14053,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Transporta Objetos"
+14054,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Atender Clientes"
+14055,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"El reparador"
+14056,0,2209,50,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cucarachas al por mayor"
+14057,0,1261,25,0,0,0,0,0,0,0,0,0,0,0,0,0,"Gatos Ladrones"
+14058,0,1216,25,0,0,0,0,0,0,0,0,0,0,0,0,0,"Bañistas en Peligro"
+
+14059,18000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Ayuda a Cultivar (Delay)"
+14060,18000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Transporta Objetos (Delay)"
+14061,18000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Atender Clientes (Delay)"
+14062,18000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"El reparador (Delay)"
+14063,18000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Cucarachas al por mayor (Delay)"
+14064,18000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Gatos Ladrones (Delay)"
+14065,18000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Bañistas en Peligro (Delay)"
+
+// Galapago Fly
+14066,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"¡El primo pingüino!"
+14067,0,1317,300,0,0,0,0,0,0,0,0,0,0,0,0,0,"Derrota a los Seal"
+14068,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"El Tío Pengüín"
+14069,0,1252,1,0,0,0,0,0,0,0,0,0,0,0,0,0,"Los cuatro polos"
+14070,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Ve a hablar con el Gran Pingüino"
+
+// Angeling Balloon
+14071,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"La búsqueda de Angeling"
+14072,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Búsqueda de Soft Feather"
+14073,0,1582,2,0,0,0,0,0,0,0,0,0,0,0,0,0,"La caza de los malvados"
+
+//Sara Memories
+15002,72000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Sara's Memories - Delay"
+15003,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Sara's Memories"
+
+//Heores trails Airship Assault
+15050,82800,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Airship Assault - Delay"
+15051,300,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Airship - Delay" 
+
+15054,0,2202,1,0,0,0,0,0,0,0,0,0,0,0,0,0,"¡Caza a Kraken!"
+
+// Jitterbug
+17500,10800,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Nightmare of Jitterbug"
+
+// Musical Note Quest
+17501,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Busca a Bragi en el Casino"
+17502,0,1680,100,0,0,0,0,0,0,0,0,0,0,0,0,0,"Caza Hill Wind"
+17503,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Consigue 30 Sanctified Fabric"

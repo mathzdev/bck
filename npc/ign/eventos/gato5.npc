@@ -1,0 +1,115 @@
+prontera,142,179,4	script	Gato Cargador::GATO	560,{
+if(fuerza_q == 1) {
+	if(checkcart()) {
+		mes "[^cc6600Gato Cargador^000000]";
+		mes "Usa tu accesorio para usar tu carrito.";
+		close2;
+			if(accesorio == 2) end;
+			getitem 7046,1;
+			set accesorio,2;
+		end;
+	}
+	mes "[^cc6600Gato Cargador^000000]";
+	mes "Usa tu accesorio para usar tu carrito";
+		close2;
+			if(accesorio == 2) end;
+			getitem 7046,1;
+			set accesorio,2;
+		end;
+		
+}
+	if(gatoss >= 20) {
+		mes "[^cc6600Gato Cargador^000000]";
+		mes "Buen trabajo, ahora probemos que cuentas con la fuerza adecuada.";
+		next;
+			if(readparam(bStr) < 99) {
+				mes "[^cc6600Gato Cargador^000000]";
+				mes "Debes tener al menos 99 de STR para poder autorizarte.";
+				close;
+			}
+		mes "[^cc6600Gato Cargador^000000]";
+		mes "Excelente, bien, te dare el permiso de cargar un carrito y aparte te regalare un ticket para que incrementes tu fuerza.";
+		next;
+		mes "[^cc6600Gato Cargador^000000]";
+		mes "Te recuerdo que si te quitas tu carrito deberás de usar tu accesorio para ponertelo nuevamente.";
+		close2;
+		set fuerza_q,1;
+		getitem 7776,1;
+		skill "MC_PUSHCART",1;
+		getexp 400000,400000;
+		setcart;
+		end;
+	}
+mes "[^cc6600Gato Cargador^000000]";
+mes "Soy el gato mas fuerte que jamas haya existido.";
+next;
+mes "[^cc6600Gato Cargador^000000]";
+mes "Puedo enseñarte a tener tanta fuerza como yo mediante unos simples pasos.";
+next;
+mes "[^cc6600Gato Cargador^000000]";
+mes "Primero necesito que conozcas a mis otros compatriotas.";
+next;
+mes "[^cc6600Gato Cargador^000000]";
+mes "Los podras encontrar en todas las ciudades capitales.";
+close;
+OnInit:
+	setarray .@m0$[0], "G","a","t","o"," ","C","a","r","g","a","d","o","r";
+	setarray .@m1$[0], "O","b","t","e","n"," ","F","u","e","r","z","a","!!!";
+	do {
+		if (.@i == 2) set .@i, 0;
+		for (set .@c, 0; .@c < getarraysize(getd(".@m" + .@i + "$")); set .@c, .@c + 1) {
+			set .@f$, .@f$ + getd(".@m" + .@i + "$[" + .@c + "]");
+			waitingroom .@f$,0;
+			sleep 350;
+			delwaitingroom;
+		}
+		for (set .@c, 0; .@c < 6; set .@c, .@c + 1) {
+			waitingroom "",0;
+			sleep 250;
+			delwaitingroom;
+			waitingroom .@f$,0;
+			sleep 250;
+			delwaitingroom;
+		}
+		waitingroom .@f$,0;
+		sleep 3000;
+		set .@f$, "";
+		delwaitingroom;
+		set .@i, .@i + 1;
+	} while(1);
+end;
+
+}
+function	script	gato5	{
+mes "[^cc6600Gato Cargador^000000]";
+	if(getd("gatos"+getarg(0)) == 1) {
+		mes "Ve a buscar al resto, dejame en paz.";
+		close;
+	}
+mes "Bien, ve a buscar al resto de nuestro gremio.";
+close2;
+set gatoss,gatoss+1;
+message strcharinfo(0),"Gatos [ "+gatoss+" / 20 ]";
+setd "gatos"+getarg(0),1;
+end;
+}
+prontera,157,230,4	script	Gato Cargador#01	560,{ callfunc "gato5",1; }
+morocc,172,75,4	script	Gato Cargador#02	560,{ callfunc "gato5",2; }
+geffen,140,73,4	script	Gato Cargador#03	560,{ callfunc "gato5",3; }
+alberta,167,177,4	script	Gato Cargador#04	560,{ callfunc "gato5",4; }
+izlude,214,144,4	script	Gato Cargador#05	560,{ callfunc "gato5",5; }
+aldebaran,142,77,4	script	Gato Cargador#06	560,{ callfunc "gato5",6; }
+xmas,105,150,4	script	Gato Cargador#07	560,{ callfunc "gato5",7; }
+comodo,252,152,4	script	Gato Cargador#08	560,{ callfunc "gato5",8; }
+yuno,161,93,4	script	Gato Cargador#09	560,{ callfunc "gato5",9; }
+amatsu,133,168,4	script	Gato Cargador#10	560,{ callfunc "gato5",10; }
+gonryun,157,12,4	script	Gato Cargador#11	560,{ callfunc "gato5",11; }
+umbala,108,164,4	script	Gato Cargador#12	560,{ callfunc "gato5",12; }
+niflheim,57,158,4	script	Gato Cargador#13	560,{ callfunc "gato5",13; }
+louyang,224,71,4	script	Gato Cargador#14	560,{ callfunc "gato5",14; }
+ayothaya,151,173,4	script	Gato Cargador#15	560,{ callfunc "gato5",15; }
+einbroch,86,208,4	script	Gato Cargador#16	560,{ callfunc "gato5",16; }
+lighthalzen,175,114,4	script	Gato Cargador#17	560,{ callfunc "gato5",17; }
+einbech,73,96,4	script	Gato Cargador#18	560,{ callfunc "gato5",18; }
+hugel,98,168,4	script	Gato Cargador#19	560,{ callfunc "gato5",19; }
+rachel,110,111,4	script	Gato Cargador#20	560,{ callfunc "gato5",20; }

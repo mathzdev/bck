@@ -1,0 +1,667 @@
+//===== rAthena Script ======================================= 
+//= Isle of Bios
+//===== By: ================================================== 
+//= DanielArt
+//===== Current Version: ===================================== 
+//= 1.3
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Based on iRO Video.
+//===== Additional Comments: ================================= 
+//= 1.0 First version. [DanielArt]
+//= 1.1 Added quest on Wandering Old Man [DanielArt]
+//= 1.2 Added mob left count on instance_announce [DanielArt]
+//= 1.3 Changed random spawn for areamonster [DanielArt]
+//============================================================ 
+moro_cav,44,63,4	script	Wandering Old Man::bio1	847,{
+	cutin "ein_icman",2;
+	mes "[Wandering Old Man]";
+	if(checkquest(18133,HUNTING) == 2) {
+		mes "Excelente trabajo, ten aquí tu recompenza.";
+		getitem 6684,1;
+		getexp 6000000,3200000;
+		close2;
+		emotion e_thx;
+		erasequest 18133;
+		end;
+	}
+	mes "El mal se está aproximando a ésta tierra, se dice que estos tres seres son el producto mismo de Yggdrasil.";
+	next;
+	mes "[Wandering Old Man]";
+	mes "Los 9 planetas del cosmos se están acercando más a Ragnarok, y es nuestro deber controlar dicho poder.";
+	next;
+	mes "[Wandering Old Man]";
+	mes "¿Qué dices? ¿Quieres ayudar?";
+	next;
+	if(select("Quiero ayudar","No, gracias.") == 2){
+		mes "[Wandering Old Man]";
+		mes "La desgracia abundará si un héroe no se presenta pronto.";
+		close;
+	}
+	mes "[Wandering Old Man]";
+	mes "Excelente, entonces déjame instruirte.";
+	next;
+	mes "[Wandering Old Man]";
+	mes "Conozco la forma de derrotar al primer mal.";
+	next;
+	mes "[Wandering Old Man]";
+	mes "Se dice que es un ser de aspecto tenebroso que se encuentra en una isla en el cielo muy lejos de aquí.";
+	next;
+	mes "[Wandering Old Man]";
+	mes "Pero hay una forma de ir.";
+	next;
+	mes "[Wandering Old Man]";
+	mes "Si tocas esa la ^008800Yellow Seed^000000 te permitirá transportarte a esa isla sin ningún problema.";
+	next;
+	mes "[Wandering Old Man]";
+	mes "Adelante, que yo te espero aquí.";
+	close2;
+	setquest 18133;
+	end;
+}
+moro_cav,50,63,4	script	Yellow Seed::isle_ent	111,{
+	if(BaseLevel < 160) {
+		mes "[Wandering Old Man]";
+		mes "Disculpa, pero no puedes entrar si no eres Nv. 160.";
+		close;
+	}
+	if(getgroupid() > 1)	
+		goto doit;
+		set .@biostime,checkquest(18134,PLAYTIME); //20 Horas
+			if (.@biostime == 2) {
+				mes "[Wandering Old Man]";
+				mes "La isla del cielo ha vuelto a aparecer, rápido, vamos.";
+				close2;
+				erasequest 18134;
+				end;
+			}
+			else  if ((.@biostime == 1) || (.@biostime == 0)) {
+				mes "[Wandering Old Man]";
+				mes "^ff0000¡La isla en el cielo ha desaparecido!^000000";
+				close;
+			}
+			else if (.@biostime == -1) {
+				doit:
+				set .@party_id,getcharid(1);
+				set .@p_name$,getpartyname(.@party_id);
+				set .@md_name$,"Isle of Bios";
+				
+				if (!instance_check_party(.@party_id,1)) {
+					mes "[Wandering Old Man]";
+					mes "No hay miembros suficientes.";
+					close;
+				}
+				mes "[Wandering Old Man]";
+				mes "¿Listo para ir?";
+				if (getcharid(0) == getpartyleader(.@party_id,2))
+					set .@menu$, "Inscribir Party.:Isle of Bios.:Salir";
+				else
+				set .@menu$, ":Isle of Bios.";
+				switch(select(.@menu$)) 
+				{
+				case 1:
+					if (instance_create(.@md_name$) < 0) {
+						mes "[Wandering Old Man]";
+						mes "Nombre de Party: "+.@p_name$;
+						mes "Tú nombre: "+strcharinfo(0);
+						mes "^0000ff"+.@md_name$+" ^000000- no se puede crear!";
+						close;
+					}
+					mes "[Wandering Old Man]";
+					mes "Gracias por tu ayuda, confío en ustedes.";
+					close;
+				case 2:
+					switch(instance_enter(.@md_name$))
+					{
+						case 0:
+							if (getcharid(0) == getpartyleader(.@party_id,2)) {
+								mapannounce "moro_cav",strcharinfo(0)+", member of the party "+.@p_name$+" entered the instance "+.@md_name$+".",bc_map,"0x00ff99";
+								setquest 18134;
+								specialeffect2 EF_WARP;
+								end;
+							}
+						//custom @ official server kRO simple when click nothing happens.
+						case 1:
+							mes "[Wandering Old Man]";
+							mes "Only the registered members can enter the instance "+.@md_name$+".";
+							close;
+						case 2:
+							mes "[Wandering Old Man]";
+							mes "The memorial dungeon "+.@md_name$+" does not exist.";
+							mes "The party leader did not generate the dungeon yet.";
+							close;
+						case 3:
+							mes "[Wandering Old Man]";
+							mes "Unknown Error...!";
+							close;
+					}
+				case 3:
+					close;	
+				}
+			}
+}
+1@dth1,72,96,4	script	Zeith#dth1	467,{
+end;
+OnConversation:
+	npctalk "...";
+	sleep2 3000;
+	donpcevent instance_npcname("Vrid#dth1")+"::OnChat1";
+	sleep2 3000;
+	npctalk "No estás hablando por los dos . . .";
+	sleep2 3000;
+	donpcevent instance_npcname("Vrid#dth1")+"::OnChat2";
+	sleep2 3000;
+	donpcevent instance_npcname("Vrid#dth1")+"::OnChat3";
+	sleep2 3000;
+	donpcevent instance_npcname("Vrid#dth1")+"::OnChat4";
+	sleep2 3000;
+	instance_announce instance_id(),"???: ¿deseas saber dónde estás?",bc_map;
+	sleep2 3000;
+	npctalk "¡¿Quién está allí?!";
+	sleep2 3000;
+	donpcevent instance_npcname("Grim Reaper#dth1")+"::OnEnable";
+	donpcevent instance_npcname("Grim Reaper#dth1")+"::OnChat1";
+	sleep2 3000;
+	donpcevent instance_npcname("Grim Reaper#dth1")+"::OnChat2";
+	sleep2 3000;
+	donpcevent instance_npcname("Vrid#dth1")+"::OnChat5";
+	sleep2 3000;
+	donpcevent instance_npcname("Grim Reaper#dth1")+"::OnChat4";
+	sleep2 3000;
+	donpcevent instance_npcname("Grim Reaper#dth1")+"::OnChat5";
+	sleep2 3000;
+	donpcevent instance_npcname("Grim Reaper#dth1")+"::OnDisable";
+	sleep2 3000;
+	donpcevent instance_npcname("Vrid#dth1")+"::OnChat6";
+	sleep2 3000;
+	donpcevent instance_npcname("Vrid#dth1")+"::OnChat7";
+	sleep2 3000;
+	donpcevent instance_npcname("Vrid#dth1")+"::OnDisable";
+	npctalk "...Ack.";
+	sleep2 3000;
+	npctalk "Odio correr.";
+	sleep2 3000;
+	donpcevent instance_npcname("#mobdth1")+"::OnEnable";
+	donpcevent instance_npcname("Zeith#dth1")+"::OnDisable";
+	end;
+OnInstanceInit:
+OnEnable:
+	enablenpc instance_npcname("Zeith#dth1");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Zeith#dth1");
+	end;
+}
+1@dth1,68,96,5	script	Vrid#dth1	468,{
+end;
+OnChat1:
+	npctalk "No te preocupes por él. No se quedará quieto si sólo somos dos de nosotros.";
+	end;
+OnChat2:
+	npctalk "Hemos venido solamente porque el vejete de allá abajo no dejaba de hablar sobre la resurrección de Morroc.";
+	end;
+OnChat3:
+	npctalk "Err, ¿qué es este lugar?, únicamente toqué la semilla y de repente fui traído hasta aquí.";
+	end;
+OnChat4:
+	npctalk "Santa vaca, ¿estamos volando en el cielo?";
+	end;
+OnChat5:
+	npctalk "Seas quien seas, ¡te mataremos antes de que hagas eso!";
+	end;
+OnChat6:
+	npctalk "¿Quién era él? ¿está intentando resucitar a Morroc?";
+	end;
+OnChat7:
+	npctalk "Debemos perseguirlo Zeith, ¡rápido!";
+	end;
+OnInstanceInit:
+OnEnable:
+	enablenpc instance_npcname("Vrid#dth1");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Vrid#dth1");
+	end;
+}
+1@dth1,69,93,0	script	#dthtalk1	139,3,3,{
+OnTouch:
+	donpcevent instance_npcname("Zeith#dth1")+"::OnConversation";
+	donpcevent instance_npcname("#dthtalk1")+"::OnDisable";
+	end;
+OnInstanceInit:
+OnEnable:
+	enablenpc instance_npcname("#dthtalk1");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("#dthtalk1");
+	end;
+}
+1@dth1,74,94,4	script	Grim Reaper#dth1	10028,{
+end;
+OnChat1:
+	npctalk "Esta es la Isle of Bios, un lugar donde he conjurado mi mente.";
+	end;
+OnChat2:
+	npctalk "Han caminado a una trampa, haciendo que ustedes se sacrifique por mi gran Señor Lord Morroc, ¿están listos para morir?";
+	end;
+OnChat3:
+	npctalk "No me provoques, humano.";
+	end;
+OnChat4:
+	npctalk "Quiero verte morir lentamente y dolorosamente.";
+	end;
+OnInstanceInit:
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Grim Reaper#dth1");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Grim Reaper#dth1");
+	end;
+}
+1@dth1,0,0,0	script	#mobdth1	139,{
+end;
+OnMyMobDead:
+	set .@m$,instance_mapname("1@dth1");
+	set .@c,mobcount(.@m$,instance_npcname("#mobdth1")+"::OnMyMobDead");
+	if(.@c < 1) {
+		instance_announce instance_id(),"[Sistema] El paso a la siguiente área ha sido abierto.",bc_map;
+		donpcevent instance_npcname("#dthwarp1")+"::OnEnable";
+		end;
+	}
+	instance_announce instance_id(),"[Sistema] Restan "+.@c+" monstruos en el mapa.",bc_map;
+	end;
+OnInstanceInit:
+OnDisable:
+	disablenpc instance_npcname("#mobdth1");
+	end;
+OnEnable:
+	enablenpc instance_npcname("#mobdth1");
+	instance_announce instance_id(),"[Sistema] Elimina a todos los enemigos en la isla y sal por la puerta en el otro lado para moverte a la siguiente área.",bc_map;
+	set .@m$,instance_mapname("1@dth1");
+	areamonster .@m$,109,157,251,59,"Orc Baby",1686,100,instance_npcname("#mobdth1")+"::OnMyMobDead";
+	areamonster .@m$,109,157,251,59,"Familiar",1005,100,instance_npcname("#mobdth1")+"::OnMyMobDead";
+	end;
+}
+1@dth1,291,104,0	script	#dthwarp1	45,1,1,{
+OnTouch:
+	set .@m$,instance_mapname("1@dth2");
+	warp .@m$,19,94;
+	end;
+OnInstanceInit:
+OnDisable:
+	disablenpc instance_npcname("#dthwarp1");
+	end;
+OnEnable:
+	enablenpc instance_npcname("#dthwarp1");
+	end;
+}
+1@dth2,61,93,0	script	#dthtalk2	139,5,5,{
+OnTouch:
+	donpcevent instance_npcname("#mobdth2")+"::OnEnable";
+	donpcevent instance_npcname("#dthtalk2")+"::OnDisable";
+	end;
+OnInstanceInit:
+OnEnable:
+	enablenpc instance_npcname("#dthtalk2");
+	end;
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("#dthtalk2");
+	end;
+}
+1@dth2,0,0,0	script	#mobdth2	139,{
+end;
+OnMyMobDead:
+	set .@m$,instance_mapname("1@dth2");
+	set .@c,mobcount(.@m$,instance_npcname("#mobdth2")+"::OnMyMobDead");
+	if(.@c < 1) {
+		instance_announce instance_id(),"[Sistema] El paso a la siguiente área ha sido abierto.",bc_map;
+		donpcevent instance_npcname("#dthwarp2")+"::OnEnable";
+		end;
+	}
+	instance_announce instance_id(),"[Sistema] Restan "+.@c+" monstruos en el mapa.",bc_map;
+	end;
+OnInstanceInit:
+OnDisable:
+	disablenpc instance_npcname("#mobdth2");
+	end;
+OnEnable:
+	enablenpc instance_npcname("#mobdth2");
+	instance_announce instance_id(),"[Sistema] Elimina a todos los enemigos en la isla y sal por la puerta en el otro lado para moverte a la siguiente área.",bc_map;
+	set .@m$,instance_mapname("1@dth2");
+	areamonster .@m$,109,157,251,59,"Orc Warrior",1023,65,instance_npcname("#mobdth2")+"::OnMyMobDead";
+	areamonster .@m$,109,157,251,59,"Desert Wolf",1106,65,instance_npcname("#mobdth2")+"::OnMyMobDead";
+	areamonster .@m$,109,157,251,59,"Phen",1158,65,instance_npcname("#mobdth2")+"::OnMyMobDead";
+	end;
+}
+1@dth2,292,104,0	script	#dthwarp2	45,1,1,{
+OnTouch:
+	set .@m$,instance_mapname("1@dth3");
+	warp .@m$,45,68;
+	end;
+OnInstanceInit:
+OnDisable:
+	disablenpc instance_npcname("#dthwarp2");
+	end;
+OnEnable:
+	enablenpc instance_npcname("#dthwarp2");
+	end;
+}
+1@dth3,64,74,5	script	#dthtalk3	139,10,10,{
+OnTouch:
+	donpcevent instance_npcname("Vrid#dth2")+"::OnConversation";
+	donpcevent instance_npcname("#dthtalk3")+"::OnDisable";
+	end;
+OnInstanceInit:
+OnEnable:
+	enablenpc instance_npcname("#dthtalk3");
+	end;
+OnDisable:
+	disablenpc instance_npcname("#dthtalk3");
+	end;
+}
+1@dth3,64,74,5	script	Vrid#dth2	468,{
+end;
+OnConversation:
+	npctalk "Tienes suerte al estar aquí. Yo me perdí totalmente cuando entré al laberinto.";
+	sleep2 3000;
+	npctalk "Si no fuera por Zeith, estaría todavía aquí vagando sin rumbo. Gracias, Zeith.";
+	sleep2 3000;
+	donpcevent instance_npcname("Zeith#dth2")+"::OnChat1";
+	sleep2 3000;
+	npctalk "¿Qué sucede?";
+	sleep2 3000;
+	donpcevent instance_npcname("Zeith#dth2")+"::OnChat2";
+	sleep2 3000;
+	donpcevent instance_npcname("Zeith#dth2")+"::OnChat3";
+	sleep2 3000;
+	npctalk "Uh... creo que estás en lo correcto.";
+	sleep2 3000;
+	npctalk "Ellos eran pequeños al inicio, y mientras más avanzábamos se fueron haciendo más grandes.";
+	sleep2 3000;
+	npctalk "Para mí, eso suena natural, ¿de qué estás preocupado?";
+	sleep2 3000;
+	donpcevent instance_npcname("Zeith#dth2")+"::OnChat4";
+	sleep2 3000;
+	donpcevent instance_npcname("Grim Reaper#dth2")+"::OnEnable";
+	donpcevent instance_npcname("Grim Reaper#dth2")+"::OnChat1";
+	sleep2 3000;
+	npctalk "¿Tu otra ves?";
+	sleep2 3000;
+	donpcevent instance_npcname("Grim Reaper#dth2")+"::OnChat2";
+	sleep2 3000;
+	donpcevent instance_npcname("Grim Reaper#dth2")+"::OnChat3";
+	for(.@i = 1; .@i <= 9; .@i++)
+		donpcevent instance_npcname("Inmortal#dth"+.@i+"")+"::OnEnable";
+	sleep2 3000;
+	npctalk "Calla mentiroso, ¡no tenemos tiempo para tus jugarretas!";
+	sleep2 3000;
+	npctalk "Me aseguraré de asesinarte con mis propias manos.";
+	sleep2 3000;
+	donpcevent instance_npcname("Grim Reaper#dth2")+"::OnChat4";
+	sleep2 3000;
+	donpcevent instance_npcname("Grim Reaper#dth2")+"::OnChat5";
+	end;
+OnInstanceInit:
+OnEnable:
+	enablenpc instance_npcname("Vrid#dth2");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Vrid#dth2");
+	end;
+}
+1@dth3,69,67,4	script	Grim Reaper#dth2	10028,{
+end;
+OnChat1:
+	npctalk "Al final, resultaron que tenían agallas para llegar hasta aquí.";
+	end;
+OnChat2:
+	npctalk "¿Así que están curiosos de su próximo adversario?";
+	end;
+OnChat3:
+	npctalk "Detrás de ustedes está una armada de inmortales.";
+	end;
+OnChat4:
+	npctalk "Justo detrás de tí, hablador.";
+	end;
+OnChat5:
+	npctalk "¡Les enseñaré que tan aterrador puede ser si enfrentan a la cara del horror!";
+	specialeffect EF_STORMGUST;
+	donpcevent instance_npcname("Zeith#dth2")+"::OnDisable";
+	donpcevent instance_npcname("Vrid#dth2")+"::OnDisable";
+	donpcevent instance_npcname("Zeith#dth3")+"::OnEnable";
+	donpcevent instance_npcname("Vrid#dth3")+"::OnEnable";
+	sleep2 3000;
+	donpcevent instance_npcname("Zeith#dth3")+"::OnChat1";
+	donpcevent instance_npcname("Vrid#dth3")+"::OnChat1";
+	sleep2 3000;
+	npctalk "En la Isle of Bios, cada día, es el tiempo de una vida.";
+	sleep2 3000;
+	npctalk "Se han dado cuenta de que mis soldados han crecido antes del atardecer.";
+	sleep2 3000;
+	npctalk "Cuando caiga la noche, ellos llegarán a su fase final donde estarán listos para estar justo en la línea de la muerte.";
+	sleep2 3000;
+	npctalk "Y como he dicho, la noche ya está cayendo, así que es hora de que experimenten la muerte.";
+	sleep2 3000;
+	npctalk "¡Prepárense para sentir el miedo de la muerte!";
+	sleep2 3000;
+	donpcevent instance_npcname("Zeith#dth3")+"::OnChat2";
+	sleep2 500;
+OnInstanceInit:
+OnDisable:
+	specialeffect EF_BASH;
+	disablenpc instance_npcname("Grim Reaper#dth2");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Grim Reaper#dth2");
+	end;
+}
+1@dth3,72,74,4	script	Zeith#dth2	467,{
+end;
+OnChat1:
+	npctalk "Algo me ha estado preocupando.";
+	end;
+OnChat2:
+	npctalk "He sentido que esos monstruos se fueron haciendo más fuertes con el tiempo.";
+	end;
+OnChat3:
+	npctalk "Así como niños convirtiéndose en adultos.";
+	end;
+OnChat4:
+	npctalk "Bien, estoy curioso del monstruo que enfrentaremos ahora.";
+	end;
+OnInstanceInit:
+OnEnable:
+	enablenpc instance_npcname("Zeith#dth2");
+	end;
+OnDisable:
+	disablenpc instance_npcname("Zeith#dth2");
+	end;
+}
+1@dth3,64,74,5	script	Vrid#dth3	10036,{
+end;
+OnChat1:
+	npctalk "¡Ugh! ¿Q-qué está pasando? ¡N-no me puedo mover!";
+	end;
+OnChat2:
+	npctalk "Ack, ¡no quiero morir!";
+	end;
+OnChat3:
+	npctalk "¡Wow!, eres sorprendente, ¿los haz matado a todos?";
+	end;
+OnInstanceInit:
+OnDisable:
+	disablenpc instance_npcname("Vrid#dth3");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Vrid#dth3");
+	end;
+}
+1@dth3,72,74,4	script	Zeith#dth3	10035,{
+end;
+OnChat1:
+	npctalk "¡Y-yo tampoco puedo! ¡N-no puedo mover mis pies!";
+	end;
+OnChat2:
+	for(.@i = 1; .@i <= 9; .@i++)
+		donpcevent instance_npcname("Inmortal#dth"+.@i+"")+"::OnDisable";
+	set .@m$,instance_mapname("1@dth3");
+	areamonster .@m$,62,82,78,80,"Orc Zombie",2723,16,instance_npcname("Zeith#dth3")+"::OnMyMobDead";
+	donpcevent instance_npcname("Vrid#dth3")+"::OnChat2";
+	sleep2 3000;
+	npctalk "... Ugh...";
+	end;
+OnMyMobDead:
+	set .@m$,instance_mapname("1@dth3");
+	if(mobcount(.@m$,instance_npcname("Zeith#dth3")+"::OnMyMobDead") < 1) {
+		donpcevent instance_npcname("Vrid#dth3")+"::OnChat3";
+		sleep2 3000;
+		npctalk "Al parecer hay algo más temible en camino.";
+		sleep2 3000;
+		instance_announce instance_id(),"Grim Reaper: Siguen hablando, me encargaré personalmente de ésto y acabaré con ustedes.",bc_map,0xFF0000;
+		monster .@m$,70,67,"Grim Reaper",3029,1,instance_npcname("Zeith#dth3")+"::OnMyMobDead2";
+	}
+	end;
+OnMyMobDead2:
+	donpcevent instance_npcname("Zeith#dth4")+"::OnEnable";
+	donpcevent instance_npcname("Vrid#dth4")+"::OnEnable";
+	donpcevent instance_npcname("Vrid#dth4")+"::OnChat1";
+	donpcevent instance_npcname("Zeith#dth3")+"::OnDisable";
+	donpcevent instance_npcname("Vrid#dth3")+"::OnDisable";
+	end;
+OnInstanceInit:
+OnDisable:
+	disablenpc instance_npcname("Zeith#dth3");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Zeith#dth3");
+	end;
+}
+1@dth3,61,79,4	script	Inmortal#dth1	2723,{
+end;
+OnInstanceInit:
+OnDisable:
+	disablenpc instance_npcname("Inmortal#dth1");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Inmortal#dth1");
+	end;
+}
+1@dth3,63,79,4	script	Inmortal#dth2	2723,{
+end;
+OnInstanceInit:
+OnDisable:
+	disablenpc instance_npcname("Inmortal#dth2");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Inmortal#dth2");
+	end;
+}
+1@dth3,65,79,4	script	Inmortal#dth3	2723,{
+end;
+OnInstanceInit:
+OnDisable:
+	disablenpc instance_npcname("Inmortal#dth3");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Inmortal#dth3");
+	end;
+}
+1@dth3,67,79,4	script	Inmortal#dth4	2723,{
+end;
+OnInstanceInit:
+OnDisable:
+	disablenpc instance_npcname("Inmortal#dth4");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Inmortal#dth4");
+	end;
+}
+1@dth3,70,79,4	script	Inmortal#dth5	2723,{
+end;
+OnInstanceInit:
+OnDisable:
+	disablenpc instance_npcname("Inmortal#dth5");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Inmortal#dth5");
+	end;
+}
+1@dth3,72,79,4	script	Inmortal#dth6	2723,{
+end;
+OnInstanceInit:
+OnDisable:
+	disablenpc instance_npcname("Inmortal#dth6");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Inmortal#dth6");
+	end;
+}
+1@dth3,74,79,4	script	Inmortal#dth7	2723,{
+end;
+OnInstanceInit:
+OnDisable:
+	disablenpc instance_npcname("Inmortal#dth7");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Inmortal#dth7");
+	end;
+}
+1@dth3,76,79,4	script	Inmortal#dth8	2723,{
+end;
+OnInstanceInit:
+OnDisable:
+	disablenpc instance_npcname("Inmortal#dth8");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Inmortal#dth8");
+	end;
+}
+1@dth3,79,79,4	script	Inmortal#dth9	2723,{
+end;
+OnInstanceInit:
+OnDisable:
+	disablenpc instance_npcname("Inmortal#dth9");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Inmortal#dth9");
+	end;
+}
+1@dth3,64,74,5	script	Vrid#dth4	468,{
+	mes "[Vrid]";
+	mes "Aquí tienes valiente guerrero.";
+	getitem 6684,1;
+	close2;
+	warp "moro_cav",47,69;
+	end;
+OnChat1:
+	npctalk "Fantástico trabajo, acérquense, les daré un premio.";
+	sleep2 3000;
+	donpcevent instance_npcname("Zeith#dth4")+"::OnChat1";
+	end;
+OnInstanceInit:
+OnDisable:
+	disablenpc instance_npcname("Vrid#dth4");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Vrid#dth4");
+	end;
+}
+1@dth3,72,74,4	script	Zeith#dth4	467,{
+end;
+OnChat1:
+	npctalk "A mi ni se me acerquen.";
+	end;
+OnInstanceInit:
+OnDisable:
+	disablenpc instance_npcname("Zeith#dth4");
+	end;
+OnEnable:
+	enablenpc instance_npcname("Zeith#dth4");
+	end;
+}

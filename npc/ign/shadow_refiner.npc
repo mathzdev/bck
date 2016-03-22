@@ -1,0 +1,168 @@
+vip,68,62,4	script	Deila	10066,{
+	function getshadowpercent;
+	disable_items;
+	mes "[Deila]";
+	mes "Buen dia.";
+	mes "¿Buscar mejorar tu equipo?";
+	next;
+	mes "[Deila]";
+	mes "Lamentablemente, yo sólo estoy especializada en mejorar equipo Shadow Gear.";
+	next;
+	setarray .@position$[16], "Shadow Armor","Shadow Weapon","Shadow Shield","Shadow Shoes","Shadow Accessory R","Shadow Accessory L";
+	set .@menu$,"";
+	for(set .@i,16; .@i<=21; set .@i,.@i+1) {
+		if(getequipisequiped(.@i)) {
+			set .@menu$, .@menu$ + .@position$[.@i] + "-" + "[" + getequipname(.@i) + "]";
+			set .@equipped,1;
+		}
+		set .@menu$, .@menu$ + ":";
+	}
+	if (.@equipped == 0) {
+		mes "[Deila]";
+		mes "Así que si quieres que te refine algo, por favor traéme un equipo Shadow Gear.";
+		close;
+	}
+	set .@part, select(.@menu$);
+	set .@part,.@part + 15;
+
+	if(!getequipisequiped(.@part)) { //custom check
+		mes "[Deila]";
+		mes "No estás vistiendo algo que pueda refinar.";
+		emotion e_an;
+		close;
+	}
+	//Check if the item is refinable...
+	if(!getequipisenableref(.@part)) {
+		mes "[Deila]";
+		mes "No creo que pueda refinar éste objeto.";
+		close;
+	}
+	//Check to see if the items is already +20
+	if(getequiprefinerycnt(.@part) >= 20) {
+		mes "[Deila]";
+		mes "No puedo refinar más.";
+		close;
+	}
+	set .@refineitemid, getequipid(.@part); // save id of the item
+	set .@refinerycnt, getequiprefinerycnt(.@part); //save refinery count
+	set .@price,100000+(100000*getequiprefinerycnt(.@part));
+	set .@material,18173; //Broxyden
+	set .@safe,4;
+
+	// If the VIP system is enabld, the prices for non-VIP players are considerably higher.
+	if (VIP_SCRIPT && !vip_status(1))
+		set .@price,.@price * 10;
+
+		mes "[Deila]";
+		mes "Para refinar ésto necesito";
+		mes "un ^003366"+getitemname(.@material)+"^000000 y";
+		mes "un pago de servicio de " + .@price + " Zeny.";
+		mes "¿Deseas continuar?";
+		next;
+		if(select("Si:No") == 2){
+			mes "[Deila]";
+			mes "Bien... no me hagas perder mi tiempo.";
+			close;
+		}
+		if(getequiprefinerycnt(.@part) > 4) {
+			mes "[Deila]";
+			mes "Si continuas refinando hay un riesgo de que se rompa.";
+			mes "Se destruirá y perderá todo de él.";
+			next;
+			mes "[Deila]";
+			mes "No puedo hacer nada si se rompe, ya que éste se";
+			mes "^FF0000perderá para siempre^000000.";
+			mes "¿Aún así deseas continuar?";
+			next;
+			if(select("Si:No") == 2){
+				mes "[Deila]";
+				mes "De acuerdo.";
+				close;
+			}
+		}
+		if((countitem(.@material) < 1) || (Zeny < .@price)) {
+			mes "[Deila]";
+			mes "Al parecer o no tiene Zeny o el material necesario, vuelve cuando los tengas.";
+			close;
+		}
+		set Zeny, Zeny-.@price;
+		delitem .@material,1;
+
+		// anti-hack
+		if (callfunc("F_IsEquipIDHack", .@part, .@refineitemid) ||
+		    callfunc("F_IsEquipRefineHack", .@part, .@refinerycnt)) {
+			mes "[Deila]";
+			emotion e_an;
+			mes "¿Acaso crees que soy estúpido?";
+			mes "No estés cambiando de equipo mientras refinas.";
+			close;
+		}
+
+		if(getshadowpercent(getequiprefinerycnt(.@part))) {
+			failedrefitem .@part;
+			mes "[Deila]";
+			emotion e_omg;
+			mes "Lo siento pero el objeto se ha perdido.";
+			close;
+		}
+		mes "[Deila]";
+		successrefitem .@part;
+		emotion e_heh;
+		mes "El refinamiento se ha llevado a la perfección.";
+		close;
+	function	getshadowpercent	{
+		switch (getarg(0)){
+			case 1:
+			case 2:
+			case 3:
+				return 0;
+			case 4: 
+			case 5:
+				if(rand(1,100) > 80)
+					return 1;
+				else
+					return 0;
+			case 6: 
+			case 7:
+			case 8:
+				if(rand(1,100) > 40)
+					return 1;
+				else
+					return 0;
+			case 9:
+				if(rand(1,100) > 30)
+					return 1;
+				else
+					return 0;
+			case 10:
+			case 11:
+			case 12:
+				if(rand(1,100) > 60)
+					return 1;
+				else
+					return 0;
+			case 13: 
+			case 14:
+				if(rand(1,100) > 80)
+					return 1;
+				else
+					return 0;
+			case 15:
+				if(rand(1,100) > 20)
+					return 1;
+				else
+					return 0;
+			case 16:
+			case 17:
+			case 18:
+			case 19:
+				if(rand(1,100) > 10)
+					return 1;
+				else
+					return 0;
+			case 20: 
+		}
+		return 0;
+	}
+end;
+}

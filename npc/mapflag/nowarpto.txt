@@ -116,6 +116,8 @@ e_tower	mapflag	nowarpto
 5@tower	mapflag	nowarpto
 6@tower	mapflag	nowarpto
 
+1@jtb	mapflag	nowarpto
+
 // Battle Grounds ================
 bat_c01	mapflag	nowarpto
 bat_c02	mapflag	nowarpto

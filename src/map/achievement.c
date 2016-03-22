@@ -95,7 +95,7 @@ void achievement_complete(struct map_session_data* sd, struct achievement_data* 
 
 	if( ad->cutin != NULL && *ad->cutin != '\0' )
 	{
-		clif_cutin(sd,ad->cutin,1);
+		clif_cutin(sd,ad->cutin,4);
 		if( sd->achievement_cutin_timer != INVALID_TIMER )
 			delete_timer(sd->achievement_cutin_timer,achievement_delete_cutin_timer);
 		sd->achievement_cutin_timer = add_timer(gettick() + 5000,achievement_delete_cutin_timer,sd->bl.id,0);
@@ -203,11 +203,11 @@ static int achievement_validate(DBKey key, DBData *data, va_list ap)
 	case AT_PC_KILL:
 	case AT_PC_DAMAGE_DONE:
 		{
-			ARR_FIND(0,ad->objectives,i,ad->ao[i].count && sad->count[i] < ad->ao[i].count && (
+/*			ARR_FIND(0,ad->objectives,i,ad->ao[i].count && sad->count[i] < ad->ao[i].count && (
 				(ad->ao[i].value == 0 && map[sd->bl.m].flag.pvp) ||
 				(ad->ao[i].value == 1 && map_allowed_woe(sd->bl.m)) ||
 				(ad->ao[i].value == 2 && map[sd->bl.m].flag.battleground) ||
-				(ad->ao[i].value == 3 && sd->state.pvpmode) || ad->ao[i].value == 4));
+				(ad->ao[i].value == 3 && sd->state.pvpmode) || ad->ao[i].value == 4)); */
 			if( i < ad->objectives )
 			{
 				changed = true;

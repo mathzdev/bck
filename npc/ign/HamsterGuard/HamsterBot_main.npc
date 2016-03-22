@@ -1,0 +1,410 @@
+//===== rAthena Script ======================================= 
+//= HamsterGuard - Bot Protection
+//===== By: ================================================== 
+//= DanielArt
+//===== Current Version: ===================================== 
+//= 1.0
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Protect a server with HamsterGuard
+//===== Additional Comments: ================================= 
+//= 1.0 First version. [DanielArt]
+//============================================================ 
+-	script	hamsterbot_main	-1,{
+end;
+OnInit:
+	set .HAM_PROB_APPEAR,100; // Probabilidad de que aparezca HamsterBot (10000 = 100%).
+	set $@ham_var_c,3; // Oportunidades
+	if(!getarraysize($HAM$))
+			setarray $HAM$[0],"Hamtaro es un Hamster","Los Hamster adoran las semillas de girasol","Los Hamster hacen ejercicio en su rueda";
+	setarray .HAM_NO_APPEAR$,"bat_","g_cas","guild_vs","nguild","poring","pvp","rwc","cell_game","poringrace","findporing","princesa";
+OnNPCKillEvent:
+	if(rand(10000) < .HAM_PROB_APPEAR) {
+		set .@HAM_MAP$,strcharinfo(3);
+		set .@HAM_ARRSIZE,getarraysize(.HAM_NO_APPEAR$);
+		while (.@HAM_ARRSIZE) {
+			set .@a,.@a - 1;
+			if( compare(.@HAM_MAP$,.HAM_NO_APPEAR$[.@a]) ) {
+				set .@b,1;
+				break;
+			}
+		}
+		if(!.@b) {
+			if(getcharid(1)) {
+				getpartymember getcharid(1),2;
+				set .@a,$@partymembercount;
+				if(.@a > 1) {
+					copyarray .@b[0],$@partymemberaid[0],.@a;
+					while (.@a) {
+						set .@a,.@a - 1;
+						if(attachrid(.@b[.@a]))
+							if(.@HAM_MAP$ == strcharinfo(3))
+								continue;
+						deletearray .@b[.@a],1;
+					}
+					set .@a,rand(getarraysize(.@b));
+					attachrid .@b[.@a];
+				}
+				cleararray $@partymemberaid[0],0,.@a;
+				set $@partymembercount,0;
+			}
+On0:
+			set .@i,getcharid(0) - 149999;
+			if(!getd("$@ham_var_"+.@i) && (getgroupid() < 80)) {
+				setd "$@ham_var_"+.@i,1;
+				set .@t,.t1;
+				while((getd("$@ham_var_"+.@i) == 1) && .@t) {
+					if(!((.t1 - .@t) % 3)) {
+						if(!((.t1 - .@t) % 2))
+								announce "["+$@ham_var_$+"]: ¡¡No te desconectes!!",bc_self,"0xff"+rand(5)+"0"+rand(5)+"0";
+						else
+								announce "["+$@ham_var_$+"]: Utiliza el comando '@hamsterbot' para comenzar el test Antibot.",bc_self,"0xff"+rand(5)+"0"+rand(5)+"0";
+						emotion 0,1;
+					}
+					set .@t,.@t - 1;
+					specialeffect2 548;
+					sleep2 1000;
+				}
+				if(getd("$@ham_var_"+.@i) == 1) {
+					setd "$@ham_var_"+.@i,2;
+					addtimer 1,"hamsterbot_cmd::On0";
+				}
+				set .@t,$@ham_var_t2;
+				while((getd("$@ham_var_"+.@i) == 2) && .@t) {
+					itemskill 674,.@t;
+					announce "["+$@ham_var_$+"]: Te quedan "+.@t+" segundos para responder.",bc_self,"0xff"+rand(5)+"0"+rand(5)+"0";
+					set .@t,.@t - 1;
+					sleep2 1000;
+				}
+				itemskill 674,0;
+				if(getd("$@ham_var_"+.@i)) callsub OnBan;
+			}
+		}
+	}
+	end;
+OnPCLoginEvent:
+OnPCLogoutEvent:
+	if(getd("$@ham_var_"+(getcharid(0) - 149999))) {
+		setd "$@ham_var_"+(getcharid(0) - 149999),0;
+		set .@a$,strcharinfo(0);
+		sleep 1000;
+		atcommand "@jail "+.@a$;
+		announce .@a$+" ha sido sancionado por uso de bot.",bc_all,0xdd8833;
+		set .@a,getarraysize($HAMa$);
+		if(.@a >= .bl) {
+			deletearray $HAMa$[0],1;
+			deletearray $HAMb$[0],1;
+			set .@a,.bl - 1;
+		}
+		set $HAMa$[.@a],.@a$;
+		setarray .@b[0],gettime(5),gettime(6),gettime(3),gettime(2),gettime(1);
+		set .@c,5;
+		while(.@c) {
+			set .@c,.@c - 1;
+			set .@b$[.@c],.@b[.@c];
+			if(.@b[.@c] < 10)
+				set .@b$[.@c],"0"+.@b$[.@c];
+		}
+		set $HAMb$[.@a],.@b$[0]+"/"+.@b$[1]+"/"+gettime(7)+" - "+.@b$[2]+":"+.@b$[3]+":"+.@b$[4];
+		end;
+	}
+}
+
+-	script	HAMSTERBOT_TEMP	-1,{
+OnCommand:
+	cutin "HamsterBot_npc",2;
+	mes "[ ^ff8800HamsterBot^000000 ]";
+	mes "Bienvenido al Panel de Control del Antibot.";
+	mes "¿En qué te puedo ayudar?";
+	next;
+	if(getgroupid() >= 50)
+		setarray .@a$[0],"Investigar posible bot","Ver lista de frases.","Añadir nueva frase.","Eliminar frase.";
+	set .@a,select("^aa0000Salir^000000","Información sobre el AntiBot.","Ver lista de sancionados.",.@a$[0],.@a$[1],.@a$[2],.@a$[3]);
+	mes "[ ^ff8800HamsterBot^000000 ]";
+	switch(.@a) {
+		case 2:
+			mes "^888888¿Qué es un bot?^000000";
+			mes "Un bot es un programa informático creado para imitar el comportamiento de un humano.";
+			next;
+			mes "[ ^ff8800HamsterBot^000000 ]";
+			mes "^888888¿Qué es un bot?^000000";
+			mes "Estos bots son utilizados de forma indeseada por algunos jugadores de Ragnarok Online para mantener a su personaje entrenando y buscando items sin necesidad de estar controlándolo.";
+			next;
+			mes "[ ^ff8800HamsterBot^000000 ]";
+			mes "^888888¿Qué es un bot?^000000";
+			mes "Logicamente esto está totalmente prohibido en este servidor, pues desequilibra el juego respecto a los jugadores sensatos que quieren disfrutar de sus personajes por sí mismos.";
+			next;
+			mes "[ ^ff8800HamsterBot^000000 ]";
+			mes "^888888¿Qué es un sistema AntiBot?^000000";
+			mes "Un sistema AntiBot es un script cuyo objetivo es mantener el servidor limpio de bots.";
+			next;
+			mes "[ ^ff8800HamsterBot^000000 ]";
+			mes "^888888¿Qué es un sistema AntiBot?^000000";
+			mes "Estos sistemas principalmente buscan diferenciar el comportamiento de un bot del de un jugador real, y en el caso de detectar la presencia de un bot, le expulsan del juego y banean la cuenta de su propietario.";
+			next;
+			mes "[ ^ff8800HamsterBot^000000 ]";
+			mes "^888888¿Cómo funciona éste sistema AntiBot?^000000";
+			mes "Este script AntiBot está basado el el método NPCKillEvent.";
+			mes "Cada vez que un jugador mate un monstruo en el juego, existirá una muy pequeña probabilidad de activar el sistema AntiBot.";
+			next;
+			mes "[ ^ff8800HamsterBot^000000 ]";
+			mes "^888888¿Cómo funciona éste sistema AntiBot?^000000";
+			mes "Entonces el AntiBot formulará una sencilla pregunta que el jugador deberá responder correctamente en un tiempo máximo de 300 segundos.";
+			next;
+			mes "[ ^ff8800HamsterBot^000000 ]";
+			mes "^888888¿Cómo funciona éste sistema AntiBot?^000000";
+			mes "Si el jugador falla tras 3 intentos, abandona el juego o simplemente no contesta a la pregunta en el tiempo estimado, será considerado un bot y será consecuentemente sancionado.";
+			next;
+			mes "[ ^ff8800HamsterBot^000000 ]";
+			mes "^888888¿Y los bots no pueden responder a esas preguntas?^000000";
+			mes "A diferencia de otros scripts AntiBot, las preguntas formuladas por este AntiBot no son generadas por ningún algoritmo aleatorio, que podría ser detectado por un bot adecuadamente programado.";
+			next;
+			mes "[ ^ff8800HamsterBot^000000 ]";
+			mes "^888888¿Y los bots no pueden responder a esas preguntas?^000000";
+			mes "En cambio, son los propios GMs del servidor los encargados de crear estas preguntas.";
+			mes "Éstos deberán asegurarse de actualizar con frecuencia las preguntas para que los bots no puedan memorizarlas.";
+			next;
+			mes "[ ^ff8800HamsterBot^000000 ]";
+			mes "Para familiarizarte un poco con el funcionamiento del AntiBot, a continuación puedes realizar una sencilla demostración.";
+			next;
+			set .@a,select("^aa0000Salir^000000","Realizar demostración") - 1;
+			if(.@a) {
+				set .@t$,"Hamtaro es un Hamster de color naranja.";
+				set .@b,getstrlen(.@t$);
+				set .@c,0;
+				while(.@b) {
+					set .@b,.@b - 1;
+					if(compare("0123456789abcdefghijklmnñopqrstuvwxyz",charat(.@t$,.@b))) {
+						set .@d[.@c],.@b;
+						set .@c,.@c + 1;
+					}
+				}
+				while(.@a) {
+					set .@e,.@d[rand(.@c)];
+					set .@c$,charat(.@t$,.@e);
+					set .@a$,"";
+					set .@b,0;
+					while(.@b < getstrlen(.@t$)) {
+						if(.@b == .@e)	set .@a$,.@a$+"#";
+						else		set .@a$,.@a$+""+charat(.@t$,.@b);
+						set .@b,.@b + 1;
+					}
+					mes "[ ^ff8800HamsterBot^000000 ]";
+					mes "Lee atentamente la frase que se muestra a continuación:";
+					mes " ";
+					mes "^"+rand(3,9)+"0"+rand(3,9)+"0ff"+.@a$+"^000000";
+					mes " ";
+					mes "Seguro que te has dado cuenta de que falta una letra marcada con un símbolo #.";
+					mes "¿Cual es esa letra?";
+					next;
+					input .@b$;
+					if(compare(.@c$,.@b$)) set .@a,0;
+					else {
+						specialeffect2 611;
+						mes "[ ^ff8800HamsterBot^000000 ]";
+						mes "Lo siento, esa no es la respuesta correcta.";
+						mes "No te preocupes, un fallo lo puede tener cualquiera.";
+						mes "Te daré un nuevo intento.";
+						next;
+					}
+				}
+				emotion 21;
+				mes "[ ^ff8800HamsterBot^000000 ]";
+				mes "¡Muy bien!";
+				mes "¿A que no es tan difícil?";
+				next;
+			}
+			mes "[ ^ff8800HamsterBot^000000 ]";
+			break;
+		case 3:
+			mes "Esta lista muestra las últimas 20 penalizaciones por uso de bot realizadas por el AntiBot.";
+			mes "Espera unos segundos mientras envío la lista de sancionados a tu ventana de chat.";
+			close2;
+			cutin "",255;
+			emotion 5;
+			announce "[ Fecha - Hora ]  -  Nombre",bc_self,0xff7700;
+			set .@a,getarraysize($HAMb$);
+			if(!.@a) announce "No se han encontrado resultados.",bc_self,"0x"+rand(7,9)+"0"+rand(7,9)+"0"+rand(7,9)+"0";
+			while(.@a) {
+				set .@a,.@a - 1;
+				announce "[ "+$HAMa$[.@a]+" ]  -  "+$HAMb$[.@a],bc_self,"0x"+rand(7,9)+"0"+rand(7,9)+"0"+rand(7,9)+"0";
+			}
+			announce "----------",bc_self,0xff7700;
+			end;
+		case 4:
+			mes "Escribe el nombre del personaje que deseas investigar.";
+			next;
+			input .@a$;
+			mes "[ ^ff8800HamsterBot^000000 ]";
+			set .@a,getcharid(3,.@a$);
+			if(.@a) {
+				set .@b,getcharid(3);
+				attachrid .@a;
+				doevent "hamsterbot_main::On0";
+				attachrid .@b;
+				mes "Muy bien.";
+				mes "Se ha iniciado un test AntiBot para comprobar si el jugador "+.@a$+" es realmente un bot.";
+				mes "Gracias por la colaboración.";
+				emotion 21;
+			}
+			else {
+				mes "No se ha encontrado ningún personaje actualmente conectado con ese nombre.";
+				mes "Comprueba que lo has escrito bien e intentalo más tarde.";
+				emotion 40;
+			}
+			next;
+			mes "[ ^ff8800HamsterBot^000000 ]";
+			break;
+		case 5:
+			mes "Esta lista contiene todas las posibles frases de los tests del AntiBot.";
+			mes "Espera unos segundos mientras envío la lista de frases a tu ventana de chat.";
+			close2;
+			cutin "",255;
+			emotion 5;
+			announce "[ nº ]  -  Frase",bc_self,0xff7700;
+			set .@a,getarraysize($HAM$);
+			if(!.@a) announce "No se han encontrado resultados.",bc_self,"0x"+rand(7,9)+"0"+rand(7,9)+"0"+rand(7,9)+"0";
+			while(.@b < .@a) {
+				set .@b,.@b + 1;
+				announce "[ "+.@b+" ]  -  "+$HAM$[.@b - 1],bc_self,"0x"+rand(7,9)+"0"+rand(7,9)+"0"+rand(7,9)+"0";
+			}
+			announce "----------",bc_self,0xff7700;
+			end;
+		case 6:
+			mes "Escribe la frase que deseas añadir a la lista del AntiBot.";
+			next;
+			input .@a$;
+			set .@a,getstrlen(.@a$);
+			while(.@a) {
+				set .@a,.@a - 1;
+				if(compare("0123456789abcdefghijklmnñopqrstuvwxyz",charat(.@a$,.@a)))
+					set .@b,.@b + 1;
+			}
+			mes "[ ^ff8800HamsterBot^000000 ]";
+			if(.@b >= 5) {
+				set .@a,getarraysize($HAM$);
+				if(.@a == 128) {
+					deletearray $HAM$[0],1;
+					set .@a,127;
+				}
+				set $HAM$[.@a],.@a$;
+				mes "Tu frase ha sido añadida a la lista del AntiBot:";
+				mes "[ "+(.@a + 1)+" ]  -  ^"+rand(3,9)+"0"+rand(3,9)+"0ff"+.@a$+"^000000";
+				emotion 21;
+			}
+			else {
+				mes "Lo siento, tu frase no contiene suficientes carácteres simples.";
+				emotion 40;
+			}
+			next;
+			mes "[ ^ff8800HamsterBot^000000 ]";
+			break;
+		case 7:
+			mes "Selecciona el número de frase que quieres eliminar:";
+			next;
+			input .@a;
+			mes "[ ^ff8800HamsterBot^000000 ]";
+			if((.@a > 0) && (.@a < getarraysize($HAM$))) {
+				deletearray $HAM$[.@a - 1],1;
+				mes "Muy bien.";
+				mes "La frase nº "+.@a+" ha sido eliminada.";
+				emotion 21;
+			}
+			else {
+				mes "Lo siento, el número seleccionado no se corresponde con ninguna frase de la lista.";
+				emotion 40;
+			}
+			next;
+			mes "[ ^ff8800HamsterBot^000000 ]";
+			break;
+	}
+	mes "Recuerda:";
+	mes "El juego limpio siempre es más divertido.";
+	close2;
+	emotion 12;
+	cutin "",255;
+	end;
+OnInit:
+	bindatcmd "hamsterconfig","HAMSTERBOT_TEMP::OnCommand",50,50;
+	end;
+}
+alberta,195,134,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#1	607
+alberta,55,250,5	duplicate(HAMSTERBOT_TEMP)	HamsterBot#2	607
+aldebaran,133,112,6	duplicate(HAMSTERBOT_TEMP)	HamsterBot#3	607
+aldebaran,133,232,6	duplicate(HAMSTERBOT_TEMP)	HamsterBot#4	607
+alde_gld,234,146,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#5	607
+amatsu,240,275,6	duplicate(HAMSTERBOT_TEMP)	HamsterBot#6	607
+amatsu,95,262,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#7	607
+amatsu,207,96,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#8	607
+ayothaya,212,200,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#9	607
+ayothaya,157,74,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#10	607
+comodo,180,325,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#11	607
+comodo,205,108,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#12	607
+comodo,312,183,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#13	607
+comodo,40,223,6	duplicate(HAMSTERBOT_TEMP)	HamsterBot#14	607
+einbech,66,88,6	duplicate(HAMSTERBOT_TEMP)	HamsterBot#15	607
+einbech,131,241,6	duplicate(HAMSTERBOT_TEMP)	HamsterBot#16	607
+einbech,46,201,8	duplicate(HAMSTERBOT_TEMP)	HamsterBot#17	607
+einbroch,70,187,2	duplicate(HAMSTERBOT_TEMP)	HamsterBot#18	607
+einbroch,145,313,6	duplicate(HAMSTERBOT_TEMP)	HamsterBot#19	607
+einbroch,152,45,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#20	607
+einbroch,253,239,2	duplicate(HAMSTERBOT_TEMP)	HamsterBot#21	607
+geffen,123,65,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#22	607
+geffen,41,103,6	duplicate(HAMSTERBOT_TEMP)	HamsterBot#23	607
+geffen,124,173,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#24	607
+geffen,175,123,6	duplicate(HAMSTERBOT_TEMP)	HamsterBot#25	607
+gef_fild13,195,240,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#26	607
+gonryun,152,106,6	duplicate(HAMSTERBOT_TEMP)	HamsterBot#27	607
+gonryun,164,178,2	duplicate(HAMSTERBOT_TEMP)	HamsterBot#28	607
+gonryun,149,14,6	duplicate(HAMSTERBOT_TEMP)	HamsterBot#29	607
+hugel,101,126,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#30	607
+hugel,180,166,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#31	607
+izlude,121,90,6	duplicate(HAMSTERBOT_TEMP)	HamsterBot#32	607
+jawaii,137,251,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#33	607
+yuno,175,85,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#34	607
+yuno,72,199,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#35	607
+sch_gld,291,119,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#36	607
+lighthalzen,209,91,6	duplicate(HAMSTERBOT_TEMP)	HamsterBot#37	607
+lighthalzen,218,318,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#38	607
+lighthalzen,311,295,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#39	607
+louyang,199,104,6	duplicate(HAMSTERBOT_TEMP)	HamsterBot#40	607
+louyang,57,242,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#41	607
+xmas,139,302,6	duplicate(HAMSTERBOT_TEMP)	HamsterBot#42	607
+xmas,165,106,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#43	607
+morocc,166,72,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#44	607
+morocc,51,174,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#45	607
+morocc,166,285,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#46	607
+morocc,283,197,8	duplicate(HAMSTERBOT_TEMP)	HamsterBot#47	607
+morocc,37,286,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#48	607
+moscovia,238,202,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#49	607
+moscovia,161,60,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#50	607
+niflheim,33,160,6	duplicate(HAMSTERBOT_TEMP)	HamsterBot#51	607
+niflheim,197,192,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#52	607
+payon,213,68,6	duplicate(HAMSTERBOT_TEMP)	HamsterBot#53	607
+payon,156,49,2	duplicate(HAMSTERBOT_TEMP)	HamsterBot#54	607
+payon,232,312,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#55	607
+payon,63,116,6	duplicate(HAMSTERBOT_TEMP)	HamsterBot#56	607
+pay_gld,201,153,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#57	607
+prontera,165,67,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#58	607
+prontera,44,212,6	duplicate(HAMSTERBOT_TEMP)	HamsterBot#59	607
+prontera,169,182,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#60	607
+prontera,255,213,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#61	607
+prontera,161,308,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#62	607
+prt_gld,166,71,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#63	607
+rachel,268,136,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#64	607
+rachel,150,148,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#65	607
+rachel,135,41,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#66	607
+rachel,43,131,6	duplicate(HAMSTERBOT_TEMP)	HamsterBot#67	607
+aru_gld,179,322,6	duplicate(HAMSTERBOT_TEMP)	HamsterBot#68	607
+umbala,125,126,8	duplicate(HAMSTERBOT_TEMP)	HamsterBot#69	607
+umbala,163,245,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#70	607
+veins,213,232,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#71	607
+veins,222,348,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#72	607
+veins,161,62,6	duplicate(HAMSTERBOT_TEMP)	HamsterBot#73	607
+mid_camp,223,287,4	duplicate(HAMSTERBOT_TEMP)	HamsterBot#74	607
+mid_camp,142,237,6	duplicate(HAMSTERBOT_TEMP)	HamsterBot#75	607
+mid_camp,248,234,8	duplicate(HAMSTERBOT_TEMP)	HamsterBot#76	607
+manuk,277,124,2	duplicate(HAMSTERBOT_TEMP)	HamsterBot#77	607
+manuk,179,173,6	duplicate(HAMSTERBOT_TEMP)	HamsterBot#78	607
+splendide,181,133,6	duplicate(HAMSTERBOT_TEMP)	HamsterBot#79	607

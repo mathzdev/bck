@@ -1,0 +1,251 @@
+function	script	F_Master	{
+	query_sql( "SELECT `"+getarg(1)+"` FROM `char_rank` WHERE `char_id` = '"+getcharid(0)+"'"),@p;
+	if( getarg(0) == 1 && @p >= 50 && achi20 < 1 ) {
+		achieve 20;
+		achi20 = 1;
+	} else if( getarg(0) == 2 && @p >= 50 && achi21 < 1 ) {
+		achieve 21;
+		achi21 = 1;
+	}
+	setarray .@oficiohat[1],36038,36025,36028,36031,36036;
+	if( @p >= getarg(2) && getd("M_Oficio"+getarg(0)) < 1) {
+		setd "M_Oficio"+getarg(0),1;
+		getitem .@oficiohat[getarg(0)],1;
+		message strcharinfo(0),"¡Felicidades, ahora eres un Maestro "+callfunc("Oficio_Check",12,getarg(0))+"!";
+		if( callfunc("Oficio_Check",13,getarg(0)) > 0 )
+			achieve 15;
+		else
+			achieve 14;
+	}
+	return;
+}
+-	script	#blvloficio	-1,{
+OnPCBaseLvUpEvent:
+	if(Oficio < 1 && BaseLevel >= 50 && q_an < 1) {
+		cutin "jobcentral",2;
+		mes "¡Al parecer ya estás listo para elegir un ^5533ffOficio^000000!";
+		mes "Dirígete a la ^ff8800Job Central^000000 en Prontera.";
+		close2;
+		set q_an,1;
+		cutin "",255;
+		end;
+	}
+	if(Oficio > 0 && Oficio2 < 1 && BaseLevel >= 120 && q_an2 < 1) {
+		cutin "jobcentral",2;
+		mes "¡Al parecer ya estás listo para elegir tu ^ff0000Segundo Oficio^000000!";
+		mes "Dirígete a la ^ff8800Job Central^000000 en Prontera.";
+		close2;
+		cutin "",255;
+		set q_an2,1;
+		end;
+	}
+end;
+}
+-	script	#craft	-1,{
+OnCosturero:
+	setarray .aguja[0],36013,36014;
+	for( @i = 0; @i < getarraysize(.aguja); @i++ ) {
+		if(getequipid(EQI_ACC_R) == .aguja[@i] || getequipid(EQI_ACC_L) == .aguja[@i]) {
+			produce 22;
+			end;
+		}
+	}
+	message strcharinfo(0),"Ocupas una aguja para comenzar a coser.";
+	end;
+end;
+OnCarpintero:
+	setarray .woodcutter[0],36006,36007;
+	for( @i = 0; @i < getarraysize(.woodcutter); @i++ ) {
+		if(getequipid(EQI_ACC_R) == .woodcutter[@i] || getequipid(EQI_ACC_L) == .woodcutter[@i]) {
+			produce 3;
+			end;
+		}
+	}
+	message strcharinfo(0),"Ocupas una sierra para comenzar a fabricar.";
+	end;
+}
+
+-	script	RankingSkill	-1,{
+OnCos:
+	callfunc "RankCosturero";
+	end;
+OnCar:
+	callfunc "RankCarpintero";
+	end;
+}
+
+function	script	RankMinero	{
+	set @GID,getcharid(2);
+	if(@GID)
+		getitem 18174,getarg(0);
+	query_sql("INSERT INTO `char_rank` SET `char_id`='"+getcharid(0)+"',`name`='"+strcharinfo(0)+"',`minero`='1' ON DUPLICATE KEY UPDATE `minero`=`minero`+"+getarg(0)+"");
+	message strcharinfo(0),"[Ranker]: Haz ganado "+getarg(0)+" puntos como Minero.";
+	return;
+}
+
+function	script	RankCazador	{
+	set @GID,getcharid(2);
+	if(@GID)
+		getitem 18174,rand(1,5);
+	callfunc "F_Master",4,"cazador",20;
+	query_sql("INSERT INTO `char_rank` SET `char_id`='"+getcharid(0)+"',`name`='"+strcharinfo(0)+"',`cazador`='1' ON DUPLICATE KEY UPDATE `cazador`=`cazador`+1");
+	message strcharinfo(0),"[Ranker]: Haz ganado 1 punto como Cazador.";
+	return;
+}
+
+function	script	RankCarpintero	{
+	set @GID,getcharid(2);
+	if(@GID && rand(1,100) < 5)
+		getitem 18174,rand(3,5);
+	callfunc "F_Master",5,"carpintero",2000;
+	query_sql("INSERT INTO `char_rank` SET `char_id`='"+getcharid(0)+"',`name`='"+strcharinfo(0)+"',`carpintero`='1' ON DUPLICATE KEY UPDATE `carpintero`=`carpintero`+1");
+	message strcharinfo(0),"[Ranker]: Haz ganado 1 punto como Carpintero.";
+	return;
+}
+
+function	script	RankLenador	{
+	set @GID,getcharid(2);
+	if(@GID && rand(1,100) < 5)
+		getitem 18174,rand(3,5);
+	callfunc "F_Master",2,"lenador",5000;
+	query_sql("INSERT INTO `char_rank` SET `char_id`='"+getcharid(0)+"',`name`='"+strcharinfo(0)+"',`lenador`='1' ON DUPLICATE KEY UPDATE `lenador`=`lenador`+"+getarg(0)+"");
+	message strcharinfo(0),"[Ranker]: Haz ganado "+getarg(0)+" puntos como Leñador.";
+	return;
+}
+
+function	script	RankCosturero	{
+	set @GID,getcharid(2);
+	if(@GID && rand(1,100) < 5)
+		getitem 18174,rand(3,5);
+	callfunc "F_Master",3,"costurero",2000;
+	query_sql("INSERT INTO `char_rank` SET `char_id`='"+getcharid(0)+"',`name`='"+strcharinfo(0)+"',`costurero`='1' ON DUPLICATE KEY UPDATE `costurero`=`costurero`+1");
+	message strcharinfo(0),"[Ranker]: Haz ganado 1 punto como Costurero.";
+	return;
+}
+
+function	script	Oficio_Check	{
+	switch (getarg(0)) {
+		case 1: // Minero
+			if(Oficio == 1 || Oficio2 == 1)
+				return 1;
+			else
+				return 0;
+			break;
+		case 2: // Leñador
+			if(Oficio == 2 || Oficio2 == 2)
+				return 1;
+			else
+				return 0;
+			break;
+		case 3: // Costurero
+			if(Oficio == 3 || Oficio2 == 3)
+				return 1;
+			else
+				return 0;
+			break;
+		case 4: // Cazador
+			if(Oficio == 4 || Oficio2 == 4)
+				return 1;
+			else
+				return 0;
+			break;
+		case 5: // Carpintero
+			if(Oficio == 5 || Oficio2 == 5)
+				return 1;
+			else
+				return 0;
+			break;
+		case 10: // Check Oficios
+			switch(getarg(1)) {
+				case 1:
+					if(Oficio == 2 || Oficio == 3 || Oficio == 4 || Oficio == 5)
+						return 2;
+					else
+						return 1;
+					break;
+				case 2:
+					if(Oficio == 1 || Oficio == 3 || Oficio == 4 || Oficio == 5)
+						return 2;
+					else
+						return 1;
+					break;
+				case 3:
+					if(Oficio == 2 || Oficio == 1 || Oficio == 4 || Oficio == 5)
+						return 2;
+					else
+						return 1;
+					break;
+				case 4:
+					if(Oficio == 2 || Oficio == 3 || Oficio == 1 || Oficio == 5)
+						return 2;
+					else
+						return 1;
+					break;
+				case 5:
+					if(Oficio == 2 || Oficio == 3 || Oficio == 4 || Oficio == 1)
+						return 2;
+					else
+						return 1;
+					break;
+			}
+			break;
+		case 11: // Check Quest Oficios No Dup
+			switch(getarg(1)) {
+				case 1: //q_min
+					if(q_carp > 0 || q_cos > 0 || q_caz > 0 || q_len > 0)
+						return 0;
+					break;
+				case 2: //q_len
+					if(q_min > 0 || q_cos > 0 || q_caz > 0 || q_carp > 0)
+						return 0;
+					break;
+				case 3: //q_cos
+					if(q_min > 0 || q_carp > 0 || q_caz > 0 || q_len > 0)
+						return 0;
+					break;
+				case 4: //q_caz
+					if(q_min > 0 || q_cos > 0 || q_carp > 0 || q_len > 0)
+						return 0;
+					break;
+				case 5: //q_carp
+					if(q_min > 0 || q_cos > 0 || q_caz > 0 || q_len > 0)
+						return 0;
+					break;
+			}
+			return 1;
+		case 12:
+			switch(getarg(1)) {
+				case 1:
+					return "Minero";
+				case 2:
+					return "Leñador";
+				case 3:
+					return "Costurero";
+				case 4:
+					return "Cazador";
+				case 5:
+					return "Carpintero";
+			}
+			end;
+		case 13:
+			switch (getarg(1)) {
+				case 1:
+					if( M_Oficio2 == 1 || M_Oficio3 == 1 || M_Oficio4 == 1 || M_Oficio5 == 1)
+						return 1;
+				case 2:
+					if( M_Oficio3 == 1 || M_Oficio4 == 1 || M_Oficio5 == 1 || M_Oficio1 == 1)
+						return 1;
+				case 3:
+					if( M_Oficio4 == 1 || M_Oficio5 == 1 || M_Oficio1 == 1 || M_Oficio2 == 1)
+						return 1;
+				case 4:
+					if( M_Oficio5 == 1 || M_Oficio1 == 1 || M_Oficio2 == 1 || M_Oficio3 == 1)
+						return 1;
+				case 5:
+					if( M_Oficio1 == 1 || M_Oficio2 == 1 || M_Oficio3 == 1 || M_Oficio4 == 1)
+						return 1;
+			}
+			return 0;
+	}
+end;
+}

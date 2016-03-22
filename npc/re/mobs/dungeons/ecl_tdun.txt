@@ -36,4 +36,4 @@ ecl_tdun03.gat,0,0,0,0	monster	Blue Lichtern	2367,5,5000,0,0
 ecl_tdun03.gat,0,0,0,0	monster	Yellow Lichtern	2368,15,5000,0,0
 ecl_tdun03.gat,0,0,0,0	monster	Red Lichtern	2369,10,5000,0,0
 ecl_tdun03.gat,0,0,0,0	monster	Green Lichtern	2370,15,5000,0,0
-ecl_tdun03.gat,0,0,0,0	monster	Faithful Manager	2371,5,5000,0,0
+ecl_tdun03.gat,0,0,0,0	monster	Faithful Manager	2371,5,365000,0,0

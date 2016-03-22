@@ -1,0 +1,217 @@
+vip,68,68,4	script	Señor Galapago::galap_q	10050,{
+	set .npc$,"^5533ffSeñor Galapago^000000";
+	mes .npc$;
+	if(BaseLevel < 100) {
+		mes "Vuelve cuando tengas más experiencia en la vida, joven humanito.";
+		close;
+	}
+	if(!galaq)
+		set galaq,0;
+	switch (galaq) {
+		case 0:
+			mes "¿Quieres jugito?";
+			next;
+			select("No quiero","Dame un poco","Tal ves al rato","¿De qué sabor es?");
+			mes .npc$;
+			mes "Em.... mejor ni te dejo mirarlo.";
+			next;
+			select("¿Cuál es tu problema?");
+			mes .npc$;
+			mes "Mi problema es que mis hermanos pingüinescos se fueron de viaje y ni siquiera me avisaron.";
+			next;
+			mes .npc$;
+			mes "En especial algunos que dicen que descubrieron una fórmula de jugo pingüinés para volar.";
+			next;
+			select("¿Volar?");
+			mes .npc$;
+			mes "Si volar, si me ayudas con las peticiones de todos mis amigos, te garantizo que te darán uno, ¿qué opinas?";
+			next;
+			if(select("No gracias.","De acuerdo...") == 1) {
+				mes .npc$;
+				mes "Pues tu te lo pierdes.";
+				close;
+			}
+			mes .npc$;
+			mes "Bien, bien, preparamente quiero que te dirijas a la tierra de pingüinos, allí busca a mi primo ^5533ffPoncho Pingüín^000000 él te dirá qué hacer.";
+			set galaq,14066;
+			setquest galaq;
+			close;
+		case 14066:
+			//if(checkquest(galaq) == 1 || checkquest(galaq) == 0) {
+				mes "Ve a buscar a mi primo en la tierra de pingüinos.";
+				close;
+			//}
+		case 14070:
+			if(checkquest(14070) == 1 || checkquest(14070) == 0) {
+				mes "No puede ser... en serio...";
+				next;
+				mes .npc$;
+				mes "¿Qué es esto?";
+				next;
+				mes .npc$;
+				mes "No puede ser verdad...";
+				emotion e_sob;
+				next;
+				emotion e_sob;
+				next;
+				emotion e_sob;
+				next;
+				emotion e_sob;
+				next;
+				emotion e_sob;
+				next;
+				emotion e_sob;
+				next;
+				emotion e_sob;
+				next;
+				emotion e_sob;
+				next;
+				mes .npc$;
+				mes "Pues que se le va a hacer.";
+				next;
+				mes .npc$;
+				mes "Al parecer el tío tenía el jugo mágico.";
+				next;
+				mes .npc$;
+				mes "Ten, le di a mi hijo sesenta litros del jugo, que te acompañe en tus aventuras.";
+				next;
+				mes .npc$;
+				mes "Ya no vuelvas.";
+				getexp 5000000,5000000;
+				getitem 5967,1;
+				completequest 14070;
+				set galaq,14071;
+				close;
+			}
+		case 14071:
+			mes "Largo.";
+			emotion e_sob;
+			close;
+		default:
+			mes "Ni me hables ahorita.";
+			close;
+	}
+OnPCLoadMapEvent:
+	if((strcharinfo(3)=="vip") && (BaseLevel >= 100) && (galaq < 14071))
+		showevent Q_TYPE_QUEST,3;
+	end;
+}
+cmd_fild02,83,84,5	script	Poncho Pingüín::galap2	1391,{
+	set .npc$,"^5533ffPoncho Pingüín^000000";
+	mes .npc$;
+	if(galaq == 14066 && checkquest(galaq) == 1) {
+		mes "Ya veo, ya veo.";
+		next;
+		mes .npc$;
+		mes "El gran señor pingüino te ha enviado conmigo, pues...";
+		next;
+		mes .npc$;
+		mes "A mi tampoco me invitaron a sus locas vacaciones así que no sabría decirte dónde se encuentran los demás pin... ESPERA....";
+		next;
+		mes .npc$;
+		mes "Sé dónde se encuentra uno, pero del puro coraje no te diré al menos que mates a 300 de éstos molestos Seal.";
+		set galaq,14067;
+		changequest 14066,14067;
+		close;
+	} else if(galaq == 14067) {
+		if(checkquest(galaq,HUNTING) == 0) {
+			mes "¿A qué esperas?";
+			next;
+			mes .npc$;
+			mes "Quiero que mates a 300 de éstos molestos Seals, no me dejan tomarme mi juguito en paz.";
+			close2;
+			emotion e_bzz;
+			end;
+		} else if(checkquest(galaq,HUNTING) == 2) { 
+			mes "¡Gran trabajo!";
+			next;
+			mes .npc$;
+			mes "De acuerdo, lo prometido es deuda.";
+			next;
+			mes .npc$;
+			mes "Dirígete a la Guild Town, y en la playa encontrarás a mi Tío Pingüín, él te dirá qué más debes de hacer.";
+			close2;
+			changequest 14067,14068;
+			set galaq,14068;
+			end;
+		}
+	}
+	mes "Deja tomarme mi juguito en paz, largo.";
+	close2;
+	emotion e_bzz;
+	end;
+}
+glemior,56,95,4	script	Tío Pingüín::galap3	1391,{
+	set .npc$,"^5533ffTío Pingüín^000000";
+	mes .npc$;
+	if(galaq == 14068 && checkquest(galaq) == 1) {
+		mes "Así que te han envíado conmigo.";
+		next;
+		mes .npc$;
+		mes "Pues no la vas a tener tan facil muchachito.";
+		next;
+		mes .npc$;
+		mes "Yo soy un gran aventurero del poro norte, sur, este y oeste.";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Eso ni existe.";
+		next;
+		mes .npc$;
+		mes "¿Cómo que no?";
+		next;
+		mes "["+strcharinfo(0)+"]";
+		mes "Que no.";
+		next;
+		mes .npc$;
+		mes "Por supuesto que si existe, hasta derrotamos a un gran lobo de cristal llamado ^ff0000Garm^000000.";
+		next;
+		mes .npc$;
+		mes "No digas estupideces, humano feo.";
+		next;
+		mes .npc$;
+		mes "Como castigo deberás pisar mis pasos e ir a vencer a un ^5533ffGarm^000000.";
+		next;
+		mes .npc$;
+		mes "Apresúrate, y cuando lo hagas, ven conmigo.";
+		changequest 14068,14069;
+		set galaq,14069;
+		close;
+	} else if(galaq == 14069) {
+		if(checkquest(galaq,HUNTING) == 0) {
+			mes "¿A qué esperas?";
+			next;
+			mes .npc$;
+			mes "Ve y pruébame tu valía, ve a matar a un ^5533ffGarm^000000";
+			close2;
+			emotion e_bzz;
+			end;
+		} else if(checkquest(galaq,HUNTING) == 2) { 
+			mes "¡Gran trabajo!";
+			next;
+			mes .npc$;
+			mes "En realidad, tengo algo que contarte....";
+			next;
+			mes .npc$;
+			mes "Fue una mentira la que le dijimos al Gran Pingüino.";
+			next;
+			mes .npc$;
+			mes "Nunca nos fuimos de vacaciones sin avisarle.";
+			next;
+			mes .npc$;
+			mes "En realidad queríamos probar nuestro invento para provocar a las Orcas.";
+			next;
+			mes .npc$;
+			mes "Pero todos terminamos muriendo.";
+			next;
+			mes .npc$;
+			mes "Por favor ve con el Gran Pingüino a contarselo.";
+			changequest 14069,14070;
+			set galaq,14070;
+			close;
+		}
+	}
+	mes "Deja tomarme mi juguito en paz, largo.";
+	close2;
+	emotion e_bzz;
+	end;
+}

@@ -1,0 +1,373 @@
+//      ______  __    __                                 
+//     /\  _  \/\ \__/\ \                                
+//     \ \ \_\ \ \ ,_\ \ \___      __    ___      __     
+// _____\ \  __ \ \ \/\ \  _ `\  /'__`\/' _ `\  /'__`\   
+///\  __\\ \ \/\ \ \ \_\ \ \ \ \/\  __//\ \/\ \/\ \_\.\_ 
+//\ \_\_/ \ \_\ \_\ \__\\ \_\ \_\ \____\ \_\ \_\ \__/.\_\
+// \/_/    \/_/\/_/\/__/ \/_/\/_/\/____/\/_/\/_/\/__/\/_/
+//
+//========================================================
+// ---                   PvP System                    ---
+//========================================================
+// ---                  by DanielArt                   ---
+//========================================================
+-	script	Versus	-1,{
+OnWhisperGlobal:
+	mes "[^5533ffPvP System^000000]";
+	mes "Bienvenido Game Master.";
+	next;
+	switch(select("Activar reinicio de Ranking:Desactivar reinicio de Ranking:^777777Salir^000000")) {
+		case 1:
+			set $rollbackrank,1;
+			mes "[^5533ffPvP System^000000]";
+			mes "Reinicio de rankings ^008800activado^000000.";
+			close;
+		case 2:
+			set $rollbackrank,0;
+			mes "[^5533ffPvP System^000000]";
+			mes "Reinicio de rankings ^ff0000desactivado^000000.";
+			close;
+		case 3:
+			mes "[^5533ffPvP System^000000]";
+			mes "Que le vaya bien.";
+			close;
+	}
+OnPCKillEvent:
+function Promedio;
+getmapxy(.@m$,.@x,.@y,0);
+	if(rid2name(killedrid) == strcharinfo(0))
+		end;
+	if(@n == 10) {
+		callsub OnLimpiar;
+		callsub OnRollback;
+	} else if(@n < 10) {
+		if (craneo != 1)
+			getnameditem 7420,rid2name(killedrid);
+	}
+	mapannounce .@m$,"[ "+strcharinfo(0)+" ] "+.KW$[rand(0, getarraysize(.KW$) - 1)]+" la cabeza de [ "+rid2name(killedrid)+" ]",bc_map,.KC$;
+	sleep2 1500;
+	if(!pvp_kill)
+		set pvp_kill,1;
+	set pvp_kill,pvp_kill+1;
+	sleep2 1500;
+	if(@ks < 1 && @mk < 1)
+		soundeffectall "firstblood.wav", 0, strcharinfo(3);
+	if(@ks < 10)
+		set @ks,@ks+1;
+	if(@mk < 6)
+		set @mk,@mk+1;
+	if(!nem_kill)
+		set nem_kill,killedrid;
+	if(nem_kill == killedrid)
+		set @n,@n+1;
+	deltimer "Versus::OnMKReset";
+	addtimer 18000,"Versus::OnMKReset";
+	callsub OnRecordStreak;
+	callsub OnAnnounce,.@m$;
+	attachrid(killedrid);
+		callsub OnDeath,.@m$;
+	end;
+OnPCDieEvent:
+getmapxy(.@m$,.@x,.@y,0);
+	if( sex ) soundeffectall "die_male.wav",0;
+		else soundeffectall "die_merchant_female.wav",0;
+	if(killerrid < 100000)
+		end;
+	if(getmapflag(.@m$,mf_pvp) == 1 || getmapflag(.@m$,mf_gvg) == 1) {
+		if(!pvp_death)
+			set pvp_death,1;
+		set pvp_death,pvp_death+1;
+	}
+	end;
+OnPCLogoutEvent:
+getmapxy(.@m$,.@x,.@y,0);
+	set @pvp_kill,pvp_kill;
+	set @pvp_death,pvp_death;
+	query_sql("REPLACE INTO `pvp_rank` (`char_id`, `account_id`, `char`, `kill`, `death`, `kdr`, `killingstreak`, `multikill`,  `nemesiskill`, `feedcount`,`killingspree`, `dominating`, `megakill`, `unstoppable`, `wickedsick`, `monsterkill`, `godlike`, `beyondgodlike`, `doublekill`, `triplekill`, `ultrakill`, `rampage`, `ownage`) VALUES ("+getcharid(0)+","+getcharid(3)+", '"+rid2name(getcharid(3))+"', "+@pvp_kill+", "+@pvp_death+", '"+Promedio(@pvp_kill,@pvp_death)+"', "+KillingStreak+", "+MultiKill+",  "+NemesisKill+", "+FeedCount+", "+KillingSpree+", "+Dominating+", "+MegaKill+", "+Unstoppable+", "+WickedSick+", "+MonsterKill+", "+Godlike+", "+BeyondGodlike+", "+DoubleKill+", "+TripleKill+", "+UltraKill+", "+Rampage+", "+Ownage+")");
+	callsub OnLimpiar;
+	deltimer "Versus::OnMKReset";
+	end;
+OnRecordStreak:
+function Promedio;
+	if(@ks > 2){
+		set KillingStreak, KillingStreak + 1;
+		switch(@ks){
+			case 0:
+			case 1:
+			case 2: break; 
+			case 3: set KillingSpree, KillingSpree + 1; break; 
+			case 4: set Dominating, Dominating + 1; break;
+			case 5: set Megapvp_kill, MegaKill + 1; break; 
+			case 6: set Unstoppable, Unstoppable + 1; break; 
+			case 7: set WickedSick, WickedSick + 1; break;
+			case 8: set Monsterpvp_kill, MonsterKill + 1; break; 
+			case 9: set Godlike, Godlike + 1; break; 
+			case 10: set BeyondGodlike, BeyondGodlike + 1; break;
+			default: break;
+		}
+	}
+	if(@mk > 1){
+		set Multipvp_kill, MultiKill + 1;
+		switch(@mk){
+			case 0:
+			case 1: break; 
+			case 2: set Doublepvp_kill, DoubleKill + 1; break; 
+			case 3: set Triplepvp_kill, TripleKill + 1; break;
+			case 4: set Ultrapvp_kill, UltraKill + 1; break;
+			case 5: set Rampage, Rampage + 1; break; 
+			case 6: set Ownage, Ownage + 1; break;
+			default: break;
+		}
+	}
+	if(@nm > 3 && @nm < 10)
+		set nem_kill,nem_kill+1;
+	if(@nm >= 10)
+		set FeedCount,FeedCount+1;
+	if(FeedCount >= 5)
+		atcommand "@mute 30";
+	if(FeedCount >= 30)
+		atcommand "@mute 120";
+	return;
+OnAnnounce:
+	if(@ks > 2){
+		mapannounce getarg(0),"[ "+strcharinfo(0)+" ] "+.KSHoN$[@ks - 3]+" [ "+@ks+" ]",bc_map, .KSC$;
+		switch (@ks) {
+			case 3: soundeffectall "killingspree.wav",0,strcharinfo(3); break; 
+			case 4: soundeffectall "dominating.wav",0,strcharinfo(3); break;
+			case 5: soundeffectall "megakill.wav",0,strcharinfo(3); break; 
+			case 6: soundeffectall "unstoppable.wav",0,strcharinfo(3); break; 
+			case 7: soundeffectall "wickedsick.wav",0,strcharinfo(3); break;
+			case 8: soundeffectall "monsterkill.wav",0,strcharinfo(3); break; 
+			case 9: soundeffectall "godlike.wav",0,strcharinfo(3); break; 
+			case 10: soundeffectall "combowhore.wav",0,strcharinfo(3); break;
+		}
+	}
+	if(@mk > 1){
+		mapannounce getarg(0),"[ "+strcharinfo(0)+" ] "+.MKHoN$[@mk - 2]+" [ "+@mk+" ]",bc_map, .MKC$;
+		sleep2 1500;
+		switch(@mk){
+			case 0:
+			case 1: break; 
+			case 2: soundeffectall "doublekill.wav",0,strcharinfo(3); break; 
+			case 3: soundeffectall "triplekill.wav",0,strcharinfo(3); break;
+			case 4: soundeffectall "ultrakill.wav",0,strcharinfo(3); break;
+			case 5: soundeffectall "rampage.wav",0,strcharinfo(3); break; 
+			case 6: soundeffectall "ownage.wav.wav",0,strcharinfo(3); break;
+			default: break;
+		}
+	}
+	if(@nm > 3 && @nm < 10){
+		mapannounce getarg(0),"[ "+strcharinfo(0)+" ] esta owneando a con quien se tope] [ "+@nm+" ]",bc_map, .NMC$;
+		sleep2 2000;
+		soundeffectall "kg_bakkugandan.wav", 0, strcharinfo(3);
+	}
+	if(@nm >= 10){
+		mapannounce getarg(0),"[ "+rid2name(nem_kill)+" ] esta haciendo feed a [  "+strcharinfo(0)+" ] [ "+@nm+" ]",bc_map, .FDC$;
+		sleep2 1500;
+	}
+	return;
+OnDeath:
+	message strcharinfo(0),"Has sido asesinado por [  "+rid2name(killerrid)+" ]";
+	if(@nm > 3){
+		soundeffectall "rampage.wav",0,rid2name(killedrid);
+		mapannounce getarg(0),"[ "+rid2name(killedrid)+" ] se las ha cobrado con [ "+strcharinfo(0)+" ] [ "+@nm+" ]",bc_map, .PBC$;
+	}
+	attachrid(killedrid); 
+		callsub OnLimpiar;
+	return;
+OnMKReset:
+	set @mk,0;
+	end;
+OnLimpiar:
+	sleep2 3000;
+	set nem_kill,0;
+	set craneo,0;
+	set @ks,0;
+	set @mk,0;
+	set @nm,0;
+	return;
+OnRollBack:
+	set craneo,1;
+	set pvp_kill,0;
+	set KillingSpree,0;
+	set Dominating,0;
+	set Megapvp_kill,0;
+	set Unstoppable,0;
+	set WickedSick,0;
+	set Monsterpvp_kill,0;
+	set Godlike,0;
+	set BeyondGodlike,0;
+	set Doublepvp_kill, 0;
+	set Triplepvp_kill,0;
+	set Ultrapvp_kill,0;
+	set Rampage,0;
+	set Ownage, 0;
+	set Nemesispvp_kill,0;
+	announce "[Anti-Feed] Tus asesinatos y ranking han sido resetados por feedear a otro jugador.",bc_self,0xFF0000;
+	return;
+
+	function	Promedio	{
+		if(getarg(0) >= getarg(1)){
+			if(getarg(1)){
+				set .@i, getarg(0) / getarg(1);
+				if((getarg(0) % getarg(1)) == 0){ return .@i+".00"; }
+				set .@j, (getarg(0) % getarg(1)) * 100 / getarg(1);
+				return .@i+"."+.@j;
+			} else {
+				return getarg(0)+".00";
+			}
+		}
+		if(getarg(0) < getarg(1)){
+			if(getarg(0)){ 
+				set .@i, (getarg(0)*10) / getarg(1);
+				set .@j, ((getarg(0)*10) % getarg(1)) * 10 / getarg(1);
+				return "0."+.@i +.@j;
+			} else {
+				return "0.00";
+			}
+		}
+		return "0.00";
+	}
+OnPCLoginEvent:
+	if($rollbackrank == 1 && rollback_1 < 1) {
+		set craneo,1;
+		set pvp_kill,0;
+		set KillingSpree,0;
+		set Dominating,0;
+		set Megapvp_kill,0;
+		set Unstoppable,0;
+		set WickedSick,0;
+		set Monsterpvp_kill,0;
+		set Godlike,0;
+		set BeyondGodlike,0;
+		set Doublepvp_kill, 0;
+		set Triplepvp_kill,0;
+		set Ultrapvp_kill,0;
+		set Rampage,0;
+		set Ownage, 0;
+		set Nemesispvp_kill,0;
+		set rollback_1,1;
+		announce "[Rollback] El ranking se ha reiniciado por iniciar el nuevo mes.",bc_self,0xFF0000;
+	}
+	end;
+OnInit:
+	setarray .KW$[0], "ha pwned", "ha machacado", "ha disintegrado", "ha sodomizado";
+	set .KC$, "0x99FF00"; set .KSC$, "0x99FF00"; set .MKC$, "0x33FF00"; set .ESC$, "0xFFAAAA"; set .NMC$, "0xFFAAAA"; set .PBC$, "0x0099FF"; set .FDC$, "0xFF00CC";
+	setarray .KSDotA$[0], "esta en un Killing Spree", "es Dominating", "ha hecho un Mega-Kill", "es Unstoppable", "es Wicked Sick", "ha hecho un M-m-m-m....Monster Kill", "es Godlike", "es Beyond Godlike";
+	setarray .KSHoN$[0], "es un Serial Killer", "es un Ultimate Warrior", "es Legendary", "esta en un Onslaught!", "es Savage Sick", "es Dominating", "ha hecho un Bloodbath", "es Immortal"; 
+	setarray .MKDotA$[0], "ha hecho un Double Kill", "ha hecho un Triple Kill", "just got un Ultra Kill", "esta en un Rampage", "ha Owning sus enemigos";
+	setarray .MKHoN$[0], "ha hecho un Double Tap", "ha hecho un Hat Trick", "just got un Quad Kill", "unnihilated sus enemigos", "ha hecho un Genocide";
+	setarray .ESDotA$[0], "Killing Spree", "Dominating", "Mega-Kill", "Unstoppable", "Wicked Sick", "Monster Kill", "Godlike", "Beyond Godlike";
+	setarray .ESHoN$[0], "Serial Killer", "Ultimate Warrior", "Legendary", "Onslaught", "Savage Sick", "Dominating", "Bloodbath", "Immortal";
+	setarray .EMDotA$[0], "Double Kill", "Triple Kill", "Ultra Kill", "Rampage", "Ownage";
+	setarray .EMHoN$[0], "Double Tap", "Hat Trick", "Quad Kill", "unnihilation", "Genocide";
+	end;
+}
+prontera,147,186,5	script	Salas PvP::pvp_s	467,{
+soundeffect "kg_bakkugandan.wav",0;
+cutin "moc2_dan01",2;
+mes "[^cc6600Salas PvP^000000]";
+mes "Por favor elige la sala Player vs Player a la que deseas asistir:";
+	switch(select("Sala PvP Rotatoria ^5533ff[ "+getmapusers($mar$)+" / 50 ]^000000:Sala PvP Normal ^5533ff[ "+getmapusers("cell_game")+" / 50 ]^000000:Sala PvP No Consumible ^5533ff[ "+getmapusers("guild_vs2")+" / 50 ]^000000:^777777Salir^000000")) {
+		case 1:
+			cutin "",255;
+			sc_end SC_ALL;
+			warp $mar$,0,0;
+			end;
+		case 2:
+			cutin "",255;
+			sc_end SC_ALL;
+			warp "cell_game",0,0;
+			end;
+		case 3:
+			cutin "",255;
+			sc_end SC_ALL;
+			warp "guild_vs2",0,0;
+			end;
+		case 4:
+			close2; cutin "",255; end;
+	}
+OnClock0000:
+OnWhisperGlobal:
+	setarray .mr$[0],"guild_vs1","guild_vs2","guild_vs4","pvp_y_1-2","pvp_n_1-1","pvp_n_1-2","pvp_n_1-3","pvp_n_1-4","pvp_n_1-5";
+	set $mar$,.mr$[rand(0,getarraysize(.mr$))];
+	setmapflag $mar$,mf_pvp;
+	setmapflag $mar$,mf_pvp_noguild;
+	setmapflag $mar$,mf_pvp_noparty;
+	if(getmapflag($mar$,mf_gvg))
+		removemapflag $mar$,mf_gvg;
+	setmapflag $mar$,mf_noreturn;
+	setmapflag $mar$,mf_noteleport;
+	setmapflag $mar$,mf_nowarp;
+	setmapflag $mar$,mf_nobranch;
+	setmapflag $mar$,mf_noexppenalty;
+	end;
+OnInit:
+	donpcevent "pvp_s::OnWhisperGlobal";
+	do {
+		set .userspvp,(getmapusers("cell_game")+getmapusers("guild_vs2")+getmapusers($mar$));
+		delwaitingroom;
+		waitingroom "PvP Room [ "+.userspvp+" ]",0;
+		sleep 50;
+	} while(1);
+}
+guild_vs3,50,85,4	script	Salida PvP::WarpPVP	869,{
+cutin "lhz_diguts01",2;
+mes "[^CC0000Warper PvP^000000]";
+mes "¿Quieres salir de esta Sala de PVP?";
+next;
+	if (select("Si, quiero irme.","No gracias.") == 2) {
+		mes "[^CC0000Warper PvP^000000]";
+		mes "Vuelve conmigo cuando desees salir.";
+		close2;
+		cutin "",255;
+		end;
+	}
+	specialeffect2 72;
+	sleep2 2500;
+	specialeffect2 73;
+	cutin "",255;
+	warp "Save",0,0;
+	end;
+}
+cell_game,133,168,4	duplicate(WarpPVP)	Warper PVP#02	869
+guild_vs2,54,71,4	duplicate(WarpPVP)	Warper PVP#03	869
+guild_vs1,68,57,4	duplicate(WarpPVP)	WarperPVP#04	869
+guild_vs2,43,70,4	duplicate(WarpPVP)	WarperPVP#05	869
+guild_vs4,37,60,4	duplicate(WarpPVP)	WarperPVP#06	869
+pvp_y_1-2,128,151,4	duplicate(WarpPVP)	WarperPVP#07	869
+pvp_n_1-1,107,99,4	duplicate(WarpPVP)	WarperPVP#08	869
+pvp_n_1-2,108,109,4	duplicate(WarpPVP)	WarperPVP#09	869
+pvp_n_1-3,96,97,4	duplicate(WarpPVP)	WarperPVP#10	869
+pvp_n_1-4,100,117,4	duplicate(WarpPVP)	WarperPVP#11	869
+pvp_n_1-5,87,114,4	duplicate(WarpPVP)	WarperPVP#12	869
+
+//cell_game	mapflag	allow_bg_items
+cell_game	mapflag	pvp	on
+cell_game	mapflag	pvp_noguild
+cell_game	mapflag	pvp_noparty
+cell_game	mapflag	gvg	off
+cell_game	mapflag	noreturn
+cell_game	mapflag	noteleport
+cell_game	mapflag	nowarp
+cell_game	mapflag	nobranch
+cell_game	mapflag	noexppenalty
+
+guild_vs2	mapflag	noitemconsumption
+guild_vs2	mapflag	gvg	off
+guild_vs2	mapflag	pvp	on
+guild_vs2	mapflag	pvp_noguild
+guild_vs2	mapflag	pvp_noparty
+guild_vs2	mapflag	noreturn
+guild_vs2	mapflag	noteleport
+guild_vs2	mapflag	nowarp
+guild_vs2	mapflag	nobranch
+guild_vs2	mapflag	noexppenalty
+
+prontera	mapflag	leaves
+
+morocc,150,104,5	duplicate(pvp_s)	Salas PvP#01	467
+geffen,112,69,5	duplicate(pvp_s)	Salas PvP#02	467
+payon,179,114,4	duplicate(pvp_s)	Salas PvP#03	467
+alberta,111,68,5	duplicate(pvp_s)	Salas PvP#04	467
+izlude,123,117,5	duplicate(pvp_s)	Salas PvP#05	467

@@ -1,0 +1,33 @@
+Hallow01,105,102,4	script	Niño Halloween::N3	793,{
+
+		mes "[^5533ffNiño Halloween^000000]";
+		mes "Muchas gracias por ayudarme.";
+		next;
+		mes "[^5533ffNiño Halloween^000000]";
+		mes "Ahora las festividades de Halloween se podran llevar a cabo.";
+		next;
+		mes "[^5533ffNiño Halloween^000000]";
+		mes "Te otorgo la bendición de Halloween ^777777*hug*^000000.";
+		getitem 7941,50; //Halloween Ticket
+		getexp 500000,500000;
+			if (#halloween_hat != 1) {
+				getitem 18656,1; //Witched Pumpkin's Hat
+				set #halloween_hat,1;
+				getexp 100000,100000;
+			}
+		close2;
+		warp "prontera",150,180;
+			set .@ins_mas,getpartyleader(getcharid(1),1);
+			if(.@ins_mas == getcharid(3)) {
+				set $hallowQST1,0;
+				set $hallowQST1_1,0;
+				announce "La party [" + getpartyname(getcharid(1)) + "] han vencido al Demonio de Halloween y completado el [Halloween Dungeon].",bc_all,"0x00ff99";
+			}
+		end;
+mes "[^5533ffNiño Halloween^000000]";
+mes "Waaa...";
+close;
+OnInit:
+disablenpc "N3";
+end;
+}

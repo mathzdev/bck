@@ -21,6 +21,7 @@
 #include "elemental.h"
 #include "mail.h"
 #include "quest.h"
+#include "achievement.h"
 
 #include <stdlib.h>
 
@@ -30,7 +31,7 @@ static const int packet_len_table[]={
 	39,-1,15,15, 14,19, 7,-1,  0, 0, 0, 0,  0, 0,  0, 0, //0x3820
 	10,-1,15, 0, 79,19, 7,-1,  0,-1,-1,-1, 14,67,186,-1, //0x3830
 	-1, 0, 0,14,  0, 0, 0, 0, -1,74,-1,11, 11,-1,  0, 0, //0x3840
-	-1,-1, 7, 7,  7,11, 8,-1,  0, 0, 0, 0,  0, 0,  0, 0, //0x3850  Auctions [Zephyrus] itembound[Akinari]
+	-1,-1, 7, 7,  7,11, 8,-1,  0, 0,-1, 7,  0, 0,  0, 0, //0x3850  Auctions [Zephyrus] itembound[Akinari]
 	-1, 7, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0,  0, 0, //0x3860  Quests [Kevin] [Inkfish]
 	-1, 3, 3, 0,  0, 0, 0, 0,  0, 0, 0, 0, -1, 3,  3, 0, //0x3870  Mercenaries [Zephyrus] / Elemental [pakpil]
 	12,-1, 7, 3,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0,  0, 0, //0x3880
@@ -1943,6 +1944,91 @@ int intif_parse_DeleteHomunculusOk(int fd)
 	return 1;
 }
 
+/////////////////////////////////////////////////////////////
+// Achievement System
+/////////////////////////////////////////////////////////////
+int intif_request_achievement(struct map_session_data* sd)
+{
+	WFIFOHEAD(inter_fd,6);
+	WFIFOW(inter_fd,0) = 0x305a;
+	WFIFOL(inter_fd,2) = sd->status.char_id;
+	WFIFOSET(inter_fd,6);
+	return 0;
+}
+
+int intif_parse_Achievement_data(int fd)
+{
+	int i, received, count, char_id = RFIFOL(fd,4);
+	struct map_session_data* sd = map_charid2sd(char_id);
+	if( !sd ) return -1;
+	
+	received = (RFIFOW(fd,2) - 8) / sizeof(struct s_achievement);
+	memset(&sd->achievement,0,sizeof(sd->achievement));
+
+	for( i = 0, count = 0; i < received; i++ )
+	{ // Load Achievements
+		memcpy(&sd->achievement[count],RFIFOP(fd,i * sizeof(struct s_achievement) + 8),sizeof(struct s_achievement));
+		if( achievement_search(sd->achievement[count].id) == NULL )
+		{
+			memset(&sd->achievement[count],0,sizeof(struct s_achievement));
+			sd->save_achievement = true;
+			continue;
+		}
+		count++;
+	}
+
+	sd->achievement_count = count; // Number of Achievements on process
+
+	// Check if new Achievements of type AT_ACHIEVEMENT are implemented
+	for( i = 0; i < count; i++ )
+	{
+		if( !sd->achievement[i].completed )
+			continue;
+		achievement_validate_achievement(sd,sd->achievement[i].id);
+	}
+
+	if( received != count )
+		ShowError("intif_parse_Achievement_data: Deleted some Achievements from Character %s [%d].\n",sd->status.name,sd->status.char_id);
+
+	return 0;
+}
+
+int intif_achievement_save(struct map_session_data* sd)
+{
+	int len;
+	if( CheckForCharServer() )
+		return 0;
+
+	len = 8 + sizeof(struct s_achievement) * sd->achievement_count;
+	sd->save_achievement = false;
+
+	WFIFOHEAD(inter_fd,len);
+	WFIFOW(inter_fd,0) = 0x305b;
+	WFIFOW(inter_fd,2) = len;
+	WFIFOL(inter_fd,4) = sd->status.char_id;
+	if( sd->achievement_count )
+		memcpy(WFIFOP(inter_fd,8), &sd->achievement, sizeof(struct s_achievement) * sd->achievement_count);
+	WFIFOSET(inter_fd, len);
+
+	return 0;
+}
+
+int intif_parse_Achievement_save(int fd)
+{
+	int char_id = RFIFOL(fd,2);
+	struct map_session_data* sd = map_id2sd(char_id);
+
+	if( !RFIFOB(fd,6) )
+	{
+		if( sd ) sd->save_achievement = true;
+		ShowError("intif_parse_Achievement_save: Failed to save Achievements(s) for character %d!\n", char_id);
+	}
+
+	return 0;
+}
+
+/////////////////////////////////////////////////////////////
+
 /**************************************
 
 QUESTLOG SYSTEM FUNCTIONS
@@ -1997,9 +2083,10 @@ void intif_parse_questlog(int fd)
 				ShowError("intif_parse_QuestLog: quest %d not found in DB.\n", received[i].quest_id);
 				continue;
 			}
-			if(received[i].state != Q_COMPLETE) // Insert at the beginning
+			if(received[i].state != Q_COMPLETE) { // Insert at the beginning
 				memcpy(&sd->quest_log[sd->avail_quests++], &received[i], sizeof(struct quest));
-			else // Insert at the end
+				achievement_validate_quest(sd,sd->quest_log[i].quest_id);
+			} else // Insert at the end
 				memcpy(&sd->quest_log[--k], &received[i], sizeof(struct quest));
 			sd->num_quests++;
 		}
@@ -3217,6 +3304,10 @@ int intif_parse(int fd)
 	case 0x3870:	intif_parse_mercenary_received(fd); break;
 	case 0x3871:	intif_parse_mercenary_deleted(fd); break;
 	case 0x3872:	intif_parse_mercenary_saved(fd); break;
+
+	// Achievement System
+	case 0x385a:	intif_parse_Achievement_data(fd); break;
+	case 0x385b:	intif_parse_Achievement_save(fd); break;
 
 	// Elemental System
 	case 0x387c:	intif_parse_elemental_received(fd); break;

@@ -164,7 +164,7 @@ moc_fild16,0,0,0,0	monster	Frilldora	1119,10,5000,0,0
 moc_fild17,0,0,0,0	monster	Hode	1127,130,5000,0,0
 moc_fild17,0,0,0,0	monster	Sandman	1165,30,5000,0,0
 moc_fild17,0,0,0,0	monster	Frilldora	1119,10,5000,0,0
-moc_fild17,0,0,0,0	boss_monster	Phreeoni	1159,1,7200000,600000,1
+moc_fild17,0,0,0,0	boss_monster	Phreeoni	1159,1,7200000,600000,"OnMvPKillEvent::OnPhreeoni"
 moc_fild17,40,258,0,0	monster	Yellow Plant	1081,1,180000,90000,1
 moc_fild17,144,151,0,0	monster	Yellow Plant	1081,1,180000,90000,1
 moc_fild17,243,138,0,0	monster	Yellow Plant	1081,1,180000,90000,1

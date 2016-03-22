@@ -1,0 +1,120 @@
+moro_vol,202,185,0	warp	morovol001	1,1,morocc,166,109
+morocc,166,113,4	script	Devoy::mol1	10027,{
+	if(devoy_q == 1) {
+		if(countitem(1019) >=50) {
+			delitem 1019,50;
+			mes "[Devoy]";
+			mes "Perfecto, entonces te abriré la entrada al Volcán.";
+			close2;
+			set devoy_q,2;
+			end;
+		}
+		mes "[Devoy]";
+		mes "Debes de traerme ^5533ff50 Trunk^000000 para construirte una entrada al volcán.";
+		close2;
+		emotion e_sry;
+		end;
+	}
+	if(devoy_q == 2) {
+		mes "[Devoy]";
+		mes "¿Deseas entrar al volcán?";
+		select("Entrar a Morroc Volcano");
+		warp "moro_vol",204,182;
+		close;
+	}
+	mes "[Devoy]";
+	mes "Oh, hola aventurer"+(Sex?"o":"a");
+	next;
+	mes "[Devoy]";
+	mes "Ahora que Morroc ha sido reconstruida hemos dejado el paso libre al volcán que se formó cerca de la ciudad.";
+	next;
+	mes "[Devoy]";
+	mes "Si quieres ir allí deberás de traerme ^5533ff50 Trunk^000000";
+	next;
+	mes "[Devoy]";
+	mes "Es para construirte una puerta segura, es decir el marco, para que puedas entrar.";
+	next;
+	mes "[Devoy]";
+	mes "Aquí te espero.";
+	close2;
+	set devoy_q,1;
+	end;
+}
+morocc,164,112,4	script	Pila de Troncos::mor2	10026,{
+mes "Una pila de troncos, muy bien acomodada.";
+close;
+}
+moro_vol,0,0,0,0	monster	Fire Condor	3020,50,186000,72000,0
+moro_vol,0,0,0,0	monster	Fire Sandman	3021,50,186000,72000,0
+moro_vol,0,0,0,0	monster	Fire Frilldora	3022,50,186000,72000,0
+moro_vol,0,0,0,0	monster	Fire Golem	3023,50,186000,72000,0
+moro_vol,0,0,0,0	monster	Firepit	3026,20,18600,7200,0
+moro_vol,0,0,0,0	monster	Fulbuk	3027,50,186000,72000,0
+moro_vol,0,0,0,0	monster	Sonia	3028,50,0,0,0
+moro_vol,113,82,5	script	Commander Hiva Agip	459,{
+	cutin "ep13_captin_edq",2;
+	mes "[Commander Hiva Agip]";
+	if(BaseLevel < 140) {
+		mes "Estamos investigando sobre la entrada de una caverna, vuelve cuando tengas más experiencia, no necesitamos novatos.";
+		close2;
+		cutin "",255;
+		end;
+	}
+	mes "Hemos encontrado una apertura hacia una caverna muy misteriosa.";
+	next;
+	mes "[Commander Hiva Agip]";
+	mes "Según nuestros investigadores, han descubierto que se trata del santuario donde nacen los grandes demonios.";
+	next;
+	mes "[Commander Hiva Agip]";
+	mes "Dentro podrás combatir al mal para liberar de la faz del reino todo el mal de una vez por todas.";
+	next;
+	mes "[Commander Hiva Agip]";
+	mes "¿Deseas entrar?";
+	next;
+	if(select("Entrar:Salir") == 2) {
+		mes "[Commander Hiva Agip]";
+		mes "Como quieras.";
+		close2;
+		cutin "",255;
+		end;
+	}
+	warp "moro_cav",53,18;
+	close2;
+	cutin "",255;
+	end;
+OnPCLoadMapEvent:
+	if(strcharinfo(3) == "moro_vol" && BaseLevel >= 140)
+		showevent 0,1;
+	end;
+}
+moro_cav,62,14,0	warp	morocav001	1,1,moro_vol,112,73
+moro_vol,114,87,4	script	Hugin#morovol	755,{
+	mes "[Hugin]";
+	mes "Hay demasiada concentración de maldad allí delante.";
+	next;
+	mes "[Hugin]";
+	mes "No se te ocurra entrar solo de ser así, morirás.";
+	close;
+}
+moro_vol,119,82,4	script	Crusader#morovol	602,{
+	mes "[Crusader]";
+	mes "No debemos permitir que nadie más entre.";
+	next;
+	mes "[Crusader]";
+	mes "No existen guerreros suficientemente fuertes para enfrentar dichosa calamidad que observamos allí dentro.";
+	next;
+	mes "[Crusader]";
+	mes "Detén ésta tontería, y sellemos la entrada.";
+	next;
+	mes "[Hugin]";
+	mes "¿Acaso crees que simplemente sellarla parará todo ésto?";
+	next;
+	cutin "ep13_captin_edq",2;
+	mes "[Commander Hiva Agip]";
+	mes "Tan sólo mira éste lugar, esto fue hecho por un sólo demonio, y allí dentro hay decenas.";
+	next;
+	cutin "",255;
+	mes "[Crusader]";
+	mes ". . . .";
+	close;
+}

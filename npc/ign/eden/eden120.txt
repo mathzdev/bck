@@ -1,0 +1,738 @@
+//===== rAthena Script ======================================= 
+//= Paradise Quest Lv 121~130 (kRO Servers)
+//===== By: ================================================== 
+//= Ziu
+//===== Current Version: ===================================== 
+//= 1.2 (Spanish Scene)
+//===== Compatible With: ===================================== 
+//= rAthena TRUNK 16811+ data Rev z360.
+//===== Additional Comments: ================================= 
+//= 1.0 [AEGIS Playing Conversion]
+//= 1.0.1 Official Korean Texts [Ziu]
+//= 1.0.2 El trace de la sección de thanatos se mantiene en el piso 9Th, no en el piso 8th como se puso despues.
+//= 1.2 Traducción al Español [DanielArt]
+//============================================================
+moc_para01,17,77,5	script	Elena#pquestigu	646,{
+	if (P_questigu == 0) {
+		cutin "igu01.bmp",2;
+		mes "[Elena]";
+		mes "¡Hola, hola!.";
+		mes "Dime, ¿en qué te puedo ayudar?";
+		next;
+		switch(select("¡No, no! En nada","Deseo registrarme como aventurero de Eden"))
+		{
+			case 1:
+				cutin "igu05.bmp",2;
+				mes "[Elena]";
+				mes "Bueno, nos vemos.";
+				close2;
+				cutin "igu05.bmp",255;
+				end;
+			case 2:
+				cutin "igu03.bmp",2;
+				mes "[Elena]";
+				mes "Ya veo, entonces quieres empezar a hacer misiones de expertos, pues bien, tendrás que encontrar ^FF0000muchos secretos^000000 y algunas veces ^FF0000matar poderosos monstruos^000000.";
+				next;
+				mes "[Elena]";
+				mes "¿Qué son dificiles nuestras misiones?";
+				next;
+				mes "[Elena]";
+				mes "No te preocupes, en fin, ya te he registrado como aventurero, vuelve a hablar conmigo para comenzar.";
+				set P_questigu,1;
+				set P_questigua,1;
+				close2;
+				cutin "igu03.bmp",255;
+				end;
+		}
+	}
+	if (P_questigu == 1) {
+		if ((BaseLevel >= 120) && (BaseLevel <= 135)) {
+			cutin "igu01.bmp",2;
+			mes "[Elena]";
+			mes "¿Estás listo para comenzar? pues bien, vamos hayá.";
+			next;
+			switch(select("Quest de Exploración","Salir")) 
+			{
+				case 1:
+					mes "[Elena]";
+					mes "Tengo gran variedad de quest de exploración en las cuales podrás participar";
+					next;
+					switch(select("Explorar Thanatos Tower","Explorar Holy Grounds","Explorar Abbey Monastery","Explorar Abyss Lake"))
+					{
+						case 1:
+							if(checkquest(13107) == -1) {
+								if(checkquest(13111) == -1) {
+									set .@pigu01_time,checkquest(13115,PLAYTIME);  //22 Horas
+									if (.@pigu01_time == 2) {
+										mes "[Elena]";
+										mes "Se han localizado avistamientos de que alguien ha entrado a Thanatos Tower últimamente y necesitamos verificar eso, por favor dírigete a las escaleras del décimo piso a investigar..";
+										next;
+										switch(select("Aceptar Misión","Rechazar misión"))
+										{
+											case 1:
+												mes "[Elena]";
+												mes "Que la mejor de las suertes te acompañe, confiamos en tí";
+												erasequest 13115;
+												setquest 13107;
+												close2;
+												cutin "igu01.bmp",255;
+												end;
+											case 2:
+												close2;
+												cutin "igu01.bmp",255;
+												end;
+										}
+									} else {
+										if (.@pigu01_time == -1) {
+											mes "[Elena]";
+											mes "Se han localizado avistamientos de que alguien ha entrado a Thanatos Tower últimamente y necesitamos verificar eso, por favor dírigete a las escaleras del décimo piso a investigar..";											next;
+											switch(select("Aceptar Misión","Rechazar misión"))
+											{
+												case 1:
+													mes "[Elena]";
+													mes "Que la mejor de las suertes te acompañe, confiamos en tí";
+													setquest 13107;
+													close2;
+													cutin "igu01.bmp",255;
+													end;
+												case 2:
+													close2;
+													cutin "igu01.bmp",255;
+													end;
+											}
+										} else {
+											mes "[Elena]";
+											mes "Lo siento pero debes de esperar 22 horas antes de poder tomar esta misión nuevamente..";
+											close2;
+											cutin "igu01.bmp",255;
+											end;
+										}
+									}
+								}
+								if(checkquest(13111) == 1) {
+									mes "[Elena]";
+									mes "¡Excelente trabajo!, sabíamos que podíamos confíar en tí, ten aquí tu recompenza.";
+									cutin "igu04.bmp",2;
+									erasequest 13111;
+									setquest 13115;
+									getexp 1250000,300000;
+									close2;
+									cutin "igu01.bmp",255;
+									end;
+								}
+							}
+							if(checkquest(13107) == 1) {
+								mes "[Elena]";
+								mes "Ve a Thanatos Tower a investigar si se han visto personas caminando por allí.";
+								close2;
+								cutin "igu01.bmp",255;
+								end;
+							}
+						case 2:
+							if(checkquest(13108) == -1) {
+								if(checkquest(13112) == -1) {
+									set .@pigu02_time,checkquest(13116,PLAYTIME);  //22 Horas
+									if (.@pigu02_time == 2) {
+										cutin "igu03.bmp",2;
+										mes "[Elena]";
+										mes "Se han visto constantes avistamientos de personas raras en Holy Ground, necesitamos que vayas a investigar lo más antes posible.";
+										next;
+										switch(select("Aceptar Misión","Rechazar Misión"))
+										{
+											case 1:
+												cutin "igu05.bmp",2;
+												mes "[Elena]";
+												mes "Confíamos en tí, mucha suerte.";
+												erasequest 13116;
+												setquest 13108;
+												close2;
+												cutin "igu05.bmp",255;
+												end;
+											case 2:
+												close2;
+												cutin "igu03.bmp",255;
+												end;
+										}
+									} else {
+										if (.@pigu02_time == -1) {
+											cutin "igu03.bmp",2;
+											mes "[Elena]";
+											mes "Se han visto constantes avistamientos de personas raras en Holy Ground, necesitamos que vayas a investigar lo más antes posible.";
+											next;
+											switch(select("Aceptar Misión","Rechazar Misión"))
+											{
+												case 1:
+													cutin "igu05.bmp",2;
+													mes "[Elena]";
+													mes "Confíamos en tí, mucha suerte.";
+													setquest 13108;
+													close2;
+													cutin "igu05.bmp",255;
+													end;
+												case 2:
+													close2;
+													cutin "igu03.bmp",255;
+													end;
+											}
+										} else {
+											mes "[Elena]";
+											mes "Lo siento pero debes esperar 22 horas para poder tomar esta misión nuevamente.";
+											close2;
+											cutin "igu01.bmp",255;
+											end;
+										}
+									}
+								}
+								if(checkquest(13112) == 1) {
+									mes "[Elena]";
+									mes "Excelente trabajo, mandaremos a las patrullas de Rachel a que investiguen más a fondo el asunto.";
+									erasequest 13112;
+									setquest 13116;
+									getexp 1000000,300000;
+									close2;
+									cutin "igu01.bmp",255;
+									end;
+								}
+							}
+							if(checkquest(13108) == 1) {
+								cutin "igu05.bmp",2;
+								mes "[Elena]";
+								mes "Ve a Rachel Sanctuary a investigar sobre personas que posiblemente estén habitando aquí.";
+								close2;
+								cutin "igu05.bmp",255;
+								end;
+							}
+						case 3:
+							if(checkquest(13109) == -1) {
+								if(checkquest(13113) == -1) {
+									set .@pigu03_time,checkquest(13117,PLAYTIME);  //22 Horas
+									if (.@pigu03_time == 2) {
+										cutin "igu03.bmp",2;
+										mes "[Elena]";
+										mes "Bien, necesito que investigues Abbey Monastery, al parecer algunos exploradores se han perdido aquí y tenemos que ayudarlos.";
+										next;
+										switch(select("Aceptar Misión","Rechazar Misión"))
+										{
+											case 1:
+												cutin "igu01.bmp",2;
+												mes "[Elena]";
+												mes "Dirígete a Nameless Island y entra al monasterio para que investigues más a fondo.";
+												erasequest 13117;
+												setquest 13109;
+												close2;
+												cutin "igu01.bmp",255;
+												end;
+											case 2:
+												close2;
+												cutin "igu03.bmp",255;
+												end;
+										}
+									} else {
+										if (.@pigu03_time == -1) {
+											cutin "igu03.bmp",2;
+											mes "[Elena]";
+											mes "Bien, necesito que investigues Abbey Monastery, al parecer algunos exploradores se han perdido aquí y tenemos que ayudarlos.";
+											next;
+											switch(select("Aceptar Misión","Rechazar Misión"))
+											{
+												case 1:
+													cutin "igu01.bmp",2;
+													mes "[Elena]";
+													mes "Dirígete a Nameless Island y entra al monasterio para que investigues más a fondo.";
+													setquest 13109;
+													close2;
+													cutin "igu01.bmp",255;
+													end;
+												case 2:
+													close2;
+													cutin "igu03.bmp",255;
+													end;
+											}
+										} else {
+											mes "[Elena]";
+											mes "Lo siento, pero debes de esperar 22 horas antes de aceptar esta misión nuevamente.";
+											close2;
+											cutin "igu01.bmp",255;
+											end;
+										}
+									}
+								}
+								if(checkquest(13113) == 1) {
+									mes "[Elena]";
+									mes "Estupendo trabajo, mandaremos ayuda de inmediato para que rescaten a los pobres.";
+									erasequest 13113;
+									setquest 13117;
+									getexp 750000,200000;
+									close2;
+									cutin "igu01.bmp",255;
+									end;
+								}
+							}
+							if(checkquest(13109) == 1) {
+								cutin "igu04.bmp",2;
+								mes "[Elena]";
+								mes "Dirígete a Nameless Island y entra al monasterio para que investigues más a fondo.";
+								close2;
+								cutin "igu04.bmp",255;
+								end;
+							}
+						case 4:
+							if(checkquest(13110) == -1) {
+								if(checkquest(13114) == -1) {
+									set .@pigu04_time,checkquest(13118,PLAYTIME); //22 Horas
+									if (.@pigu04_time == 2) {
+										mes "[Elena]";
+										mes "Ahora necesito que te vayas a Abyss Lake y entres a esta cueva, donde encontramos rastros de exploradores siendo acorralados por los dragones, debemos encontrar pistas para salvarlos.";
+										next;
+										switch(select("Aceptar Misión","Rechazar Misión"))
+										{
+											case 1:
+												mes "[Elena]";
+												mes "¡Rápido!, ¡Que los dragones se los almuerzan!";
+												erasequest 13118;
+												setquest 13110;
+												close2;
+												cutin "igu01.bmp",255;
+												end;
+											case 2:
+												close2;
+												cutin "igu01.bmp",255;
+												end;
+										}
+									} else {
+										if (.@pigu04_time == -1) {
+											mes "[Elena]";
+											mes "Ahora necesito que te vayas a Abyss Lake y entres a esta cueva, donde encontramos rastros de exploradores siendo acorralados por los dragones, debemos encontrar pistas para salvarlos.";
+											next;
+											switch(select("Aceptar Misión","Rechazar Misión"))
+											{
+												case 1:
+													mes "[Elena]";
+													mes "¡Rápido!, ¡Que los dragones se los almuerzan!";
+													setquest 13110;
+													close2;
+													cutin "igu01.bmp",255;
+													end;
+												case 2:
+													close2;
+													cutin "igu01.bmp",255;
+													end;
+											}
+										} else {
+											mes "[Elena]";
+											mes "Lo siento pero debes esperar 22 horas antes de tomar esta misión nuevamente.";
+											close2;
+											cutin "igu01.bmp",255;
+											end;
+										}
+									}
+								}
+								if(checkquest(13114) == 1) {
+									cutin "igu05.bmp",2;
+									mes "[Elena]";
+									mes "Perfecto trabajo, enviaremos guerreros inmediatamente para que salven a estos exploradores";
+									erasequest 13114;
+									setquest 13118;
+									getexp 500000,200000;
+									close2;
+									cutin "igu05.bmp",255;
+									end;
+								}
+							}
+							if(checkquest(13110) == 1) {
+								cutin "igu05.bmp",2;
+								mes "[Elena]";
+								mes "¡Rápido!, ve a Abyss Lake a buscar pistas de como encontrar a los demás exploradores.";
+								close2;
+								cutin "igu05.bmp",255;
+								end;
+							}		
+					}
+				case 2:
+					mes "[Elena]";
+					mes "Si necesitas algún trabajo para subir tu experiencia como aventurero no dudes en volver.";
+					next;
+					cutin "igu02.bmp",2;
+					mes "[Elena]";
+					mes "¡Te estaré esperando!";
+					close2;
+					cutin "igu02.bmp",255;
+					end;
+			}
+		} else {
+			if (BaseLevel < 120) {
+				cutin "igu01.bmp",2;
+				mes "[Elena]";
+				mes "¡Hola, hola!, ¿qué haces por aquí pequeñín?";
+				next;
+				switch(select("¿Quién eres?","Salir")) 
+				{
+					case 1:
+						cutin "igu04.bmp",2;
+						mes "[Elena]";
+						mes "Yo soy Elena y me encargo de dar tareas de Exploración a los Aventureros de Edén, para apuntarte necesitas nivel 120 ~ 135.";
+						close2;
+						cutin "igu04.bmp",255;
+						end;
+						
+					case 2:
+						mes "[Elena]";
+						mes "Regresa cuando seas mínimo Nivel 120!";
+						close2;
+						cutin "igu02.bmp",255;
+						end;
+				}
+			} else {
+				cutin "igu01.bmp",2;
+				mes "[Elena]";
+				mes "¡Oh dios! al parecer has sobrepasado el nivel 135 y ya no te puedo dar misiones de exploración... ¿qué hacemos?";
+				next;
+				switch(select("Entregar las quest que llevo hasta ahora","Salir")) 
+				{
+					case 1:
+						cutin "igu04.bmp",2;
+						mes "[Elena]";
+						mes "Bien... si has completado alguna quest te daré la experiencia que te mereces.";
+						if((checkquest(13115) == 0) || (checkquest(13115) == 1) || (checkquest(13115) == 2)) {
+							erasequest 13115;
+						}
+						if((checkquest(13116) == 0) || (checkquest(13116) == 1) || (checkquest(13116) == 2)) {
+							erasequest 13116;
+						}
+						if((checkquest(13118) == 0) || (checkquest(13117) == 1) || (checkquest(13117) == 2)) {
+							erasequest 13118;
+						}
+						if((checkquest(13118) == 0) || (checkquest(13118) == 1) || (checkquest(13118) == 2)) {
+							erasequest 13118;
+						}
+						if((checkquest(13107) == 0) || (checkquest(13107) == 1) || (checkquest(13107) == 2)) {
+							erasequest 13107;
+						}
+						if((checkquest(13108) == 0) || (checkquest(13108) == 1) || (checkquest(13108) == 2)) {
+							erasequest 13108;
+						}
+						if((checkquest(13109) == 0) || (checkquest(13109) == 1) || (checkquest(13109) == 2)) {
+							erasequest 13109;
+						}
+						if((checkquest(13110) == 0) || (checkquest(13110) == 1) || (checkquest(13110) == 2)) {
+							erasequest 13110;
+						}
+						if((checkquest(13111) == 0) || (checkquest(13111) == 1) || (checkquest(13111) == 2)) {
+							getexp 1250000,300000;
+							erasequest 13111;
+						}
+						if((checkquest(13112) == 0) || (checkquest(13112) == 1) || (checkquest(13112) == 2)) {
+							getexp 1000000,300000;
+							erasequest 13112;
+						}
+						if((checkquest(13113) == 0) || (checkquest(13113) == 1) || (checkquest(13113) == 2)) {
+							getexp 750000,200000;
+							erasequest 13113;
+						}
+						if((checkquest(13114) == 0) || (checkquest(13114) == 1) || (checkquest(13114) == 2)) {
+							getexp 500000,200000;
+							erasequest 13114;
+						}
+						close2;
+						cutin "igu04.bmp",255;
+						end;
+					case 2:
+						mes "[Elena]";
+						mes "Nos vemos después";
+						close2;
+						cutin "igu02.bmp",255;
+						end;
+				}
+			}
+		}
+	}
+}
+
+
+//Localizaciones trace.
+
+thana_step,75,178,0	script	Trozos de leña#trace01	649,{
+	if (checkquest(13107) == 1) {
+		mes "Al parecer esto es lo que querían que investigara, se nota que alguien ha estado viviendo aquí.";
+		erasequest 13107;
+		setquest 13111;
+		close;
+	} else {
+		mes "Unos trozos de leña quemados.";
+		close;
+	}
+}
+ra_san05,265,69,0	script	Trozos de leña#trace02	649,{
+	if (checkquest(13108) == 1) {
+		mes "Al parecer esto es lo que querían que investigara, se nota que alguien ha estado viviendo aquí.";
+		erasequest 13108;
+		setquest 13112;
+		close;
+	} else {
+		mes "Unos trozos de leña quemados.";
+		close;
+	}
+}
+
+abbey02,155,290,0	script	Trozos de leña#trace03	649,{
+	if (checkquest(13109) == 1) {
+		mes "Al parecer esto es lo que querían que investigara, se nota que alguien ha estado viviendo aquí.";
+		erasequest 13109;
+		setquest 13113;
+		close;
+	} else {
+		mes "Unos trozos de leña quemados.";
+		close;
+	}
+}
+
+abyss_03,102,140,0	script	Trozos de leña#trace04	649,{
+	if (checkquest(13110) == 1) {
+		mes "Al parecer esto es lo que querían que investigara, se nota que alguien ha estado viviendo aquí.";
+		erasequest 13110;
+		setquest 13114;
+		close;
+	} else {
+		mes "Unos trozos de leña quemados.";
+		close;
+	}
+}
+
+moc_para01,44,82,3	script	Steward#pquestigu	648,6,5,{
+	if (P_questigu == 0) {
+		mes "[Steward]";
+		mes "Antes de convertirte en un cazador, debes de ser un explorador, ve allí delante y habla con Elena.";
+		close;
+	}
+	if (P_questigu == 1) {
+		if (P_questigua == 1) {
+			mes "[Steward]";
+			mes "Yo me encargo de dar misiones de caza a los exploradores de edén, dime ¿qué necesitas?";
+			next;
+			switch(select("Registrarme como Cazador","Salir"))
+			{
+				case 1:
+					mes "[Steward]";
+					mes "Los cazadores de edén se dedican a eliminar aquellos monstruos que se han sobrepoblado o que están causando muchos problemas en los dungeons";
+					next;
+					mes "[Steward]";
+					mes "Por tal motivo es nuestro deber exterminarles.";
+					next;
+					mes "[Steward]";
+					mes "Para poder convertirse en un cazador de edén tu nivel deberá ser mayor a 120 y haber sido explorador.";
+					next;
+					mes "[Steward]";
+					mes "Veamos si tu nivel es el adecuado.";
+					next;
+					if (BaseLevel < 136) {
+						mes "[Steward]";
+						mes "Muy bien, te he registrado como un cazador de edén, habla conmigo nuevamente para empezar.";
+						set P_questigua,0;
+						close;
+					} else {
+						mes "[Steward]";
+						mes "Muy bien, te he registrado como un cazador de edén, habla conmigo nuevamente para empezar.";
+						set P_questigua,2;
+						close;
+					}
+					
+				case 2:
+					mes "[Steward]";
+					mes "Nos vemos después.";
+					close;
+			}
+		}
+		if (P_questigua == 0) {
+			if (BaseLevel < 120) {
+				mes "[Steward]";
+				mes "Lo siento pero eres muy débil para tratar con nosotros, vuelve en otra ocasión.";
+				close;
+			}
+			if ((BaseLevel >= 120) && (BaseLevel <= 135)) {
+				mes "[Steward]";
+				mes "¿A qué vienes el día de hoy?";
+				next;
+				switch(select("Quest de Caza","Salir"))
+				{
+					case 1:
+						mes "[Steward]";
+						mes "Por favor elige el lugar de donde realizarás la caza.";
+						next;
+						switch(select("Thanatos Tower","Holy Ground","Abbey Monastery","Abyss Lake"))
+						{
+							case 1:
+								mes "[Steward]";
+								mes "¿Qué es lo que quieres cazar aquí?";
+								next;
+								switch(select("Baroness of Retribution","Lady Solace","Mistress of Shelter","Dame of Sentinel"))
+								{
+									case 1:
+										callfunc "Hunt_Q",13119,13120,"Baroness of Retribution",800000,300000,0,0,120,135;
+									case 2:
+										callfunc "Hunt_Q",13121,13122,"Lady Solace",800000,300000,0,0,120,135;
+									case 3:
+										callfunc "Hunt_Q",13123,13124,"Mistress of Shelter",800000,300000,0,0,120,135;
+									case 4:
+										callfunc "Hunt_Q",13125,13126,"Dame of Sentinel",800000,300000,0,0,120,135;
+								}
+							case 2:
+								mes "[Steward]";
+								mes "¿Qué es lo que quieres cazar aquí?";
+								next;
+								switch(select("Isilla y Vanberk","Hodremlin","Agav y Echio"))
+								{
+									case 1:
+										callfunc "Hunt_Q",13127,13128,"Isilla & Vanberk",1000000,550000,0,0,120,135;
+									case 2:
+										callfunc "Hunt_Q",13129,13130,"Hodremlin",800000,300000,0,0,120,135;
+									case 3:
+										callfunc "Hunt_Q",13131,13132,"Agav & Echio",1000000,550000,0,0,120,135;
+								}
+							case 3:
+								mes "[Steward]";
+								mes "¿Qué es lo que quieres cazar aquí?";
+								next;
+								switch(select("Ragged Zombie","Zombie Slaughter","Banshee"))
+								{
+									case 1:
+										callfunc "Hunt_Q",13133,13134,"Ragged Zombie",800000,300000,0,0,120,135;
+									case 2:
+										callfunc "Hunt_Q",13135,13136,"Zombie Slaughter",800000,300000,0,0,120,135;
+									case 3:
+										callfunc "Hunt_Q",13137,13138,"Banshee",800000,300000,0,0,120,135;
+								}
+							case 4:																			
+								mes "[Steward]";
+								mes "¿Qué es lo que quieres cazar aquí?";
+								next;
+								switch(select("Green y Red Ferus","Blue y Golden Acidus"))
+								{
+									case 1:
+										callfunc "Hunt_Q",13139,13140,"Green & Red Ferus",800000,300000,0,0,120,135;
+									case 2:
+										callfunc "Hunt_Q",13141,13142,"Blue & Golden Acidus",800000,300000,0,0,120,135;			
+								}
+						}
+					case 2:
+						close;
+				}
+			}
+			if (BaseLevel >= 130) {
+				mes "[Steward]";
+				mes "Al parecer superaste el nivel ¿Qué quieres hacer?";
+				next;
+				switch(select("Entregar Quest","Salir"))
+				{
+					case 1:
+						mes "[Steward]";
+						mes "Si hay alguna quest que hayas completado, la haré válida.";
+						next;
+						if((checkquest(13120) == 0) || (checkquest(13120) == 1) || (checkquest(13120) == 2)) {
+							erasequest 13120;
+						}
+						if((checkquest(13122) == 0) || (checkquest(13122) == 1) || (checkquest(13122) == 2)) {
+							erasequest 13122;
+						}
+						if((checkquest(13124) == 0) || (checkquest(13124) == 1) || (checkquest(13124) == 2)) {
+							erasequest 13124;
+						}
+						if((checkquest(13126) == 0) || (checkquest(13126) == 1) || (checkquest(13126) == 2)) {
+							erasequest 13126;
+						}
+						if((checkquest(13128) == 0) || (checkquest(13128) == 1) || (checkquest(13128) == 2)) {
+							erasequest 13128;
+						}
+						if((checkquest(13130) == 0) || (checkquest(13130) == 1) || (checkquest(13130) == 2)) {
+							erasequest 13130;
+						}
+						if((checkquest(13132) == 0) || (checkquest(13132) == 1) || (checkquest(13132) == 2)) {
+							erasequest 13132;
+						}
+						if((checkquest(13134) == 0) || (checkquest(13134) == 1) || (checkquest(13134) == 2)) {
+							erasequest 13134;
+						}
+						if((checkquest(13136) == 0) || (checkquest(13136) == 1) || (checkquest(13136) == 2)) {
+							erasequest 13136;
+						}
+						if((checkquest(13138) == 0) || (checkquest(13138) == 1) || (checkquest(13138) == 2)) {
+							erasequest 13138;
+						}
+						if((checkquest(13140) == 0) || (checkquest(13140) == 1) || (checkquest(13140) == 2)) {
+							erasequest 13140;
+						}
+						if((checkquest(13142) == 0) || (checkquest(13142) == 1) || (checkquest(13142) == 2)) {
+							erasequest 13142;
+						}
+						if((checkquest(13119) == 0) || (checkquest(13119) == 1) || (checkquest(13119) == 2)) {
+							erasequest 13119;
+							next;
+						}
+						if((checkquest(13121) == 0) || (checkquest(13121) == 1) || (checkquest(13121) == 2)) {
+							erasequest 13121;
+							next;
+						}
+						if((checkquest(13123) == 0) || (checkquest(13123) == 1) || (checkquest(13123) == 2)) {
+							erasequest 13123;
+							next;
+						}
+						if((checkquest(13125) == 0) || (checkquest(13125) == 1) || (checkquest(13125) == 2)) {
+							erasequest 13125;
+							next;
+						}
+						if((checkquest(13127) == 0) || (checkquest(13127) == 1) || (checkquest(13127) == 2)) {
+							erasequest 13127;
+							next;
+						}
+						if((checkquest(13129) == 0) || (checkquest(13129) == 1) || (checkquest(13129) == 2)) {
+							erasequest 13129;
+							next;
+						}
+						if((checkquest(13131) == 0) || (checkquest(13131) == 1) || (checkquest(13131) == 2)) {
+							erasequest 13131;
+							next;
+						}
+						if((checkquest(13133) == 0) || (checkquest(13133) == 1) || (checkquest(13133) == 2)) {
+							erasequest 13133;
+							next;
+						}
+						if((checkquest(13135) == 0) || (checkquest(13135) == 1) || (checkquest(13135) == 2)) {
+							erasequest 13135;
+							next;
+						}
+						if((checkquest(13137) == 0) || (checkquest(13137) == 1) || (checkquest(13137) == 2)) {
+							erasequest 13137;
+							next;
+						}
+						if((checkquest(13139) == 0) || (checkquest(13139) == 1) || (checkquest(13139) == 2)) {
+							erasequest 13139;
+							next;
+						}
+						if((checkquest(13141) == 0) || (checkquest(13141) == 1) || (checkquest(13141) == 2)) {
+							erasequest 13141;
+							next;
+						}
+						mes "[Steward]";
+						mes "He terminado el proceso, buena suerte.";
+						set P_questigua,2;
+						close;
+						
+					case 2:
+						close;
+				}
+				
+			}
+		}
+		if (P_questigua == 2) {
+			mes "[Steward]";
+			mes "Aquí podrás solicitar quest para asesinar monstruos y ganar experiencia con ésto.";
+			close;
+		}
+	}
+OnTouch:
+	if (P_questigua == 1) {
+		mes "[Steward]";
+		mes "¡Ey, explorador!, acercate aquí si te gusta más la caza que la exploración.";
+		emotion e_gasp,0;
+		close;
+	}
+}

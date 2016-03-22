@@ -1,0 +1,89 @@
+//===== eAthena Script ======================================= 
+//= Alquiler Universal (compatible con 3CeAM)
+//= Custom Free Breeder aka Universal Renter (nombre original)
+//===== Por: ================================================= 
+//= eAthena Team (Trabajo original)
+//= karmic (Traducción al español)
+//===== Version Actual: ====================================== 
+//= 1.7
+//===== Compatible Con: ====================================== 
+//= eAthena 1.0 Final +
+//===== Descripción: ========================================= 
+//= A Free PecoPeco and Falcon Breeder
+//===== Comentarios Adicionales Originales: ================== 
+//= 1.1 FIXED checkriding/cart/falcon funcs [Lupus]
+//= 1.2 Added Rebirth/Advanced Class support [Mass Zero]
+//= 1.3 Simplified the checks of job [Silentdragon]
+//= 1.3a Fixed a Typo Error. [Samuray22]
+//	-Thanks to ~AnnieRuru~.
+//= 1.4 Optimized Script. No need for 50 million Labels. [Spre]
+//= Added renting of Dragons . [The Quality Maker]
+//= 1.5 Added option for Gryphons and fixed problem with Peco and Rune Knight. [Ryo-Kun]
+//= 1.6 Added provisory renting of Magic Gear. [Viktus]
+//= 1.7 Fixed for 3CeAM Emulator.[Kimimaro]
+//============================================================ 
+ 
+prontera,129,216,5	script	Alquiler Universal	731,{
+	mes "[Alquiler Universal]";
+	mes "Hola, aquí puedes alquilar Carros, Halcones, Pecopecos, Dragones, Grifos o Magic Gears.";
+	next;
+	switch(select("Carro:Halcon:PecoPeco:Dragon:Grifo:Magic Gear")) {
+		case 1:
+			if(checkcart() == 0 && getskilllv("MC_PUSHCART")>0) {
+				setcart;
+				close;
+			}else{
+				mes "[Alquiler Universal]";
+				mes "Lo siento " + strcharinfo(0) + ", Por favor, asegurate de tener el job y la habilidad requerida.";
+				close;
+			}
+		case 2:
+			if (!checkfalcon() && getskilllv("HT_FALCON") && !checkoption(Option_Wug) && !checkoption(Option_Wugrider)) {
+				setfalcon;
+				close;
+			}else{
+				mes "[Alquiler Universal]";
+				mes "Lo siento " + strcharinfo(0) + ", Por favor, asegurate de tener el job y la habilidad requerida.";
+				close;
+			}					
+		case 3:
+			if (BaseJob != Job_Swordman && BaseClass == Job_Swordman && checkriding() == 0 && getskilllv("KN_RIDING")>0 && Class != 4054 && Class != 4060 && Class != 4066 && Class != 4073) {
+				setriding;
+				close;
+			}else{
+				mes "[Alquiler Universal]";
+				mes "Lo siento " + strcharinfo(0) + ", Por favor, asegurate de tener el job y la habilidad requerida.";
+				close;
+			}
+		case 4:
+			if (BaseJob != Job_Swordman && BaseClass == Job_Swordman && checkriding() == 0 && getskilllv("RK_DRAGONTRAINING")>0) {
+				setdragon;
+				close;
+			}else{
+				mes "[Alquiler Universal]";
+				mes "Lo siento " + strcharinfo(0) + ", Por favor, asegurate de tener el job y la habilidad requerida.";
+				close;
+			}
+		case 5:
+			if (BaseJob != Job_Swordman && BaseClass == Job_Swordman && checkriding() == 0 && getskilllv("KN_RIDING")>0 && Class == 4073 || Class == 4066) {
+				setriding;
+				close;
+			}else{
+				mes "[Alquiler Universal]";
+				mes "Lo siento " + strcharinfo(0) + ", Por favor, asegurate de tener el job y la habilidad requerida.";
+				close;
+			}
+		case 6:
+			if (BaseJob != Job_Merchant && BaseClass == Job_Merchant && checkriding() == 0 && getskilllv("NC_MADOLICENCE")>0 && Class == 4064 || Class == 4058 || Class == 4100) {
+				setmadogear;
+				close;
+			}else{
+				mes "[Alquiler Universal]";
+				mes "Lo siento " + strcharinfo(0) + ", Por favor, asegurate de tener el job y la habilidad requerida.";
+				close;
+			}
+	}
+}
+bat_room,145,147,5	duplicate(Alquiler Universal)	Alquiler Universal#02	731
+new_3-2,87,122,5	duplicate(Alquiler Universal)	Alquiler Universal#03	731
+ayo_in01,182,111,5	duplicate(Alquiler Universal)	Alquiler Universal#04	731

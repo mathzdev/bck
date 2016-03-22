@@ -1,0 +1,144 @@
+// ===============================
+// ===============================
+// -------- Event Ticket ---------
+//         por Tirfing 
+// http://organix.foro-activo.com
+// ===============================
+// ===============================
+
+prontera.gat,187,210,4	script	Tickets Eventos::ticketseventos	562,{
+
+	mes "[^CC0000Tickets Eventos^000000]";
+	mes "¿Has venido a cambiar tus ^0000CCEvent Ticket^000000?";
+	next;
+menu "Cambiar mi Event Ticket",cambiar,"¿Que es un Event Ticket?",quees,"¿Como consigo uno?",como,"Cancelar",cancelar;
+	close;
+
+cambiar:
+if(countitem(7711)<1)goto noticket;
+	mes "[^CC0000Tickets Eventos^000000]";
+	mes "¡Perfecto!";
+	mes "Veo que tienes un Event Ticket, ahora mismo te doy tu premio.";
+	next;
+	delitem 7711,1;
+	set @TicketEvento,rand(1,200);
+	if (@TicketEvento <= 10) goto raro;
+	if (@TicketEvento <= 30) goto infrecuente;
+	if (@TicketEvento <= 80) goto comun;
+	if (@TicketEvento <= 200) goto consumible;
+	end;
+	
+
+raro:
+	set @TicketEvento,rand(1,17);
+	if (@TicketEvento == 1) {getitem 616,1;} // Old Card Album
+	if (@TicketEvento == 2) {getitem 5436,1;} // Bride's Corolla
+	if (@TicketEvento == 3) {getitem 5447,1;} // Frog Cap
+	if (@TicketEvento == 4) {getitem 5253,1;} // Lif Doll Hat
+	if (@TicketEvento == 5) {getitem 5365,1;} // Magnolia Hat
+	if (@TicketEvento == 6) {getitem 5099,1;} // Neko Mimi
+	if (@TicketEvento == 7) {getitem 5554,1;} // Octopus Hat
+	if (@TicketEvento == 8) {getitem 5529,1;} // Satanic Bone Helm
+	if (@TicketEvento == 9) {getitem 5181,1;} // Helm of Darkness
+	if (@TicketEvento == 10) {getitem 5214,1;} // Moonlight Flower Cap
+	if (@TicketEvento == 11) {getitem 5520,1;} // Rabbit Earplugs
+	if (@TicketEvento == 12) {getitem 5511,1;} // Samambaia
+	if (@TicketEvento == 13) {getitem 5288,1;} // Red Glasses
+	if (@TicketEvento == 14) {getitem 5445,1;} // Lollipop
+	if (@TicketEvento == 15) {getitem 5272,1;} // Tongue Mask
+	if (@TicketEvento == 16) {getitem 5304,1;} // Executioner Hood
+	if (@TicketEvento == 17) {getitem 5294,1;} // Whisper Mask
+	if (@TicketEvento == 18) {getitem 7539,20;} // Poring Coin
+goto fin;
+end;
+
+infrecuente:
+	set @TicketEvento,rand(1,9);
+	if (@TicketEvento == 1) {getitem 12103,1;} // Bloody Branch
+	if (@TicketEvento == 2) {getitem 12214,5;} // Convex Mirror
+	if (@TicketEvento == 3) {getitem 12263,1;} // Field Manual 50%
+	if (@TicketEvento == 4) {getitem 7619,1;} // Enriched Elunium
+	if (@TicketEvento == 5) {getitem 14540,1;} // Scroll of Holy Armor
+	if (@TicketEvento == 6) {getitem 12106,1;} // Jewelry Box
+	if (@TicketEvento == 7) {getitem 14592,1;} // Field Manual Job 50%
+	if (@TicketEvento == 8) {getitem 7620,1;} // Enriched Oridecon
+	if (@TicketEvento == 9) {getitem 12213,1;} // Neuralizer
+goto fin;
+end;
+
+comun:
+	set @TicketEvento,rand(1,9);
+	if (@TicketEvento == 1) {getitem 7773,30;} // Battle Badge
+	if (@TicketEvento == 2) {getitem 7829,30;} // Valor Badge
+	if (@TicketEvento == 3) {getitem 7828,30;} // Bravery Badge
+	if (@TicketEvento == 4) {getitem 12209,10;} // Life Insurance
+	if (@TicketEvento == 5) {getitem 603,20;} // Old Blue Box
+	if (@TicketEvento == 6) {getitem 617,10;} // Old Purple Box
+	if (@TicketEvento == 7) {getitem 12105,3;} // Taming Gift Set
+	if (@TicketEvento == 8) {getitem 14234,5;} // Dead Branch Box
+	if (@TicketEvento == 9) {getitem 12211,10;} // Kafra Card
+goto fin;
+end;
+
+consumible:
+	set @TicketEvento,rand(1,19);
+	if (@TicketEvento == 1) {getitem 505,30;} // Blue Potion
+	if (@TicketEvento == 2) {getitem 547,30;} // Condensed White Potion
+	if (@TicketEvento == 3) {getitem rand(12118,12121),30;} // Elemental Resistance Potion
+	if (@TicketEvento == 4) {getitem 678,30;} // Poison Bottle
+	if (@TicketEvento == 5) {getitem rand(12717,12724),30;} // Poison Guillotine
+	if (@TicketEvento == 6) {getitem rand(13260,13264),30;} // Genetic Bombs
+	if (@TicketEvento == 7) {getitem rand(6210,6212),30;} // Genetic Usables
+	if (@TicketEvento == 8) {getitem 12437,30;} // Ceromain Soup
+	if (@TicketEvento == 9) {getitem rand(7135,7139),30;} // Creator Usables
+	if (@TicketEvento == 10) {getitem rand(12114,12117),30;} // Converters
+	if (@TicketEvento == 11) {getitem rand(12028,12034),30;} // Boxes
+	if (@TicketEvento == 12) {getitem rand(14512,14521),30;} // Pergaminos
+	if (@TicketEvento == 13) {getitem rand(12202,12207),30;} // Comidas +10
+	if (@TicketEvento == 14) {getitem 12424,30;} // Increase HP Large
+	if (@TicketEvento == 15) {getitem 12298,30;} // SP Reduce Consumption Potion
+	if (@TicketEvento == 16) {getitem 12427,30;} // Increase SP Large
+	if (@TicketEvento == 17) {getitem 12016,30;} // Speed Potion
+	if (@TicketEvento == 18) {getitem rand(12725,12733),20;} // Runes RK
+	if (@TicketEvento == 19) {getitem 12299,5;} // Resist Potion
+goto fin;
+end;
+
+
+
+	fin:
+	mes "[^CC0000Tickets Eventos^000000]";
+	mes "¡Ahi tienes!";
+	mes "Espero que sea algo bueno, sino no te apures pronto habra un nuevo evento y mas tickets que conseguir.";
+close;
+
+quees:
+	mes "[^CC0000Tickets Eventos^000000]";
+	mes "Los Event Ticket son unos objetos que podrás intercambiar aquí por diferentes premios.";
+	next;
+	mes "[^CC0000Tickets Eventos^000000]";
+	mes "Los premios que recibirás aquí són muy variables, puede que tengas mucha suerte y recibas un gran premio o tener una suerte mediocre y recibir algo no tan bueno.";
+	next;
+	mes "[^CC0000Tickets Eventos^000000]";
+	mes "Es como una loteria en la que podrás recibir:";
+	mes "- Consumibles para WOE";
+	mes "- Comidas de Stat";
+	mes "- Algun elemento decorativo único";
+	mes "- Medallas de Battlegrounds";
+	mes "- Cash Points";
+	mes "y algún premio sorpresa más!";
+close;
+
+como:
+	mes "[^CC0000Tickets Eventos^000000]";
+	mes "Los ^0000CCEvent Ticket^000000 solo podrán ser obtenidos en algunos eventos.";
+close;
+
+cancelar:
+close;
+
+noticket:
+	mes "[^CC0000Tickets Eventos^000000]";
+	mes "Si no tienes un Event Ticket no puedo darte ningún premio.";
+close;
+}

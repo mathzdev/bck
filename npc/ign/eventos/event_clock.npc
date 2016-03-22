@@ -1,0 +1,52 @@
+// El siguiente script controla al resto de los eventos.
+// Al minuto 25 hay 50% de probabilidad de ejecutar uno de los 7 eventos programados.
+// Para activar un evento, escribir npc:BUSCAPO por ejemplo, sustituyendo el nombre según el evento.
+// Elaborado por DanielArt.
+-	script	EventClock	-1,{
+OnMinute20:
+OnMinute50:
+	if(rand(100) < 50) {
+		switch (rand(1,10)) {
+			case 1:
+				//Busca Poring
+				donpcevent "BUSCAPO::OnBuscaPoring";
+				break;
+			case 2:
+			case 8:
+				//Emperium Break
+				donpcevent "EMP::OnEmpeBreak";
+				break;
+			case 3:
+				//Pesca Alberta
+				donpcevent "PESCALBE::OnPescaAlberta";
+				break;
+			case 4:
+			case 9:
+				//Guerra Explosiva
+				donpcevent "EXPLOWAR::OnExploWar";
+				break;
+			case 5:
+				//Cuenta Hongos
+				donpcevent "CUENT::OnCuentaHongos";
+				break;
+			case 6:
+				//Atrapa la Masa
+				donpcevent "RICEVT::OnAtrapaMasa";
+				break;
+			case 7:
+			case 10:
+				//Novice vs Zombies
+				donpcevent "announce_nvz::OnNoviceZombie";
+				break;
+		}
+	}
+end;
+}
+function	script	F_Event	{
+	switch (getarg(0)) {
+		case 1:
+			getitem 7711,getarg(1);
+			return;
+	}
+return 0;
+}

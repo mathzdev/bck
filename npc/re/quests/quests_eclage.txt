@@ -1373,7 +1373,7 @@ eclage,191,200,4	script	Yube#ep14_2	4_M_FAIRYKID5,{
 			next;
 			mes "[Yube]";
 			mes "I mold the dust clumb like this and place the wick like this!";
-			mes "VoilÃ !";
+			mes "Voilà!";
 			next;
 			mes "[Yube]";
 			mes "They're all made!";
@@ -1469,7 +1469,7 @@ eclage,191,200,4	script	Yube#ep14_2	4_M_FAIRYKID5,{
 	else if (ep14_2_oliver == 15) {
 		if (countitem(6555) >= 128) {
 			mes "I mold the dust clumb like this and place the wick like this!";
-			mes "VoilÃ !";
+			mes "Voilà!";
 			cutin "war_y4",2;
 			next;
 			mes "[Yube]";
@@ -1512,7 +1512,7 @@ eclage,191,200,4	script	Yube#ep14_2	4_M_FAIRYKID5,{
 				}
 				else {
 					mes "I mold the dust clumb like this and place the wick like this!";
-					mes "VoilÃ !";
+					mes "Voilà!";
 					delitem 6561,.@input;// Dustball
 					getitem 6555,.@input;// Birthday_Candle
 					next;
@@ -10671,7 +10671,7 @@ ecl_in04,105,216,4	script	Hiel's Workshop#pa0829	HIDDEN_NPC,{
 			next;
 			cutin "EP14_etran1",1;
 			mes "[Etran]";
-			mes "Welcome welcomeow~! We are cat merchants, always serving guests as our kingeow~! Special sale! One piece of meat for 200ì œë‹ˆ!!";
+			mes "Welcome welcomeow~! We are cat merchants, always serving guests as our kingeow~! Special sale! One piece of meat for 200??!!";
 			next;
 			cutin "EP14_robert1",1;
 			mes "[Robert]";

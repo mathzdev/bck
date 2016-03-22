@@ -1,0 +1,13 @@
+bif_fild01,35,374,4	script	Mysterious Flower	111,{
+	if(countitem(12561) < 1) {
+		mes "This flower can't growth if you don't have a ^5533ffMysterious Seed^000000.";
+		close;
+	}
+	if(lffins < 1 && ep13_mdrama < 20) {
+		mes "^777777The flower don't aswer to your call^000000.";
+		close;
+	}
+delitem 12561,1;
+warp "bif_fild02",160,230;
+end;
+}

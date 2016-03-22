@@ -1,0 +1,126 @@
+prontera,164,163,4	script	Premiador	872,{
+	mes "^FF0000Premiador^000000";
+	if(getgroupid() >= .GMlevel) {
+        mes "Hola GM, quieres entregar un premio?";
+        mes "^FF0000Recuerda^000000: La entrega de los premios se hace de forma publica y se guarda un registro de esta.";
+        if(select("~ Entregar Premio:~ Salir")==2) close;
+        next;
+        mes "^FF0000Premiador^000000";
+        mes "Escribe el nombre del jugador que al que quieres premiar.";
+        set .@gm$, strcharinfo(0);
+        set .@gmid, getcharid(3);
+        input .@name$;
+        query_sql "SELECT account_id FROM `char` WHERE `name` = '"+.@name$+"'", .@account_id;
+		if(!.@account_id) {
+			mes "Ese player no existe.";
+			close;
+		}
+        next;
+        mes "^FF0000GM Premiador^000000";
+        mes "Escribe un resumen de la razón por la cual entregas este premio.";
+        input .@reason$;
+        next;
+        mes "^FF0000Premiador^000000";
+        mes "Selecciona la modalidad de premio.";
+        switch(select("~ Objeto Random:~ Zeny Random:~ Cash Random"+(getgmlevel() >= .GMlevelT?":~ Objeto:~ Zeny:~ Cash":"")+"")) {
+                case 4:
+                        next;
+                        mes "^FF0000Premiador^000000";
+                        mes "Introduce la ID del objeto que quieres entregar como premio.";
+                        input .@nameid;
+                        if(getiteminfo(.@nameid,0) == -1) {next; mes "^FF0000GM Premiador^000000"; mes "El objeto elegido no existe."; close;}
+                        next;
+                        mes "^FF0000Premiador^000000";
+                        mes "Digite la cantidad de ["+getitemname(.@nameid)+"] que desea entregar como premio.";
+                        input .@amount;
+                case 1:
+                        next;
+                        mes "^FF0000Premiador^000000";
+                        mes "¿Confirmas el envio del premio?";
+                        if(select("~ Si:~ No")==2) close;
+                        if(!.@nameid || !.@amount) {
+                                set .@s, getarraysize(.ItPremios)/2;
+                                set .@it, rand(.@s)*2;
+                                set .@nameid, .ItPremios[.@it];
+                                set .@amount, .ItPremios[.@it+1];
+                        }
+                        close2;
+                        if(attachrid(.@account_id)) {
+                                getitem .@nameid, .@amount;
+                        } else {
+                                query_sql("INSERT INTO storage (account_id, nameid, amount, identify) VALUES ("+.@account_id+", "+.@nameid+", "+.@amount+", 1)");
+                        }
+                        announce "["+.@gm$+"] le entrega premio en Items a ["+.@name$+"]",0;
+                        query_sql("INSERT INTO premios_log (account_gm_id, account_user_id, nameid, amount, reason) VALUES ("+.@gmid+", "+.@account_id+", "+.@nameid+", "+.@amount+", '"+.@reason$+"')");
+                        end;
+                case 5:
+                        next;
+                        mes "^FF0000Premiador^000000";
+                        mes "Introduce la cantidad de Zeny que desea entregar como premio.";
+                        input .@zeny;
+                case 2:
+                        next;
+                        mes "^FF0000Premiador^000000";
+                        mes "¿Confirmas el envío del premio?";
+                        if(select("~ Si:~ No")==2) close;
+                        if(!.@zeny)
+                                set .@zeny, rand(.Zeny[0],.Zeny[1]);
+                        close2;
+                        if(attachrid(.@account_id)) {
+                                set Zeny, Zeny + .@zeny;
+                        } else {
+                                query_sql("UPDATE `char` SET zeny = zeny+"+.@zeny+" WHERE name = '"+.@name$+"'");
+                        }
+                        announce "["+.@gm$+"] le entrega premio en Zeny a ["+.@name$+"]",0;
+                        query_sql("INSERT INTO premios_log (account_gm_id, account_user_id, zeny, reason) VALUES ("+.@gmid+", "+.@account_id+", "+.@zeny+", '"+.@reason$+"')");
+                        end;
+                case 6:
+                        next;
+                        mes "^FF0000Premiador^000000";
+						mes "Servicio cancelado.";
+						close;
+                        mes "Introduce la cantidad de CashPoints que desea entregar como premio.";
+                        input .@cash;
+                case 3:
+                        next;
+                        mes "^FF0000Premiador^000000";
+						mes "Servicio cancelado.";
+						close;
+                        mes "¿Confirmas el envío del premio?";
+                        if(select("~ Si:~ No")==2) close;
+                        if(!.@cash)
+                                set .@cash, rand(.Cash[0],.Cash[1]);
+                        close2;
+                        if(attachrid(.@account_id)) {
+                                set #CASHPOINTS, #CASHPOINTS + .@cash;
+                        } else {
+                        query_sql("SELECT IF (EXISTS(SELECT * FROM global_reg_value WHERE str = '#CASHPOINTS' AND account_id = "+.@account_id+"),1, 0)", .@select);
+                                if(.@select==1)
+                                        query_sql("UPDATE `global_reg_value` SET value = value+"+.@cash+" WHERE str = '#CASHPOINTS' AND account_id = "+.@account_id+"");
+                                else
+                                        query_sql("INSERT INTO global_reg_value (str, value, type, account_id) VALUES ('#CASHPOINTS', "+.@cash+", 2, "+.@account_id+")");
+                        }
+                        announce "["+.@gm$+"] le entrega premio en CashPoints a ["+.@name$+"]",0;
+                        query_sql("INSERT INTO premios_log (account_gm_id, account_user_id, cash, reason) VALUES ("+.@gmid+", "+.@account_id+", "+.@cash+", '"+.@reason$+"')");
+                        end;
+        }
+	} else {
+			mes "Soy el encargado de entregar los premios de parte de los GMs.";
+			next;
+			mes "^FF0000Premiador^000000";
+			mes "Estos premios serán entregados públicamente y se guardará un registro con las razones por la que se entrego este premio.";
+			next;
+			mes "^FF0000Premiador^000000";
+			mes "El objetivo es la transparencia en el Staff y el control de la corrupción.";
+	}
+close;
+ 
+OnInit:
+query_sql("CREATE TABLE IF NOT EXISTS `premios_log` (`id` int(11) NOT NULL AUTO_INCREMENT,`account_gm_id` int(11) NOT NULL, `account_user_id` int(11) NOT NULL, `nameid` int(11) DEFAULT NULL, `amount` int(11) DEFAULT NULL, `zeny` int(11) DEFAULT NULL, `cash` int(11) DEFAULT NULL, `reason` char(50) DEFAULT NULL, PRIMARY KEY (`id`))");
+set .GMlevel, 4;       //Minimo nivel de GM para utilizar este NPC
+set .GMlevelT, 99;      //Minimo nivel de GM para utilizar este NPC y usar la opción de entregar item especifico.
+setarray .ItPremios[0],675,5,7711,1,7711,2,7711,5,7711,10,7711,20;     //Lista de premios aleatorios (item_id,ammount)
+setarray .Zeny[0],100000,500000,1000000;        //Intervalo de premio en zeny, el zeny a entregar sera un numero aleatorio entre los dos números del array.
+setarray .Cash[0],0;                        //El mismo concepto de Zeny.
+end;
+}

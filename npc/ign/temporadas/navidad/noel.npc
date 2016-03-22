@@ -1,0 +1,98 @@
+prontera,159,181,4	script	Papá Noel::EV01	718,{
+set .npc$,"[^ff0000Papá Noel^000000]";
+	if( #q_nav01 == 1 ) {
+		mes .npc$;
+		mes "Disfruta las fiestas decembrinas.";
+		close;
+	}
+function r_i;
+mes .npc$;
+mes "¡Hola!, Ho ho ho ~";
+mes "Si respondes correctamente a mi cuestionario te daré un gran regalo que sólo podrás recibir este año.";
+next;
+mes .npc$;
+mes "¿Listo para comenzar?";
+next;
+	if(select("Aún no","Estoy list"+(Sex?"o":"a")) == 1) {
+		mes .npc$;
+		mes "Vuelve cuando lo estés.";
+		close2;
+		emotion e_sry;
+		end;
+	}
+	mes .npc$;
+	mes "¿Cuál es el otro nombre por el cual me conocen?";
+	next;
+	input @r$;
+	if(@r$ != "San Nicolás") r_i;
+	mes .npc$;
+	mes "¿Cuál es la fecha en la que me encargo de entregar regalos?";
+	next;
+	input @r;
+	if(@r != 24) r_i;
+	mes .npc$;
+	mes "¿A qué religión pertenesco?";
+	next;
+	input @r$;
+	if(@r$ != "Cristianismo") r_i;
+	mes .npc$;
+	mes "¿De qué país proviene mi existencia?";
+	next;
+	input @r$;
+	if(@r$ != "Grecia") r_i;
+	mes .npc$;
+	mes "¿Cómo se llama la ciudad donde viví?";
+	next;
+	input @r$;
+	if(@r$ != "Anatolia") r_i;
+	mes .npc$;
+	mes "¿En qué país está la basílica de San Nicolas?";
+	next;
+	input @r$;
+	if(@r$ != "Italia") r_i;
+	mes .npc$;
+	mes "¿Cuál fue mi nombre verdadero en el Cristianismo?";
+	next;
+	input @r$;
+	if(@r$ != "Nicolás de Bari") r_i;
+	mes .npc$;
+	mes "¿Qué quería mi Madre que me convirtiera de grande?";
+	next;
+	input @r$;
+	if(@r$ != "Sacerdote") r_i;
+	mes .npc$;
+	mes "¿Qué fue lo que mató a mis padres?";
+	next;
+	input @r$;
+	if(@r$ != "La Peste") r_i;
+	mes .npc$;
+	mes "¿Dónde vivía mi tío que era Sacerdote?";
+	next;
+	input @r$;
+	if(@r$ != "Mira") r_i;
+	mes .npc$;
+	mes "¿A qué edad me convertí en sacerdote?";
+	next;
+	input @r;
+	if(@r != 19) r_i;
+	mes .npc$;
+	mes "¿En qué año me transformé aproximadamente de San Nicolás a Papá Noel?";
+	next;
+	input @r;
+	if(@r != 1624) r_i;
+	mes .npc$;
+	mes "¡Grandioso!";
+	mes "Se ve que conoces mucho de mi historia, por ello te daré el siguiente regalo.";
+	set #q_nav01,1;
+	getitem 18189,1;
+	close2;
+	emotion e_thx;
+	end;
+	function	r_i	{
+		mes .npc$;
+		mes "Lo siento, respuesta incorrecta.";
+		close2;
+		emotion e_sry;
+		end;
+	}
+}

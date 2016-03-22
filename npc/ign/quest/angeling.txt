@@ -1,0 +1,124 @@
+vip,84,59,3	script	Angeling#esp	1096,{ end; }
+vip,84,57,3	script	Cuidador de Angeling::ang_q	10060,{
+	if(BaseLevel < 80) {
+		mes "[^ff7700 Cuidador de Angeling^000000 ]";
+		mes "Vuelve cuando tengas un poco más de poder.";
+		next;
+		mes "[^ff7700 Cuidador de Angeling^000000 ]";
+		mes "No puedo confiar en alguien tan débil para cuidar de los Angeling.";
+		close;
+	}
+	if(checkquest(14071) == 1 && ange_cQ >= 5) {
+		mes "[^ff7700 Cuidador de Angeling^000000 ]";
+		mes "¡Buen trabajo!";
+		mes "Me alegra que hayas encontrado a los Angeling.";
+		next;
+		mes "[^ff7700 Cuidador de Angeling^000000 ]";
+		mes "Ahora para seguir con el proceso de creación que te había contado, necesito que me traigan 25 Soft Feather.";
+		next;
+		mes "[^ff7700 Cuidador de Angeling^000000 ]";
+		mes "Te esperaré cuando lo hayas hecho.";
+		close2;
+		changequest 14071,14072;
+		end;
+	} else if(checkquest(14071) == 1) {
+		mes "[^ff7700 Cuidador de Angeling^000000 ]";
+		mes "Ve a Labyrinth Forest y encuentra a los 5 Angeling que allí se refugian.";
+		close;
+	}
+	if(checkquest(14072) == 1 && countitem(7063) >= 25) {
+		mes "[^ff7700 Cuidador de Angeling^000000 ]";
+		mes "Buen trabajo, ahora como última petición para darte tu bien merecida recompenza.";
+		next;
+		mes "[^ff7700 Cuidador de Angeling^000000 ]";
+		mes "Necesito que asesines a dos contrapartes de los Angeling, los cuales son los ^5533ffDeviling^000000";
+		next;
+		mes "[^ff7700 Cuidador de Angeling^000000 ]";
+		mes "Cuando hayas terminado, ven a verme.";
+		close2;
+		delitem 7063,25;
+		changequest 14072,14073;
+		end;
+	} else if(checkquest(14072) == 1) {
+		mes "[^ff7700 Cuidador de Angeling^000000 ]";
+		mes "Obtén "+(25-countitem(7063))+" Soft Feather más para seguir con tu petición.";
+		close;
+	}
+	if(checkquest(14073,HUNTING) == 2) {
+		mes "[^ff7700 Cuidador de Angeling^000000 ]";
+		mes "Haz hecho un estupendo trabajo, ten aquí tu recompenza.";
+		close2;
+		completequest 14073;
+		Zeny += 350000;
+		getexp 400000,650000;
+		dispbottom "You gained 350,000 z.";
+		getitem 671,2;
+		sleep2 1500;
+		getitem 35000,1;
+		end;
+	} else if(checkquest(14073) == 1) {
+		mes "[^ff7700 Cuidador de Angeling^000000 ]";
+		mes "Caza a 2 ^5533ffDeviling^000000 y vuelve cuando lo hayas hecho.";
+		close;
+	}
+	mes "[^ff7700 Cuidador de Angeling^000000 ]";
+	mes "¡¿Qué tal!?";
+	mes "Mi profesión es cuidar de éstas hermosas criaturas y darles todo lo que necesitan.";
+	next;
+	mes "[^ff7700 Cuidador de Angeling^000000 ]";
+	mes "En mi cultura éstas criaturas son santas y muy valiosas para mi pueblo por sus poderes curativos.";
+	next;
+	mes "[^ff7700 Cuidador de Angeling^000000 ]";
+	mes "Por ello creamos algo para conmemorar su poder.";
+	next;
+	mes "[^ff7700 Cuidador de Angeling^000000 ]";
+	mes "Si cumples con lo que te digo, podré otorgártelo, junto con una recompensa.";
+	next;
+	mes "[^ff7700 Cuidador de Angeling^000000 ]";
+	mes "¿Qué dices? ¿Lo harás?";
+	next;
+	if(select("En otro momento","Claro que lo haré") == 1) {
+		mes "[^ff7700 Cuidador de Angeling^000000 ]";
+		mes "De acuerdo, no te preocupes, aquí seguiré.";
+		next;
+		mes "[^ff7700 Cuidador de Angeling^000000 ]";
+		mes "Vuelve cuando quieras y no olvides cuidar a éstas criaturas.";
+		next;
+		mes "[^ff7700 Cuidador de Angeling^000000 ]";
+		mes "Si les haces daño un destino pésimo te esperará.";
+		close;
+	}
+	mes "[^ff7700 Cuidador de Angeling^000000 ]";
+	mes "¡De acuerdo!";
+	next;
+	mes "[^ff7700 Cuidador de Angeling^000000 ]";
+	mes "Por favor ve a Labyrinth Forest y encuentra a los 5 ^FF00AAAngeling^000000, cuando lo hayas hecho, vuelve conmigo.";
+	close2;
+	setquest 14071;
+	end;
+OnPCLoadMapEvent:
+	if((strcharinfo(3)=="vip") && BaseLevel >= 80 && (checkquest(14073) == -1))
+		showevent Q_TYPE_QUEST,1;
+	end;
+}
+-	script	angtemplate	-1,{
+	if(getd("ange_q"+strnpcinfo(2)) < 1 && checkquest(14071) == 1) {
+		setd "ange_q"+strnpcinfo(2),1;
+		ange_cQ += 1;
+		message strcharinfo(0),"Angeling Encontrados [ "+ange_cQ+" / 5 ]";
+		end;
+	} else if(checkquest(14071) == 1) {
+		message strcharinfo(0),"Ya haz encontrado a éste Angeling.";
+		end;
+	} else {
+		mes "["+strcharinfo(0)+"]";
+		mes "¿Qué estará haciendo éste Angeling aquí?";
+		close;
+	}
+end;
+}
+prt_maze01,64,69,4	duplicate(angtemplate)	Angeling#01	948
+prt_maze01,61,183,4	duplicate(angtemplate)	Angeling#02	948
+prt_maze01,22,136,4	duplicate(angtemplate)	Angeling#03	948
+prt_maze01,177,104,4	duplicate(angtemplate)	Angeling#04	948
+prt_maze01,133,10,4	duplicate(angtemplate)	Angeling#05	948

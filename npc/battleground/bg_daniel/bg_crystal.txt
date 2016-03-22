@@ -1,0 +1,412 @@
+//      ______  __    __                                 
+//     /\  _  \/\ \__/\ \                                
+//     \ \ \_\ \ \ ,_\ \ \___      __    ___      __     
+// _____\ \  __ \ \ \/\ \  _ `\  /'__`\/' _ `\  /'__`\   
+///\  __\\ \ \/\ \ \ \_\ \ \ \ \/\  __//\ \/\ \/\ \_\.\_ 
+//\ \_\_/ \ \_\ \_\ \__\\ \_\ \_\ \____\ \_\ \_\ \__/.\_\
+// \/_/    \/_/\/_/\/__/ \/_/\/_/\/____/\/_/\/_/\/__/\/_/
+//
+//========================================================
+// ---              Battleground - Crystal             ---
+//========================================================
+// ---                  by DanielArt                   ---
+//========================================================
+bat_room,225,227,4	script	Registration::CrysR_Guillaume	418,{ // KvM Guillaume
+	end;
+
+OnInit:
+	waitingroom "Battle Station 5 Players",6,"Crys_BG::OnGuillaumeJoin",1;
+	end;
+	
+OnEnterBG:
+	set $@CrysBG_id1, waitingroom2bg("nov_gar01",61,27,0,"Crys_BG::OnGuillaumeQuit","Crys_BG::OnGuillaumeDie");
+	end;
+}
+
+bat_room,225,204,0	script	Registration::CrysR_Croix	414,{ // KvM Croix
+	end;
+
+OnInit:
+	waitingroom "Battle Station 5 Players",6,"Crys_BG::OnCroixJoin",1;
+	end;
+
+OnEnterBG:
+	set $@CrysBG_id2, waitingroom2bg("nov_gar01",127,104,1,"Crys_BG::OnCroixQuit","Crys_BG::OnCroixDie");
+	end;
+}
+
+// Battleground Engine
+// *********************************************************************
+
+-	script	Crys_BG	-1,{
+	end;
+
+OnInit:
+	end;
+
+OnGuillaumeJoin:
+	if( $@CrysBG != 0)
+		donpcevent "Crys_BG::OnDoBalance";
+	if( $@CrysBG == 1 && bg_get_data($@CrysBG_id1, 0) < 5 )
+		waitingroom2bg_single $@CrysBG_id1,"nov_gar01",61,27,"CrysR_Guillaume";
+	else
+		donpcevent "Crys_BG::OnReadyCheck";
+	end;
+
+OnGuillaumeQuit:
+	setquest 8506;
+	if( $@CrysBG != 0)
+		donpcevent "Crys_BG::OnDoBalance";
+	if( $@CrysBG == 1 && bg_get_data($@CrysBG_id1, 0) < 5 )
+		waitingroom2bg_single $@CrysBG_id1,"nov_gar01",61,27,"CrysR_Guillaume";
+OnGuillaumeDie:
+	if( $@CrysBG == 2 )
+	{
+		set .Croix_Score, .Croix_Score + 1;
+		bg_updatescore "nov_gar01",.Guillaume_Score,.Croix_Score;
+		if( .Croix_Score >= 99 ) donpcevent "Crys_BG::OnCroixWin";
+	}
+	end;
+
+OnCroixJoin:
+	if( $@CrysBG != 0)
+		donpcevent "Crys_BG::OnDoBalance";
+	if( $@CrysBG == 1 && bg_get_data($@CrysBG_id2, 0) < 5 )
+		waitingroom2bg_single $@CrysBG_id2,"nov_gar01",127,104,"CrysR_Croix";
+	else
+		donpcevent "Crys_BG::OnReadyCheck";
+	end;
+
+OnCroixQuit:
+	setquest 8506;
+	if( $@CrysBG != 0)
+		donpcevent "Crys_BG::OnDoBalance";
+	if( $@CrysBG == 1 && bg_get_data($@CrysBG_id2, 0) < 5 )
+		waitingroom2bg_single $@CrysBG_id2,"nov_gar01",127,104,"CrysR_Croix";
+OnCroixDie:
+	if( $@CrysBG == 2 )
+	{
+		set .Guillaume_Score, .Guillaume_Score + 1;
+		bg_updatescore "nov_gar01",.Guillaume_Score,.Croix_Score;
+		if( .Guillaume_Score >= 99 ) donpcevent "Crys_BG::OnGuillaumeWin";
+	}
+	end;
+OnDoBalance:
+	if( $@CrysBG != 2 )
+		end;
+
+	set .@Guillaume, bg_get_data($@CrysBG_id1, 0);
+	set .@Croix, bg_get_data($@CrysBG_id2, 0);
+
+	if( .@Guillaume < .@Croix )
+		waitingroom2bg_single $@CrysBG_id1,"nov_gar01",61,27,"CrysR_Guillaume";
+	else if( .@Guillaume > .@Croix )
+		waitingroom2bg_single $@CrysBG_id2,"nov_gar01",127,104,"CrysR_Croix";
+	else
+	{
+		set .@GuillaumeR, getwaitingroomstate(0,"CrysR_Guillaume");
+		set .@CroixR, getwaitingroomstate(0,"CrysR_Croix");
+
+		if( .@GuillaumeR <= .@CroixR )
+			set .@Limit, .@GuillaumeR;
+		else
+			set .@Limit, .@CroixR;
+
+		if( .@Limit + .@Guillaume > 35 )
+			set .@Limit, 35 - .@Guillaume;
+		if( .@Limit <= 0 ) end;
+
+		for( set .@i, 0; .@i < .@Limit; set .@i, .@i + 1 )
+		{
+			waitingroom2bg_single $@CrysBG_id1,"nov_gar01",61,27,"CrysR_Guillaume";
+			waitingroom2bg_single $@CrysBG_id2,"nov_gar01",127,104,"CrysR_Croix";
+		}
+
+		set .@Guillaume, .@Guillaume + .@Limit;
+		set .@Croix, .@Croix + .@Limit;
+		mapannounce "bat_room","Battleground -- Crystal [120-175] G: " + .@Guillaume + "/35, C: " + .@Croix + "/35 (Playing)",1,0x46D6D1;
+	}
+	end;
+
+OnReadyCheck:
+	if( $@CrysBG || $@Global_BG_Block )
+		end;
+	set .@Guillaume, getwaitingroomstate(0,"CrysR_Guillaume");
+	set .@Croix, getwaitingroomstate(0,"CrysR_Croix");
+
+	if( .@Guillaume < 5 || .@Croix < 5 )
+	{
+		if( .@Guillaume > 4 || .@Croix > 4 && !agitcheck() && $@Crys_Flood < gettimetick(2) )
+		{
+			announce "Battleground -- Crystal [120-175] G: " + .@Guillaume + "/5, C: " + .@Croix + "/5",0,0x46D6D1;
+			set $@Crys_Flood, gettimetick(2) + 4;
+		}
+		else
+			mapannounce "bat_room","Battleground -- Crystal [120-175] G: " + .@Guillaume + "/5, C: " + .@Croix + "/5",0,0x46D6D1;
+		end;
+	}
+
+	set $@CrysBG, 1; // Starting
+	donpcevent "CrysR_Croix::OnEnterBG";
+	donpcevent "CrysR_Guillaume::OnEnterBG";
+	donpcevent "Crys_BG::OnStart";
+	end;
+
+OnStart:
+	announce "Battleground -- Crystal [120-175] has started!",0,0x46D6D1;
+	set $@CrysBG_Victory, 0;
+	sleep 2000;
+	// Warp Teams
+	bg_warp $@CrysBG_id1,"nov_gar01",61,27;
+	bg_warp $@CrysBG_id2,"nov_gar01",127,104;
+	bg_team_setxy $@CrysBG_id1,61,27;
+	bg_team_setxy $@CrysBG_id2,127,104;
+	// ScoreBoard
+	set .Guillaume_Score, 0;
+	set .Croix_Score, 0;
+	mapannounce "nov_gar01","The battle will start in 10 seconds!!",1,0x46D6D1;
+	sleep2 8000;
+
+OnNPCLoad:
+	// Team Members
+	killmonsterall "nov_gar01";
+	set .Guillaume_Count, bg_get_data($@CrysBG_id1, 0);
+	set .Croix_Count, bg_get_data($@CrysBG_id2, 0);
+	if( .Guillaume_Count < 1 || .Croix_Count < 1 )
+	{
+		set $@CrysBG_Victory, 3;
+		set $@CrysBG, 3;
+		mapannounce "nov_gar01","There are not enough players to start the battle",1,0x46D6D1;
+		stopnpctimer;
+		sleep 2000;
+		donpcevent "Crys_BG::OnStop";
+		end;
+	}
+	//Guillaume
+	bg_monster 0,"nov_gar01",117,82,"Crystal",1905,"Crys_BG::OnCrystal2";
+	bg_monster 0,"nov_gar01",114,56,"Crystal",1905,"Crys_BG::OnCrystal3";
+	bg_monster 0,"nov_gar01",110,41,"Crystal",1905,"Crys_BG::OnCrystal4";
+	//Croix
+	bg_monster 0,"nov_gar01",75,51,"Crystal",1905,"Crys_BG::OnCrystal5";
+	bg_monster 0,"nov_gar01",73,85,"Crystal",1905,"Crys_BG::OnCrystal6";
+	bg_monster 0,"nov_gar01",82,67,"Crystal",1905,"Crys_BG::OnCrystal7";
+	//Guardianes
+	bg_monster $@CrysBG_id1,"nov_gar01",62,26,"Guardian",1830,"Crys_BG::OnGuardian1";
+	bg_monster $@CrysBG_id2,"nov_gar01",127,104,"Guardian",1830,"Crys_BG::OnGuardian2";
+	set $@CrysBG, 2; // Playing
+	bg_warp $@CrysBG_id1,"nov_gar01",127,98;
+	bg_warp $@CrysBG_id2,"nov_gar01",67,32;
+	sleep2 2000;
+	mapannounce "nov_gar01","The War of Crystal has started!!",1,0x46D6D1;
+	sleep2 3000;
+	mapannounce "nov_gar01","Player Kill (1P) - Crystal (5P)",1,0x46D6D1;
+	sleep2 900000;
+	mapannounce "nov_gar01","The Battle will ends in 30 seconds!!",1,0x46D6D1;
+	sleep2 30000;
+	if( .Croix_Score > .Guillaume_Score )
+		donpcevent "Crys_BG::OnCroixWin";
+	else if( .Croix_Score < .Guillaume_Score )
+		donpcevent "Crys_BG::OnGuillaumeWin";
+	else
+	{ // Draw Game
+		set $@CrysBG, 3;
+		set $@CrysBG_Victory, 3;
+		stopnpctimer;
+		sleep 2000;
+		mapannounce "nov_gar01","The time is out! This is a Tie...",1,0x46D6D1;
+		donpcevent "Crys_BG::OnStop";
+	}
+	end;
+
+	end;
+	OnGuardian1: bg_monster $@CrysBG_id1,"nov_gar01",62,119,"Guardian",1829,"Crys_BG::OnGuardian1"; end;
+	OnGuardian2: bg_monster $@CrysBG_id2,"nov_gar01",137,64,"Guardian",1829,"Crys_BG::OnGuardian2"; end;
+	OnCrystal2: set .a,2; set .x,117; set .y,82; goto OnCrystal;
+	OnCrystal3:	set .a,3; set .x,114; set .y,56; goto OnCrystal;
+	OnCrystal4:	set .a,4; set .x,110; set .y,41; goto OnCrystal;
+	OnCrystal5:	set .a,5; set .x,75; set .y,51; goto OnCrystal;
+	OnCrystal6:	set .a,6; set .x,73; set .y,85; goto OnCrystal;
+	OnCrystal7:	set .a,7; set .x,82; set .y,67; goto OnCrystal;
+OnCrystal:
+	if( getcharid(4) == $@CrysBG_id1 )
+	{
+		mapannounce "nov_gar01","Guillaume has break a Crystal.",1,0x0000FF;
+		set .Guillaume_Score,.Guillaume_Score+5;
+		bg_updatescore "nov_gar01",.Guillaume_Score,.Croix_Score;
+		set .c,1;
+	}
+	else if( getcharid(4) == $@CrysBG_id2 )
+	{
+		mapannounce "nov_gar01","Croix has break a Crystal.",1,0xFF0000;
+		set .Croix_Score,.Croix_Score+5;
+		bg_updatescore "nov_gar01",.Guillaume_Score,.Croix_Score;
+		set .c,0;
+	}
+	else end;
+	set .crystal, getcharid(4);
+	if(.a == 1) { set .a,8; set .x,100; set .y,92; }
+	bg_monster .crystal,"nov_gar01",.x,.y,"Crystal",.c ? 1908 : 1907,"Crys_BG::OnCrystal"+.a;
+	end;
+
+OnGuillaumeWin:
+	set $@CrysBG, 3;
+	set $@CrysBG_Victory, 1;
+	stopnpctimer;
+	sleep 2000;
+	mapannounce "nov_gar01","The Guillaume Army has won the war of crystal!!",1,0x0000FF;
+	donpcevent "Crys_BG::OnStop";
+	end;
+
+OnCroixWin:
+	set $@CrysBG, 3;
+	set $@CrysBG_Victory, 2;
+	stopnpctimer;
+	sleep 2000;
+	mapannounce "nov_gar01","The Croix Army has won the war of crystal!!",1,0xFF0000;
+	donpcevent "Crys_BG::OnStop";
+	end;
+
+OnStop:
+	donpcevent "Crys_BG_Out::OnBegin";
+	end;
+
+OnReset:
+	stopnpctimer;
+	stopnpctimer "Crys_BG_Out";
+	set .Croix_Count, 0;
+	set .Guillaume_Count, 0;
+	set .Croix_Score, 0;
+	set .Guillaume_Score, 0;
+	set $@CrysBG_Victory, 0;
+	if( $@CrysBG_id1 ) { bg_destroy $@CrysBG_id1; set $@CrysBG_id1, 0; }
+	if( $@CrysBG_id2 ) { bg_destroy $@CrysBG_id2; set $@CrysBG_id2, 0; }
+	killmonsterall "nov_gar01";
+	sleep 1000;
+	mapwarp "nov_gar01","bat_room",155,150;
+	sleep 2000;
+	maprespawnguildid "nov_gar01",0,3; // Just in case someone else
+	bg_updatescore "nov_gar01",0,0;
+	sleep 2000;
+	set $@CrysBG, 0;
+	donpcevent "Crys_BG::OnReadyCheck"; // Maybe a game is ready to start
+	end;
+}
+
+-	script	Crys_BG_Out	-1,{
+	end;
+
+OnBegin:
+	initnpctimer;
+	end;
+
+OnTimer3000:
+	mapannounce "nov_gar01","War of Crystal will close in 1 minute!",1,0x46D6D1;
+	end;
+OnTimer30000:
+	mapannounce "nov_gar01","War of Crystal will close in 30 seconds!",1,0x46D6D1;
+	end;
+OnTimer50000:
+	mapannounce "nov_gar01","War of Crystal will close in 10 seconds!",1,0x46D6D1;
+	end;
+OnTimer60000:
+	donpcevent "Crys_BG::OnReset";
+	end;
+}
+nov_gar01,62,26,4	script	#HealerNPCID01	111,2,2,{
+	end;
+OnTouch:
+	if($@CrysBG_id1) {
+		if($@CrysBG != 1) {
+			if( $@CrysBG_Victory ) {
+				if( $@CrysBG_Victory == 3 ) {
+					setquest 6025;
+					bg_leave;
+					warp "bat_room",155,150;
+					end;
+				} else if( $@CrysBG_Victory == Bat_Team ) { // Victory
+					set .@Reward, rand(5,16);
+					close2;
+				} else { // 
+					set .@Reward, rand(1,7);
+					close2;
+				}
+				setquest 6025;
+				switch(rand(1,3)) {
+					case 1: getitem 7829,.@Reward; break;
+					case 2: getitem 7828,.@Reward; break;
+					case 3: getitem 7773,.@Reward; break;
+				}
+				bg_leave;
+				warp "bat_room",155,150;
+				end;
+			}
+		}
+		atcommand "@option 2 0 0";
+		atcommand "@battleignore";
+		atcommand "@repairall";
+		openstorage;
+		sleep2 5000;
+		percentheal 100,100;
+		atcommand "@option 0 0 0";
+		atcommand "@battleignore";
+		if(Class == Job_Royal_Guard_T || Class == Job_Rune_Knight_T)
+			atcommand "@mount";
+	}
+end;
+}
+nov_gar01,126,104,4	script	#HealerNPCID02	111,2,2,{
+	end;
+OnTouch:
+	if($@CrysBG_id2) {
+		if($@CrysBG != 1) {
+			if( $@CrysBG_Victory ) {
+				if( $@CrysBG_Victory == 3 ) {
+					setquest 6025;
+					bg_leave;
+					warp "bat_room",155,150;
+					end;
+				} else if( $@CrysBG_Victory == Bat_Team ) { // Victory
+					set .@Reward, rand(5,16);
+					close2;
+				} else { // 
+					set .@Reward, rand(1,7);
+					close2;
+				}
+				setquest 6025;
+				switch(rand(1,3)) {
+					case 1: getitem 7829,.@Reward; break;
+					case 2: getitem 7828,.@Reward; break;
+					case 3: getitem 7773,.@Reward; break;
+				}
+				bg_leave;
+				warp "bat_room",155,150;
+				end;
+			}
+		}
+		atcommand "@option 2 0 0";
+		atcommand "@battleignore";
+		atcommand "@repairall";
+		openstorage;
+		sleep2 5000;
+		percentheal 100,100;
+		atcommand "@option 0 0 0";
+		atcommand "@battleignore";
+		if(Class == Job_Royal_Guard_T || Class == Job_Rune_Knight_T)
+			atcommand "@mount";
+	}
+end;
+}
+// MapFlags
+// *********************************************************************
+
+nov_gar01	mapflag	battleground	2
+nov_gar01	mapflag	nomemo
+nov_gar01	mapflag	nosave	SavePoint
+nov_gar01	mapflag	noteleport
+nov_gar01	mapflag	nowarp
+nov_gar01	mapflag	nowarpto
+nov_gar01	mapflag	noreturn
+nov_gar01	mapflag	nobranch
+nov_gar01	mapflag	nopenalty
+nov_gar01	mapflag	allow_bg_items
+nov_gar01	mapflag	nomobloot

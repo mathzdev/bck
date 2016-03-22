@@ -13,6 +13,7 @@
 //============================================================
 
 // PvP ========================
+vip	mapflag	pvp	off
 pvp_y_1-1	mapflag	pvp
 pvp_y_1-2	mapflag	pvp
 pvp_y_1-3	mapflag	pvp
@@ -55,7 +56,7 @@ pvp_y_8-4	mapflag	pvp
 pvp_y_8-5	mapflag	pvp
 pvp_n_1-1	mapflag	pvp
 pvp_n_1-2	mapflag	pvp
-pvp_n_1-3	mapflag	pvp
+//pvp_n_1-3	mapflag	pvp // Branch room
 pvp_n_1-4	mapflag	pvp
 pvp_n_1-5	mapflag	pvp
 pvp_n_2-1	mapflag	pvp
@@ -99,3 +100,10 @@ pvp_2vs2	mapflag	pvp
 turbo_e_4	mapflag	pvp
 turbo_e_8	mapflag	pvp
 turbo_e_16	mapflag	pvp
+
+// GvG Arenas =============
+guild_vs1	mapflag	pvp
+guild_vs2	mapflag	pvp
+guild_vs3	mapflag	pvp
+guild_vs4	mapflag	pvp
+guild_vs5	mapflag	pvp

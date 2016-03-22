@@ -124,6 +124,12 @@ enum BROADCASTING_SPECIAL_ITEM_OBTAIN {
 	ITEMOBTAIN_TYPE_NPC =  0x2,
 };
 
+enum e_adopt_reply {
+	ADOPT_REPLY_MORE_CHILDREN = 0,
+	ADOPT_REPLY_LEVEL_70,
+	ADOPT_REPLY_MARRIED,
+};
+
 // packet_db[SERVER] is reserved for server use
 #define SERVER 0
 #define packet_len(cmd) packet_db[SERVER][cmd].len
@@ -718,11 +724,21 @@ void clif_guild_xy_remove(struct map_session_data *sd);
 
 // Battleground
 void clif_bg_hp(struct map_session_data *sd);
+void clif_bg_hp_single(int fd, struct map_session_data* ssd);
 void clif_bg_xy(struct map_session_data *sd);
 void clif_bg_xy_remove(struct map_session_data *sd);
+void clif_bg_belonginfo(struct map_session_data *sd);
+int clif_visual_guild_id(struct block_list *bl);
+int clif_visual_emblem_id(struct block_list *bl);
+void clif_bg_emblem(struct map_session_data *sd, struct guild *g);
+void clif_bg_memberlist(struct map_session_data *sd);
+void clif_bg_leave(struct map_session_data *sd, const char *name, const char *mes);
+void clif_bg_leave_single(struct map_session_data *sd, const char *name, const char *mes);
 void clif_bg_message(struct battleground_data *bg, int src_id, const char *name, const char *mes, int len);
+void clif_bg_expulsion_single(struct map_session_data *sd, const char *name, const char *mes);
 void clif_bg_updatescore(int16 m);
 void clif_bg_updatescore_single(struct map_session_data *sd);
+int clif_bg_updatescore_team(struct battleground_data *bg);
 void clif_sendbgemblem_area(struct map_session_data *sd);
 void clif_sendbgemblem_single(int fd, struct map_session_data *sd);
 
@@ -843,6 +859,7 @@ void clif_cashshop_show(struct map_session_data *sd, struct npc_data *nd);
 
 // ADOPTION
 void clif_Adopt_reply(struct map_session_data *sd, int type);
+void clif_Adopt_request(struct map_session_data *sd, struct map_session_data *src, int p_id);
 
 // MERCENARIES
 void clif_mercenary_info(struct map_session_data *sd);
@@ -958,7 +975,7 @@ void clif_ranklist(struct map_session_data *sd, int16 rankingType);
 void clif_update_rankingpoint(struct map_session_data *sd, int rankingtype, int point);
 
 void clif_crimson_marker(struct map_session_data *sd, struct block_list *bl, bool remove);
-
+void clif_showscript(struct block_list* bl, const char* message);
 void clif_showscript(struct block_list* bl, const char* message);
 void clif_party_leaderchanged(struct map_session_data *sd, int prev_leader_aid, int new_leader_aid);
 

@@ -1,0 +1,277 @@
+//-	cashshop	donashop	-1,5778:420,5967:300,5623:450,5211:350,5360:35,5312:35,5359:25,5132:10,5431:35,5464:150
+-	cashshop	Consus1	-1,7776:5,12412:10,12411:10,35034:250,35035:66,35036:50,14536:3,13912:3,13913:3,13914:3,12208:5,12209:5,12210:5,12213:10,12221:1,12263:9,12264:9,12265:9,12345:2,12354:2,12357:10,12358:10,12359:10,12360:10,12361:10,12362:10,12363:10,12364:10,12365:10,12366:10,12367:10,12368:10,12369:10,12370:10,12371:10,12372:10,12373:10,12374:10
+-	cashshop	CashShop_HeadGearA1	-1,2237:10,5056:10,5101:10,5134:10,5147:20,5451:20,5148:20,5180:20,5190:25,5200:25,5209:25,5302:25,5336:25,5337:25,5338:25,5339:25,5346:25,5352:25,5400:25,5412:25,5438:25,5439:25,5440:25,5441:25,5203:40,5282:40,5405:40,5422:40,5426:40,5427:40,5429:40,5437:40,5443:40,5444:40,5447:40,5448:40,5449:40,5450:40,5458:40,5480:40,5489:40,5522:40,5530:40,5536:40,5499:42,5511:42,5519:42,5523:42,5524:42,5525:42,5528:42,5020:47,5054:47,5102:47,5206:47,5406:47,5407:47,5411:47,5436:47,5446:47,5457:47,5501:47,5537:47,5538:47,5548:47,5557:47,5558:47,5562:47,5566:47,5572:47,5579:47,5140:52,5227:52,5228:52,5229:52,5235:52,5236:52,5237:52,5238:52,5239:52,5240:52,5241:52,5242:52,5272:52,5287:52,5332:52
+-	cashshop	CashShop_HeadGearB1	-1,5333:52,5335:52,5370:52,5371:52,5380:52,5402:52,5413:52,5477:52,5478:52,5500:52,5520:52,5100:60,5135:60,5188:60,5189:60,5191:60,5192:60,5193:60,5194:60,5195:60,5196:60,5197:60,5198:60,5258:60,5285:60,5303:60,5322:60,5382:60,5383:60,5414:60,5479:60,5503:60,5506:60,5507:60,5508:60,5509:60,5510:60,5512:60,5513:60,5514:60,5515:60,5526:60,5529:60,5535:60,5539:60,5545:60,5546:60,5549:60,5550:60,5554:60,5555:60,5556:60,5569:60,5570:60,5573:60,5581:60,5582:60,5585:60,5139:66,5186:66,5254:66,5260:66,5304:66,5316:66,5381:66,5387:66,5390:66,5403:66,5404:66,5416:66,5417:66,5430:66,5482:66,5521:66,5527:66,5532:66,5567:66,5593:66,5822:66,5418:66,5496:66
+-	cashshop	CashShop_HeadGearC1	-1,5149:68,5179:68,5184:68,5213:68,5214:68,5243:68,5311:68,5319:68,5334:68,5359:68,5410:68,5568:68,5143:70,5146:70,5152:70,5183:70,5230:70,5231:70,5232:70,5233:70,5234:70,5252:70,5253:70,5263:70,5270:70,5294:70,5354:70,5355:70,5365:70,5385:70,5397:70,5409:70,5495:70,5502:70,5505:70,5151:82,5182:82,5225:82,5259:82,5286:82,5293:82,5298:82,5305:82,5491:82,5098:95,5099:95,5103:95,5129:95,5130:95,5208:95,5256:95,5257:95,5261:95,5262:95,5271:95,5284:95,5289:95,5291:95,5296:95,5300:95,5307:95,5310:95,5317:95,5360:95,5361:95,5396:95,5485:95,5497:95,5498:95,5533:95,5568:95,5131:98,5133:98,5153:98,5185:98,5187:98,5220:98,5255:98,5288:98,5379:98,5388:98
+-	cashshop	CashShop_HeadGearD1	-1,5132:103,5273:103,5274:103,5275:103,5276:103,5283:103,5292:103,5312:103,5314:103,5358:103,5367:103,5389:103,5401:103,5565:103,5137:106,5138:106,5212:106,5226:520,5210:115,5277:115,5324:115,5362:115,5372:115,5373:115,5313:120,5378:120,5547:120,5142:120,5278:120,5364:120,5393:120
+-	cashshop	CashShop_HeadGearE1	-1,18795:128,18600:128,5181:128,5211:128,5340:128,5341:128,5342:128,5343:128,5344:128,5345:128,5421:128,5464:128,5315:650,5325:650,5357:135,5363:135,5420:135,5375:137,5376:137,5377:137,5800:137,5155:137
+-	cashshop	CashShop_HeadGearF1	-1,18501:145,5462:145,5463:145,5490:145,2204:145,5423:145,5564:145,5483:145,5374:156,5518:156,5574:156,5451:156
+
+prontera,147,186,5	script	Donaciones	10078,{
+	cutin "ep15_2_brt_1",2;
+	function getescala;
+	mes "[^5533ffDonaciones^000000]";
+	mes "Buen día.";
+	mes "Yo me encargo de administrar las recompenzas a aquellas personas que nos apoyan mediante donaciones.";
+	next;
+	mes "[^5533ffDonaciones^000000]";
+	mes "Por favor elige en qué te puedo ayudar.";
+	next;
+	switch(select("Tienda:Escala de Premios:^5533ff¿Cómo donar?^000000:^ff0000¿Cuánto recibo por donar?^000000:^777777Salir^000000")) {
+		case 1:
+			mes "[^5533ffDonaciones^000000]";
+			mes "Selecciona el listado de gorros/cascos que quieres revisar.";
+			switch(select("^5533ffConsumibles^000000:- Lista A ^BDBDBD[10/52]^000000:- Lista B ^BDBDBD[52/66]^000000:- Lista C ^BDBDBD[68/98]^000000:- Lista D ^BDBDBD[103/120]^000000:- Lista E ^BDBDBD[128/137]^000000:- Lista F ^BDBDBD[145/156]^000000:^880000Salir^000000"))
+			{
+				case 1:	set .@shop$, "Consus1";	break;
+				case 2:	set .@shop$, "CashShop_HeadGearA1";	break;
+				case 3:	set .@shop$, "CashShop_HeadGearB1";	break;
+				case 4:	set .@shop$, "CashShop_HeadGearC1";	break;
+				case 5:	set .@shop$, "CashShop_HeadGearD1";	break;
+				case 6:	set .@shop$, "CashShop_HeadGearE1";	break;
+				case 7:	set .@shop$, "CashShop_HeadGearF1";	break;
+				default:	close2;	cutin "",255;	end;
+			}
+			next;
+			mes "Abriendo shop...";
+			close2;
+			cutin "",255;
+			callshop .@shop$,0;
+			end;
+		case 2:
+			cutin "ESC2",4;
+			mes "[^5533ffDonaciones^000000]";
+			mes "Bienvenido a la Escala de Premios.";
+			mes " ";
+			mes "Tú escala: ^008800"+#ESCALA+"^000000/^cc6600500^000000";
+			next;
+			switch(select("Información:^ff8800Obtener Premios^000000:^777777Salir^000000")) {
+				case 1:
+					mes "[^5533ffDonaciones^000000]";
+					mes "La escala de premios ocurre bimestralmente, en éste nuevo sistema que hace uso de los IGN points podrás obtener fabulosos premios por el simple hecho de adquirir los puntos.";
+					next;
+					mes "[^5533ffDonaciones^000000]";
+					mes "Es decir, si tiene 33 IGN Points, y compras un objeto de mismo valor, tus IGN Points se consumirán, pero aún contarás con los puntos de la Escala de Premios que pueden ser canjeados cada cierto número acumulado.";
+					next;
+					mes "[^5533ffDonaciones^000000]";
+					mes "En ésta sección se mostrará siempre la Escala de Premios actual para que puedas ver qué te depara.";
+					next;
+					mes "[^5533ffDonaciones^000000]";
+					mes "Al momento de canjear, gastarás tus puntos de éstos dos meses, si depositas más no contarán hasta la nueva escala de premios.";
+					next;
+					mes "[^5533ffDonaciones^000000]";
+					mes "Sólo podrás canjear un objeto por cada rango de puntos (50, 100, 200 y 500), es decir, si adquieres 500 IGN Points podrás obtener 4 fabulosos objetos.";
+					next;
+					mes "[^5533ffDonaciones^000000]";
+					mes "Pero ten mucho cuidado, que al momento de canjear una vez, ya no podrás volver a utilizar la escala de premios del mes actual, si no, hasta el próximo.";
+					close2; cutin "",255; end;
+				case 2:
+					if(#ESCOCT == 1) {
+						mes "Lo siento, pero ya haz obtenido tus premios, vuelve luego.";
+						close2; cutin "",255; end;
+					}
+					if(#ESCALA < 1) {
+						mes "[^5533ffDonaciones^000000]";
+						mes "Lo siento pero no tienes puntos para la escala de Premios.";
+						close2; cutin "",255; end;
+					}
+					if(#ESCALA >= 50) {
+						setarray .@Ea$[0],"Balloon al azar","50 Mora Coins","30 Event Ticket","Witch's Pumpkin Hat","50 IGN Coin";
+						setarray .@Ea[0],(rand(35000,35027)),6380,7711,18656,671;
+						setarray .@Ea_c[0],1,50,30,1,50;
+						setarray .@Eb[0],35035,35036,35005,12922,7711;
+						setarray .@Eb_c[0],2,2,1,5,50;
+						setarray .@Ec[0],13912,13913,13914;
+						setarray .@Ec_c[0],30,30,30;
+						setarray .@Ed[0],35059,20707,2589,35034;
+						setarray .@Ed_c[0],1,1,1,1;
+						mes "[^5533ffDonaciones^000000]";
+						mes "Bien, comencemos con la primera ronda.";
+						next;
+						set .@m$,"";
+						for(set .@i,0; .@i <= getarraysize(.@Ea$)-1; set .@i,.@i+1) {
+							set .@m$,.@m$+"^5533ff~^000000 "+.@Ea$[.@i];
+							set .@m$,.@m$+":";
+						}
+						mes "[^5533ffDonaciones^000000]";
+						mes "Por favor selecciona el objeto que desees obtener:";
+						next;
+						set .@ie,select(.@m$)-1;
+						mes "[^5533ffDonaciones^000000]";
+						mes "Haz elegido:";
+						mes "^ff0000"+.@Ea$[.@ie]+"^000000.";
+						mes " ";
+						mes "¿Estás segur"+(Sex?"o":"a")+"?";
+						next;
+						if(select("Continuar","^777777Salir^000000") == 2) {
+							mes "[^5533ffDonaciones^000000]";
+							mes "Bien, aquí guardaré tus premios, vuelve pronto.";
+							set .@m$,"";
+							set .@ie,0;
+							set .@i,0;
+							close2;
+							cutin "",255;
+							end;
+						}
+						setarray .@EsA[0],.@Ea[.@ie],.@Ea_c[.@ie];
+						if(#ESCALA >= 100) {
+							set .@ib,getescala(100);
+							setarray .@EsB[0],.@Eb[.@ib],.@Eb_c[.@ib];
+						}
+						if(#ESCALA >= 200) {
+							set .@ic,getescala(200);
+							setarray .@EsC[0],.@Ec[.@ic],.@Ec_c[.@ic];
+						}
+						if(#ESCALA >= 500) {
+							set .@id,getescala(500);
+							setarray .@EsD[0],.@Ed[.@id],.@Ed_c[.@id];
+						}
+						mes .npc$;
+						mes "Bien, aquí están tus objetos.";
+						next;
+						set #ESCALA,0;
+						specialeffect 154;
+						getitem .@EsA[0],.@EsA[1];
+						next;
+						specialeffect 154;
+						if(.@EsB[0] > 0)
+							getitem .@EsB[0],.@EsB[1];
+						next;
+						specialeffect 154;
+						if(.@EsC[0] > 0)
+							getitem .@EsC[0],.@EsC[1];
+						next;
+						specialeffect 154;
+						if(.@EsD[0] > 0)
+							getitem .@EsD[0],.@EsD[1];
+						next;
+						mes .npc$;
+						mes "Gracias por tu apoyo.";
+						close2;
+						deletearray .@EsA,getarraysize(.@EsA);
+						deletearray .@EsB,getarraysize(.@EsB);
+						deletearray .@EsC,getarraysize(.@EsC);
+						deletearray .@EsD,getarraysize(.@EsD);
+						set @ib,0;
+						set @id,0;
+						set @ic,0;
+						set #ESCOCT,1;
+						emotion e_thx;
+						cutin "",255;
+						end;
+					}
+				case 3:
+					mes "[^5533ffDonaciones^000000]";
+					mes "Vuelve cuando gustes.";
+					close2; cutin "",255; end;
+			}
+		case 3:
+			mes "[^5533ffDonaciones^000000]";
+			mes "Para donar vía SmS ve a la página web del servidor.";
+			next;
+			mes "[^5533ffDonaciones^000000]";
+			mes "En el menú de la izquierda verás que dice 'Donaciones', da clic allí en el método de pago que más te guste ^5533ffSMS o PayPal^000000 y te dirigirá a una página.";
+			next;
+			mes "[^5533ffDonaciones^000000]";
+			mes "Si eliges SmS:";
+			mes "En ésta página veras que dice 'Cuenta del Juego' y un botón de PayGol.";
+			next;
+			mes "[^5533ffDonaciones^000000]";
+			mes "Deberas de escribir la cuenta que utilizas para logear y posteriormente dar clic al botón.";
+			next;
+			mes "[^5533ffDonaciones^000000]";
+			mes "Si eliges PayPal:";
+			mes "Deberás hacer una donación mínima de 2 USD, allí te dirá la equivalencia a puntos.";
+			next;
+			mes "[^5533ffDonaciones^000000]";
+			mes "Vuelve a la misma página después de PayPal y verifica que tengas los puntos.";
+			next;
+			mes "[^5533ffDonaciones^000000]";
+			mes "Cuando hayas realizado la compra logeate en el juego y tus puntos se cargarán automáticamente.";
+			close2; cutin "",255;
+			emotion e_hmm;
+			end;
+		case 4:
+			mes "[^5533ffDonaciones^000000]";
+			mes "PayPal: ^ff00002 USD = 33 IGN Points^000000.";
+			mes "SmS: ^ff00001 SmS = 14 IGN Points^000000.";
+			close2; cutin "",255; end;
+		case 5:
+			mes "[^5533ffDonaciones^000000]";
+			mes "Vuelve cuando gustes.";
+			close2; cutin "",255;
+			emotion e_no1;
+			end;
+	}
+function	getescala	{
+	mes "[^5533ffDonaciones^000000]";
+	set @b$,"";
+	deletearray @Ea,getarraysize(@Ea);
+	deletearray @Ea,getarraysize(@Ea_c);
+	set @size,0;
+	switch (getarg(0)) {
+		case 100:
+			set @b$,"segunda";
+			setarray .@Ea[0],35035,35036,35005,12922,7711;
+			setarray .@Ea_c[0],2,2,1,5,50;
+			set @size,getarraysize(@Ea)-1;
+			break;
+		case 200:
+			set @b$,"tercera";
+			setarray .@Ea[0],13912,13913,13914;
+			setarray .@Ea_c[0],30,30,30;
+			set @size,getarraysize(@Ea)-1;
+			break;
+		case 500: 
+			setarray .@Ea[0],35059,20707,2589,35034;
+			setarray .@Ea_c[0],1,1,1,1;
+			set @size,getarraysize(@Ea)-1;
+			set @b$,"última";
+			break;
+	}
+	mes "Bien, comencemos con la "+@b$+" ronda.";
+	next;
+	set @m$,"";
+	for(set @i,0; @i <= @size; set @i,@i+1) {
+		set @m$,@m$+"^5533ff~^000000"+@Ea_c[@i]+"^008800x^000000 "+getitemname(@Ea[@i]);
+		set @m$,@m$+":";
+	}
+	mes "[^5533ffDonaciones^000000]";
+	mes "Por favor selecciona el objeto que desees obtener:";
+	next;
+	set @ie,select(@m$)-1;
+	mes "[^5533ffDonaciones^000000]";
+	mes "Haz elegido:";
+	mes "^ff0000"+@Ea_c[@ie]+"x "+getitemname(@Ea[@ie])+"^000000.";
+	mes " ";
+	mes "¿Estás segur"+(Sex?"o":"a")+"?";
+	next;
+	if(select("Continuar","^777777Salir^000000") == 2) {
+		mes "[^5533ffDonaciones^000000]";
+		mes "Bien, aquí guardaré tus premios, vuelve pronto.";
+		set @m$,"";
+		set @ie,0;
+		set @i,0;
+		close2; cutin "",255; end;
+	}
+	return @ie;
+}
+OnInit:
+	set .waiting,120000; // Tiempo de cada mensaje.
+	sleep2 1000;
+	npctalk "¡Recarga IGN Points y canjea tus compras en la Escala de Premios!";
+	sleep2 .waiting;
+	npctalk "¡Acérquense, acérquense!, tenemos la mejor mercancía para tí a un mejor precio.";
+	sleep2 .waiting;
+	npctalk "Recuerda que por tu primera recarga de IGN Points, recibes fabulosos premios.";
+	sleep2 .waiting;
+	npctalk "No olvides revisar Facebook e IGN.do, recomiéndanos a tus amigos y vótanos.";
+	sleep2 .waiting;
+	npctalk "Los mejores objetos a los mejores precios, no pierdas la oportunidad.";
+	sleep2 .waiting;
+	npctalk "¿Sabías que si invitas amigos a un grupo de amigos, pueden obtener una transferencia?";
+	sleep2 .waiting;
+	npctalk "Utiliza el sistema de recomendaciones, y gana fabulosos premios.";
+	sleep2 .waiting;
+	goto OnInit;
+}

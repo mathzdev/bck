@@ -1,0 +1,145 @@
+-	itemshop	tiendassex	139,35054:0,35047:50,35048:50,35049:50,35050:50,35051:50,35052:50,35053:50
+vip,267,258,5	script	Super Novice::nvex	567,{
+	disable_items;
+	function getequipcardcnt2;
+	set .npc$,"[^cc6600Super Novice^000000]";
+	mes .npc$;
+	mes "¡Hola, hola!";
+	next;
+	if(Class == Job_Super_Novice_E || Class == Job_Super_Baby_E) {
+		mes .npc$;
+		mes "¿Qué tal camarada?";
+		next;
+		mes .npc$;
+		mes "Soy un gran Super Novice que se especializó en la construcción de armas y armaduras.";
+		next;
+		mes .npc$;
+		mes "Ya que ultimamente nos estamos quedando atrás, te traigo lo último en mi tecnología.";
+		next;
+		mes .npc$;
+		mes "Podré canjéartelo por tan solo 50 ^5533ff"+getitemname(35054)+"^000000 cada pieza, ¿qué dices?";
+		next;
+		switch(select("Ver tienda:^ff0000Mejorar equipo:^777777Salir^000000")) {
+			case 1:
+				close2;
+				callshop "tiendassex",1;
+				end;
+			case 2:
+				mes .npc$;
+				mes "Por favor dime qué equipo deseas mejorar.";
+				next;
+				setarray .@position$[2],"Body","Left hand","Right hand","Robe","Shoes";
+				set .@menu$,"";
+				for(set .@i,1; .@i<=getarraysize(.@position$); set .@i,.@i+1) {
+					if(getequipisequiped(.@i)) {
+						set .@menu$, .@menu$ + .@position$[.@i] + "-" + "[" + getequipname(.@i) + "]";
+						set .@equipped,1;
+					}
+					set .@menu$, .@menu$ + ":";
+				}
+				if (.@equipped == 0) {
+					mes .npc$;
+					mes "Disculpa, pero no traes nada puesto.";
+					close;
+				}
+				set .@part,select(.@menu$);
+				switch (getequipid(.@part)) {
+					case 35047:
+					case 35048:
+					case 35049:
+					case 35050:
+					case 35051:
+					case 35052:
+					case 35053:
+						set .@val,1;
+						break;
+					default:
+						set .@val,0;
+						break;
+				}
+				if(.@val < 1) {
+					mes .npc$;
+					mes "Lo siento pero ése objeto no lo puedo utilizar.";
+					close2;
+					emotion e_sry;
+					end;
+				}
+				set .@itid,getequipid(.@part);
+				mes .npc$;
+				mes "Vale, te cobraré 10 ^5533ff"+getitemname(35054)+"^000000 por cada encantamiento que le ponga a tú ^ff0000"+getitemname(.@itid)+"^000000.";
+				next;
+				mes .npc$;
+				mes "Sólo puedo colocarle dos encantamientos.";
+				next;
+				mes .npc$;
+				mes "¿Listo?";
+				next;
+				if(select("¡Vamos!","^777777Salir^000000") == 2) {
+					mes .npc$;
+					mes "Como tu quieras.";
+					close;
+				}
+				if(countitem(35054) < 10) {
+					mes .npc$;
+					mes "No tienes los objetos necesarios.";
+					close;
+				}
+				if(getequipid(.@part) != .@itid) {
+					mes .npc$;
+					mes "No me quieras ver la cara de tonto, no te cambies tu equipo.";
+					close;
+				}
+				setarray .@enc[0],getequipid(.@part),1,1,getequiprefinerycnt(.@part),0,getequipcardid(.@part,0),getequipcardid(.@part,1),getequipcardid(.@part,2),getequipcardid(.@part,3);
+				switch(getequipcardcnt2(.@part)) {
+					case 0: setarray .@enc[8],rand(4951,4961); break;
+					case 1: setarray .@enc[7],rand(4951,4961); break;
+					case 2:
+						mes .npc$;
+						mes "Ya no puedo añadir más encantamientos.";
+						close2;
+						emotion e_sry;
+						deletearray .@enc[0],getarraysize(.@enc);
+						end;
+				}
+				delitem 35054,10;
+				delequip .@part;
+				getitem2 .@enc[0],.@enc[1],.@enc[2],.@enc[3],.@enc[4],.@enc[5],.@enc[6],.@enc[7],.@enc[8];
+				mes .npc$;
+				mes "Aquí tienes, todo listo.";
+				emotion e_no1;
+				specialeffect 154;
+				close2;
+				deletearray .@enc[0],getarraysize(.@enc);
+				set .@part,0;
+				set .@itid,0;
+				emotion e_thx;
+				end;
+			case 3:
+				mes .npc$;
+				mes "Vuelve cuando quieras.";
+				close2;
+				emotion e_no1;
+				end;
+		}
+	} else {
+		mes .npc$;
+		mes "¿Andas un poco perdido?";
+		next;
+		mes .npc$;
+		mes "El casino está allí abajo, no acá.";
+		close;
+	}
+	function	getequipcardcnt2	{
+		set .@r,0;
+		if(getequipcardid(getarg(0),2))
+			set .@r,.@r+1;
+		if(getequipcardid(getarg(0),3))
+			set .@r,.@r+1;
+		return .@r;
+	}
+OnPCLoadMapEvent:
+	if((strcharinfo(3)=="vip") && (BaseLevel >= 100) && (Class == Job_Super_Novice_E || Class == Job_Super_Baby_E))
+		showevent 0,1;
+	end;
+}
+vip	mapflag	loadevent

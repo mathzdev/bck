@@ -1,0 +1,76 @@
+-	script	rec_sys	-1,{
+OnPCBaseLvUpEvent:
+	if(BaseLevel < 150)
+		end;
+	else if(#rec_lv == 1) {
+		query_sql("SELECT `status` FROM `reference` WHERE `invitado`='"+getcharid(3)+"'"),.@s;
+		if(!.@s)
+			end;
+		cutin "ep13_cheshire_h",2;
+		mes "[^cc6600Sistema de Recomendación^000000]";
+		mes "Felicidades, has llegado al Nivel 150, por lo tanto el ^5533ffreferente que diste al iniciar el juego^000000 será recompenzado.";
+		set #rec_lv,0;
+		query_sql("UPDATE `reference` SET `status`='1' WHERE `invitado`='"+getcharid(3)+"'");
+		close2;
+		cutin "",255;
+		end;
+	}
+	else end;
+OnPCLoginEvent:
+	query_sql("SELECT `status` FROM `reference` WHERE `invitante`='"+getcharid(3)+"'"),.@s;
+	if(.@s == 1) {
+		cutin "ep13_cheshire_h",2;
+		mes "[^cc6600Sistema de Recomendación^000000]";
+		mes "La persona que te ha recomendado ha llegado a Nivel 150, por lo tanto aquí está tu recompenza.";
+		getitem 671,20;
+		getitem 7711,20;
+		set Zeny,Zeny + 1500000;
+		dispbottom "Has obtenido 1,500,000 Zeny.";
+		query_sql("UPDATE `reference` SET `status`='0' WHERE `status`='1' AND `invitante`='"+getcharid(3)+"'");
+		close2;
+		cutin "",255;
+		end;
+	}
+	if(#rec_v == 1)
+		end;
+	if(BaseLevel > 1) {
+		set #rec_v,1;
+		end;
+	}
+	cutin "ep13_cheshire_h",2;
+	mes "[^cc6600Sistema de Recomendación^000000]";
+	mes "Bienvenid"+(Sex?"o ^0000ff":"a ^ff0000")+strcharinfo(0)+" a ^5533ffIGN RO^000000.";
+	mes "Nuestros sistemas han identificado que eres un nuevo usuario en nuestro servidor y nos gustaría saber si ^ff0000alguién te ha invitado^000000.";
+	next;
+	if(select("Me han invitado","^777777Salir^000000")== 2)
+		close;
+	while (1) {
+		mes "[^cc6600Sistema de Recomendación^000000]";
+		mes "Entonces, por favor escribe el nombre de la persona que te ha invitado.";
+		mes " ";
+		mes "Recuerda que debe ser el nombre ^ff0000exacto de su personaje^000000.";
+		next;
+		input @name$;
+		query_sql("SELECT `account_id` FROM `char` WHERE `name`='"+@name$+"'"),@inv;
+		if(@inv == 0) {
+			mes "[^cc6600Sistema de Recomendación^000000]";
+			mes "Lo siento pero este nombre no existe.";
+			mes "¿Deseas intentar con otro?";
+			if(select("Intentar con otro","^777777Salir^000000")== 2) {
+				close2;
+				cutin "",255;
+				end;
+			}
+			break;
+		} else if(@inv) {
+			mes "[^cc6600Sistema de Recomendación^000000]";
+			mes "¡De acuerdo!";
+			mes "Hemos registrado que "+@name$+" te ha invitado al servidor, será premiado en cuanto tu subas a Nivel 150, suerte.";
+			set #rec_v,1;
+			set #rec_lv,1;
+			query_sql("INSERT INTO `reference`(invitante,invitado,status) VALUES ('"+@inv+"','"+getcharid(3)+"','0'");
+			close;
+		}
+	}
+end;
+}

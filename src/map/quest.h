@@ -4,6 +4,7 @@
 #ifndef _QUEST_H_
 #define _QUEST_H_
 
+
 struct quest_dropitem {
 	uint16 nameid;
 	uint16 count;
@@ -21,7 +22,7 @@ struct quest_objective {
 
 struct quest_db {
 	// TODO: find out if signed or unsigned in client
-	int id;
+	int id; // test
 	unsigned int time;
 	uint8 objectives_count;
 	struct quest_objective *objectives;

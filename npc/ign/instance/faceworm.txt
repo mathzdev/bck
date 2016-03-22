@@ -1,0 +1,341 @@
+dali,79,60,6	script	Suhben#face	852,{
+	if(BaseLevel < 120) {
+		mes "[Suhben]";
+		mes "Necesitas nivel 120 para entrar a éste portal, ve a ganar más experiencia, aventurero.";
+		close;
+	}
+	if(getgroupid() > 1)	
+		goto doit;
+		set .@facetime,checkquest(13999,PLAYTIME); //20 Horas
+			if (.@facetime == 2) {
+				erasequest 13999;
+				end;
+			}
+			else  if ((.@facetime == 1) || (.@facetime == 0)) {
+				mes "[Suhben]";
+				mes "^ff0000Aún no es tiempo de que ingreses aquí.^000000";
+				close;
+			}
+			else if (.@facetime == -1) {
+				doit:
+				set .@party_id,getcharid(1);
+				set .@p_name$,getpartyname(.@party_id);
+				set .@md_name$,"Faceworm Nest";
+				
+				if (!instance_check_party(.@party_id,1)) {
+					mes "[Suhben]";
+					mes "No hay miembros suficientes.";
+					close;
+				}
+				if (getcharid(0) == getpartyleader(.@party_id,2))
+					set .@menu$, "Inscribir Party.:Faceworm Nest.:Salir";
+				else
+				set .@menu$, ":Faceworm Nest.";
+				switch(select(.@menu$)) 
+				{
+				case 1:
+					if (instance_create(.@md_name$) < 0) {
+						mes "[Suhben]";
+						mes "Nombre de Party: "+.@p_name$;
+						mes "Tú nombre: "+strcharinfo(0);
+						mes "^0000ff"+.@md_name$+" ^000000- no se puede crear!";
+						close;
+					}
+					mes "[Suhben]";
+					mes "^ff0000¡¡La entrada está abierta!^000000";
+					close;
+				case 2:
+					switch(instance_enter(.@md_name$))
+					{
+						case 0:
+							if (getcharid(0) == getpartyleader(.@party_id,2)) {
+								mapannounce "verus04",strcharinfo(0)+", member of the party "+.@p_name$+" entered the instance "+.@md_name$+".",bc_map,"0x00ff99";
+								setquest 13999;
+								specialeffect2 EF_WARP;
+								//war "1@face",112,375;
+								end;
+							}
+						//custom @ official server kRO simple when click nothing happens.
+						case 1:
+							mes "[Suhben]";
+							mes "Only the registered members can enter the instance "+.@md_name$+".";
+							close;
+						case 2:
+							mes "[Suhben]";
+							mes "The memorial dungeon "+.@md_name$+" does not exist.";
+							mes "The party leader did not generate the dungeon yet.";
+							close;
+						case 3:
+							mes "[Suhben]";
+							mes "Unknown Error...!";
+							close;
+					}
+				case 3:
+					close;	
+				}
+			}
+}
+dali,84,67,5	script	Letrero#face	857,{
+	mes "^777777Puente Dimensional a Faceworm Nest^000000";
+	close;
+}
+//Sala 1
+1@face,111,355,0	script	#spawnmob_e	139,5,5,{
+OnInstanceInit:
+	donpcevent instance_npcname("#spawnmob_e")+"::OnEnable";
+	end;
+OnTouch:
+	donpcevent instance_npcname("#spawnmob1")+"::OnEnable";
+	donpcevent instance_npcname("#spawnmob_e")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#spawnmob_e");
+	end;
+OnDisable:
+	disablenpc instance_npcname("#spawnmob_e");
+	end;
+}
+1@face,0,6,0	script	#spawnmob1	139,{
+OnInstanceInit:
+	donpcevent instance_npcname("#spawnmob1")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#spawnmob1");
+	set .@map$, instance_mapname("1@face");
+	monster .@map$,116,62,"Faceworm",2528,5,instance_npcname("#spawnmob1")+"::OnMyMobDead";
+	monster .@map$,82,110,"Faceworm",2528,5,instance_npcname("#spawnmob1")+"::OnMyMobDead";
+	monster .@map$,60,72,"Faceworm",2528,5,instance_npcname("#spawnmob1")+"::OnMyMobDead";
+	monster .@map$,77,148,"Faceworm",2528,5,instance_npcname("#spawnmob1")+"::OnMyMobDead";
+	monster .@map$,86,108,"Faceworm",2528,5,instance_npcname("#spawnmob1")+"::OnMyMobDead";
+	monster .@map$,85,188,"Faceworm",2528,5,instance_npcname("#spawnmob1")+"::OnMyMobDead";
+	monster .@map$,61,347,"Faceworm",2528,5,instance_npcname("#spawnmob1")+"::OnMyMobDead";
+	monster .@map$,73,217,"Faceworm",2528,5,instance_npcname("#spawnmob1")+"::OnMyMobDead";
+	monster .@map$,54,134,"Faceworm",2528,10,instance_npcname("#spawnmob1")+"::OnMyMobDead";
+	end;
+OnDisable:
+	disablenpc instance_npcname("#spawnmob1");
+	end;
+OnMyMobDead:
+	set .@map$,instance_mapname("1@face");
+	set .@mob,mobcount(.@map$,instance_npcname("#spawnmob1")+"::OnMyMobDead");
+	if((.@mob) < 1) {
+		instance_announce instance_id(),"Un Dark Faceworm ha aparecido en el mapa, derrótenlo para desbloquear el tesoro.",bc_map,0xF8E6E0;
+		donpcevent instance_npcname("#spawnmob1")+"::OnFaceworm";
+		end;
+	}
+	instance_announce instance_id(),"Quedan "+.@mob+" Faceworm",bc_map,0xF8E6E0;
+	end;
+OnFaceworm:
+	set .@map$,instance_mapname("1@face");
+	monster .@map$,149,75,"Dark Faceworm",2530,1,instance_npcname("#spawnmob1")+"::OnDarkMobDead";
+	end;
+OnDarkMobDead:
+	set .@map$,instance_mapname("1@face");
+	set .@mob,mobcount(.@map$,instance_npcname("#spawnmob1")+"::OnMyMobDead");
+	if((.@mob) < 1) {
+		donpcevent instance_npcname("#chest1")+"::OnEnable";
+		instance_announce instance_id(),"Un cofre de tesoro ha aparecido en el mapa.",bc_map,0xF8E6E0;
+		donpcevent instance_npcname("#spawnmob1")+"::OnDisable";
+		end;
+	}
+}
+1@face,152,80,4	script	#chest1	10005,{
+	setarray .@enc[0],4700,4701,4702,4703,4704,4710,4711,4712,4713,4714,4715,4720,4721,4722,4723,4724,4730,4731,4732,4733,4734,4740,4741,4742,4743,4744,4750,4751,4752,4753,4754,4760,4761,4762,4763,4764,4765,4766,4767,4786,4787,4788,4789,4790,4791,4792,4793,4794,4795,4796,4797,4798,4799,4800,4801,4802,4803,4804,4805,4806,4807,4808,4809,4810,4811,4812,4813,4814,4815,4816,4817,4818;
+	set .@prob,rand(1,20);
+	if(.@prob == 5)
+		getitem2 20718,1,0,rand(0,5),0,0,0,.@enc[rand(0,getarraysize(.@enc))],.@enc[rand(0,getarraysize(.@enc))];
+	else if(.@prob == 6)
+		getitem2 20718,1,0,rand(0,5),0,0,0,0,.@enc[rand(0,getarraysize(.@enc))];
+	else if(.@prob == 7)
+		getitem2 20717,1,0,rand(0,5),0,0,0,.@enc[rand(0,getarraysize(.@enc))],.@enc[rand(0,getarraysize(.@enc))];
+	else if(.@prob == 8)
+		getitem2 20717,1,0,rand(0,5),0,0,0,0,.@enc[rand(0,getarraysize(.@enc))];
+	else
+		getitem2 20717,1,0,rand(0,2),0,0,0,0,.@enc[rand(0,getarraysize(.@enc))];
+	donpcevent instance_npcname("#chest1")+"::OnDisable";
+	donpcevent instance_npcname("#warp1")+"::OnEnable";
+	set .@map$,instance_mapname("1@face");
+	monster .@map$,166,143,"Faceworm",2528,5,instance_npcname("#spawnmob2")+"::OnMyMobDead";
+	monster .@map$,165,176,"Faceworm",2528,5,instance_npcname("#spawnmob2")+"::OnMyMobDead";
+	monster .@map$,180,200,"Faceworm",2528,5,instance_npcname("#spawnmob2")+"::OnMyMobDead";
+	monster .@map$,212,208,"Faceworm",2528,5,instance_npcname("#spawnmob2")+"::OnMyMobDead";
+	monster .@map$,242,218,"Faceworm",2528,5,instance_npcname("#spawnmob2")+"::OnMyMobDead";
+	monster .@map$,244,242,"Faceworm",2528,5,instance_npcname("#spawnmob2")+"::OnMyMobDead";
+	monster .@map$,247,273,"Faceworm",2528,5,instance_npcname("#spawnmob2")+"::OnMyMobDead";
+	monster .@map$,239,299,"Faceworm",2528,5,instance_npcname("#spawnmob2")+"::OnMyMobDead";
+	monster .@map$,241,350,"Faceworm",2528,10,instance_npcname("#spawnmob2")+"::OnMyMobDead";
+
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#chest1")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#chest1");
+	end;
+OnDisable:
+	disablenpc instance_npcname("#chest1");
+	end;
+}
+1@face,154,93,0	script	#warp1	45,1,1,{
+end;
+OnInstanceInit:
+	donpcevent instance_npcname("#warp1")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#warp1");
+	end;
+OnDisable:
+	disablenpc instance_npcname("#warp1");
+	end;
+OnTouch:
+	set .@map$,instance_mapname("1@face");
+	warp .@map$,154,110;
+	end;
+}
+//Sala 2
+1@face,154,110,0	script	#spawnmob2	139,5,5,{
+end;
+OnInstanceInit:
+	donpcevent instance_npcname("#spawnmob2")+"::OnEnable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#spawnmob2");
+	end;
+OnDisable:
+	disablenpc instance_npcname("#spawnmob2");
+	end;
+OnMyMobDead:
+	set .@map$,instance_mapname("1@face");
+	set .@mob,mobcount(.@map$,instance_npcname("#spawnmob2")+"::OnMyMobDead");
+	if((.@mob) < 1) {
+		instance_announce instance_id(),"Un Dark Faceworm ha aparecido en el mapa, derrótenlo para desbloquear el tesoro.",bc_map,0xF8E6E0;
+		donpcevent instance_npcname("#spawnmob2")+"::OnFaceworm";
+		end;
+	}
+	instance_announce instance_id(),"Quedan "+.@mob+" Faceworm",bc_map,0xF8E6E0;
+	end;
+OnFaceworm:
+	set .@map$,instance_mapname("1@face");
+	monster .@map$,168,141,"Dark Faceworm",2530,1,instance_npcname("#spawnmob2")+"::OnDarkMobDead";
+	end;
+OnDarkMobDead:
+	set .@map$,instance_mapname("1@face");
+	set .@mob,mobcount(.@map$,instance_npcname("#spawnmob2")+"::OnMyMobDead");
+	if((.@mob) < 1) {
+		donpcevent instance_npcname("#chest2")+"::OnEnable";
+		instance_announce instance_id(),"Un cofre de tesoro ha aparecido en el mapa.",bc_map,0xF8E6E0;
+		disablenpc instance_npcname("#spawnmob2")+"::OnDisable";
+		end;
+	}
+}
+1@face,184,130,4	script	#chest2	10005,{
+	setarray .@enc[0],4700,4701,4702,4703,4704,4710,4711,4712,4713,4714,4715,4720,4721,4722,4723,4724,4730,4731,4732,4733,4734,4740,4741,4742,4743,4744,4750,4751,4752,4753,4754,4760,4761,4762,4763,4764,4765,4766,4767,4786,4787,4788,4789,4790,4791,4792,4793,4794,4795,4796,4797,4798,4799,4800,4801,4802,4803,4804,4805,4806,4807,4808,4809,4810,4811,4812,4813,4814,4815,4816,4817,4818;
+	set .@prob,rand(1,20);
+	if(.@prob == 5)
+		getitem2 20718,1,0,rand(0,5),0,0,0,.@enc[rand(0,getarraysize(.@enc))],.@enc[rand(0,getarraysize(.@enc))];
+	else if(.@prob == 6)
+		getitem2 20718,1,0,rand(0,5),0,0,0,0,.@enc[rand(0,getarraysize(.@enc))];
+	else if(.@prob == 7)
+		getitem2 20717,1,0,rand(0,5),0,0,0,.@enc[rand(0,getarraysize(.@enc))],.@enc[rand(0,getarraysize(.@enc))];
+	else if(.@prob == 8)
+		getitem2 20717,1,0,rand(0,5),0,0,0,0,.@enc[rand(0,getarraysize(.@enc))];
+	else
+		getitem2 20717,1,0,rand(0,2),0,0,0,0,.@enc[rand(0,getarraysize(.@enc))];
+	donpcevent instance_npcname("#chest2")+"::OnDisable";
+	donpcevent instance_npcname("#warp2")+"::OnEnable";
+	donpcevent instance_npcname("#spawnboss")+"::OnEnable";
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#chest2")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#chest2");
+	end;
+OnDisable:
+	disablenpc instance_npcname("#chest2");
+	end;
+}
+1@face,188,130,0	script	#warp2	45,1,1,{
+end;
+OnInstanceInit:
+	donpcevent instance_npcname("#warp2")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#warp2");
+	end;
+OnDisable:
+	disablenpc instance_npcname("#warp2");
+	end;
+OnTouch:
+	set .@map$,instance_mapname("1@face");
+	warp .@map$,213,145;
+	end;
+}
+
+//Sala Boss
+1@face,154,110,0	script	#spawnboss	139,{
+end;
+OnInstanceInit:
+	donpcevent instance_npcname("#spawnboss")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#spawnboss");
+	set .@map$, instance_mapname("1@face");
+	monster .@map$,214,157,"Faceworm Queen",2529,1,instance_npcname("#spawnboss")+"::OnMyMobDeadR";
+	end;
+OnDisable:
+	disablenpc instance_npcname("#spawnboss");
+	end;
+OnMyMobDeadR:
+	set .@map$, instance_mapname("1@face");
+	monster .@map$,214,157,"Faceworm Queen",2532,1,instance_npcname("#spawnboss")+"::OnMyMobDeadG";
+	end;
+OnMyMobDeadG:
+	set .@map$, instance_mapname("1@face");
+	monster .@map$,214,157,"Faceworm Queen",2533,1,instance_npcname("#spawnboss")+"::OnMyMobDeadB";
+	end;
+OnMyMobDeadB:
+	set .@map$, instance_mapname("1@face");
+	monster .@map$,214,157,"Faceworm Queen",2534,1,instance_npcname("#spawnboss")+"::OnMyMobDeadY";
+	end;
+OnMyMobDeadY:
+	set .@map$, instance_mapname("1@face");
+	monster .@map$,214,157,"Faceworm Queen",2535,1,instance_npcname("#spawnboss")+"::OnMyMobDead";
+	end;
+OnMyMobDead:
+	set .@map$,instance_mapname("1@face");
+	set .@mob,mobcount(.@map$,instance_npcname("#spawnboss")+"::OnMyMobDead");
+	if((.@mob) < 1) {
+		set sarah_q3,1;
+		donpcevent instance_npcname("#chestboss")+"::OnEnable";
+		instance_announce instance_id(),"Un cofre de tesoro ha aparecido en el mapa.",bc_map,0xF8E6E0;
+		end;
+	}
+}
+1@face,213,160,4	script	#chestboss	10005,{
+	setarray .@enc[0],4700,4701,4702,4703,4704,4710,4711,4712,4713,4714,4715,4720,4721,4722,4723,4724,4730,4731,4732,4733,4734,4740,4741,4742,4743,4744,4750,4751,4752,4753,4754,4760,4761,4762,4763,4764,4765,4766,4767,4786,4787,4788,4789,4790,4791,4792,4793,4794,4795,4796,4797,4798,4799,4800,4801,4802,4803,4804,4805,4806,4807,4808,4809,4810,4811,4812,4813,4814,4815,4816,4817,4818;
+	set .@prob,rand(1,20);
+	if(.@prob > 10 && .@prob < 16)
+		getitem2 20718,1,0,rand(0,5),0,0,0,.@enc[rand(0,getarraysize(.@enc))],.@enc[rand(0,getarraysize(.@enc))];
+	else if(.@prob == 6)
+		getitem2 20718,1,0,rand(0,5),0,0,0,0,.@enc[rand(0,getarraysize(.@enc))];
+	else if(.@prob > 0 && .@prob < 6)
+		getitem2 20717,1,0,rand(0,5),0,0,0,.@enc[rand(0,getarraysize(.@enc))],.@enc[rand(0,getarraysize(.@enc))];
+	else if(.@prob == 8)
+		getitem2 20717,1,0,rand(0,5),0,0,0,0,.@enc[rand(0,getarraysize(.@enc))];
+	else
+		getitem2 20717,1,0,rand(0,2),0,0,0,0,.@enc[rand(0,getarraysize(.@enc))];
+	donpcevent instance_npcname("#chestboss")+"::OnDisable";
+	sleep2 5000;
+	instance_warpall	"prontera",150,180,instance_id();
+	end;
+OnInstanceInit:
+	donpcevent instance_npcname("#chestboss")+"::OnDisable";
+	end;
+OnEnable:
+	enablenpc instance_npcname("#chestboss");
+	end;
+OnDisable:
+	disablenpc instance_npcname("#chestboss");
+	end;
+}

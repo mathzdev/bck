@@ -1,0 +1,28 @@
+prontera,164,178,4	script	Facebook	837,{
+	mes "[^5533ffFacebook^000000]";
+	if(#delay5 > gettimetick(0)){
+		mes "Deberás esperar "+(#delay5-gettimetick(0))/3600000+" horas antes de compartir de nuevo.";
+		close;
+	}
+
+	mes "¡Hola, conmigo podrás compartir tu personaje de ^ff8800IGN.do^000000 en ^0000ffFacebook^000000^.";
+	next;
+	mes "[^5533ffFacebook^000000]";
+	mes "¡Por compartir ganarás puntos especiales que podrás canjear en el juego!";
+	next;
+	mes "[^5533ffFacebook^000000]";
+	mes "¿Deseas compartir?";
+	next;
+	if(select("¡Claro, vamos!","No, gracias")==1) {
+		mes "[^5533ffFacebook^000000^]";
+		mes "Bien, para continuar da clic <URL>aquí<INFO>www.facebook.com/sharer/sharer.php?u=ign.do/ragnarok/facebook/index.php?char="+getcharid(0)+"</INFO></URL>";
+		close2;
+		query_sql "update `login` set `shate_points`=`share_points`+1";
+		query_sql "select `share_points` from `login` where `account_id`=="+getcharid(3)+"",@points;
+		set #delay5, gettimetick(0)+86400000;
+		end;
+	}
+	mes "[^5533ffFacebook^000000]";
+	mes "Vuelve cuando quieras hacerlo entonces.";
+	close;
+}

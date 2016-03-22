@@ -37,6 +37,7 @@
 #include "elemental.h"
 #include "cashshop.h"
 #include "channel.h"
+#include "achievement.h"
 
 #include <stdlib.h>
 #include <math.h>
@@ -1738,6 +1739,36 @@ int map_addflooritem(struct item *item, int amount, int16 m, int16 x, int16 y, i
 	return fitem->bl.id;
 }
 
+int map_addflooritem_area(struct block_list* bl, int16 m, int16 x, int16 y, int nameid, int amount)
+{
+	struct item item_tmp;
+	int count, range, i;
+	short mx, my;
+
+	memset(&item_tmp, 0, sizeof(item_tmp));
+	item_tmp.nameid = nameid;
+	item_tmp.identify = 1;
+
+	if( bl != NULL ) m = bl->m;
+
+	count = 0;
+	range = (int)sqrt(amount) +2;
+	for( i = 0; i < amount; i++ )
+	{
+		if( bl != NULL )
+			map_search_freecell(bl, 0, &mx, &my, range, range, 0);
+		else
+		{
+			mx = x; my = y;
+			map_search_freecell(NULL, m, &mx, &my, range, range, 1);
+		}
+
+		count += (map_addflooritem(&item_tmp, 1, m, mx, my, 0, 0, 0, 0, 4) != 0) ? 1 : 0;
+	}
+
+	return count;
+}
+
 /**
  * @see DBCreateData
  */
@@ -1805,6 +1836,12 @@ void map_reqnickdb(struct map_session_data * sd, int charid)
 	struct map_session_data* tsd;
 
 	nullpo_retv(sd);
+
+	if( battle_config.costume_reserved_char_id && battle_config.costume_reserved_char_id == charid )
+	{
+		clif_solved_charname(sd->fd, charid, "Costume");
+		return;
+	}
 
 	tsd = map_charid2sd(charid);
 	if( tsd )
@@ -1907,8 +1944,10 @@ int map_quit(struct map_session_data *sd) {
 	if (sd->npc_id)
 		npc_event_dequeue(sd);
 
-	if( sd->bg_id )
+	if( sd->bg_id ) {
 		bg_team_leave(sd,1);
+		sd->bgstats.deserter++;
+	}
 
 	pc_itemcd_do(sd,false);
 
@@ -4335,6 +4374,7 @@ void do_final(void)
 	do_final_battleground();
 	do_final_duel();
 	do_final_elemental();
+	do_final_achievement();
 	do_final_cashshop();
 	do_final_channel(); //should be called after final guild
 	do_final_vending();
@@ -4668,6 +4708,7 @@ int do_init(int argc, char *argv[])
 	do_init_duel();
 	do_init_vending();
 	do_init_buyingstore();
+	do_init_achievement();
 
 	npc_event_do_oninit();	// Init npcs (OnInit)
 

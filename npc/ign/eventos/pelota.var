@@ -1,0 +1,32 @@
+prontera,150,180,4	script	Pelota::pelota	1792,{
+	getmapxy ( .@m1$, .@x1, .@y1 , 0 ) ;
+	getmapxy ( .@m2$, .@x2, .@y2 , 1 ) ;
+	set .@m1, ( ( .@x1 < .@x2 ) ? 3 : ( ( .@x1 > .@x2 ) ? -3 : 0 ) );
+	set .@m2, ( ( .@y1 < .@y2 ) ? 3 : ( ( .@y1 > .@y2 ) ? -3 : 0 ) );
+	npcspeed 80 ;
+	specialeffect 44 ;
+	set .@x, .@x2 + .@m1;
+	set .@y, .@y2 + .@m2;
+	set .@a1, checkcell ( .@m2$, .@x, .@y, cell_chkpass );
+	set .@a2, checkcell ( .@m2$, .@x - .@m1, .@y - .@m2, cell_chkpass );
+	if ( ! .@a1 ) {
+		if ( .@a2 ) {
+			while ( ! checkcell ( .@m2$, .@x, .@y, cell_chkpass ) ) {
+				set .@x, ( ( .@m1 > 0 ) ? .@x - 3 : .@x + 3 );
+				set .@y, ( ( .@m2 > 0 ) ? .@x - 3 : .@y + 3 );
+			}
+		}
+		else {
+			while ( ! checkcell ( .@m2$, .@x, .@y, cell_chkpass ) ) {
+				set .@x, ( ( .@x > 0 ) ? .@x - 3 : (-.@x) + 3 );
+				set .@y, ( ( .@y > 0 ) ? .@y - 3 : (-.@y) + 3 );
+			}
+		}
+	}
+	soundeffectall "ho_ami_2_attack1.wav", 0, .@m2$, .@x2 - 5, .@y2 - 5, .@x2 + 5, .@y2 + 5 ;
+	npcwalkto .@x, .@y ;
+	end ;
+OnClock0000:
+atcommand "@npcmove 150 180 pelota";
+end;
+}

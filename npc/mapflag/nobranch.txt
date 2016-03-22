@@ -20,6 +20,9 @@
 //============================================================
 
 // Cities ======================
+vip	mapflag	nobranch
+que_ba	mapflag	nobranch
+ilyo_kwan	mapflag	nobranch
 ayo_in01	mapflag	nobranch
 ayo_in02	mapflag	nobranch
 alb_ship	mapflag	nobranch

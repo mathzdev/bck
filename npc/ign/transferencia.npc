@@ -1,0 +1,1335 @@
+prontera,149,191,5	script	Transferencia	10053,{
+	playbgm "tos_pristine";
+	cutin "dalle01",2;
+	if(#trans > 0){
+		mes .npc$;
+		mes "Disculpa, pero tu ya haz realizado una transferencia correctamente.";
+		close2; cutin "",255; playbgm "prt_new";
+		end;
+	}
+	if(BaseLevel != 1 && JobLevel != 1) {
+		mes .npc$;
+		mes "¡Hola ^5533ff"+strcharinfo(0)+"^000000!, éste NPC está reservado para transferencias de personaje, ha sido colocado en la ciudad principal para promover la transparencia, si tienes alguna duda sobre las ^5533ffTransferencias^000000, contacta a un Game Master.";
+		close2; cutin "",255; playbgm "prt_new"; cutin "",255; end;
+		end;
+	}
+	mes .npc$;
+	mes "Bienvenid"+(Sex?"o":"a")+" a ^ff0000IGN RO^000000 "+strcharinfo(0)+".";
+	mes "Yo soy la Asistente para Transferencias.";
+	mes "¿Algún Game Master te ha entregado el Ticket para transferencia?";
+	next;
+	if(select("No:Si")==1){
+		mes .npc$;
+		mes "Entonces no me quites mi tiempo por favor, espera a que te lo den";
+		close2; cutin "",255; playbgm "prt_new";
+		end;
+	}
+	mes .npc$;
+	mes "Muy bien dejame revisar si lo tienes contigo...";
+	next;
+	if(!countitem(.keyitem)){
+		mes .npc$;
+		mes "No me hagas perder mi tiempo por favor, espera a que te lo den";
+		close2; cutin "",255; playbgm "prt_new";
+		end;
+	}
+	mes .npc$;
+	mes "...";
+	sleep2 1000;
+	mes "......";
+	sleep2 1000;
+	mes ".........";
+	sleep2 1000;
+	mes "............";
+	sleep2 1000;
+	next;
+	mes .npc$;
+	mes "Muy Bien, veo que si lo tienes, entonces comenzemos";
+	next;
+	mes .npc$;
+	mes "Primero, dime por favor, ¿qué tipo de clase deseas ser?";
+	next;
+	if(select("Regular:Baby") == 1 )
+		set #selupper, 1;
+	else
+		set #selupper, 0;	
+	mes .npc$;
+	mes "Muy Bien, asi que deseas ser un "+(#selupper?"Regular":"Baby")+" Third Job, ahora, ¿qué trabajo deseas elegir?";
+		next;
+		switch(select("01 Rune Knight:02 Warlock:03 Ranger:04 Arch Bishop:05 Mechanic:06 Gullotine Cross:07 Royal Guard:08 Sorcerer:09 "+(Sex?"Minstrel":"Wanderer")+":10 Sura:11 Genetic:12 Shadow Chaser:13 Expanded Class")){
+			case 1://RK
+				set #jobselect, (#selupper?"4060":"4096");
+				break;
+			case 2://Warlock
+				set #jobselect, (#selupper?"4061":"4097");
+				break;
+			case 3://Ranger
+				set #jobselect, (#selupper?"4062":"4098");
+				break;
+			case 4://Arch
+				set #jobselect, (#selupper?"4063":"4099");
+				break;
+			case 5://Mechanic
+				set #jobselect, (#selupper?"4064":"4100");
+				break;
+			case 6://GX
+				set #jobselect, (#selupper?"4065":"4101");
+				break;
+			case 7://RG
+				set #jobselect, (#selupper?"4073":"4102");
+				break;
+			case 8://Sorcerer
+				set #jobselect, (#selupper?"4074":"4103");
+				break;
+			case 9://Mins/Wand
+				set #jobselect, (#selupper?"4075":"4104");
+				break;
+			case 10://Sura
+				set #jobselect, (#selupper?"4077":"4106");
+				break;
+			case 11://Gene
+				set #jobselect, (#selupper?"4078":"4107");
+				break;
+			case 12://Shadow
+				set #jobselect, (#selupper?"4079":"4108");
+				break;
+			case 13://Expanded Classes
+				if(#selupper == 0) {
+					mes .npc$;
+					mes "La unica Expanded Class que hay con rama de Baby es el ^0ffff0Super Novice Extended^000000.";
+					next;
+					mes .npc$;
+					mes "¿Deseas ser Super Novice Extended?";
+					next;
+					if(select("Si:No")==2){
+						mes .npc$;
+						mes "Muy Bien, comienza de nuevo por favor.";
+						close2; cutin "",255; playbgm "prt_new"; cutin "",255; playbgm "prt_new"; end;
+						end;
+					}
+					set #jobselect, 4191;
+					break;
+				}
+				mes .npc$;
+				mes "¿Qué tipo de expanded deseas ser?";
+					switch(select("01 Super Novice Extended:02 Gunslinger:03 Taekwon:04 Star Gladiator:05 Soul Linker:06 "+(Sex?"Kagerou":"Oboro")+":Cancel")){
+						case 01://SNE
+							set #jobselect, 4190;
+							break;
+						case 02://Gunz
+							set #jobselect, 24;
+							break;
+						case 03://Taek
+							set #jobselect, 4046;
+							break;
+						case 04://SG
+							set #jobselect, 4047;
+							break;
+						case 05://SL
+							set #jobselect, 4049;
+							break;
+						case 06://KA/OB
+							set #jobselect, (Sex?"4211":"4212");
+							break;
+						case 07://Cancel
+							mes .npc$;
+							mes "De acuerdo, habla conmigo nuevamente en ese caso.";
+							close2; cutin "",255; playbgm "prt_new"; cutin "",255; playbgm "prt_new"; end;
+						end;
+					}
+				break;
+		}
+	next;
+	mes .npc$;
+	mes "Muy Bien, ahora iremos a seleccionar los items que estan a Tu Disposicion de acuerdo al Job que elegiste, OK.";
+	next;
+	mes .npc$;
+	mes "^ff0000[ ***Recuerda Que Puedes Cancelar en Cualquier Momento*** ]^000000";
+	next;
+OnArmorSelect:
+	mes .npc$;
+	mes "Estas Son las Armaduras que puedes Elegir:";
+	next;
+	switch(#jobselect){
+		default:
+			mes "Algo ha salido mal.";
+			close2; cutin "",255; playbgm "prt_new"; cutin "",255; playbgm "prt_new"; end;
+		case 4060://Swordman Branch
+		case 4096:
+		case 4073:
+		case 4102:
+			for ( set .@i,0; .@i<getarraysize(.armorsword); set .@i,.@i+1) {
+				set .@Menu$,.@Menu$+(getitemname(.armorsword[.@i]))+":";
+			}
+			set .@j,select(.@Menu$);
+			next;
+			mes .npc$;
+			mes "Muy Bien Veo que has Elegido [ ^ff0000" + getitemname(.armorsword[.@j-1]) + "^000000 ] como tu armadura, es esto correcto??";
+			next;
+			if(select("Si:No") == 2) {
+				mes .npc$;
+				mes "Correcto entonces por favor elige correctamente.";
+					callsub OnArmorSelect;
+			}
+			next;
+			set #armor, .armorsword[.@j-1];
+			break;	
+		case 4061://Magician Branch
+		case 4097:
+		case 4074:
+		case 4103:
+			for ( set .@i,0; .@i<getarraysize(.armormagic); set .@i,.@i+1) {
+				set .@Menu$,.@Menu$+(getitemname(.armormagic[.@i]))+":";
+			}
+			set .@j,select(.@Menu$);
+			next;
+			mes .npc$;
+			mes "Muy Bien Veo que has Elegido [ ^ff0000" + getitemname(.armormagic[.@j-1]) + "^000000 ] como tu armadura, es esto correcto??";
+			next;
+			if(select("Si:No") == 2) {
+				mes .npc$;
+				mes "Correcto entonces por favor elige correctamente.";
+					callsub OnArmorSelect;
+			}
+			next;
+			set #armor, .armormagic[.@j-1];
+			break;
+		case 4062://Archer Branch
+		case 4098:
+		case 4075:
+		case 4104:
+			for ( set .@i,0; .@i<getarraysize(.armorarche); set .@i,.@i+1) {
+				set .@Menu$,.@Menu$+(getitemname(.armorarche[.@i]))+":";
+			}
+			set .@j,select(.@Menu$);
+			next;
+			mes .npc$;
+			mes "Muy Bien Veo que has Elegido [ ^ff0000" + getitemname(.armorarche[.@j-1]) + "^000000 ] como tu armadura, es esto correcto??";
+			next;
+			if(select("Si:No") == 2) {
+				mes .npc$;
+				mes "Correcto entonces por favor elige correctamente.";
+					callsub OnArmorSelect;
+			}
+			next;
+			set #armor, .armorarche[.@j-1];
+			break;
+		case 4063://Acolite Branch
+		case 4099:
+		case 4077:
+		case 4106:
+			for ( set .@i,0; .@i<getarraysize(.armoracoli); set .@i,.@i+1) {
+				set .@Menu$,.@Menu$+(getitemname(.armoracoli[.@i]))+":";
+			}
+		set .@j,select(.@Menu$);
+	next;
+		mes .npc$;
+		mes "Muy Bien Veo que has Elegido [ ^ff0000" + getitemname(.armoracoli[.@j-1]) + "^000000 ] como tu armadura, es esto correcto??";
+	next;
+		if(select("Si:No") == 2) {
+			mes .npc$;
+			mes "Correcto entonces por favor elige correctamente.";
+				callsub OnArmorSelect;
+		}
+	next;
+		set #armor, .armoracoli[.@j-1];
+			break;
+
+		case 4064://Merchant Branch
+		case 4100:
+		case 4078:
+		case 4107:
+			for ( set .@i,0; .@i<getarraysize(.armormerch); set .@i,.@i+1) {
+				set .@Menu$,.@Menu$+(getitemname(.armormerch[.@i]))+":";
+			}
+		set .@j,select(.@Menu$);
+	next;
+		mes .npc$;
+		mes "Muy Bien Veo que has Elegido [ ^ff0000" + getitemname(.armormerch[.@j-1]) + "^000000 ] como tu armadura, es esto correcto??";
+	next;
+		if(select("Si:No") == 2) {
+			mes .npc$;
+			mes "Correcto entonces por favor elige correctamente.";
+				callsub OnArmorSelect;
+		}
+	next;
+		set #armor, .armormerch[.@j-1];
+			break;
+
+		case 4065://Thief Branch
+		case 4101:
+		case 4079:
+		case 4108:
+			for ( set .@i,0; .@i<getarraysize(.armorthief); set .@i,.@i+1) {
+				set .@Menu$,.@Menu$+(getitemname(.armorthief[.@i]))+":";
+			}
+		set .@j,select(.@Menu$);
+	next;
+		mes .npc$;
+		mes "Muy Bien Veo que has Elegido [ ^ff0000" + getitemname(.armorthief[.@j-1]) + "^000000 ] como tu armadura, es esto correcto??";
+	next;
+		if(select("Si:No") == 2) {
+			mes .npc$;
+			mes "Correcto entonces por favor elige correctamente.";
+				callsub OnArmorSelect;
+		}
+	next;
+		set #armor, .armorthief[.@j-1];
+			break;
+
+		case 24://Expanded Classes
+
+		case 4046:
+		case 4047:
+		case 4049:
+		case 4211:
+		case 4212:
+			for ( set .@i,0; .@i<getarraysize(.armorexpan); set .@i,.@i+1) {
+				set .@Menu$,.@Menu$+(getitemname(.armorexpan[.@i]))+":";
+			}
+		set .@j,select(.@Menu$);
+	next;
+		mes .npc$;
+		mes "Muy Bien Veo que has Elegido [ ^ff0000" + getitemname(.armorexpan[.@j-1]) + "^000000 ] como tu armadura, es esto correcto??";
+	next;
+		if(select("Si:No") == 2) {
+			mes .npc$;
+			mes "Correcto entonces por favor elige correctamente.";
+				callsub OnArmorSelect;
+		}
+	next;
+		set #armor, .armorexpan[.@j-1];
+			break;
+
+			
+		case 4190:
+		case 4191:
+			mes .npc$;
+			mes "Como Los Super Novice No tienen mucho de donde elegir, te daremos el Set para Super Novices";
+			mes "Este set consta de lo siguiente:";
+				for ( set .@i,0; .@i < getarraysize(.SNEXPSET);set .@i, .@i + 1){
+					mes getitemname(.SNEXPSET[.@i]);
+				}
+		next;
+			mes .npc$;
+			mes "Enserio deseas ser un Super Novice Extended?";
+		next;
+				if(select("Si:No")==2){
+					mes .npc$;
+					mes "Muy Bien entonces, comienza de nuevo.";
+					close2; cutin "",255; playbgm "prt_new"; cutin "",255; playbgm "prt_new"; end;
+					end;
+				}
+			mes .npc$;
+			mes "Correcto, entonces solo restara que elijas el Arma que llevaras, Estas son las Disponibles:";
+				for ( set .@i,0; .@i<getarraysize(.SNEXPWEAP); set .@i,.@i+1) {
+					set .@Menu$,.@Menu$+(getitemname(.SNEXPWEAP[.@i]))+":";
+				}
+			set .@j,select(.@Menu$);
+		next;
+			mes .npc$;
+			mes "Muy Bien Veo que has Elegido [ ^ff0000" + getitemname(.SNEXPWEAP[.@j-1]) + "^000000 ] como tu armadura, es esto correcto??";
+		next;
+				if(select("Si:No") == 2) {
+					mes .npc$;
+					mes "Correcto entonces por favor elige correctamente.";
+					callsub OnArmorSelect;
+				}
+		next;
+			set #SNEXweapon, .SNEXPWEAP[.@j-1];
+			callsub OnCardArmor;
+	}
+
+		next;
+		callsub OnGarmentSelect;
+end;
+
+
+OnGarmentSelect:
+	mes .npc$;
+	mes "Ok, ya elegiste tu armadura, ahora elegiremos tu \"Garment\", estos son los Disponibles:";
+next;
+	for ( set .@i,0; .@i<getarraysize(.garments); set .@i,.@i+1) {
+		set .@Menu$,.@Menu$+(getitemname(.garments[.@i]))+":";
+	}
+	set .@j,select(.@Menu$);
+next;
+	mes .npc$;
+	mes "Muy Bien Veo que has Elegido [ ^ff0000" + getitemname(.garments[.@j-1]) + "^000000 ] como tu Garment, es esto correcto??";
+next;
+	if(select("Si:No") == 2) {
+		mes .npc$;
+		mes "Correcto entonces por favor elige correctamente.";
+			next;
+			callsub OnGarmentSelect;
+	}
+next;
+	set #garment, .garments[.@j-1];
+		callsub OnShoesSelect;
+end;
+	
+OnShoesSelect:
+	mes .npc$;
+	mes "Correcto, ahora Elegiremos que \"Shoes\" llevaras, estos son los disponibles:";
+next;
+	for ( set .@i,0; .@i<getarraysize(.shoes); set .@i,.@i+1) {
+		set .@Menu$,.@Menu$+(getitemname(.shoes[.@i]))+":";
+	}
+	set .@j,select(.@Menu$);
+next;
+	mes .npc$;
+	mes "Muy Bien Veo que has Elegido [ ^ff0000" + getitemname(.shoes[.@j-1]) + "^000000 ] como tu Shoes, es esto correcto??";
+next;
+	if(select("Si:No") == 2) {
+		mes .npc$;
+		mes "Correcto entonces por favor elige correctamente.";
+			next;
+			callsub OnShoesSelect;
+	}
+next;
+	set #shoes, .shoes[.@j-1];
+		callsub OnShieldSelect;
+end;
+
+OnShieldSelect:
+	mes .npc$;
+	mes "Muy Bien, ya casi terminamos, ahora vamos a elegir el Escudo que llevaras, estos son los Disponibles:";
+next;
+	for ( set .@i,0; .@i<getarraysize(.shields); set .@i,.@i+1) {
+		set .@Menu$,.@Menu$+(getitemname(.shields[.@i]))+":";
+	}
+	set .@j,select(.@Menu$);
+next;
+	mes .npc$;
+	mes "Muy Bien Veo que has Elegido [ ^ff0000" + getitemname(.shields[.@j-1]) + "^000000 ] como tu Escudo, es esto correcto??";
+next;
+	if(select("Si:No") == 2) {
+		mes .npc$;
+		mes "Correcto entonces por favor elige correctamente.";
+			next;
+			callsub OnShieldSelect;
+	}
+next;
+	set #shield, .shields[.@j-1];
+		callsub OnAccesorySelect1;
+end;
+
+OnAccesorySelect1:
+	mes .npc$;
+	mes "Correcto, ya estamos mas cerca del Final, Ahora bien, Puedes llevar hasta 2 Accesorios";
+next;
+	mes .npc$;
+	mes "asi que eligamos el primero, puedes elegir de entre estos:";
+next;
+	for ( set .@i,0; .@i<getarraysize(.accesories); set .@i,.@i+1) {
+		set .@Menu$,.@Menu$+(getitemname(.accesories[.@i]))+":";
+	}
+	set .@j,select(.@Menu$);
+next;
+	mes .npc$;
+	mes "Muy Bien Veo que has Elegido [ ^ff0000" + getitemname(.accesories[.@j-1]) + "^000000 ] como tu Accesorio #1, es esto correcto??";
+next;
+	if(select("Si:No") == 2) {
+		mes .npc$;
+		mes "Correcto entonces por favor elige correctamente.";
+			next;
+			callsub OnAccesorySelect1;
+	}
+next;
+	set #accesory1, .accesories[.@j-1];
+		callsub OnAccesorySelect2;
+end;
+
+OnAccesorySelect2:
+	mes .npc$;
+	mes "OK, OK, OK!!! ya estamos casi completos, Ahora elije el segundo accesorio:";
+next;
+	for ( set .@i,0; .@i<getarraysize(.accesories); set .@i,.@i+1) {
+		set .@Menu$,.@Menu$+(getitemname(.accesories[.@i]))+":";
+	}
+	set .@j,select(.@Menu$);
+next;
+	mes .npc$;
+	mes "Muy Bien Veo que has Elegido [ ^ff0000" + getitemname(.accesories[.@j-1]) + "^000000 ] como tu Accesorio #2, es esto correcto??";
+next;
+	if(select("Si:No") == 2) {
+		mes .npc$;
+		mes "Correcto entonces por favor elige correctamente.";
+			next;
+			callsub OnAccesorySelect2;
+	}
+next;
+	set #accesory2, .accesories[.@j-1];
+		callsub OnCardArmor;
+end;
+
+OnCardArmor:
+	mes .npc$;
+	mes "Muy Bien ya has elegido tu Equipo, ahora podras Elegir ^FF0000SOLO UNA CARTA^000000 de Cada uno de los siguientes Sets para que elijas.";
+next;
+	mes .npc$;
+	mes "Comenzemos con la carta para armadura, tienes estas opciones:";
+next;
+	for ( set .@i,0; .@i<getarraysize(.armorcard); set .@i,.@i+1) {
+		set .@Menu$,.@Menu$+(getitemname(.armorcard[.@i]))+":";
+	}
+	set .@j,select(.@Menu$);
+next;
+	mes .npc$;
+	mes "Muy Bien Veo que has Elegido [ ^ff0000" + getitemname(.armorcard[.@j-1]) + "^000000 ], es esto correcto??";
+next;
+	if(select("Si:No") == 2) {
+		mes .npc$;
+		mes "Correcto entonces por favor elige correctamente.";
+			next;
+			callsub OnCardArmor;
+	}
+next;
+	set #armorcard, .armorcard[.@j-1];
+		callsub OnCardHead;
+end;
+
+OnCardHead:
+	mes .npc$;
+	mes "Ahora Elige tu carta para HeadGear:";
+next;
+	for ( set .@i,0; .@i<getarraysize(.headcard); set .@i,.@i+1) {
+		set .@Menu$,.@Menu$+(getitemname(.headcard[.@i]))+":";
+	}
+	set .@j,select(.@Menu$);
+next;
+	mes .npc$;
+	mes "Muy Bien Veo que has Elegido [ ^ff0000" + getitemname(.headcard[.@j-1]) + "^000000 ], es esto correcto??";
+next;
+	if(select("Si:No") == 2) {
+		mes .npc$;
+		mes "Correcto entonces por favor elige correctamente.";
+			next;
+			callsub OnCardHead;
+	}
+next;
+	set #headcard, .headcard[.@j-1];
+		callsub OnCardShield;
+end;
+
+OnCardShield:
+	mes .npc$;
+	mes "Ahora Toca que eligas la carta para tu Escudo:";
+next;
+	for ( set .@i,0; .@i<getarraysize(.shieldcard); set .@i,.@i+1) {
+		set .@Menu$,.@Menu$+(getitemname(.shieldcard[.@i]))+":";
+	}
+	set .@j,select(.@Menu$);
+next;
+	mes .npc$;
+	mes "Muy Bien Veo que has Elegido [ ^ff0000" + getitemname(.shieldcard[.@j-1]) + "^000000 ], es esto correcto??";
+next;
+	if(select("Si:No") == 2) {
+		mes .npc$;
+		mes "Correcto entonces por favor elige correctamente.";
+			next;
+			callsub OnCardShield;
+	}
+next;
+	set #shieldcard, .shieldcard[.@j-1];
+		callsub OnCardGarment;
+end;
+
+OnCardGarment:
+	mes .npc$;
+	mes "Ahora Toca que eligas la carta para tu Garment:";
+next;
+	for ( set .@i,0; .@i<getarraysize(.garmentcard); set .@i,.@i+1) {
+		set .@Menu$,.@Menu$+(getitemname(.garmentcard[.@i]))+":";
+	}
+	set .@j,select(.@Menu$);
+next;
+	mes .npc$;
+	mes "Muy Bien Veo que has Elegido [ ^ff0000" + getitemname(.garmentcard[.@j-1]) + "^000000 ], es esto correcto??";
+next;
+	if(select("Si:No") == 2) {
+		mes .npc$;
+		mes "Correcto entonces por favor elige correctamente.";
+			next;
+			callsub OnCardGarment;
+	}
+next;
+	set #garmentcard, .garmentcard[.@j-1];
+		callsub OnCardShoes;
+end;
+
+OnCardShoes:
+	mes .npc$;
+	mes "Ahora Toca que eligas la carta para tus Shoes:";
+next;
+	for ( set .@i,0; .@i<getarraysize(.shoescard); set .@i,.@i+1) {
+		set .@Menu$,.@Menu$+(getitemname(.shoescard[.@i]))+":";
+	}
+	set .@j,select(.@Menu$);
+next;
+	mes .npc$;
+	mes "Muy Bien Veo que has Elegido [ ^ff0000" + getitemname(.shoescard[.@j-1]) + "^000000 ], es esto correcto??";
+next;
+	if(select("Si:No") == 2) {
+		mes .npc$;
+		mes "Correcto entonces por favor elige correctamente.";
+			next;
+			callsub OnCardShoes;
+	}
+next;
+	set #shoescard, .shoescard[.@j-1];
+		callsub OnCardAccesory;
+end;
+
+OnCardAccesory:
+	mes .npc$;
+	mes "Ahora Toca que eligas la carta para tu Accesorio:";
+next;
+	for ( set .@i,0; .@i<getarraysize(.accesorycard); set .@i,.@i+1) {
+		set .@Menu$,.@Menu$+(getitemname(.accesorycard[.@i]))+":";
+	}
+	set .@j,select(.@Menu$);
+next;
+	mes .npc$;
+	mes "Muy Bien Veo que has Elegido [ ^ff0000" + getitemname(.accesorycard[.@j-1]) + "^000000 ], es esto correcto??";
+next;
+	if(select("Si:No") == 2) {
+		mes .npc$;
+		mes "Correcto entonces por favor elige correctamente.";
+			next;
+			callsub OnCardAccesory;
+	}
+next;
+	set #accesorycard, .accesorycard[.@j-1];
+//		callsub OnCardWeapon;
+		callsub OnAllSet1;
+end;
+
+/*OnCardWeapon:
+	mes .npc$;
+	mes "Ahora Toca que eligas la carta para tu Arma:";
+next;
+	for ( set .@i,0; .@i<getarraysize(.weaponcard); set .@i,.@i+1) {
+		set .@Menu$,.@Menu$+(getitemname(.weaponcard[.@i]))+":";
+	}
+	set .@j,select(.@Menu$);
+next;
+	mes .npc$;
+	mes "Muy Bien Veo que has Elegido [ ^ff0000" + getitemname(.weaponcard[.@j-1]) + "^000000 ], es esto correcto??";
+next;
+	if(select("Si:No") == 2) {
+		mes .npc$;
+		mes "Correcto entonces por favor elige correctamente.";
+			next;
+			callsub OnCardWeapon;
+	}
+next;
+	set #weaponcard, .weaponcard[.@j-1];
+		callsub OnAllSet1;
+end;
+*/
+
+OnAllSet1:
+
+	if(#jobselect==4190||#jobselect==4191){
+		callsub OnAllSet2;
+	}
+
+	mes .npc$;
+	mes "Muy Bien, ya todo a quedado registrado, ahora solo Corroboraremos lo que has elegido,";
+next;
+	mes .npc$;
+	mes "Esto son los Equipos que elegiste:^0000ff";
+	mes getitemname(#armor);
+	mes getitemname(#garment);
+	mes getitemname(#shoes);
+	mes getitemname(#shield);
+	mes getitemname(#accesory1);
+	mes getitemname(#accesory2);
+next;
+	mes .npc$;
+	mes "Es esto correcto?";
+next;
+		if(select("Si:No")==2){
+			mes .npc$;
+			mes "Muy Bien, desde donde deseas Cambiar tus items?";
+		next;
+				switch(select("Armor:Garment:Shoes:Shield:Accesory1:Accesory2:Cancel")){
+					case 1:
+						callsub OnArmorSelect;
+					case 2:
+						callsub OnGarmentSelect;
+					case 3:
+						callsub OnShoesSelect;
+					case 4:
+						callsub OnShieldSelect;
+					case 5:
+						callsub OnAccesorySelect1;
+					case 6:
+						callsub OnAccesorySelect2;
+					case 7:
+						callsub OnAllSet1;
+				}
+		}
+next;
+	callsub OnAllSet2;
+end;
+
+OnAllSet2:
+	mes .npc$;
+	mes "Correcto, ahora revisemos las cartas que elegiste:^0000ff";
+//	mes getitemname(#weaponcard);
+	mes getitemname(#accesorycard);
+	mes getitemname(#shoescard);
+	mes getitemname(#garmentcard);
+	mes getitemname(#shieldcard);
+	mes getitemname(#headcard);
+	mes getitemname(#armorcard)+"^000000.";
+next;
+	mes .npc$;
+	mes "Estan Correctas?";
+next;
+		if(select("Si:No")==2){
+			mes .npc$;
+			mes "Muy Bien, desde donde deseas cambiar?";
+		next;
+				switch(select("Armor Card:Headgear Card:Shield Card:Garment Card:Shoes Card:Accesory Card:Cancel")){ //:Weapon Card:Cancel")){
+					case 1:
+						callsub OnCardArmor;
+					case 2:
+						callsub OnCardHead;
+					case 3:
+						callsub OnCardShield;
+					case 4:
+						callsub OnCardGarment;
+					case 5:
+						callsub OnCardShoes;
+					case 6:
+						callsub OnCardAccesory;
+//					case 7:
+//						callsub OnCardWeapon;
+//					case 8:
+					case 7:
+						callsub OnAllSet2;
+				}
+		}
+	mes .npc$;
+	mes "Muy Bien Comenzemos Tu Cambio Ahora!!....";
+next;
+	mes .npc$;
+	mes "...";
+	sleep2 500;
+	mes "......";
+	sleep2 500;
+	mes ".........";
+	sleep2 500;
+	mes "............";
+	sleep2 500;
+next;
+	callsub OnReady;
+end;
+	
+
+OnReady:
+	set #trans, 1;
+	delitem .keyitem, 1;
+	set #CASHPOINTS, #CASHPOINTS + .cash;
+	set Zeny, Zeny + .zeny;
+	atcommand "@blvl 9";
+	atcommand "@jlvl 9";
+	sleep2 3000;
+
+switch(#jobselect){
+
+	default:
+		mes "Este es un Mensaje de Error, Toma SS y comunicate con el Administrador";
+		close2; cutin "",255; playbgm "prt_new"; cutin "",255; playbgm "prt_new"; end;
+	end;
+	
+	case 24:
+		jobchange 24;//Gunslinger
+		atcommand "@blvl 140";
+		atcommand "@jlvl 99";
+	sleep2 3000;
+	break;
+	
+	case 4046://Taekwon
+		jobchange 4046;
+		atcommand "@blvl 140";
+		atcommand "@jlvl 99";
+	sleep2 3000;
+	break;
+	
+	case 4047://Star Gladiator
+		jobchange 4046;
+		atcommand "@blvl 89";
+		atcommand "@jlvl 99";
+	sleep2 3000;
+		jobchange 4047;
+		atcommand "@blvl 41";
+		atcommand "@jlvl 99";
+	sleep2 3000;
+	break;
+	
+	case 4049://Soul Linker
+		jobchange 4046;
+		atcommand "@blvl 89";
+		atcommand "@jlvl 99";
+	sleep2 3000;
+		jobchange 4049;
+		atcommand "@blvl 41";
+		atcommand "@jlvl 99";
+	sleep2 3000;
+	break;
+	
+	case 4211:
+	case 4212://KA/OB
+		jobchange 25;
+		atcommand "@blvl 89";
+		atcommand "@jlvl 99";
+	sleep2 3000;
+		jobchange (Sex?"4211":"4212");
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+	break;
+	
+	case 4190://SNEXT
+		jobchange 23;
+		atcommand "@blvl 89";
+		atcommand "@jlvl 99";
+	sleep2 3000;
+		jobchange 4190;
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+	break;
+	
+	case 4191://BSNEXT
+		jobchange 4045;
+		atcommand "@blvl 89";
+		atcommand "@jlvl 99";
+	sleep2 3000;
+		jobchange 4191;
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+	break;
+	
+
+	case 4060://Rune Knight Trans
+		jobchange 4002;
+		atcommand "@blvl 41";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4008;
+		atcommand "@blvl 49";
+		atcommand "@jlvl 69";
+	sleep2 3000;
+		jobchange 4060;
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+		getitem 5746,1;
+	sleep2 500;
+	break;
+	
+	case 4096://Rune Knight Baby
+		jobchange 4024;
+		atcommand "@blvl 41";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4030;
+		atcommand "@blvl 49";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4096;
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+		getitem 5746,1;
+	sleep2 500;
+	break;
+	
+	case 4073://Royal Guard Trans
+		jobchange 4002;
+		atcommand "@blvl 41";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4015;
+		atcommand "@blvl 49";
+		atcommand "@jlvl 69";
+	sleep2 3000;
+		jobchange 4073;
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+		getitem 5757,1;
+	sleep2 500;
+	break;
+	
+	case 4102://Royal Guard Baby
+		jobchange 4024;
+		atcommand "@blvl 41";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4037;
+		atcommand "@blvl 49";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4102;
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+		getitem 5757,1;
+	sleep2 500;
+	break;
+
+	case 4061://Warlock Trans
+		jobchange 4003;
+		atcommand "@blvl 41";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4010;
+		atcommand "@blvl 49";
+		atcommand "@jlvl 69";
+	sleep2 3000;
+		jobchange 4061;
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+		getitem 5753,1;
+	sleep2 500;
+	break;
+
+	case 4097://Warlock Baby
+		jobchange 4025;
+		atcommand "@blvl 41";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4032;
+		atcommand "@blvl 49";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4097;
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+		getitem 5753,1;
+	sleep2 500;
+	break;
+
+	case 4074://Sorcerer Trans
+		jobchange 4003;
+		atcommand "@blvl 41";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4017;
+		atcommand "@blvl 49";
+		atcommand "@jlvl 69";
+	sleep2 3000;
+		jobchange 4074;
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+		getitem 5756,1;
+	sleep2 500;
+	break;
+
+	case 4103://Sorcerer Baby
+		jobchange 4025;
+		atcommand "@blvl 41";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4039;
+		atcommand "@blvl 49";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4103;
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+		getitem 5756,1;
+	sleep2 500;
+	break;
+
+
+	case 4062://Ranger Trans
+		jobchange 4004;
+		atcommand "@blvl 41";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4013;
+		atcommand "@blvl 49";
+		atcommand "@jlvl 69";
+	sleep2 3000;
+		jobchange 4062;
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+		getitem 5748,1;
+	sleep2 500;
+	break;
+
+	case 4098://Ranger Baby
+		jobchange 4026;
+		atcommand "@blvl 41";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4034;
+		atcommand "@blvl 49";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4098;
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+		getitem 5748,1;
+	sleep2 500;
+	break;
+
+	case 4075://Minstrel/Wanderer Trans
+		jobchange 4004;
+		atcommand "@blvl 41";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange (Sex?"4020":"4021");
+		atcommand "@blvl 49";
+		atcommand "@jlvl 69";
+	sleep2 3000;
+		jobchange (Sex?"4075":"4076");
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+		getitem (Sex?"5751":"5758"),1;
+	sleep2 500;
+	break;
+
+	case 4104://Minstrel/Wanderer Baby
+		jobchange 4026;
+		atcommand "@blvl 41";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange (Sex?"4042":"4043");
+		atcommand "@blvl 49";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange (Sex?"4104":"4105");
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+		getitem (Sex?"5751":"5758"),1;
+	sleep2 500;
+	break;
+
+	case 4063://Arch Bishop Trans
+		jobchange 4005;
+		atcommand "@blvl 41";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4009;
+		atcommand "@blvl 49";
+		atcommand "@jlvl 69";
+	sleep2 3000;
+		jobchange 4063;
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+		getitem 5747,1;
+	sleep2 500;
+	break;
+
+	case 4099://Arch Bishop Baby
+		jobchange 4027;
+		atcommand "@blvl 41";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4031;
+		atcommand "@blvl 49";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4099;
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+		getitem 5747,1;
+	sleep2 500;
+	break;
+
+	case 4077://Sura Trans
+		jobchange 4027;
+		atcommand "@blvl 41";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4016;
+		atcommand "@blvl 49";
+		atcommand "@jlvl 69";
+	sleep2 3000;
+		jobchange 4077;
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+		getitem 5754,1;
+	sleep2 500;
+	break;
+
+	case 4106://Sura Baby
+		jobchange 4027;
+		atcommand "@blvl 41";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4038;
+		atcommand "@blvl 49";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4106;
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+		getitem 5754,1;
+	sleep2 500;
+	break;
+
+	case 4064://Mechanic Trans
+		jobchange 4006;
+		atcommand "@blvl 41";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4011;
+		atcommand "@blvl 49";
+		atcommand "@jlvl 69";
+	sleep2 3000;
+		jobchange 4064;
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+		getitem 5760,1;
+	sleep2 500;
+	break;
+
+	case 4100://Mechanic Baby
+		jobchange 4028;
+		atcommand "@blvl 41";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4033;
+		atcommand "@blvl 49";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4100;
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+		getitem 5760,1;
+	sleep2 500;
+	break;
+
+	case 4078://Genetic Trans
+		jobchange 4006;
+		atcommand "@blvl 41";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4019;
+		atcommand "@blvl 49";
+		atcommand "@jlvl 69";
+	sleep2 3000;
+		jobchange 4078;
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+		getitem 5752,1;
+	sleep2 500;
+	break;
+
+	case 4107://Genetic Baby
+		jobchange 4028;
+		atcommand "@blvl 41";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4041;
+		atcommand "@blvl 49";
+		atcommand "@jlvl 69";
+	sleep2 3000;
+		jobchange 4107;
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+		getitem 5752,1;
+	sleep2 500;
+	break;
+
+	case 4065://Guillotine Cross Trans
+		jobchange 4007;
+		atcommand "@blvl 41";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4013;
+		atcommand "@blvl 49";
+		atcommand "@jlvl 69";
+	sleep2 3000;
+		jobchange 4065;
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+		getitem 5755,1;
+	sleep2 500;
+	break;
+
+	case 4101://Guillotine Cross Baby
+		jobchange 4029;
+		atcommand "@blvl 41";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4035;
+		atcommand "@blvl 49";
+		atcommand "@jlvl 69";
+	sleep2 3000;
+		jobchange 4101;
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+		getitem 5755,1;
+	sleep2 500;
+	break;
+
+	case 4079://Shadow Chaser Trans
+		jobchange 4007;
+		atcommand "@blvl 41";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4018;
+		atcommand "@blvl 49";
+		atcommand "@jlvl 69";
+	sleep2 3000;
+		jobchange 4079;
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+		getitem 5750,1;
+	sleep2 500;
+	break;
+
+	case 4108://Shadow Chaser Baby
+		jobchange 4029;
+		atcommand "@blvl 41";
+		atcommand "@jlvl 49";
+	sleep2 3000;
+		jobchange 4040;
+		atcommand "@blvl 49";
+		atcommand "@jlvl 69";
+	sleep2 3000;
+		jobchange 4108;
+		atcommand "@blvl "+.maxlvl;
+		atcommand "@jlvl "+.maxjlv;
+	sleep2 3000;
+		getitem 5750,1;
+	sleep2 500;
+	break;
+
+}
+
+if(#jobselect!=4190||#jobselect!=4191){
+sleep2 500;
+getitem #armor,1;
+sleep2 500;
+getitem #garment,1;
+sleep2 500;
+getitem #shield,1;
+sleep2 500;
+getitem #shoes,1;
+sleep2 500;
+getitem #accesory1,1;
+sleep2 500;
+getitem #accesory2,1;
+sleep2 500;
+}
+
+if(#jobselect==4190||#jobselect==4191){
+	for(set .@i,0; .@i < getarraysize(.SNEXPSET);set .@i,.@i+1){
+		getitem .SNEXPSET[.@i],1;
+		sleep2 500;
+	}
+	getitem #SNEXweapon, 1;
+	sleep2 500;
+}
+
+getitem #armorcard,1;
+sleep2 500;
+getitem #headcard,1;
+sleep2 500;
+getitem #garmentcard,1;
+sleep2 500;
+getitem #shieldcard,1;
+sleep2 500;
+getitem #shoescard,1;
+sleep2 500;
+getitem #accesorycard,1;
+sleep2 500;
+//getitem #weaponcard,1;
+//sleep2 500;
+getitem 7773, .watbadge;//Wat Badges
+sleep2 500;
+getitem 7828, .brabadge;//Bravery Badges
+sleep2 500;
+getitem 7829, .valbadge;//Valor Badges
+sleep2 500;
+getitem 7711,.evtticket;
+sleep2 500;
+resetstatus;
+resetskill;
+next;
+
+mes .npc$;
+mes "Listo, eso es todo por ahora, solo resta desearte una feliz estadia en el servidor";
+close2; cutin "",255; playbgm "prt_new";
+warp "prontera",155,180;
+end;
+
+/*Configuracion del Script
+Esto es lo necesario para modificar los
+items a dar en nuestro Tranfer de Guild
+*/
+OnInit:
+
+	setarray .armorsword[0],2366,2353,2317;
+	setarray .armoracoli[0],2366,2353,2373;
+	setarray .armormagic[0],2366,2353,2372,2360;
+	setarray .armorarche[0],2366,2353,2367;
+	setarray .armormerch[0],2366,2353,2318;
+	setarray .armorthief[0],2366,2353,2336;
+	setarray .armorexpan[0],2319,2353,2359,2360;
+	
+	setarray .garments[0],2530,2528,2525;
+	
+	setarray .shoes[0],2434,2424;
+
+	setarray .shields[0],2123,2114,2138;
+
+	setarray .accesories[0],2621,2622,2623,2624,2625,2626;
+
+	setarray .armorcard[0],4105,4031;
+	setarray .headcard[0],4411,4412;
+	setarray .shieldcard[0],4322,4413;
+	setarray .garmentcard[0],4402,4303,4375;
+	setarray .shoescard[0],4097,4100;
+	setarray .accesorycard[0],4103,4079,4084,4077,4044,4022,4053,4064;
+//	setarray .weaponcard[0],4035,4092,4082,4085;//,4140;// Esta que esta comentada es la  Abysmal Knight Card
+
+	setarray .SNEXPSET[0],5125,2420,2521,2116,2355;
+	setarray .SNEXPWEAP[0],1309,1622,1639,1742;
+
+	set .maxlvl, 21;//Los Niveles Adicionales a 99 que se les dara
+	set .maxjlv, 19;
+	set .cash, 50;
+	set .zeny, 3000000;
+	set .valbadge, 50;
+	set .brabadge, 50;
+	set .watbadge, 50;
+	set .evtticket, 3;
+	set .keyitem,7851;//Wii Raffle Ticket, Item que sera el unico a dar para el transfer.
+	set .npc$,"[ ^cc6600Transferencia^000000 ]";
+end;
+/*
+Fin de la Configuracion
+*/
+}

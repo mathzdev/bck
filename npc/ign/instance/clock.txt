@@ -1,0 +1,123 @@
+c_tower1,232,222,5	script	Guardia#ct	968,{
+	mes "[Guardia]";
+	mes "A partir de éste camino se encuentra la pesadilla de ésta torre, la más llamada ^ff0000Nightmare Clock Tower^000000.";
+	next;
+	if(BaseLevel < 150) {
+		mes "[Guardia]";
+		mes "Pero tu no tienes la experiencia necesaria para accesar, así que lo siento mucho, pero largo de aquí.";
+		close2;
+		emotion e_hmm;
+		end;
+	}
+	switch(select("Accesar al primer piso","Accesar al segundo piso","^777777Salir^000000"))
+	{
+		case 1:
+			mes "[Guardia]";
+			mes "Como quieras.";
+			next;
+			mes "[Guardia]";
+			mes "Pero por la entrada te cobraré ";
+			mes "^0000FF10000z^000000.";
+			next;
+			switch(select("Muy caro","10000z, aquí están","¡Iré yo solo!"))
+			{
+				case 1:
+					mes "[Guardia]";
+					mes "Nada es gratis en ésta vida.";
+					close;
+				case 2:
+					if (Zeny > 9999) {
+						set Zeny, Zeny-10000;
+						mes "[Guardia]";
+						mes "Aquí te llevo entonces.";
+						close2;
+						warp "c_tower2_",268,26;
+						end;
+					} else {
+						mes "[Guardia]";
+						mes "No tienes el dinero suficiente ni para pagarme el transporte, que aburrido.";
+						close;
+					}
+				case 3:
+					mes "[Guardia]";
+					mes "Suerte encontrando la entrada.";
+					emotion e_swt;
+					close;
+			}
+		case 2:
+			mes "[Guardia]";
+			mes "Como quieras.";
+			next;
+			mes "[Guardia]";
+			mes "Pero por la entrada te cobraré ";
+			mes "^0000FF10000z^000000.";
+			next;
+			switch(select("Muy caro","10000z, aquí están","¡Iré yo solo!"))
+			{
+				case 1:
+					mes "[Guardia]";
+					mes "Nada es gratis en ésta vida.";
+					close;
+				case 2:
+					if (Zeny > 9999) {
+						set Zeny, Zeny-10000;
+						mes "[Guardia]";
+						mes "Aquí te llevo entonces.";
+						close2;
+						warp "c_tower3_",65,147;
+						end;
+					} else {
+						mes "[Guardia]";
+						mes "No tienes el dinero suficiente ni para pagarme el transporte, que aburrido.";
+						close;
+					}
+				case 3:
+					mes "[Guardia]";
+					mes "Suerte encontrando la entrada.";
+					emotion e_swt;
+					close;
+			}
+		case 3:
+			close;
+	}
+}
+c_tower2_,274,26,3	script	Guardia#ct1	962,{
+	mes "[Guardia]";
+	mes "¿Deseas salir?";
+	if(select("Salir al primer piso","Mejor no") == 2)
+		close;
+	close2;
+	warp "c_tower1",235,223;
+	end;
+}
+c_tower3_,59,148,5	script	Guardia#ct2	574,{
+	mes "[Guardia]";
+	mes "¿Deseas salir?";
+	if(select("Salir al primer piso","Mejor no") == 2)
+		close;
+	close2;
+	warp "c_tower1",235,223;
+	end;
+}
+
+// Monster Spawn
+// Floor 2
+c_tower2_,0,0,0,0	monster	Rideword	2478,2,300000,0,0
+c_tower2_,0,0,0,0	monster	Rideword	2478,2,120000,0,0
+c_tower2_,0,0,0,0	monster	Rideword	2478,1,60000,0,0
+c_tower2_,0,0,0,0	monster	Mimic	2357,3,0,0,0
+c_tower2_,0,0,0,0	monster	Big Ben	2916,40,0,0,0
+c_tower2_,0,0,0,0	monster	Neo Punk	2919,40,0,0,0
+c_tower2_,0,0,0,0	monster	Timer Keeper	2918,1,0,0,0
+c_tower2_,0,0,0,0	monster	Arc Elder	2920,2,3600000,0,0
+
+// Floor 3
+c_tower3_,0,0,0,0	monster	Mimic	2357,7,0,0,0
+c_tower3_,0,0,0,0	monster	Rideword	2478,5,0,0,0
+c_tower3_,0,0,0,0	monster	Rideword	2478,1,120000,0,0
+c_tower3_,0,0,0,0	monster	Time Keeper	2919,1,0,0,0
+c_tower3_,0,0,0,0	monster	Owl Viscount	2921,3,0,0,0
+c_tower3_,0,0,0,0	monster	Owl Viscount	2921,6,120000,0,0
+c_tower3_,0,0,0,0	monster	Owl Marquess	2923,1,0,0,0
+c_tower3_,0,0,0,0	monster	Owl Marquess	2923,5,120000,0,0
+c_tower3_,0,0,0,0	boss_monster	Time Holder	3074,1,10800000,600000,0,"OnMvPKillEvent::OnTimeHolder"

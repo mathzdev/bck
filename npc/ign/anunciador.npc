@@ -1,0 +1,175 @@
+prontera,167,172,4	script	Encargada de Anuncios::AN	893,{
+function Check_Zeny;
+cutin "god_kukur01",2;
+	if(.timetick == 1) {
+		mes "[^CC0000Anuncios^000000]";
+		mes "Por favor espera a que pasen 50 segundos para usar nuevamente mis servicios.";
+		close2;
+		cutin "",255;
+		emotion e_sry;
+		end;
+	}
+mes "[^CC0000Anuncios^000000]";
+mes "Mis servicios solo podrán ser usado para la búsqueda de party o guild, en caso de ser usado para otro tipo de asunto serás sancionado.";
+next;
+mes "[^CC0000Anuncios^000000]";
+mes "Usar este servicio te costará 10.000 Zeny.";
+	switch (select("Anunciar [Busco Party]:Anunciar [Busco Miembro de Party]:Anunciar [Organizo Party]:Anunciar [Invitación a PvP]:Anunciar [Invitación a BG]:Anunciar [Busco Guild]:Anunciar [Busco Miembro de Guild]:Anunciar [Partida Soulcards]:Anunciar [Comercio]")) {
+		case 1:
+			Check_Zeny(10000,"^CC0000Anuncios^000000");
+			announce "[Anuncios] El jugador [ "+strcharinfo(0)+" ] busca party como "+jobname(Class)+" de nivel "+BaseLevel+".",bc_all,0xAAF105;
+			close2;
+			cutin "",255;
+			set .timetick,1;
+			sleep 50000;
+			set .timetick,0;
+			npctalk "El servicio de búsqueda de party puede ser usado nuevamente.";
+			end;
+		case 2:
+			mes "[^CC0000Anuncios^000000]";
+			mes "¿Qué profesion buscas para tu party?";
+			next;
+			input @BP_JOB$;
+			next;
+			mes "[^CC0000Anuncios^000000]";
+			mes "¿Que nivel mínimo han de tener?";
+			mes "^ff0000Automaticamente se recreara el Share Level^000000";
+			next;
+			input @BP_LEVEL;
+			if (@BP_LEVEL == 0) set @BP_LEVEL,1;
+			set @BP_SHARE,@BP_LEVEL+15;
+			next;
+			mes "[^CC0000Anuncios^000000]";
+			mes "¿En que lugar lucharan tu y tu party?";
+			next;
+			input @BP_DUNGEON$;
+			Check_Zeny(10000,"^CC0000Anuncios^000000");
+			announce "[Anuncios] La party de [ "+strcharinfo(0)+" ] busca "+@BP_JOB$+" de nivel "+@BP_LEVEL+"~"+@BP_SHARE+" para "+@BP_DUNGEON$+".",bc_all,0xAAF105;
+			close2;
+			cutin "",255;
+			set .timetick,1;
+			sleep 50000;
+			set .timetick,0;
+			npctalk "El servicio de búsqueda de party puede ser usado nuevamente.";
+			end;
+		case 3:
+			mes "[^CC0000Anuncios^000000]";
+			mes "¿Que nivel mínimo han de tener?";
+			mes "^ff0000Automaticamente se recreara el Share Level^000000";
+			next;
+			input @BP_LEVEL;
+			if (@BP_LEVEL == 0) set @BP_LEVEL,1;
+			set @BP_SHARE,@BP_LEVEL+15;
+			next;
+			mes "[^CC0000Anuncios^000000]";
+			mes "¿En que lugar lucharan tu y tu party?";
+			next;
+			input @BP_DUNGEON$;
+			Check_Zeny(10000,"^CC0000Anuncios^000000");
+			announce "[Anuncios] La party de [ "+strcharinfo(0)+" ] busca "+@BP_JOB$+" de nivel "+@BP_LEVEL+"~"+@BP_SHARE+" para "+@BP_DUNGEON$+".",bc_all,0xAAF105;
+			close2;
+			cutin "",255;
+			set .timetick,1;
+			sleep 50000;
+			set .timetick,0;
+			npctalk "El servicio de búsqueda de party puede ser usado nuevamente.";
+			end;
+		case 4:
+			Check_Zeny(10000,"^CC0000Anuncios^000000");
+			announce "[Anuncios] El jugador ["+strcharinfo(0)+"] les anima a pasar un buen rato en las Salas PVP.",bc_all,0xAAF105;
+			set @Totaluserspvp,getmapusers("guild_vs2.gat")+getmapusers("pvp_n_1-5.gat")+getmapusers("guild_vs2-1.gat")+getmapusers("guild_vs2-2.gat")+getmapusers("pvp_n_1-1.gat")+getmapusers("pvp_n_1-3.gat")+getmapusers("pvp_n_2-3.gat")+getmapusers("pvp_n_3-3.gat")+1;
+			announce "[Número de users en PVP: [ "+@Totaluserspvp+" ]",bc_all,0xAAF105;
+			close2;
+			cutin "",255;
+			set .timetick,1;
+			sleep 50000;
+			set .timetick,0;
+			npctalk "El servicio de búsqueda de party puede ser usado nuevamente.";
+			end;
+		case 5:
+			Check_Zeny(10000,"^CC0000Anuncios^000000");
+			announce "[Anuncios] El jugador ["+strcharinfo(0)+"] les anima a pasar un buen rato en BattleGround, escribe @joinbg en alguna ciudad para accesar..",bc_all,0xAAF105;
+			close2;
+			cutin "",255;
+			set .timetick,1;
+			sleep 50000;
+			set .timetick,0;
+			npctalk "El servicio de búsqueda de party puede ser usado nuevamente.";
+			end;
+		case 6:
+			mes "[^CC0000Anuncios^000000]";
+			mes "¿Que tipo de clan buscas?";
+			mes "Ejemplo: Amigable, Full Woe, Activa...";
+			next;
+			Check_Zeny(10000,"^CC0000Anuncios^000000");
+			input @BP_GUILD$;
+			announce "[Anuncios] El jugador ["+strcharinfo(0)+"] busca guild "+@BP_GUILD$+" como "+jobname(Class)+" de nivel "+BaseLevel+".",bc_all,0xAAF105;
+			close2;
+			cutin "",255;
+			set .timetick,1;
+			sleep 50000;
+			set .timetick,0;
+			npctalk "El servicio de búsqueda de party puede ser usado nuevamente.";
+			end;
+		case 7:
+			mes "[^CC0000Anuncios^000000]";
+			mes "¿Que tipo de miembro para tu clan buscas buscas?";
+			next;
+			Check_Zeny(10000,"^CC0000Anuncios^000000");
+			input @BP_GUILD$;
+			announce "[Anuncios] El jugador ["+strcharinfo(0)+"] busca miembros "+@BP_GUILD$+" para la guild [ "+strcharinfo(2)+" ].",bc_all,0xAAF105;
+			close2;
+			cutin "",255;
+			set .timetick,1;
+			sleep 50000;
+			set .timetick,0;
+			npctalk "El servicio de búsqueda de party puede ser usado nuevamente.";
+			end;
+		case 8:
+			mes "[^CC0000Anuncios^000000]";
+			mes "Proximamente.";
+			close2; cutin "",255; end;
+			Check_Zeny(10000,"^CC0000Anuncios^000000");
+			announce "[Anuncios] El jugador ["+strcharinfo(0)+"] los reta a jugar una partida de Ragnarok Soulcards.",bc_all,0xAAF105;
+			close2;
+			cutin "",255;
+			set .timetick,1;
+			sleep 50000;
+			set .timetick,0;
+			npctalk "El servicio de búsqueda de party puede ser usado nuevamente.";
+			end;
+		case 9:
+			Check_Zeny(10000,"^CC0000Anuncios^000000");
+			mes "[^CC0000Anuncios^000000]";
+			mes "¿Que clase de anuncio de comercio quieres hacer?";
+			next;
+			set .@a,select("Compra","Venta");
+			set .@a,.@a-1;
+			mes "[^CC0000Anuncios^000000]";
+			mes "Por favor elija lo que quiera ^5533ff"+(.@a ? "Vender":"Comprar")+"^000000.";
+			next;
+			input .@mes$;
+			announce "["+strcharinfo(0)+"]["+(.@a ? "Vendo":"Compro")+"]: "+.@mes$,bc_all,0xAAF105;
+			close2;
+			cutin "",255;
+			set .timetick,1;
+			sleep 50000;
+			set .timetick,0;
+			npctalk "El servicio de búsqueda de party puede ser usado nuevamente.";
+			end;
+			
+	}
+function	Check_Zeny	{
+	if(Zeny < getarg(0)) {
+		mes getarg(1);
+		mes "No tienes el zeny suficiente.";
+		close2;
+		cutin "",255;
+		end;
+	}
+	set Zeny,Zeny - getarg(0);
+	set $loteria,$loteria+getarg(0);
+	dispbottom "Has añadido 10,000z a la loteria.";
+	return;
+}
+}

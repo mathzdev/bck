@@ -1,0 +1,460 @@
+ilyo_kwan	mapflag	sakura
+ilyo_kwan,145,96,4	script	Capitán Altair#tg	632,{
+	cutin "aca_gunb_01",2;
+	switch (q_tg) {
+		case 1:
+			mes "[Capitán Altair]";
+			mes "Ve a hablar con la mujer que te espera en el puerto.";
+			close2;
+			cutin "",255;
+			end;
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+		case 7:
+		case 8:
+			mes "[Capitán Altair]";
+			mes "Ya no tengo nada más que decirte, adios.";
+			close2;
+			cutin "",255;
+			end;
+		default:
+			mes "[Capitán Altair]";
+			mes "¡Qué tal!";
+			next;
+			mes "[Capitán Altair]";
+			mes "Ten mi más grata bienvenida al continente de Rune Midgard.";
+			next;
+			mes "[Capitán Altair]";
+			mes "Si mal no recuerdo, viniste aquí para convertirte en un ^5533ffaventurero^000000.";
+			next;
+			mes "[Capitán Altair]";
+			mes "Si estás listo sal del barco de una vez, y habla con la hermosura que te espera en el puerto.";
+			close2;
+			set q_tg,1;
+			cutin "",255;
+			emotion e_no1;
+			end;
+	}
+end;
+}
+ilyo_kwan,157,116,4	script	Coordinadora#tg	641,{
+	cutin "acact_01",2;
+	switch (q_tg) {
+		case 0:
+			mes "[Coordinadora]";
+			mes "...¿qué sucede?";
+			close2;
+			cutin "",255;
+			end;
+		case 1:
+			mes "[Coordinadora]";
+			mes "¿Cómo estás?";
+			mes "Mi trabajo es darle la bienvenida a todas aquellas personas que deseen ser aventureros.";
+			next;
+			mes "[Coordinadora]";
+			mes "Antes de proseguir por favor dame tu nombre.";
+			next;
+			input @name$;
+			if(@name$ != strcharinfo(0)) {
+				mes "[Coordinadora]";
+				mes "Lo siento pero no te entendí.";
+				close2;
+				emotion e_sry;
+				cutin "",255;
+				end;
+			}
+			mes "[Coordinadora]";
+			mes "De acuerdo, "+strcharinfo(0)+".";
+			next;
+			mes "[Coordinadora]";
+			mes "Te he registrado como un aventurero oficial del continente.";
+			next;
+			mes "[Coordinadora]";
+			mes "Ahora lo que sigue, antes de salir al mundo es obligatorio que tomes un pequeño entrenamiento.";
+			next;
+			mes "[Coordinadora]";
+			mes "Por ello hemos preparado ésta hermosa tierra como un campo de entrenamiento intensivo para que aprendas todo lo que ocupas.";
+			next;
+			mes "[Coordinadora]";
+			mes "No podrás ir a visitar al mundo sin haber visto todo aquí, sería muy peligroso.";
+			next;
+			mes "[Coordinadora]";
+			mes "Muy bien empecemos, primeramente por favor busca al ^5533ffEntrenador de Batalla^000000.";
+			close2;
+			emotion e_no1;
+			cutin "",255;
+			set q_tg,2;
+			end;
+		case 2:
+			mes "[Coordinadora]";
+			mes "Ve con el Entrenador de Batalla por favor.";
+			close2;
+			cutin "",255;
+			end;
+		default:
+			mes "[Coordinadora]";
+			mes "No tienes ya ningún asunto pendiente conmigo.";
+			close2;
+			cutin "",255;
+			end;
+	}
+end;
+}
+ilyo_kwan,178,115,4	script	Entrenador de Batalla#tg	628,{
+	cutin "bu_du1",2;
+	switch (q_tg) {
+		case 0:
+		case 1:
+			mes "[Entrenador de Batalla]";
+			mes "No tienes nada qué hacer aquí.";
+			close2;
+			cutin "",255;
+			end;
+		case 2:
+			mes "[Entrenador de Batalla]";
+			mes "Se bienvenido a mis cursos intensivos de batalla.";
+			next;
+			mes "[Entrenador de Batalla]";
+			mes "Para comenzar dejame decirte que como aventurero tienes la responsabilidad de hacerte más fuerte.";
+			next;
+			mes "[Entrenador de Batalla]";
+			mes "Esto con el propósito de defender al pueblo de todo peligro.";
+			next;
+			mes "[Entrenador de Batalla]";
+			mes "Primeramente dejame explicarte como medir tu fuerza.";
+			next;
+			mes "[Entrenador de Batalla]";
+			mes "Para ello sube a más de Nivel 5 matando esos Poring y Fabre.";
+			next;
+			mes "[Entrenador de Batalla]";
+			mes "Recuerda dar clic para atacar a un monstruo.";
+			cutin "tutorial01",4;
+			next;
+			mes "[Entrenador de Batalla]";
+			mes "Siempre debes de tener en cuenta el ^ff0000nivel del monstruo^000000 antes de enfrentarlo, unos son más débiles que otros.";
+			next;
+			mes "[Entrenador de Batalla]";
+			mes "¿Preparado?, pues mata unos cuantos monstruos.";
+			close2;
+			set q_tg,3;
+			cutin "",255;
+			end;
+		case 3:
+			if(BaseLevel < 5) {
+				mes "[Entrenador de Batalla]";
+				mes "Sube a más de Nivel 5 matando esos Poring y Fabre.";
+				next;
+				mes "[Entrenador de Batalla]";
+				mes "Recuerda dar clic para atacar a un monstruo.";
+				cutin "tutorial01",4;
+				next;
+				mes "[Entrenador de Batalla]";
+				mes "Siempre debes de tener en cuenta el ^ff0000nivel del monstruo^000000 antes de enfrentarlo, unos son más débiles que otros.";
+				next;
+				mes "[Entrenador de Batalla]";
+				mes "¿Preparado?, pues mata unos cuantos monstruos.";
+				close2;
+				cutin "",255;
+				end;
+			}
+			mes "[Entrenador de Batalla]";
+			mes "¡Muy bien hecho!";
+			next;
+			mes "[Entrenador de Batalla]";
+			mes "Recuerda que tu nivel se muestra en el siguiente menú:";
+			cutin "tuto01",2;
+			next;
+			mes "[Entrenador de Batalla]";
+			mes "Siempre ten en cuenta la experiencia que llevas acumulada para subir de nivel.";
+			next;
+			mes "[Entrenador de Batalla]";
+			mes "Si expandes el menú tendrás una visión más clara de todo lo que te falta.";
+			next;
+			mes "[Entrenador de Batalla]";
+			mes "Si acaso mueres perderás un porcentaje de ésta experiencia, así que ten cuidado.";
+			next;
+			mes "[Entrenador de Batalla]";
+			mes "Para evitar eso utiliza objetos curativos.";
+			cutin "tuto02",2;
+			next;
+			mes "[Entrenador de Batalla]";
+			mes "Cada ves que subas de nivel ganarás puntos de estado.";
+			cutin "tuto03",2;
+			next;
+			mes "[Entrenador de Batalla]";
+			mes "Asegúrate de subir los indicados según la profesión que quieras ser.";
+			next;
+			mes "[Entrenador de Batalla]";
+			mes "Aquí te daré ejemplos de las clases que utilizan éstos estados.";
+			cutin "tutostr",2;
+			next;
+			cutin "tutoagi",2;
+			next;
+			cutin "tutovit",2;
+			next;
+			cutin "tutoint",2;
+			next;
+			cutin "tutodex",2;
+			next;
+			cutin "tutoluk",2;
+			next;
+			cutin "tuto07",2;
+			mes "[Entrenador de Batalla]";
+			mes "Además, aparte de los estados, deberás de elegir habilidades para usar en tus combates.";
+			next;
+			mes "[Entrenador de Batalla]";
+			mes "Como eres novato no tienes muchas, pero depende a qué te quieras dedicar, ganarás muchas más.";
+			next;
+			cutin "bu_du1",2;
+			mes "[Entrenador de Batalla]";
+			mes "Bien, es todo lo que tengo que enseñarte.";
+			next;
+			mes "[Entrenador de Batalla]";
+			mes "Por favor ahora dirígete con la Maestra de Objetos.";
+			close2;
+			set q_tg,4;
+			cutin "",255;
+			end;
+		case 4:
+			mes "[Entrenador de Batalla]";
+			mes "Dirigete con la Maestra de Objetos.";
+			close2;
+			cutin "",255;
+			end;
+		default:
+			mes "[Entrenador de Batalla]";
+			mes "Adios jóven.";
+			
+	}
+	close2;
+	cutin "",255;
+	end;
+}
+ilyo_kwan,174,107,0,0	monster	Poring	1002,10,0,0,0
+ilyo_kwan,159,130,5	script	Maestra de Objetos#tg	643,{
+	cutin "min01",2;
+	switch (q_tg) {
+		case 1:
+		case 2:
+		case 3:
+		default:
+			mes "[Maestra de Objetos]";
+			mes "Disculpa pero estoy muy ocupada en éstos momentos, vuelve más tarde.";
+			close2;
+			cutin "",255;
+			end;
+		case 4:
+			mes "[Maestra de Objetos]";
+			mes "Veo que haz superado la anterior etapa con éxito, te felicito.";
+			next;
+			mes "[Maestra de Objetos]";
+			mes "Bien, ahora veremos la forma en que puedes utilizar objetos a tu beneficio.";
+			next;
+			cutin "tutorial03",4;
+			mes "[Maestra de Objetos]";
+			mes "Primeto ten ésto, ve a tu inventario y da doble clic, de esa forma lo podrás utilizar.";
+			getitem 531,1;
+			next;
+			mes "[Maestra de Objetos]";
+			mes "Vuelve cuando hayas usado tu objeto.";
+			close2;
+			cutin "",255;
+			set q_tg,5;
+			end;
+		case 5:
+			if(countitem(531) > 0) {
+				mes "[Maestra de Objetos]";
+				mes "Debes dar doble clic en el objeto en tu inventario para utilizarlo.";
+				next;
+				mes "[Maestra de Objetos]";
+				mes "De ésta forma.";
+				cutin "tutorial03",4;
+				close2;
+				cutin "",255;
+				end;
+			}
+			mes "[Maestra de Objetos]";
+			mes "Buen trabajo, ten ésto como recompenza.";
+			getitem 598,100;
+			next;
+			mes "[Maestra de Objetos]";
+			mes "Ahora déjame contarte como mejorar tu poder con tu equipamento.";
+			next;
+			cutin "tuto05",2;
+			mes "[Maestra de Objetos]";
+			mes "Existe un sistema llamado refinación, de ésta forma las armaduras se hacen más resistentes y las armas más poderosas y letales.";
+			next;
+			mes "[Maestra de Objetos]";
+			mes "Mientras mayor es el número de refinación mejor será el equipo.";
+			next;
+			mes "[Maestra de Objetos]";
+			mes "También dejame contarte otra forma de hacer tu equipo aún más poderoso.";
+			next;
+			cutin "tuto06",2;
+			mes "[Maestra de Objetos]";
+			mes "Los monstruos tienen probabilidad de darte 'cartas', éstas cartas pueden colocarse en objetos con una ranura disponible.";
+			next;
+			mes "[Maestra de Objetos]";
+			mes "Todas las cartas tienen un efecto distinto, y he allí la particularidad de tu creatividad para hacerte fuerte.";
+			next;
+			cutin "min01",2;
+			mes "[Maestra de Objetos]";
+			mes "Muy bien, es todo lo que tengo que enseñarte, ahora dirígete con el Guardia de Seguridad.";
+			close2;
+			set q_tg,6;
+			cutin "",255;
+			end;
+		case 6:
+			mes "[Maestra de Objetos]";
+			mes "Ahora dirígete con el Guardia de Seguridad.";
+			close2;
+			cutin "",255;
+			end;
+	}
+end;
+}
+ilyo_kwan,204,106,4	script	Guardia de Seguridad#tg	618,{
+	cutin "avant01",2;
+	switch (q_tg) {
+		case 6:
+			mes "[Guardia de Seguridad]";
+			mes "Veo que haz completado todas las pruebas con éxito.";
+			next;
+			mes "[Guardia de Seguridad]";
+			mes "Te felicito, como recompenza dejame darte un premio.";
+			next;
+			getitem 36029,1;
+			set q_tg,7;
+			mes "[Guardia de Seguridad]";
+			mes "Antes de irte necesito que hables con un amigo mío, para que te enseñe sobre la comunicación.";
+			next;
+			mes "[Guardia de Seguridad]";
+			mes "Ve a la casa de arriba, allí lo encontrarás.";
+			close2;
+			cutin "",255;
+			end;
+		case 7:
+			mes "[Guardia de Seguridad]";
+			mes "Ve a la casa de mi amigo, arriba de aquí, él te enseñará algo muy importante.";
+			close2;
+			cutin "",255;
+			end;
+		case 8:
+			mes "[Guardia de Seguridad]";
+			mes "Muy bien, antes de irte te recuerdo que es muy recomendable que protejas tu cuenta.";
+			next;
+			mes "[Guardia de Seguridad]";
+			mes "Si usas el comando ^ff0000@security^000000, podrás definir una clave para tu cuenta.";
+			next;
+			mes "[Guardia de Seguridad]";
+			mes "Con ésta clave ninguna persona podrá mover tus objetos a ningún lado.";
+			next;
+			mes "[Guardia de Seguridad]";
+			mes "Y así evitar cualquier clase de robo.";
+			next;
+			mes "[Guardia de Seguridad]";
+			mes "Muy bien, ¿listo para irte?";
+			next;
+			if(select("Todavía no","Vámonos...") == 2) {
+				warp "izlude",198,210;
+				close;
+			}
+			mes "[Guardia de Seguridad]";
+			mes "Entonces vuelve cuando desees irte.";
+			close2;
+			cutin "",255;
+			end;
+		default:
+			mes "[Guardia de Seguridad]";
+			mes "No tienes nada qué hacer aquí.";
+			close2;
+			cutin "",255;
+			end;
+	}
+end;
+}
+ilyo_kwan,203,125,4	script	Rumin#tg	638,{
+	cutin "thf_lumin01",2;
+	switch (q_tg) {
+		case 7:
+			mes "[Rumin]";
+			mes "Veo que te han mandado conmigo.";
+			next;
+			mes "[Rumin]";
+			mes "Pues ya sé a lo que va esto.";
+			next;
+			mes "[Rumin]";
+			mes "Quiero que prestes mucha atención porque al final ^ff8800 te voy a preguntar^000000";
+			next;
+			cutin "booking",4;
+			mes "[Rumin]";
+			mes "Existe un comando llamado ^5533ff/booking^000000 que te permite abrir una ventana para el reclutamiento de party.";
+			next;
+			mes "[Rumin]";
+			mes "Las party son grupos que se dedican a subir de nivel juntos, matar fuertes monstruos o recolectar objetos en lugares dificiles.";
+			next;
+			mes "[Rumin]";
+			mes "Generalmente es muy dificil encontrar una party capaz, pero gracias a esta herramienta eso se terminó.";
+			next;
+			cutin "thf_lumin01",2;
+			mes "[Rumin]";
+			mes "Entonces dime, ¿qué comando se utiliza para buscar una party?";
+			next;
+			input @resp$;
+			if(@resp$ != "/booking") {
+				mes "[Rumin]";
+				mes "Si no vas a prestar atención, nunca te dejaré salir de aquí.";
+				close2;
+				cutin "",255;
+				end;
+			}
+			mes "[Rumin]";
+			mes "Muy bien, siempre ten en cuenta utilizar este comando, no solamente se utiliza para buscar party.";
+			next;
+			mes "[Rumin]";
+			mes "Si no que también para buscar miembros específicos para una party.";
+			next;
+			cutin "recruit",4;
+			mes "[Rumin]";
+			mes "Para buscar miembros específicos debes de utilizar el comando ^5533ff/recruit^000000, de esa manera podrás hacer una party más rápido.";
+			next;
+			mes "[Rumin]";
+			mes "Pero antes de eso debes de tener una party creada con ^5533ff/organize^000000";
+			next;
+			cutin "thf_lumin01",2;
+			mes "[Rumin]";
+			mes "Nunca olvides mis consejos, pero te preguntaré por si acaso.";
+			next;
+			mes "[Rumin]";
+			mes "¿Qué comando se utiliza para reclutar jugadores especificos?";
+			next;
+			input @resp$;
+			if(@resp$ != "/recruit") {
+				mes "[Rumin]";
+				mes "Pon más atención.";
+				close2;
+				cutin "",255;
+				end;
+			}
+			mes "[Rumin]";
+			mes "De acuerdo, es todo lo que te quería enseñar, ya te puedes ir.";
+			close2;
+			set q_tg,8;
+			cutin "",255;
+			end;
+		case 8:
+			mes "[Rumin]";
+			mes "Ya no tengo nada más que enseñarte, adios.";
+			close2;
+			cutin "",255;
+			end;
+		default:
+			mes "[Rumin]";
+			mes "Estoy algo ocupado aquí, no molestes.";
+			close2;
+			cutin "",255;
+			end;
+	}
+}

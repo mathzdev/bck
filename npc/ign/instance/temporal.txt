@@ -1,0 +1,192 @@
+-	itemshop	TemTem	139,6607:0,2499:15
+glast_01,213,269,4	script	Eryzuben	684,{
+disable_items;
+function getequipcardcnt2;
+	if(t_boots_gl == 1) {
+		if(getequipid(6) == 22000 || getequipid(6) == 22001 || getequipid(6) == 22002 || getequipid(6) == 22003 || getequipid(6) == 22004 || getequipid(6) == 22005)
+			goto continue;
+		else if(getequipid(6) == 22006 || getequipid(6) == 22007 || getequipid(6) == 22008 || getequipid(6) == 22009 || getequipid(6) == 22010 || getequipid(6) == 22011) {
+			mes "[Eryzuben]";
+			mes "Lo siento pero a tus botas no le puedo añadir magia ni encantamientos.";
+			close;
+		} else {
+			mes "[Eryzuben]";
+			mes "Si no traes tus botas encantadas, no podré añadirle más magia.";
+			close;
+		}
+continue:
+		mes "[Eryzuben]";
+		mes "Al objeto que haz creado puedes añadirle aún más poder.";
+		next;
+		mes "[Eryzuben]";
+		mes "El poder se lo puedes añadir en forma de cartas, o con energía mágica de mi parte.";
+		next;
+		if(select("Energía de Cartas","Tú Energía Mágica") == 1) {
+			if(getequipcardcnt2(6) > 0) {
+				mes "[Eryzuben]";
+				mes "Lo siento pero no puedo perforar si tiene encantamientos.";
+				close2;
+				emotion e_sry;
+				end;
+			}
+			mes "[Eryzuben]";
+			mes "De acuerdo, veamos...";
+			next;
+			if(countitem(6607) < 5) {
+				mes "[Eryzuben]";
+				mes "Para poder perforar éstas botas necesitaré ^5533ff5 Temporal Crystal^000000.";
+				close;
+			}
+			mes "[Eryzuben]";
+			mes "Ten en cuenta que al perforar las botas, ya no podré añadirle ningún tipo de encantamiento.";
+			next;
+			set .@it,0;
+			if(getequipid(6) == 22000 || getequipid(6) == 22001 || getequipid(6) == 22002 || getequipid(6) == 22003 || getequipid(6) == 22004 || getequipid(6) == 22005) {
+				select("Perforar botas");
+				mes "[Eryzuben]";
+				mes "Dame un momento...";
+				specialeffect 60;
+				sleep2 1000;
+				specialeffect 40;
+				mes ". . .";
+				sleep2 1000;
+				specialeffect 154;
+				delitem 6607,5;
+				set @it,getequipid(6) + 6;
+				delequip 6;
+				getitem @it,1;
+				mes "Todo listo, aquí tienes.";
+				close2;
+				emotion e_thx;
+				end;
+			}
+			mes "[Eryzuben]";
+			mes "Por favor no te quites las botas en medio encantamiento.";
+			close;
+			
+		}
+		mes "[Eryzuben]";
+		mes "Pero ahora no necesito sólo energía, ahora necesitamos hechizos.";
+		next;
+		switch(getequipcardcnt2(6)) {
+			case 0: set .@rc,5; break;
+			case 1: set .@rc,15; break;
+			case 2: set .@rc,45; break;
+			case 3: set .@rc,135; break;
+			case 4:
+				mes "[Eryzuben]";
+				mes "No puedo ingresar más magia a tus botas.";
+				close;
+		}
+		mes "[Eryzuben]";
+		mes "Para hacer un encantamiento a tus botas deberás de darme "+.@rc+" Coagulated Spell.";
+		next;
+		if(countitem(6608) < .@rc) {
+			mes "[Eryzuben]";
+			mes "Sin Coagulated Spell necesarias, no puedo hacer ningún encantamiento.";
+			close;
+		}
+		switch(getequipcardcnt2(6)) {
+			case 0: setarray .@ench[0],4701,4711,4721,4731,4741,4751; break;
+			case 1: setarray .@ench[0],4702,4712,4722,4732,4742,4753; break;
+			case 2: setarray .@ench[0],4821,4834,4826,4861,4842,4755; break;
+			case 3: setarray .@ench[0],4822,4835,4827,4862,4842,4756; break;
+			case 4: mes "Error"; close;
+		}
+		if(select("Encantar","Salir") == 2)
+			close;
+		delitem 6608,.@rc;
+		setarray .@enc[0],getequipid(6),1,1,getequiprefinerycnt(6),0,getequipcardid(6,0),getequipcardid(6,1),getequipcardid(6,2),getequipcardid(6,3);
+		switch(getequipcardcnt2(6)) {
+			case 0: setarray .@enc[8],.@ench[rand(0,5)]; break;
+			case 1: setarray .@enc[7],.@ench[rand(0,5)]; break;
+			case 2: setarray .@enc[6],.@ench[rand(0,5)]; break;
+			case 3: setarray .@enc[5],.@ench[rand(0,5)]; break;
+			case 4: mes "Error"; close;
+		}
+		delequip 6;
+		specialeffect 154;
+		getitem2 .@enc[0],.@enc[1],.@enc[2],.@enc[3],.@enc[4],.@enc[5],.@enc[6],.@enc[7],.@enc[8];
+		mes "[Eryzuben]";
+		mes "Aquí tienes.";
+		close;
+	}
+	mes "[Eryzuben]";
+	mes "Si haz logrado pasar la pesadilla de éste lugar, entonces estás hablando con la persona correcta.";
+	next;
+	if(getequipid(6) != 2499) {
+		mes "[Eryzuben]";
+		mes "Entonces permíteme darte una oferta...";
+		close2;
+		callshop "TemTem",1;
+		end;
+	}
+	if(getequipid(6) == 2499 && getequiprefinerycnt(6) >= 7) {
+		mes "[Eryzuben]";
+		mes "Haz alcanzado un buen nivel de encantamiento.";
+		next;
+		mes "[Eryzuben]";
+		mes "Para poder alcanzar un mayor poder, necesito que me des ^5533ff5 Temporal Crystal^000000.";
+		next;
+		if(countitem(6607) >= 5) {
+			mes "[Eryzuben]";
+			mes "Entonces, por favor dime que clase de poder buscas.";
+			next;
+			switch(select("Fuerza:Inteligencia:Agilidad:Vitalidad:Precisión:Suerte")) {
+				case 1: set .@i,22000; break;
+				case 2: set .@i,22001; break;
+				case 3: set .@i,22002; break;
+				case 4: set .@i,22003; break;
+				case 5: set .@i,22004; break;
+				case 6: set .@i,22005; break;
+			}
+			mes "[Eryzuben]";
+			mes "¿Seguro que deseas obtener ^cc6600"+getitemname(.@i)+"^000000?";
+			if(select("Claro","No") == 2)
+				close;
+			mes "De acuerdo, dame un momento.";
+			if(getequipid(6) == 2499) {
+				specialeffect 60;
+				sleep2 1000;
+				specialeffect 40;
+				sleep2 1000;
+				specialeffect 154;
+				delequip 6;
+				delitem 6607,5;
+				getitem .@i,1;
+				mes "Allí tienes.";
+				set t_boots_gl,1;
+				close2;
+				emotion e_no1;
+				end;
+			}
+			mes "[Eryzuben]";
+			mes "Si te quitas las botas no puedo trabajar.";
+			close;
+		}
+		mes "[Eryzuben]";
+		mes "Si no cuentas con los cristales, no tengo el suficiente poder para poder hacer el encantamiento.";
+		close;
+	}
+	mes "[Eryzuben]";
+	mes "El alma de Amdarias haz logrado arrancar y con sus botas te haz hecho.";
+	next;
+	mes "[Eryzuben]";
+	mes "He estudiado las maldiciones de éste lugar por décadas, y por fin averigué cómo incrementar el valor de éste artefacto.";
+	next;
+	mes "[Eryzuben]";
+	mes "Si me entregas las ^5533ffTemporal Boots^000000 a un refinamiento de ^ff0000+7^000000 o mayor, te ayudaré a alcanzar un gran poder.";
+	close;
+	function	getequipcardcnt2	{
+		set .@r,0;
+		if(getequipcardid(6,0))
+			set .@r,.@r+1;
+		if(getequipcardid(6,1))
+			set .@r,.@r+1;
+		if(getequipcardid(6,2))
+			set .@r,.@r+1;
+		if(getequipcardid(6,3))
+			set .@r,.@r+1;
+		return .@r;
+	}
+}

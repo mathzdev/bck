@@ -1,0 +1,18 @@
+//===== rAthena Script =======================================
+//= Haunted House Warps
+//===== By: ==================================================
+haunt_e,151,200,0	warp	haunt01	1,1,haunt_h,22,158
+haunt_h,19,155,0	warp	haunt02	1,1,haunt_e,151,194
+haunt_h,172,82,0	warp	haunt03	1,1,haunt_h,191,105
+haunt_h,186,105,0	warp	haunt04	1,1,haunt_h,169,82
+haunt_e,152,150,0	warp	haunt05	1,1,niflheim,354,268
+niflheim,362,274,0	warp	haunt05-1	1,1,haunt_e,152,157
+
+
+haunt_e,0,0,0,0	monster	Giant Whisper	1186,2,0,0,0
+haunt_h,0,0,0,0	monster	Giant Whisper	1186,2,0,0,0
+haunt_h,0,0,0,0	monster	Masked Chimu	3496,7,0,0,0
+haunt_h,0,0,0,0	monster	Pirate Ghost	3500,7,0,0,0
+haunt_h,0,0,0,0	monster	Ghost Book	3498,7,0,0,0
+haunt_h,0,0,0,0	monster	Whisper	1179,20,0,0,0
+haunt_e,0,0,0,0	monster	Whisper	1179,5,0,0,0

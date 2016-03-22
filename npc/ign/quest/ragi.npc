@@ -1,0 +1,169 @@
+vip,278,241,3	script	Ragi::q_musical1	647,{
+	cutin "ragi01",2;
+	playbgm "122";
+	mes "[^ff0000Ragi^000000]";
+	mes "Hooola ~";
+	switch (q_musical) {
+		case 1:
+			next;
+			mes "[^ff0000Ragi^000000]";
+			mes "Veo que te han contado de mi ~~";
+			next;
+			mes "[^ff0000Ragi^000000]";
+			mes "Yo soy un músico que viajo por todo el mundo, y mis viajes me han traido a ésta bella ciudad.";
+			next;
+			mes "[^ff0000Ragi^000000]";
+			mes "Yo vengo de una tierra muy lejana llamado ^5533ffDorado^000000.";
+			next;
+			mes "[^ff0000Ragi^000000]";
+			mes "Le he preguntado a mucha gente si conoce mi tierra, pero al parecer nadie.";
+			next;
+			mes "[^ff0000Ragi^000000]";
+			mes "¿Que cómo llegué aquí?";
+			next;
+			mes "[^ff0000Ragi^000000]";
+			mes "Facil, estaba en un navío y naufragué, hehe";
+			emotion e_heh;
+			next;
+			mes "[^ff0000Ragi^000000]";
+			mes "Pero que eso no te deprima, ¿para qué me buscabas?";
+			next;
+			select("Para decirte lo guapo que eres","Dame un hijo por favor","¿No te ahogaste?","Que molesto eres...");
+			mes "[^ff0000Ragi^000000]";
+			mes "¡Por favor olvida todo eso!";
+			next;
+			mes "[^ff0000Ragi^000000]";
+			mes "¡Tengo algo importantisisisisimo que decirte!";
+			next;
+			mes "[^ff0000Ragi^000000]";
+			mes "Recientemente me enseñaron una forma de hacer que mi música se muestre de manera visual.";
+			next;
+			mes "[^ff0000Ragi^000000]";
+			mes "Es un tipo de magia al que bauticé como ^5533ffLas Notas Musicales^000000.";
+			next;
+			mes "[^ff0000Ragi^000000]";
+			mes "¿Q-que no es original?";
+			next;
+			mes "[^ff0000Ragi^000000]";
+			mes "Bueeno... si no te interesa te puedes ir yendo.";
+			next;
+			set @sec,prompt("Me largo...","No espera, me interesa.");
+			switch (@sec) {
+				case 1:
+				case 255:
+					mes "[^ff0000Ragi^000000]";
+					mes "Pues vete.";
+					close2;
+					playbgm "vip";
+					cutin "",255;
+					emotion e_bzz;
+					end;
+				case 2:
+					break;
+			}
+			mes "[^ff0000Ragi^000000]";
+			mes "Bueno, como veo que te interesa, sólo te pediré algo muy sencillo.";
+			next;
+			mes "[^ff0000Ragi^000000]";
+			mes "Ve y caza 100 Hill Wind y vuelve conmigo.";
+			close2;
+			cutin "",255;
+			playbgm "vip";
+			setquest 17501;
+			changequest 17501,17502;
+			set q_musical,2;
+			end;
+		case 2:
+			next;
+			if(checkquest(17502,HUNTING) == 1 || checkquest(17502,HUNTING) == 0) {
+				mes "[^ff0000Ragi^000000]";
+				mes "Ve y caza 100 Hill Wind y vuelve conmigo.";
+				close2;
+				cutin "",255;
+				playbgm "vip";
+				end;
+			} else if(checkquest(17502,HUNTING) == 2) {
+				mes "[^ff0000Ragi^000000]";
+				mes "Excelente trabajo, ahora mi última petición y podré usar la magia de la que te había hablado.";
+				next;
+				mes "[^ff0000Ragi^000000]";
+				mes "Necesito usar tela muy fina para poder convertirlas en notas flotantes.";
+				next;
+				mes "[^ff0000Ragi^000000]";
+				mes "En un castillo muy antiguo a veces se encuentran, se llaman ^5533ffSanctified Fabric^000000.";
+				next;
+				mes "[^ff0000Ragi^000000]";
+				mes "Se dice que los dragones aman éste tipo de telas, consigueme 30 y todo estará listo.";
+				close2;
+				cutin "",255;
+				playbgm "vip";
+				changequest 17502,17503;
+				set q_musical,3;
+				end;
+			}
+			mes "[^ff0000Ragi^000000]";
+			mes "No tienes nada que hacer conmigo.";
+			close2;
+			cutin "",255;
+			playbgm "vip";
+			end;
+		case 3:
+			next;
+			if(countitem(18168) < 30) {
+				mes "[^ff0000Ragi^000000]";
+				mes "Necesito usar tela muy fina para poder convertirlas en notas flotantes.";
+				next;
+				mes "[^ff0000Ragi^000000]";
+				mes "En un castillo muy antiguo a veces se encuentran, se llaman ^5533ffSanctified Fabric^000000.";
+				next;
+				mes "[^ff0000Ragi^000000]";
+				mes "Se dice que los dragones aman éste tipo de telas, consigueme 30 y todo estará listo.";
+				close2;
+				playbgm "vip";
+				cutin "",255;
+				end;
+			} else {
+				mes "[^ff0000Ragi^000000]";
+				mes "Excelente trabajo, ahora déjame darte tu recompenza.";
+				next;
+				progressbar "008800",4;
+				specialeffect 154;
+				getitem 19871,1;
+				mes "[^ff0000Ragi^000000]";
+				mes "Allí tienes, y la he firmado para tí, para que vean que haz conocido a un famoso.";
+				close2;
+				getexp 5000000,5000000;
+				playbgm "vip";
+				cutin "",255;
+				set q_musical,4;
+				completequest 17503;
+				end;
+			}
+			mes "[^ff0000Ragi^000000]";
+			mes "No tienes nada que hacer conmigo.";
+			close2;
+			cutin "",255;
+			playbgm "vip";
+			end;
+		case 4:
+			next;
+			mes "[^ff0000Ragi^000000]";
+			mes "Las notas musicales son la vida.";
+			next;
+			mes "[^ff0000Ragi^000000]";
+			mes "Vuelve en otro momento, quiza descubra algo más.";
+			close2;
+			cutin "",255;
+			playbgm "vip";
+			end;
+		default:
+			break;
+	}
+	close2;
+	cutin "",255;
+	playbgm "vip";
+	end;
+OnPCLoadMapEvent:
+	if((strcharinfo(3)=="vip") && (q_musical > 0 && q_musical < 4))
+		showevent 0,1;
+}

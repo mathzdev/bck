@@ -1,0 +1,187 @@
+prontera,151,197,4	script	Gato Cebollero::GATO	545,{
+mes "[^ff0000Gato Cebollero^000000]";
+mes "Hola ^ff8800"+strcharinfo(0)+"^000000.";
+mes "Actualmente hay eventos en los que puedes participar si deseas.";
+next;
+	if (select("Participar","^777777Salir^000000")==2) {
+		mes "[^ff0000Gato Cebollero^000000]";
+		mes "Vuelve cuando desees.";
+		close2;
+		emotion e_ok;
+		end;
+	}
+	switch (select("Cosechador:Verano Intenso:Cebollero Extremo")) {
+		case 1:
+			if (Q_cebolla == 1) {
+				if(Q_cebo >= 25) {
+					mes "[^ff0000Gato Cebollero^000000]";
+					mes "Muy bien hecho.";
+					mes "Ten aquí tu recompenza.";
+					announce strcharinfo(0)+" ha terminado la mision [Cosechador]",bc_all;
+					getitem 5304,1;
+					getexp 50000,50000;
+					set #Q_cebolla,2;
+					set Q_cebolla,2;
+					set Q_cebo,0;
+					close;
+				}
+				mes "[^ff0000Gato Cebollero^000000]";
+				mes "Ve a cazar ^5533ff25 Cebollas Gigantes^000000, las podrás encontrar en lugares cotidianos.";
+				close2;
+				emotion e_thx;
+				end;
+			}
+			if (#Q_cebolla == 2) {
+				mes "[^ff0000Gato Cebollero^000000]";
+				mes "Ya has completado esta misión.";
+				close;
+			}
+			mes "[^ff0000Gato Cebollero^000000]";
+			mes "El evento consiste en que busques unas cebollas gigantescas por todo el mundo de Ragnarok.";
+			next;
+			mes "[^ff0000Gato Cebollero^000000]";
+			mes "Si me traes a este mismo punto ^5533ff25 Cebollas Gigantes^000000 te recompensaré";
+			close2;
+			set Q_cebolla,1;
+			emotion e_no1;
+			end;
+		case 2:
+			if(Q_giant == 1) {
+				mes "[^ff0000Gato Cebollero^000000]";
+				mes "Excelente trabajo, puedes volver a participar en la misión si deseas.";
+				announce strcharinfo(0)+" ha completado la mision [Verano Intenso]",bc_all;
+				getitem 12260,1;
+				getexp 10000,10000;
+				set Q_giant,0;
+				close2;
+				emotion e_thx;
+				end;
+			}
+			mes "[^ff0000Gato Cebollero^000000]";
+			mes "Podrás verte super sexy al terminar esta misión. Sólo ve a Hawaii y busca al ^ff8800Gigante Stripper^000000, al cazarlo vuelve conmigo y te daré algo muy especial";
+			close2;
+			set Q_verano,1;
+			emotion e_no1;
+			end;
+		case 3:
+			if(#Q_cebolla2 == 1) {
+				mes "[^ff0000Gato Cebollero^000000]";
+				mes "Ya has completrado esta misión.";
+				close2;
+				emotion e_sry;
+				end;
+			}
+			if(#Q_cebolla == 2) {
+				if(Q_cebo >= 200) {
+					mes "[^ff0000Gato Cebollero^000000]";
+					mes "Excelente trabajo.";
+					announce strcharinfo(0)+" ha completado la misión [Cebollero Extremo]",bc_all;
+					getexp 3500000,1500000;
+					getitem 12210,10;
+					getitem 5597,1;
+					close2;
+					emotion e_no1;
+					set Q_cebo,0;
+					set #Q_cebolla2,1;
+					end;
+				}	
+				mes "[^ff0000Gato Cebollero^000000]";
+				mes "Veo que has terminado la misión de ^ff0000Cosechador^000000, entonces ahora deberás de cosechar ^5533ff200 Cebollas Gigantes^000000 y te daré un buen lote de experiencia y un premio extra.";
+				close2;
+				set Q_cebolla2,1;
+				emotion e_thx;
+				end;
+			} else {
+				mes "[^ff0000Gato Cebollero^000000]";
+				mes "Debes de completar primero la misión de ^ff0000Cosechador^000000";
+				close2;
+				emotion e_sry;
+				end;
+			}
+	}
+OnInit:
+	setarray .@m0$[0], "G","a","t","o"," ","C","e","b","o","ll","e","r","o";
+	setarray .@m1$[0], "B","u","s","ca"," ","c","e","b","o","ll","a","s","!";
+	do {
+		if (.@i == 2) set .@i, 0;
+		for (set .@c, 0; .@c < getarraysize(getd(".@m" + .@i + "$")); set .@c, .@c + 1) {
+			set .@f$, .@f$ + getd(".@m" + .@i + "$[" + .@c + "]");
+			waitingroom .@f$,0;
+			sleep 350;
+			delwaitingroom;
+		}
+		for (set .@c, 0; .@c < 6; set .@c, .@c + 1) {
+			waitingroom "",0;
+			sleep 250;
+			delwaitingroom;
+			waitingroom .@f$,0;
+			sleep 250;
+			delwaitingroom;
+		}
+		waitingroom .@f$,0;
+		sleep 3000;
+		set .@f$, "";
+		delwaitingroom;
+		set .@i, .@i + 1;
+	} while(1);
+end;
+}
+-	script	#Cebo	-1,{
+OnMonsterDead:
+	if(Q_cebolla == 1) {
+		if (Q_cebo < 1) {
+			set Q_cebo,1;
+			message strcharinfo(0),"Cebollas Gigantes [1/25]";
+			end;
+		}
+		set Q_cebo,Q_cebo+1;
+		message strcharinfo(0),"Cebollas Gigantes ["+Q_cebo+"/25]";
+		if (Q_cebo >= 25) {
+			message strcharinfo(0),"Has obtenido todas las Cebollas";
+			set Q_cebo,25;
+		}
+	}
+	if(Q_cebolla2 == 1) {
+		if (Q_cebo < 1) {
+			set Q_cebo,1;
+			message strcharinfo(0),"Cebollas Gigantes [1/200]";
+			end;
+		}
+		set Q_cebo,Q_cebo+1;
+		message strcharinfo(0),"Cebollas Gigantes ["+Q_cebo+"/200]";
+		if (Q_cebo >= 200) {
+			message strcharinfo(0),"Has obtenido todas las Cebollas";
+		}
+	}
+end;
+}
+-	script	#Giant	-1,{
+OnMonsterDead:
+	if(Q_verano == 1) {
+		if(Q_giant < 1) {
+			set Q_giant,1;
+			message strcharinfo(0),"Haz cazado Gigante Stripper [1/1]";
+			end;
+		}
+	}
+end;
+}
+pay_dun00,0,0,0,0	monster	Cebolla Gigante	1816,20,600000,0,"#Cebo::OnMonsterDead"
+pay_dun01,0,0,0,0	monster	Cebolla Gigante	1816,20,600000,0,"#Cebo::OnMonsterDead"
+pay_dun02,0,0,0,0	monster	Cebolla Gigante	1816,20,600000,0,"#Cebo::OnMonsterDead"
+pay_dun03,0,0,0,0	monster	Cebolla Gigante	1816,20,600000,0,"#Cebo::OnMonsterDead"
+pay_dun04,0,0,0,0	monster	Cebolla Gigante	1816,20,600000,0,"#Cebo::OnMonsterDead"
+prontera,0,0,0,0	monster	Cebolla Gigante	1816,20,600000,0,"#Cebo::OnMonsterDead"
+geffen,0,0,0,0	monster	Cebolla Gigante	1816,20,600000,0,"#Cebo::OnMonsterDead"
+izlude,0,0,0,0	monster	Cebolla Gigante	1816,20,600000,0,"#Cebo::OnMonsterDead"
+abyss_01,0,0,0,0	monster	Cebolla Gigante	1816,20,600000,0,"#Cebo::OnMonsterDead"
+geffen,0,0,0,0	monster	Cebolla Gigante	1816,20,600000,0,"#Cebo::OnMonsterDead"
+anthell01,0,0,0,0	monster	Cebolla Gigante	1816,20,600000,0,"#Cebo::OnMonsterDead"
+anthell02,0,0,0,0	monster	Cebolla Gigante	1816,20,600000,0,"#Cebo::OnMonsterDead"
+ra_fild01,0,0,0,0	monster	Cebolla Gigante	1816,20,600000,0,"#Cebo::OnMonsterDead"
+moc_fild11,0,0,0,0	monster	Cebolla Gigante	1816,20,600000,0,"#Cebo::OnMonsterDead"
+prt_fild08,0,0,0,0	monster	Cebolla Gigante	1816,20,600000,0,"#Cebo::OnMonsterDead"
+hu_fild06,0,0,0,0	monster	Cebolla Gigante	1816,20,600000,0,"#Cebo::OnMonsterDead"
+glast_01,0,0,0,0	monster	Cebolla Gigante	1816,20,600000,0,"#Cebo::OnMonsterDead"
+quiz_02,341,79,0,0	monster	Cebolla GM		1816,30,0,0,"#Cebo::OnMonsterDead"
+jawaii,0,0,0,0	monster	Gigante Stripper	2309,1,100000,0,"#Giant::OnMonsterDead"

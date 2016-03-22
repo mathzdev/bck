@@ -1,0 +1,384 @@
+vip,72,272,4	script	Jefe de Leñadores::q_leñ	10056,{
+	cutin "verus_ian01",2;
+	if(BaseLevel >= 120 && (Oficio > 0 && Oficio !=2) && Oficio2 < 1) {
+		mes "[Jefe de Leñadores]";
+		mes "Veo que estás listo para unirte al oficio de leñadores.";
+		next;
+		mes "[Jefe de Leñadores]";
+		mes "Nuestro objetivo es talar y recoger ciertos árboles que hay por el mundo, de donde se pueden extraer especiales tipos de madera.";
+		next;
+		mes "[Jefe de Leñadores]";
+		mes "Ésta madera se puede usar por los Carpinteros y Costureros para la fabricación de objetos.";
+		next;
+		mes "[Jefe de Leñadores]";
+		mes "¿Entonces te unes?";
+		next;
+		if(select("Claro que no","Elegir Leñador como 2do Oficio") == 1) {
+			mes "[Jefe de Leñadores]";
+			mes "Bien, la decisión es tuya, no mía.";
+			close2;
+			cutin "",255;
+			end;
+		}
+		mes "[Jefe de Leñadores]";
+		mes "Ahora deja explicarte a qué se dedica nuestro Oficio.";
+		next;
+		mes "[Jefe de Leñadores]";
+		mes "Los leñadores somos los mejores recolectores de madera del mundo.";
+		next;
+		mes "[Jefe de Leñadores]";
+		mes "Para saber que puedes cortar un árbol verás una pila de madera a un lado de ciertos árboles.";
+		next;
+		mes "[Jefe de Leñadores]";
+		mes "Éstos se ubican a los alrededores de Prontera, Aldebaran, Payon, Hugel y Geffen.";
+		next;
+		mes "[Jefe de Leñadores]";
+		mes "Hay algunas maderas que son más raras que otras, pero ocuparás el nivel necesario para conseguirlas.";
+		next;
+		mes "[Jefe de Leñadores]";
+		mes "Antes que nada deja darte esto.";
+		getitem 36019,1;
+		next;
+		mes "[Jefe de Leñadores]";
+		mes "Siempre deberás tener equipada ésta hacha para poder talar árboles.";
+		next;
+		mes "[Jefe de Leñadores]";
+		mes "Ya que las manos pues, no nos bastan, ocupamos una buena herramienta.";
+		next;
+		mes "[Jefe de Leñadores]";
+		mes "En fin, que la suerte te acompañe en el camino de la madera.";
+		close2;
+		cutin "",255;
+		set Oficio2,2;
+		achieve 10;
+		announce "¡"+strcharinfo(0)+", ha emprendido el camino del Leñador!",bc_all;
+		end;
+	}
+	if(BaseLevel >= 50 && Oficio != 2 && q_len < 1 && callfunc("Oficio_Check",10,2) == 1) {
+		mes "[Jefe de Leñadores]";
+		mes "Veo que estás listo para unirte al oficio de leñadores.";
+		next;
+		mes "[Jefe de Leñadores]";
+		mes "Nuestro objetivo es talar y recoger ciertos árboles que hay por el mundo, de donde se pueden extraer especiales tipos de madera.";
+		next;
+		mes "[Jefe de Leñadores]";
+		mes "Ésta madera se puede usar por los Carpinteros y Costureros para la fabricación de objetos.";
+		next;
+		mes "[Jefe de Leñadores]";
+		mes "¿Entonces te unes?";
+		next;
+		if(select("Claro que no","Si, es lo que quiero") == 1) {
+			mes "[Jefe de Leñadores]";
+			mes "Bien, la decisión es tuya, no mía.";
+			close2;
+			cutin "",255;
+			end;
+		}
+		mes "[Jefe de Leñadores]";
+		mes "Bien, para demostrar que eres un Leñador capaz, deberás traerme aquí, nada más y nada menos que 70 ^cc6600Trunk^000000.";
+		next;
+		mes "[Jefe de Leñadores]";
+		mes "De ésta forma demostrarás que ningún árbol es un rival para tí.";
+		next;
+		mes "[Jefe de Leñadores]";
+		mes "Te esperaré aquí.";
+		close2;
+		set q_len,1;
+		cutin "",255;
+		end;
+	}
+	if(q_len == 1 && callfunc("Oficio_Check",11,2) == 1) {
+		if(countitem(1019) < 70) {
+			mes "[Jefe de Leñadores]";
+			mes "Todavía te faltan "+(70-(countitem(1019)))+" Trunk.";
+			close2;
+			cutin "",255;
+			emotion e_sry;
+			end;
+		}
+		mes "[Jefe de Leñadores]";
+		mes "Fantástico trabajo, me quedaré con esos troncos, serán algo especial para ésta chimenea.";
+		next;
+		delitem 1019,70;
+		mes "[Jefe de Leñadores]";
+		mes "Ahora deja explicarte a qué se dedica nuestro Oficio.";
+		next;
+		mes "[Jefe de Leñadores]";
+		mes "Los leñadores somos los mejores recolectores de madera del mundo.";
+		next;
+		mes "[Jefe de Leñadores]";
+		mes "Para saber que puedes cortar un árbol verás una pila de madera a un lado de ciertos árboles.";
+		next;
+		mes "[Jefe de Leñadores]";
+		mes "Éstos se ubican a los alrededores de Prontera, Aldebaran, Payon, Hugel y Geffen.";
+		next;
+		mes "[Jefe de Leñadores]";
+		mes "Hay algunas maderas que son más raras que otras, pero ocuparás el nivel necesario para conseguirlas.";
+		next;
+		mes "[Jefe de Leñadores]";
+		mes "Antes que nada deja darte esto.";
+		getitem 36019,1;
+		next;
+		mes "[Jefe de Leñadores]";
+		mes "Siempre deberás tener equipada ésta hacha para poder talar árboles.";
+		next;
+		mes "[Jefe de Leñadores]";
+		mes "Ya que las manos pues, no nos bastan, ocupamos una buena herramienta.";
+		next;
+		mes "[Jefe de Leñadores]";
+		mes "En fin, que la suerte te acompañe en el camino de la madera.";
+		close2;
+		cutin "",255;
+		set q_len,2;
+		achieve 10;
+		set Oficio,2;
+		announce "¡"+strcharinfo(0)+", ha emprendido el camino del Leñador!",bc_all;
+		end;
+	}
+	if(q_len == 2 && callfunc("Oficio_Check",11,2) == 1) {
+		mes "[Jefe de Leñadores]";
+		mes "Recuerda que para talar árboles debes de buscar troncos a un lado de los árboles.";
+		next;
+		mes "[Jefe de Leñadores]";
+		mes "Éstos se ubican a los alrededores de Prontera, Aldebaran, Payon, Hugel y Geffen.";
+		close2;
+		cutin "",255;
+		end;
+	}
+	mes "[Jefe de Leñadores]";
+	mes "La leña para ésta chimenea, la talé yo mismo.";
+	close2;
+	cutin "",255;
+	end;
+end;
+}
+function	script	F_WoodCutting	{
+	if( callfunc("Oficio_Check",2) < 1) {
+		mes "^777777Necesito ser Leñador para poder talar ésto.^000000";
+		close;
+	}
+	if(getequipid(7) == 36019 || getequipid(8) == 36019 || countitem(36019) >= 1)
+		goto S_continue;
+	else {
+		mes "Necesito una hacha para cortar ésto.";
+		close;
+	}
+	S_continue:
+	setarray .NormalWood[0],1019,6008,36000;
+	setarray .AdvancedWood[0],6787,6553,7189,36001;
+	setarray .ExpertWood[0],7222,36002,36003;
+	setarray .MasterWood[0],36004,36005,36016;
+	setarray .LegendaryWood[0],36008,36009,36016;
+	setarray .RankLen$[0],"Aprendiz","Versado","Experto","Maestro","Legendario";
+	if(!LenLv)
+		set LenLv,0;
+	switch (getarg(0)) {
+		case 1:
+			callsub S_WoodCut,getarg(0);
+			if(LenExp >= 500 && LenLv < 1 ) {
+				set LenLv,LenLv + 1;
+				message strcharinfo(0),"¡Felicidades haz subido a Leñador "+.RankLen$[LenLv]+"!";
+			}
+			close2;return;end;
+		case 2:
+			if(LenExp < 500) {
+				mes "^777777No tengo la experiencia necesaria.^000000";
+				close;
+			}
+			callsub S_WoodCut,getarg(0);
+			if(LenExp >= 2000 && LenLv < 2 ) {
+				set LenLv,LenLv + 1;
+				message strcharinfo(0),"¡Felicidades haz subido a Leñador "+.RankLen$[LenLv]+"!";
+			}
+			close2;return;end;
+		case 3:
+			if(LenExp < 2000) {
+				mes "^777777No tengo la experiencia necesaria.^000000";
+				close;
+			}
+			callsub S_WoodCut,getarg(0);
+			if(LenExp >= 5000 && LenLv < 3 ) {
+				set LenLv,LenLv + 1;
+				message strcharinfo(0),"¡Felicidades haz subido a Leñador "+.RankLen$[LenLv]+"!";
+			}
+			close2;return;end;
+		case 4:
+			if(LenExp < 5000) {
+				mes "^777777No tengo la experiencia necesaria.^000000";
+				close;
+			}
+			callsub S_WoodCut,getarg(0);
+			if(LenExp >= 10000 && LenLv < 4 ) {
+				set LenLv,LenLv + 1;
+				message strcharinfo(0),"¡Felicidades haz subido a Leñador "+.RankLen$[LenLv]+"!";
+			}
+			close2;return;end;
+		case 5:
+			if(LenExp < 10000) {
+				mes "^777777No tengo la experiencia necesaria.^000000";
+				close;
+			}
+			specialeffect2 68;
+			callsub S_WoodCut,getarg(0);
+			close2;return;end;
+	}
+	close;
+S_WoodCut:
+	set @ExpGet,0;
+	specialeffect2 57;
+	progressbar "008800",2;
+	set @tronco,rand(15,20);
+	while(1) {
+		mes "^777777Tronco del árbol:^000000";
+		switch (@tronco) {
+			case 1:  mes "^00ff00|^ff0000|||||||||||||||||||^000000"; break;
+			case 2:  mes "^00ff00||^ff0000||||||||||||||||||^000000"; break;
+			case 3:  mes "^00ff00|||^ff0000|||||||||||||||||^000000"; break;
+			case 4:  mes "^00ff00||||^ff0000||||||||||||||||^000000"; break;
+			case 5:  mes "^00ff00|||||^ff0000|||||||||||||||^000000"; break;
+			case 6:  mes "^00ff00||||||^ff0000||||||||||||||^000000"; break;
+			case 7:  mes "^00ff00|||||||^ff0000|||||||||||||^000000"; break;
+			case 8:  mes "^00ff00||||||||^ff0000||||||||||||^000000"; break;
+			case 9:  mes "^00ff00|||||||||^ff0000|||||||||||^000000"; break;
+			case 10: mes "^00ff00||||||||||^ff0000||||||||||^000000"; break;
+			case 11: mes "^00ff00|||||||||||^ff0000|||||||||^000000"; break;
+			case 12: mes "^00ff00||||||||||||^ff0000||||||||^000000"; break;
+			case 13: mes "^00ff00|||||||||||||^ff0000|||||||^000000"; break;
+			case 14: mes "^00ff00||||||||||||||^ff0000||||||^000000"; break;
+			case 16: mes "^00ff00|||||||||||||||^ff0000|||||^000000"; break;
+			case 17: mes "^00ff00||||||||||||||||^ff0000||||^000000"; break;
+			case 18: mes "^00ff00|||||||||||||||||^ff0000|||^000000"; break;
+			case 19: mes "^00ff00||||||||||||||||||^ff0000||^000000"; break;
+			case 20: mes "^00ff00||||||||||||||||||||^ff0000^000000"; break;
+		}
+		mes " ";
+		mes "¿Qué quieres hacer?";
+		next;
+		switch(select("Cortar:Empujar:Super corte:^777777Salir^000000")) {
+			case 1:
+				if(@tronco < 3) {
+					mes "^777777Tronco del árbol:^000000";
+					mes "^ff0000||||||||||||||||||||^000000";
+					mes " ";
+					mes "^777777Oh, el árbol ha caído.^000000";
+					set @ExpGet,rand(1,2);
+					goto break3;
+				}
+				set @tronco,@tronco - rand(1,4);
+				specialeffect2 131;
+				break;
+			case 2:
+				if(@tronco >= rand(6,9)) {
+					mes "^777777Empujas el árbol pero no pasa nada.^000000";
+					goto break2;
+				}
+				mes "^777777Tronco del árbol:^000000";
+				mes "^ff0000||||||||||||||||||||^000000";
+				mes " ";
+				mes "^777777Oh, el árbol ha caído.^000000";
+				set @ExpGet,rand(1,3);
+				goto break3;
+			case 3:
+				if(@tronco < 5) {
+					mes "^777777Tronco del árbol:^000000";
+					mes "^ff0000||||||||||||||||||||^000000";
+					mes " ";
+					mes "^777777Oh, el árbol ha caído.^000000";
+					set @ExpGet,rand(1,2);
+					goto break3;
+				}
+				set @tronco,@tronco - rand(1,7);
+				specialeffect2 131;
+				goto break2;
+			case 4:
+				mes "Mejor lo dejo para después.";
+				close;
+		}
+break2:
+	}
+break3:
+	specialeffect 518;
+	if(@ExpGet < 1) {
+		mes "Ha ocurrido un error.";
+		close;
+	}
+	if(readparam(bStr) > 40)
+		@ExpGet += 1;
+	if(readparam(bLuk) > 40)
+		@ExpGet += 1;
+	if(readparam(bAgi) > 50)
+		@ExpGet += 1;
+	if(readparam(bDex) > 50)
+		@ExpGet += 1;
+	set @ExpSave,(@ExpGet*rand(2,4));
+	set LenExp,LenExp + @ExpSave;
+	if( M_Oficio2 == 1 && getequipid(13) == 36025 )
+		set @Bonus,3*rand(1,3);
+	else
+		set @Bonus,rand(1,4);
+	switch (getarg(0)) {
+		case 5: getitem .LegendaryWood[rand(getarraysize(.LegendaryWood))],@ExpGet+@Bonus; set @ExpGet,@ExpGet - 1;
+		case 4: if(@ExpGet < 0) set @ExpGet,0; getitem .MasterWood[rand(getarraysize(.MasterWood))],@ExpGet+@Bonus; set @ExpGet,@ExpGet - 1;
+		case 3: if(@ExpGet < 0) set @ExpGet,0; getitem .ExpertWood[rand(getarraysize(.ExpertWood))],@ExpGet+@Bonus; set @ExpGet,@ExpGet - 1;
+		case 2: if(@ExpGet < 0) set @ExpGet,0; getitem .AdvancedWood[rand(getarraysize(.AdvancedWood))],@ExpGet+@Bonus; set @ExpGet,@ExpGet - 1;
+		case 1: if(@ExpGet < 0) set @ExpGet,0; getitem .NormalWood[rand(getarraysize(.NormalWood))],@ExpGet+@Bonus;
+	}
+	dispbottom "¡Haz obtenido [ "+@ExpSave+" ] puntos como Leñador "+.RankLen$[LenLv]+". Total: [ "+LenExp+" ].";
+	callfunc "RankLenador",@ExpSave;
+	return;
+}
+
+// Madera Normal
+prt_fild08,182,361,4	script	Madera Normal#001	10026,{ callfunc "F_WoodCutting",1,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+prt_fild08,196,363,4	script	Madera Normal#002	10026,{ callfunc "F_WoodCutting",1,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+prt_fild08,219,355,4	script	Madera Normal#003	10026,{ callfunc "F_WoodCutting",1,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+prt_fild08,207,344,4	script	Madera Normal#004	10026,{ callfunc "F_WoodCutting",1,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+prt_fild08,145,370,4	script	Madera Normal#005	10026,{ callfunc "F_WoodCutting",1,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+prt_fild08,135,396,4	script	Madera Normal#006	10026,{ callfunc "F_WoodCutting",1,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+prt_fild08,134,346,4	script	Madera Normal#007	10026,{ callfunc "F_WoodCutting",1,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+
+// Madera Avanzada
+pay_fild01,314,316,4	script	Madera Avanzada#001	10026,{ callfunc "F_WoodCutting",2,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+pay_fild01,318,335,4	script	Madera Avanzada#002	10026,{ callfunc "F_WoodCutting",2,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+pay_fild01,310,343,4	script	Madera Avanzada#003	10026,{ callfunc "F_WoodCutting",2,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+pay_fild01,336,273,4	script	Madera Avanzada#004	10026,{ callfunc "F_WoodCutting",2,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+pay_fild01,357,225,4	script	Madera Avanzada#005	10026,{ callfunc "F_WoodCutting",2,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+pay_fild01,362,228,4	script	Madera Avanzada#006	10026,{ callfunc "F_WoodCutting",2,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+pay_fild01,367,238,4	script	Madera Avanzada#007	10026,{ callfunc "F_WoodCutting",2,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+
+// Madera Experta
+yuno_fild01,182,59,4	script	Madera Experta#001	10026,{ callfunc "F_WoodCutting",3,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+yuno_fild01,183,67,4	script	Madera Experta#002	10026,{ callfunc "F_WoodCutting",3,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+yuno_fild01,193,72,4	script	Madera Experta#003	10026,{ callfunc "F_WoodCutting",3,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+yuno_fild01,183,77,4	script	Madera Experta#004	10026,{ callfunc "F_WoodCutting",3,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+yuno_fild01,211,120,4	script	Madera Experta#005	10026,{ callfunc "F_WoodCutting",3,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+yuno_fild01,211,101,4	script	Madera Experta#006	10026,{ callfunc "F_WoodCutting",3,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+yuno_fild01,213,131,4	script	Madera Experta#007	10026,{ callfunc "F_WoodCutting",3,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+yuno_fild01,223,140,4	script	Madera Experta#008	10026,{ callfunc "F_WoodCutting",3,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+
+// Madera Maestra
+hu_fild06,115,292,4	script	Madera Maestra#001	10026,{ callfunc "F_WoodCutting",4,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+hu_fild06,124,296,4	script	Madera Maestra#002	10026,{ callfunc "F_WoodCutting",4,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+hu_fild06,124,280,4	script	Madera Maestra#003	10026,{ callfunc "F_WoodCutting",4,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+hu_fild06,117,268,4	script	Madera Maestra#004	10026,{ callfunc "F_WoodCutting",4,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+hu_fild06,103,260,4	script	Madera Maestra#005	10026,{ callfunc "F_WoodCutting",4,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+hu_fild06,104,269,4	script	Madera Maestra#006	10026,{ callfunc "F_WoodCutting",4,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+hu_fild06,128,258,4	script	Madera Maestra#007	10026,{ callfunc "F_WoodCutting",4,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+
+// Madera Legendaria
+yuno_fild01,175,84,4	script	Madera Legendaria#001	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
+hu_fild06,139,244,4	script	Madera Legendaria#002	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
+mjolnir_06,246,281,4	script	Madera Legendaria#003	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
+odin_tem01,364,268,4	script	Madera Legendaria#004	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
+odin_tem01,354,257,4	script	Madera Legendaria#005	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
+odin_tem01,308,280,4	script	Madera Legendaria#006	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
+ra_fild03,190,271,4	script	Madera Legendaria#007	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
+ra_fild03,193,282,4	script	Madera Legendaria#008	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
+gef_fild09,279,195,4	script	Madera Legendaria#009	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
+gef_fild09,284,198,4	script	Madera Legendaria#010	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
+gef_fild09,273,204,4	script	Madera Legendaria#011	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
+pay_fild10,174,355,4	script	Madera Legendaria#012	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
+pay_fild10,185,335,4	script	Madera Legendaria#013	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
+pay_fild10,237,325,4	script	Madera Legendaria#014	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
+pay_fild10,208,297,4	script	Madera Legendaria#015	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
+

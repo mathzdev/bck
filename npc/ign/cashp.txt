@@ -1,0 +1,170 @@
+// ---
+//= Script administrador de Cash Points v1.0 [Rokimoki]
+// * Añadir Cash Points
+// * Borrar Cash Points
+// * Mirar Cash Points
+// * Notificador que si estás online te dice qué administrador te ha quitado/añadido cash points
+// * Notificador que al loguear si te han quitado/añadido cash points te lo especifique, no muestra qué administrador lo hizo
+// * Sistema de logs que almacena User, Account ID, Cantidad Cash Añadida/Borrada, Accoun ID afectada, según los siguientes casos:
+//   -> Si introducen mal la contraseña del Script
+//   -> Si añaden/quitan cash points
+// ---
+//= El Script funciona tanto si está online como si no
+// Si está online no usa SQL, si está offline usa SQL
+// ---
+-	script	donaciones	-1,{
+OnWhisperGlobal:
+if (getgmlevel() < 99) { // Desechamos los que no sean admin
+	dispbottom "Tu cantidad de cash points es: " +#CASHPOINTS;
+	end;
+} // End if
+if (@whispervar0$ != "Colador123") { // Desechamos los que no pongan bien la contraseña, en "contraseña" sustituir contraseña por lo que quieran como contraseña, por ejemplo "asdasd"
+	logmes "El usuario: " +strcharinfo(0) +" con account id: " +getcharid(3) +" ha introducido mal la contraseña SQL Cash, su contraseña fue: " +@whispervar0$; // Por si acaso
+	end;
+} // End if
+deletearray .@array$[0], 128; // Debug no tocar
+deletearray .@idcuenta[0], 128;
+set .@nombre$, "[^0000FFAsistente de Cash Points^000000]";
+mes .@nombre$;
+mes "Hola, soy el sistema de administración de donaciones...";
+next;
+switch (select("Añadir Cash Points:Borrar Cash Points:Mirar Cash Points:Nada")) {
+	case 1: // Añadir cash points
+		callfunc("CashPoints",1);
+		break;
+
+	case 2: // Borrar cash points
+		callfunc("CashPoints",2);
+		break;
+
+	case 3: // Mirar cash points
+		callfunc("CashPoints",3);
+		break;
+		
+	case 4: // Salir
+		mes "Adiós...";
+		break;
+} // End switch
+close;
+
+OnPCLoginEvent: // Notificador Offline
+if (#CASHPOINTS < UltimoCash) dispbottom "Balance de IGN Points: " +#CASHPOINTS +", antes: " +UltimoCash;
+else if (#CASHPOINTS > UltimoCash) dispbottom "Balance de IGN Points: " +#CASHPOINTS +", antes: " +UltimoCash;
+set UltimoCash, #CASHPOINTS;
+end;
+} // End Script
+
+function	script	CashPoints	{
+mes .@nombre$;
+mes "Necesito saber algo antes...";
+next;
+mes .@nombre$;
+if (select("Seleccionar por nombre de character:Seleccionar por login de usuario") == 1) {
+	mes "Introduce el nombre del personaje: ";
+	next;
+	input .@nombre$;
+	query_sql "SELECT `account_id` FROM `char` WHERE `name` = '" +escape_sql(.@nombre$) +"'", .@idcuenta[0];
+} else {
+	mes "Introduce el login del personaje: ";
+	next;
+	input .@login$;
+	query_sql "SELECT `account_id` FROM `login` WHERE `userid` = '" +escape_sql(.@login$) +"'", .@idcuenta[0];
+} // End if
+if (!.@idcuenta[0]) {
+	mes "Lo siento pero no es un personaje válido, inténtelo de nuevo.";
+	close;
+} // End if
+if (getarg(0) == 3) {
+	if (isloggedin(.@idcuenta[0])) { // Si está Online
+		// Guardamos la ID del antiguo GM
+		set .@gm$, strcharinfo(0);
+		set .@id, getcharid(3);
+		detachrid;
+		// Adjuntamos al user que recibirá los cash points
+		attachrid(.@idcuenta[0]);
+		set .@cash, #CASHPOINTS; // Guardamos cuantos cash points que tiene actualmente
+		detachrid;
+		attachrid(.@id);
+		mes .@nombre$;
+		mes "El usuario buscado tiene en su cuenta: ^FF0000" +.@cash +"^000000 Cash Points.";
+	} else { // Si está Offline
+		query_sql "SELECT `value` FROM global_reg_value WHERE `str` = '#CASHPOINTS' and account_id = " +.@idcuenta[0], .@valor[0]; // Capturamos el valor de los cash points
+		if (!.@valor[0]) mes "El usuario no tiene Cash Points en su cuenta."; // Si no tiene Cash Points
+		else mes "El usuario tiene ^FF0000" +.@valor[0] +"^000000 Cash Points en su cuenta."; // Si tiene Cash Points
+	} // End if
+	close;
+} // End if
+mes .@nombre$;
+mes "Ahora introduce la cantidad de cash points: ";
+next;
+input .@cantidad, -1000, 1000; // Debug no tocar
+if (.@cantidad < 1 || .@cantidad > 1000) { // Definir la cantidad máxima por uso
+	mes .@nombre$;
+	mes "Lo siento pero la cantidad ingresada no es válido, debe ser un número positivo, y no mayor que 60, para evitar abusos.";
+	close;
+} // End if
+if (isloggedin(.@idcuenta[0])) { // Si está Online
+	// Guardamos la ID del antiguo ID
+	set .@gm$, strcharinfo(0);
+	set .@id, getcharid(3);
+	detachrid;
+	// Adjuntamos al user que recibirá los cash points
+	attachrid(.@idcuenta[0]);
+	set .@cash, #CASHPOINTS; // Guardamos cuantos cash points tiene actualmente
+	if (getarg(0) == 1) {
+		set #CASHPOINTS, #CASHPOINTS + .@cantidad; // Añadimos los cash points, ya se encarga el emulador
+		dispbottom "El administrador [" + .@gm$ +"] te ha añadido: " +.@cantidad +" cash points en tu cuenta, balance actual: " +#CASHPOINTS; // Notificador Online
+	} else if (getarg(0) == 2) {
+		if (.@cash <= 0) {
+			detachrid;
+			attachrid(.@id);
+			mes .@nombre$;
+			mes "Lo siento pero no puedes quitar Cash Points porque el usuario no tiene Cash Points.";
+			close;
+		} else if (.@cash - .@cantidad < 0) {
+			detachrid;
+			attachrid(.@id);
+			mes .@nombre$;
+			mes "Lo siento pero no puedes quitar Cash Points porque se queda en números negativos, sólo puedes quitar ^FF0000" +.@cash +"^000000 cash points.";
+			close;
+		} // End if
+		set #CASHPOINTS, #CASHPOINTS - .@cantidad; // Quitamos cash points, ya se encarga el emulador
+		dispbottom "El administrador [" + .@gm$ +"] te ha quitado: " +.@cantidad +" cash points en tu cuenta, balance actual: " +#CASHPOINTS; // Notificador Online
+		set .@accion, 1; // Marcamos como que hemos quitado cash
+	} // End if
+	detachrid;
+	attachrid(.@id);
+} else { // Si no está Online
+	query_sql "SELECT `str` FROM global_reg_value WHERE account_id = " +.@idcuenta[0], .@array$[0]; // Comprobamos si no tiene cash points
+	if (.@array$[0] != "#CASHPOINTS") { // Es que no existe, devuelve campo vacío
+		if (getarg(0) == 1) {
+			query_sql "INSERT INTO `global_reg_value` (`char_id`,`str`,`value`,`type`,`account_id`) VALUES ('0','#CASHPOINTS','" +.@cantidad +"','2','" +.@idcuenta[0] +"')"; // Creamos los cash points SQL
+		} else {
+			mes .@nombre$;
+			mes "No puedes quitar Cash Points porque el usuario no tiene Cash Points.";
+			close;
+		} // End if
+	} else { // Ya existe valor
+		if (getarg(0) == 1) {
+			query_sql "UPDATE global_reg_value SET `value` = `value` + '" +.@cantidad +"' WHERE `str` = '#CASHPOINTS' and account_id = '" +.@idcuenta[0] +"'"; // Actualizamos los cash points SQL
+		} else if (getarg(0) == 2) {
+			query_sql "SELECT `value` FROM global_reg_value WHERE `str` = '#CASHPOINTS' and account_id = " +.@idcuenta[0], .@valor[0]; // Capturamos el valor de los cash points
+			mes .@nombre$;
+			if (.@valor[0] <= 0) {
+				mes "Lo siento pero no puedes quitar Cash Points porque el usuario no tiene Cash Points.";
+				close;
+			} else if (.@valor[0] - .@cantidad < 0) {
+				mes "Lo siento pero no puedes quitar Cash Points porque se queda en números negativos, sólo puedes quitar ^FF0000" +.@valor[0] +"^000000 cash points.";
+				close;
+			} // End if
+			query_sql "UPDATE global_reg_value SET `value` = `value` - '" +.@cantidad +"' WHERE `str` = '#CASHPOINTS' and account_id = '" +.@idcuenta[0] +"'";
+			set .@accion, 1; // Marcamos como que hemos quitado cash
+		} // End if
+	} // End if
+} // End if
+// Guardamos LOGs
+if (!.@accion) logmes "El usuario: " +strcharinfo(0) +" con account id: " +getcharid(3) +" ha añadido " +.@cantidad +" Cash Points a la account ID: " +.@idcuenta[0];
+else logmes "El usuario: " +strcharinfo(0) +" con account id: " +getcharid(3) +" ha quitado " +.@cantidad +" Cash Points a la account ID: " +.@idcuenta[0];
+mes "Ya se han enviado los cash points correctamente, el usuario al loguearse recibirá una notificación, gracias por utilizar este servicio.";
+return;
+} // End function

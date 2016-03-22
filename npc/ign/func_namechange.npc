@@ -1,0 +1,58 @@
+function	script	C_NameChange	{
+	set .@char_name_option, 1;
+	set .@char_name_letters$, "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890,*-.[]()?¨ñÑ~-^";
+	message strcharinfo(0),"Coloca el nombre que deseas:";
+	input .@name$;
+
+	if (getstrlen(.@name$)<4) {
+		message strcharinfo(0),"Tu nombre debe de tener^FF0000 4^000000 letras de longitud.";
+		getitem 12790,1;
+		close;
+	} else if (getstrlen(.@name$)>24) {
+		message strcharinfo(0),"Tu nombre no puede tener más de ^FF0000 24^000000 letras.";
+		getitem 12790,1;
+		close;
+	}
+	if (.@char_name_option == 1) { 
+		for (set .@i,0; .@i<getstrlen(.@name$); set .@i,.@i+1) {
+			if (!compare(.@char_name_letters$, charat(.@name$,.@i))) {
+				message strcharinfo(0),"Caracter inválido: " + charat(.@name$,.@i);
+				close;
+			}
+		}
+	} else if (.@char_name_option == 2) {
+		for (set .@i,0; .@i<getstrlen(.@name$); set .@i,.@i+1) {
+			if (compare(.@char_name_letters$, charat(.@name$,.@i))) {
+				message strcharinfo(0),"Caracter inválido: " + charat(.@name$,.@i);
+				close;
+			}
+		}
+	}
+	mes "<^5533ffCambio de Nombre^000000>";
+	mes strcharinfo(0)+" -->^0000FF "+.@name$+"^000000  ?";
+	mes "^FF0000¡Después de confirmarlo serás hechado del servidor para cambiar tu nombre!^000000";
+	if(select("Sí, cambiar mi nombre:No gracias")==2) close;
+	
+	if (getcharid(1)) {
+		message strcharinfo(0),"Sal de tu grupo antes de cambiar de nombre.";
+		getitem 12790,1;
+		close;
+	} else if (getcharid(2)) {
+		message strcharinfo(0),"Sal de tu gremio antes de cambiar de nombre.";
+		getitem 12790,1;
+		close;
+	}
+	query_sql "SELECT COUNT(char_id) FROM `char` WHERE `name`='"+escape_sql(.@name$)+"'", .@name_exists;
+	if (.@name_exists) {
+		message strcharinfo(0),"Nombre inválido: ya existe";
+		getitem 12790,1;
+		close;
+	}
+	set .@char_id, getcharid(0);
+	set .@acc_id, getcharid(3);
+	query_sql("INSERT INTO `char_namechange` (`char_id`, `account_id`, `last_name`, `new_name`) VALUES ("+.@char_id+","+.@acc_id+",'"+strcharinfo(0)+"','"+escape_sql(.@name$)+"')");
+	atcommand "@kick "+strcharinfo(0);
+	sleep 500;
+	query_sql "UPDATE `char` SET `name`='"+escape_sql(.@name$)+"' WHERE char_id="+.@char_id;
+	end;
+}

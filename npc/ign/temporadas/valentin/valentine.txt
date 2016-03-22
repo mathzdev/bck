@@ -1,0 +1,74 @@
+prontera,180,217,3	script	Máquina de Valentin::MDV	563,{
+mes "[^ff0000Máquina de Valentin^000000]";
+mes "Durante la temporada de San Valentin podras recibir distintas cartas azules con letras impresas, si adivinas distintas palabras y las colocas, te dare un gran premio.";
+next;
+mes "[^ff0000Máquina de Valentin^000000]";
+mes "Cabe recalcar que algunas palabras son en ingles y otras en español.";
+next;
+set .@turn,0;
+L_sel:
+setarray .@id[1],6011,6012,6013,6015,6016,6017,6018,6019,7461,7462,7463,7464,7465,7466,7467,7468,7469,7470,7471,7598,7599,7600,7601,7602;
+setarray .@letra$[1],"B","C","J","M","Q","T","V","Z","A","E","F","H","L","N","O","P","U","W","Y","I","D","K","S","R";
+next;
+	set .@menu$,"";
+	for(set .@i,1;.@i<=24;set .@i,.@i+1) {
+		set .@menu$,.@menu$+(countitem(.@id[.@i]) ? "^5533ff":"^777777")+getitemname(.@id[.@i])+"^000000";
+		set .@menu$,.@menu$+":";
+	}
+	set .@carta,select(.@menu$);
+	mes "[^ff0000Máquina de Valentin^000000]";
+	if(countitem(.@id[.@carta]) < 1) {
+		mes "No tienes esta carta, solo usa cartas que poseas.";
+		close;
+	}
+mes "Has seleccionado la:";
+mes "^0000ff"+getitemname(.@id[.@carta])+"^000000";
+set .@turn,.@turn + 1;
+setarray .@sel$[.@turn],.@letra$[.@carta];
+sleep2 1000;
+mes "¿Seleccionar otra carta?";
+next;
+	if(select("Seleccionar otra","Probar suerte") == 1)
+		goto L_sel;
+	for(set .@i,1;.@i<=.@turn;set .@i,.@i+1)
+		set .@palabra$,.@palabra$+.@sel$[.@i];
+	if(.@palabra$ == "LOVE") set .@rew,1;
+	else if(.@palabra$ == "VALENTINE") set .@rew,2;
+	else if(.@palabra$ == "AMOR") set .@rew,3;
+	else if(.@palabra$ == "BOYFRIEND") set .@rew,4;
+	else if(.@palabra$ == "HONEY") set .@rew,5;
+	else if(.@palabra$ == "MARRY") set .@rew,6;
+	else if(.@palabra$ == "VIDA") set .@rew,8;
+	else set .@rew,7;
+	switch (.@rew) {
+		case 1: delitem 7465,1; delitem 7467,1; delitem 6018,1; delitem 7462,1; getexp 300000,100000; set .@rew$,"Experiencia"; break;
+		case 2: delitem 6018,1; delitem 7461,1; delitem 7465,1; delitem 7462,1; delitem 7466,1; delitem 6017,1; delitem 7598,1; delitem 7466,1; delitem 7462,1; set #CASHPOINTS,#CASHPOINTS+5; set .@rew$,"iCash"; break;
+		case 3: delitem 7461,1; delitem 6015,1; delitem 7467,1; delitem 7602,1; getitem 671,10; set .@rew$,"Gold Coin"; break;
+		case 4: delitem 6011,1; delitem 7467,1; delitem 7471,1; delitem 7463,1; delitem 7602,1; delitem 7598,1; delitem 7472,1; delitem 7466,1; getitem 7711,20; set .@rew$,"Event Ticket"; break;
+		case 5: delitem 7464,1; delitem 7467,1; delitem 7466,1; delitem 7462,1; delitem 7471,1; getitem 7859,50; set .@rew$,"Game Ticket"; break;
+		case 7: set .@rew$,"Nada, jajaja"; break;
+		case 8: delitem 6018,1; delitem 7598,1; delitem 7599,1; delitem 7461,1; 
+			if(val == 1) { getexp 300000,200000; set .@rew$,"Experiencia"; break; }
+			getitem 5393,1; set .@rew$,"Valentine's Hat"; set val,1; break;
+		case 6:
+			delitem 6015,1; delitem 7461,1; delitem 7602,2; delitem 7471,1;
+			switch (alice) {
+				case 1:
+					getexp 300000,100000; set .@rew$,"Experiencia"; break;
+				default:
+					getitem 5137,1; set .@rew$,"Alice Doll"; set alice,1; break;
+			}
+	}
+	mes "[^ff0000Máquina de Valentin^000000]";
+	mes "Felicidades, has ganado "+.@rew$;
+	mes "Sigue coleccionando cartas.";
+	close;
+}
+-	script	#getcard	-1,{
+OnNPCKillEvent:
+OnPCKillEvent:
+	if(rand(1,200) < 198) end;
+	setarray .@id[1],6011,6012,6013,6015,6016,6017,6018,6019,7461,7462,7463,7464,7465,7466,7467,7468,7469,7470,7471,7598,7599,7600,7601,7602;
+	getitem .@id[rand(1,24)],1;
+	end;
+}

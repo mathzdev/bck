@@ -1,0 +1,95 @@
+-	script	MobKillBoleto	-1,{
+OnNPCKillEvent:
+	if(BaseLevel < 99)
+		end;
+	if(getmonsterinfo(killedrid,MOB_MVPEXP) > 0)
+		set @prob,100;
+	set @mblvl,BaseLevel-getmonsterinfo(killedrid,MOB_LV);
+	if ( @mblvl < 0 || @mblvl < 1)
+		set @prob,50;
+	else if ( @mblvl >= 10 && @mblvl < 30)
+		set @prob,40;
+	else if ( @mblvl >= 30 && @mblvl < 50)
+		set @prob,20;
+	else if ( @mblvl >= 50 && @mblvl < 100)
+		set @prob,10;
+	else if ( @mblvl > 100 )
+		set @prob,5;
+	if(rand(1,100) < @prob)
+		getitem 7360,1;
+	end;
+}
+prontera,1,1,4,7941	sshop	evento1	111,501:1
+prontera,142,179,4	script	Gato Héroe	555,{
+	if( BaseLevel < 99 ) {
+		mes "[ ^5533ffGato Héroe^000000 ]";
+		mes "Lo siento pero no tienes suficiente experiencia para cumplir con mis misiones.";
+		close2;
+		emotion e_sry;
+		end;
+	}
+	if( gatoh_npc == 1 ) {
+		mes "[ ^5533ffGato Héroe^000000 ]";
+		mes "Bienvenid"+(Sex?"o ^0000ff ":"a ^ff0000 ")+strcharinfo(0);
+		mes "¿En qué te puedo ayudar?";
+		next;
+		switch (select("Canjear boletos de evento:Explicación del evento:^777777Salir^000000")) {
+			case 1:
+				mes "[ ^5533ffGato Héroe^000000 ]";
+				mes "Bien, deja te abro la tienda.";
+				close2;
+				callshop "evento1",1;
+				end;
+			case 2:
+				goto L_explicacion;
+			case 3:
+				mes "[ ^5533ffGato Héroe^000000 ]";
+				mes "Vuelve cuando gustes.";
+				close2;
+				emotion e_no1;
+				end;
+		}
+	}
+	mes "[ ^5533ffGato Héroe^000000 ]";
+	mes "Bienvenid"+(Sex?"o ^0000ff ":"a ^ff0000 ")+strcharinfo(0);
+	mes "A mí me conocen como el Gato Héroe.";
+	next;
+L_explicacion:
+	mes "[ ^5533ffGato Héroe^000000 ]";
+	mes "Actualmente está en efecto el evento 'El Gato Héroe' donde tendrás la oportunidad de obtener boletos especiales e intercambiarlos por grandiosos objetos.";
+	next;
+	mes "[ ^5533ffGato Héroe^000000 ]";
+	mes "Estos boletos especiales aparecen en cualquier monstruo, pero es más probable de que salgan si tu nivel es más cercano al del monstruo.";
+	next;
+	mes "[ ^5533ffGato Héroe^000000 ]";
+	mes "Cuando hayas conseguido algunos boletos, vuelve conmigo y te enseñaré los premios que puedes obtener.";
+	close2;
+	set gatoh_npc,1;
+	end;
+OnInit:
+	setarray .@m0$[0], "G","a","t","o"," ","H","é","r","o","e";
+	setarray .@m1$[0], "O","b","t","é","n"," ","g","r","a","n","d","e","s"," ","p","r","e","m","i","o","s";
+	do {
+		if (.@i == 2) set .@i, 0;
+		for (set .@c, 0; .@c < getarraysize(getd(".@m" + .@i + "$")); set .@c, .@c + 1) {
+			set .@f$, .@f$ + getd(".@m" + .@i + "$[" + .@c + "]");
+			waitingroom .@f$,0;
+			sleep 350;
+			delwaitingroom;
+		}
+		for (set .@c, 0; .@c < 6; set .@c, .@c + 1) {
+			waitingroom "",0;
+			sleep 250;
+			delwaitingroom;
+			waitingroom .@f$,0;
+			sleep 250;
+			delwaitingroom;
+		}
+		waitingroom .@f$,0;
+		sleep 3000;
+		set .@f$, "";
+		delwaitingroom;
+		set .@i, .@i + 1;
+	} while(1);
+end;
+}

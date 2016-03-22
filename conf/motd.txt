@@ -1,2 +1,8 @@
 // Internal default is limited to 128 lines.  If you need more, you will need to modify the MOTD_LINE_SIZE definition in pc.c
-Welcome to rAthena! Enjoy! Please report any bugs you find.
+¡Bienvenidos a IGN Ragnarok Online!
+Reporta en el Foro todo problema que encuentres.
+
+Recuerda votar por el servidor.
+
+Foro: http://www.ign.do
+Control Panel: http://www.ign.do/ragnarok

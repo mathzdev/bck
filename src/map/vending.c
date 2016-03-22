@@ -13,6 +13,7 @@
 #include "vending.h"
 #include "pc.h"
 #include "buyingstore.h" // struct s_autotrade_entry, struct s_autotrader
+#include "achievement.h"
 
 #include <stdlib.h> // atoi
 
@@ -194,6 +195,7 @@ void vending_purchasereq(struct map_session_data* sd, int aid, int uid, const ui
 	if( battle_config.vending_tax )
 		z -= z * (battle_config.vending_tax/10000.);
 	pc_getzeny(vsd, (int)z, LOG_TYPE_VENDING, sd);
+	achievement_validate_zeny(vsd,ATZ_GET_VENDING,(int)z);
 
 	for( i = 0; i < count; i++ ) {
 		short amount = *(uint16*)(data + 4*i + 0);

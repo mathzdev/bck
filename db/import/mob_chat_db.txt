@@ -1,0 +1,12 @@
+// Monster Chat Database
+//
+// Structure of Database:
+// Line_ID#Color_Code#Dialog
+// Monster Chat Database
+//
+// Structure of Database:
+// Line_ID#Color_Code#Dialog
+// Spicy Dragon
+41#0xFF0000#Rawwrrr....!! Groaawwrr...!!
+42#0xFF0000#You killed my sons, you must die... !! Roaarr...!!
+43#0xFF0000#I am the Lord of Dragons..!!! Prepare to met the terror of death..!!!

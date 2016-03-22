@@ -1,0 +1,49 @@
+-	script	staffmail	-1,{
+OnCommand:
+	message strcharinfo(0),"@staffmail está en proceso.";
+	message strcharinfo(0),"Coloque el nombre de usuario";
+	input .@dest$;
+	set .@option,atoi(.@atcmd_parameters$[1]);
+	if(.@dest$ == "" || .@option < 1) {
+		message strcharinfo(0),"@staffmail ha fallado.";
+		message strcharinfo(0),"Por favor use el siguiente formato:";
+		message strcharinfo(0),"@staffmail <Input User> <Opción> <Item> <Cantidad> <Zeny>";
+		message strcharinfo(0),"Opciones: 1 - Ranker, 2 - Especial";
+		end;
+	}
+	setarray .@p[0],.@atcmd_parameters$[2],.@atcmd_parameters$[3],.@atcmd_parameters$[4];
+	query_sql("SELECT COUNT(*) FROM `char` WHERE `name` = '"+.@dest$+"'"),.@n;
+	if(.@n < 1) {
+		message strcharinfo(0),"@staffmail ha fallado.";
+		message strcharinfo(0),"No se ha encontrado al usuario llamado "+.@dest$;
+		end;
+	}
+	query_sql("SELECT `char_id` FROM `char` WHERE `name` = '"+.@dest$+"'"),.@cid;
+	if(!.@cid) {
+		message strcharinfo(0),"@staffmail ha fallado.";
+		message strcharinfo(0),"No se ha podido recuperar la ID del char.";
+		end;
+	}
+	switch(.@option) {
+		case 1:
+			message strcharinfo(0),"Por favor escriba con cuidado el nombre del Ranking.";
+			input .@rank$;
+			query_sql("INSERT INTO `mail` (send_name,dest_id,dest_name,title,message,nameid,amount,identify,zeny,time) VALUES ('Ranker',"+.@cid+",'"+.@dest$+"','** Recompenza "+.@rank$+"','¿Qué tal?,% % ¡Felicidades!% Haz ocupado el primer puesto en la clasificación: "+.@rank$+".% % % % % [ Tu recompenza está adjunta. ]',"+.@p[0]+","+.@p[1]+",1,"+.@p[2]+",UNIX_TIMESTAMP(NOW()))");
+			message .@dest$,"¡Te ha llegado un mail, reloguea para recibirlo!";
+			query_sql("UPDATE `mail` SET `message` = REPLACE(message,'%',CHAR(13)) WHERE `send_name` = 'Ranker'");
+			message strcharinfo(0),"¡El mail se ha enviado correctamente a "+.@dest$+"!";
+			end;
+		case 2:
+			query_sql("INSERT INTO `mail` (send_name,dest_id,dest_name,title,message,nameid,amount,identify,zeny,time) VALUES ('Staff Mail',"+.@cid+",'"+.@dest$+"','** Staff IGN RO','¿Qué tal?,% % ¡Haz recibido un mensaje del Staff!% Si no sabes por qué haz recibido éste mensaje consúltalo con un GM.% % % % % [ Tu entrega está adjunta. ]',"+.@p[0]+","+.@p[1]+",1,"+.@p[2]+",UNIX_TIMESTAMP(NOW()))");
+			message .@dest$,"¡Te ha llegado un mail, reloguea para recibirlo!";
+			query_sql("UPDATE `mail` SET `message` = REPLACE(message,'%',CHAR(13)) WHERE `send_name` = 'Staff Mail'");
+			message strcharinfo(0),"¡El mail se ha enviado correctamente a "+.@dest$+"!";
+			end;
+		default:
+			message strcharinfo(0),"@staffmail ha fallado.";
+			end;
+	}
+OnInit:
+	bindatcmd "staffmail","staffmail::OnCommand",80,80;
+	end;
+}

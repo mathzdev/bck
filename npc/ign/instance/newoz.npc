@@ -1,0 +1,20 @@
+moc_para01,33,172,5	script	Newoz::ringnew	625,{
+	if(countitem(6719) < 1) {
+		mes "[Newoz]";
+		mes "Las sonatas del mundo resuenan en un piano.";
+		close;
+	}
+	mes "[Newoz]";
+	mes "Veo que haz venido, muchas gracias.";
+	if(select("Canjear Jitterbug's Tooth","^777777Salir^000000")==2) {
+		mes "Vuelve cuando gustes.";
+		close2;
+		emotion e_no1;
+		end;
+	}
+	mes "De acuerdo, te abriré la tienda.";
+	close2;
+	callshop "jittershop",1;
+	end;
+}
+-	itemshop	jittershop	136,6719:0,34006:50,2979:50,2980:50,2983:50,2984:50,2985:50,2986:50,2987:50,2988:50,2989:50,2990:50,2991:50,2992:50

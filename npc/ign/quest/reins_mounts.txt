@@ -1,0 +1,294 @@
+//======================================================================//                                 
+// ,--.  ,--.        ,--.               
+// |  '--'  | ,--,--.`--',-----.,--.,--.
+// |  .--.  |' ,-.  |,--.`-.  / |  ||  |
+// |  |  |  |\ '-'  ||  | /  `-.'  ''  '
+// `--'  `--' `--`--'`--'`-----' `----' 
+//======================================================================//
+//	Script:
+//		» Quest Reins of Mount «
+//		
+//	Creation:
+//		» Haizu «
+//		
+//	Description:
+//		Una pequeña quest, Basada en una Shaman y su Camello
+//		Legendario.
+//
+//======================================================================//.
+//	Version:
+//		» 1.1 « Haizu [FaceBeta]
+//	Version:
+//		» 1.2 « Sero [Modificada la forma de asesinar del camello y añadidos broadcast]
+//
+//	Version:
+//		» 1.3 « Voyage [Agregada la forma de asesinato con efectos y el cuntin. Proximamente animado]
+//
+//	Coments:
+//		Diseñado para prontera RO.
+//======================================================================//
+
+
+//------------------------------//
+// Inicio de Quest
+// NPC: Ancianidad o.o (?)
+//------------------------------//
+
+vip,48,60,4	script	Ancianidad	765,{
+set .@name$,"[Ancianidad]";
+
+	if(#RShaman == 1) {
+		mes .@name$;
+		mes "Ya no tengo mas nada que decirte...";
+		close;
+
+	}
+
+	if(#RCamello == 1) {
+		mes .@name$;
+		mes "Vaya... veo que lo has conseguido... comenzare la preparacion...";
+		next;
+		mes "^00B0FF** HOOOOOO!... **^000000";
+		specialeffect 220;
+		getitem 14345,1;
+		next;
+		mes .@name$;
+		mes "Aqui tienes, pero pone atencion a lo que te dire... ";
+		next;
+		mes .@name$;
+		mes "En la cima de la Montaña de Comodo, encontraras a una vieja shaman... ";
+		mes "Entregale este objeto junto a los cabellos del camello para que ella te cree las Reins of Mounts.";
+		next;
+		mes "No tengo nada mas que decirte... te deseo suerte en tu viaje.";
+		set #RShaman, 1;
+		close;
+
+	}
+	
+	if (#RAnciano == 1) {
+		mes .@name$;
+		mes "Que no piensa ir por el camello...";
+		mes "Vete ya!...";
+		close;
+
+	}
+
+mes .@name$;
+mes "Buen dia Jovencito...";
+mes "Es raro que alguien como tu se acerce a un viejo.";
+mes "A que vienes realmente...";
+next;
+mes "["+strcharinfo(0)+"]";
+mes "Amm... Estem... Yo... queria preguntarle acerca de...";
+next;
+	switch(select("El Camello Legendario!:No nada, ya me voy!")){
+	
+	case 1:
+		mes .@name$;
+		mes "AAAh! ese condenado camello... siempre se pierde !!!!";
+		mes "cof cof cof !!!! ~";
+		next;
+		mes .@name$;
+		mes "Perdon mijito... te contare una pequeña historia...";
+		next;
+		mes .@name$;
+		mes "Hace muchos años... en mis tiempos de juventud, existia una persona que diseñaba unas riendas especiales la cuales servian para montar, y domar algunos animales legendarios.";
+		next;
+		mes .@name$;
+		mes "Estos se hacen con los cabellos de aquel Camello, que junto a otros materiales especiales... se los puedes llevar a esa shaman para que te cree este preciado material.";
+		next;
+		mes .@name$;
+		mes "Lo malo es que... este camello se ha vuelto con los años mas agil y fuerte, y yo ya no tengo la misma vitalidad que antes para ir en su busqueda...";
+		next;
+		mes .@name$;
+		mes "¿Irias a buscarlo tu por mi?...";
+		next;
+			if(select("Claro! le Ayudare!:No creo en fantasias...") == 2) {
+				mes .@name$;
+				mes "Haya tu, si me quieres creer... despues no te vayas a arrepentir...";
+				mes "cof cof cof !!!! ~";
+				close;
+
+			} else {
+				mes .@name$;
+				mes "Veo que te interesa... bueno... a ese condenado camello le gusta los desiertos con agua... ";
+				mes "Hay uno en especial que le encanta, que se encuentra si no me falla la memoria en Sograt Deset, en el Field 11 de Morroc. ";
+				next;
+				mes .@name$;
+				mes "Cuando lo encuentres intenta de tener cuidado porque no sera facil arrancarle unos cuantos cabellos suyos, podrias hasta morir en el intento...";
+				next;
+				mes .@name$;
+				mes "Asi que, ve con cautela... cuando logres quitarle un poco de su cabello vienes a mi para hacerte el talisman...";
+				mes "Te deseo suerte, la necesitara...";
+				set #RAnciano, 1;
+				close;
+			
+			}
+
+	case 2:
+		mes .@name$;
+		mes "ESPERA JO!... ash, la juventud de hoy en dia no tienen paciencia con los ancianos...";
+		close;
+	
+	}
+OnPCLoadMapEvent:
+	if((strcharinfo(3)=="vip") && (#RShaman < 1))
+		showevent Q_TYPE_QUEST,1;
+	end;
+}
+
+
+//------------------------------------------//
+// A mitad de la Quest
+// NPC: Artorth, El Camello Legendario(?)
+//------------------------------------------//
+moc_fild11	mapflag	nosave	SavePoint
+moc_fild11	mapflag	nomemo
+moc_fild11	mapflag	noteleport
+moc_fild11	mapflag	nowarp
+moc_fild11	mapflag	nowarpto
+moc_fild11,208,213,5	script	Arthoth	938,{
+OnTouch:
+if(#RAnciano == 1 && #RCamello < 1) {
+	set porno, rand(1,35);
+	if(porno >= 1 && porno <= 2 ){
+		announce "El jugador "+strcharinfo(0)+" le ha logrado arrancar parte de su pelo al camello legendario.",bc_yellow|bc_all;
+		npctalk "Auch! eso dolio...";
+		emotion e_sob;
+		getitem 7878,1;
+		set #RCamello, 1;
+		end;
+	}
+	if(porno >= 3 && porno <= 4 ){
+		mapannounce "moc_fild11","El camello legendario se para en dos patas, mira fijamente a "+strcharinfo(0)+" y le da un cachetazo con una ballena Azul. Pobre, !!Hay que recojerlo con una Pala!!",bc_blue;
+		npctalk "Juuum! no toques mi bello Pelaje...";
+		sleep2 500;
+		specialeffect2 904;
+		sleep2 500;
+		specialeffect2 890;
+		sleep2 300;
+		specialeffect2 109;
+	       specialeffect2 109;
+		specialeffect2 109;
+		sleep2 1000;
+		atcommand "@kill "+strcharinfo(0);
+		sleep2 400;
+		cutin "Labo1",4;
+		sleep2 5000;
+		cutin "",255;
+		end;
+	}
+	if(porno >= 5 && porno <= 7 ){
+		mapannounce "moc_fild11","El Camello legendario le ha dado una patada legendaria a "+strcharinfo(0)+" y lo ha mandado a algun lugar de prontera",bc_blue;
+		npctalk "Vete a volar! no me jodas...";
+		warp "prontera",0,0;
+		end;
+	}
+	if(porno >= 8 && porno <= 13 ){
+			mapannounce "moc_fild11","El Camello legendario se para en dos patas, mira fijamente a "+strcharinfo(0)+" y le da un cachetaso con una ballena Azul. Pobre, !!Hay que recojerlo con una Pala!!",bc_blue;
+		npctalk "Juuum! no toques mi bello Pelaje...";
+		sleep2 500;
+		specialeffect2 904;
+		sleep2 500;
+		specialeffect2 890;
+		sleep2 300;
+		specialeffect2 109;
+	       specialeffect2 109;
+		specialeffect2 109;
+		sleep2 1000;
+		atcommand "@kill "+strcharinfo(0);
+		sleep2 400;
+		cutin "Labo1",4;
+		sleep2 5000;
+		cutin "",255;
+		end;
+	}	
+	if(porno >= 14 && porno <= 16 ){
+		mapannounce "moc_fild11","El Camello legendario le ha dado una patada legendaria a "+strcharinfo(0)+" y lo mando a algun lugar desconocido.",bc_blue;
+		npctalk "Te lo voy a deletrear, N-O-M-E-J-O-D-A-S...";
+		warp "thor_v03",0,0;
+		end;
+	}
+	if(porno >= 17 && porno <= 19 ){
+		mapannounce "moc_fild11","El Camello legendario le ha dado una patada legendaria a "+strcharinfo(0)+" y lo mando a algun lugar desconocido.",bc_blue;		npctalk "Te mandaré al mundo de los chocolates de una patada";
+		warp "guild_vs3",0,0;
+		end;
+	}	
+	if(porno >= 20 && porno <= 22 ){
+		mapannounce "moc_fild11","El Camello legendario le ha dado una patada legendaria a "+strcharinfo(0)+" y lo mando a algun lugar desconocido.",bc_blue;		npctalk "Me rio en tu cara Wajajajajaj!!!.";
+		warp "guild_vs3",0,0;
+		end;
+	}
+	if(porno >= 23 && porno <= 25 ){
+		mapannounce "moc_fild11","El Camello legendario le ha dado una patada legendaria a "+strcharinfo(0)+" y lo mando a algun lugar de prontera.",bc_blue;		npctalk "Vete a volar! no me jodas...";
+		warp "prontera",0,0;
+		end;
+	}
+	if(porno >= 26 && porno <= 35 ){
+		mapannounce "moc_fild11","El Camello legendario se pone en posicion de Yoga, medita por tres segundos mientras explota a "+strcharinfo(0)+" con su poder pirotecnico mental.",bc_blue;
+		npctalk "Te lo habeis ganado...";
+		atcommand "@kill "+strcharinfo(0);
+		end;
+	}
+} else {
+	mes "No deseo hablar mas con tigo";
+	mes "No vuelvas!";
+	atcommand "@kill "+strcharinfo(0);
+	close;	
+}
+}
+
+//------------------------------------------//
+// Final de la Quest
+// NPC: Areli, La Shaman
+//------------------------------------------//
+
+comodo,177,228,4	script	Areli	840,{
+set .@name$,"[Areli]";
+
+	if(#RShaman == 0) {
+		mes .@name$;
+		mes "Este lugar es tan relajante, esas luces en el cielo...";
+		mes "Es un buen lugar para meditar...";
+		close;
+
+	}
+
+
+mes .@name$;
+mes "Hola forastero, veo que traes la escencia del anciano Thor, entonces supongo que vienes por las Reins of Mount...";
+next;
+mes .@name$;
+mes "Y tienes los materiales?...";
+next;
+mes "["+strcharinfo(0)+"]";
+mes "Si, aqui los traigo! el Animal Scroll y los Cabellos del Camello Legendario...";
+next;
+	if((countitem(14345) >= 1) && (countitem(7878) >= 1)) {
+		mes .@name$;
+		mes "Entonces... procedo a darte lo que has venido a buscar...";
+		mes "Relajate y Abre tu mente...";
+		next;
+		mes "^00B0FF** IIIIAAAAAHHHH!... **^000000";
+		specialeffect2 71;
+		sleep2 500;
+		specialeffect2 402;
+		sleep2 500;
+		specialeffect2 6;
+		sleep2 200;
+		specialeffect2 304;
+		delitem 14345,1;
+		delitem 7878,1;
+		getitem 12622,1;
+		achieve 22;
+		next;
+		mes "Aqui tienes disfrutala! y cuidala bien...";
+		mes "Que los Espiritus del Mas alla te acompañen en tu aventura...";
+		set #RAnciano, 0;
+		set #RCamello, 0;
+		set #RShaman, 1;
+		close;
+
+	}
+
+}

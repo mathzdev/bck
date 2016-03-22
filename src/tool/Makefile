@@ -1,6 +1,6 @@
 
 COMMON_OBJ = minicore.o malloc.o showmsg.o strlib.o utils.o des.o grfio.o
-COMMON_DIR_OBJ = $(COMMON_OBJ:%=../common/obj_all/%)
+COMMON_DIR_OBJ = $(COMMON_OBJ:%=../common/obj/%)
 COMMON_H = $(shell ls ../common/*.h)
 COMMON_INCLUDE = -I../common/
 
@@ -21,7 +21,7 @@ all: mapcache
 
 mapcache: obj_all $(MAPCACHE_OBJ) $(COMMON_DIR_OBJ) $(LIBCONFIG_OBJ)
 	@echo "	LD	$@"
-	@gcc  -flto -L/usr/lib -o ../../mapcache $(MAPCACHE_OBJ) $(COMMON_DIR_OBJ) $(LIBCONFIG_AR) -lpcre -lpthread -lm -lz  -ldl
+	@gcc  -L/usr/lib -o ../../mapcache $(MAPCACHE_OBJ) $(COMMON_DIR_OBJ) $(LIBCONFIG_AR) -lpthread -lm -lz  -ldl
 
 clean:
 	@echo "	CLEAN	tool"
@@ -41,7 +41,7 @@ obj_all:
 
 obj_all/%.o: %.c $(COMMON_H) $(OTHER_H) $(LIBCONFIG_H)
 	@echo "	CC	$<"
-	@gcc -g -O2 -pipe -ffast-math -Wall -flto -Wno-unused-parameter -Wno-maybe-uninitialized -Wno-clobbered -Wempty-body -Wno-switch -Wno-missing-field-initializers -Wshadow -fPIC -fno-strict-aliasing $(COMMON_INCLUDE) $(LIBCONFIG_INCLUDE)  -DMAXCONN=16384 -I../common -DHAS_TLS -DHAVE_SETRLIMIT -DHAVE_STRNLEN  -I/usr/include -DHAVE_MONOTONIC_CLOCK -c $(OUTPUT_OPTION) $<
+	@gcc -flto -fuse-linker-plugin -g -O2 -pipe -ffast-math -Wall -Wno-unused-parameter -Wno-maybe-uninitialized -Wno-clobbered -Wempty-body -Wno-switch -Wno-missing-field-initializers -Wshadow -fPIC -fno-strict-aliasing $(COMMON_INCLUDE) $(LIBCONFIG_INCLUDE)  -DMAXCONN=16384 -I../common -DHAS_TLS -DHAVE_SETRLIMIT -DHAVE_STRNLEN  -I/usr/include -DHAVE_MONOTONIC_CLOCK -c $(OUTPUT_OPTION) $<
 
 # missing common object files
 $(COMMON_DIR_OBJ):

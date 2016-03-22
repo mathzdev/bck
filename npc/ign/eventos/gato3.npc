@@ -1,0 +1,197 @@
+prontera,151,197,4	script	Gato Gatuno	547,{
+mes "[^cc6600Gato Gatuno^000000]";
+mes "Tengo... tanto... sue... ZZzZzZ....";
+sleep2 1000;
+mes "ZzZZz... ZzZzzz..... . .. .";
+sleep2 1000;
+mes ". . . .";
+next;
+	if(gato == 3) {
+		if(gato_rq == 5) {
+			getexp 1000000,500000;
+			set gato_rq,0;
+			set gato,0;
+			set raton_n1,0;
+			set raton_n2,0;
+			set raton_n3,0;
+			set raton_n4,0;
+			set raton_n5,0;
+			set gato_q,0;
+			set @hat,rand(1,5);
+				switch (@hat) {
+					case 1: getitem 5738,1; break;
+					case 2: getitem 5486,1; break;
+					case 3:	getitem 5507,1; break;
+					case 4: getitem 18525,1; break;
+					case 5: getitem 5762,1; break;
+				}
+			announce "[ "+strcharinfo(0)+" ] ha completado la mision del Gato Gatuno.",0;
+			mes "[^cc6600Gato Gatuno^000000]";
+			mes "Largate y dejame dormir...";
+			close;
+		}
+		if(gato_q == 2) {
+		mes "[^cc6600Gato Gatuno^000000]";
+		mes "Recuerda que los ratonsitos azules de los que te hablo no se mueven, buscalos bien, solo quiero cinco.";
+		close;
+		}
+		if(gato_q == 1) {
+			if(countitem(539) < 300) {
+				mes "[^cc6600Gato Gatuno^000000]";
+				mes "Eso es muy poca comida, traeme "+(300-(countitem(539)))+" "+getitemname(539)+" mas.";
+				close;
+			}
+			mes "[^cc6600Gato Gatuno^000000]";
+			mes "Bien !";
+			mes "Pero aun no estoy satisfecho.";
+			next;
+			delitem 539,300;
+			set gato_q,2;
+			mes "[^cc6600Gato Gatuno^000000]";
+			mes "Quiero que cazes 10 ratonsitos azules que me contaron que habia en este continente.";
+			next;
+			mes "[^cc6600Gato Gatuno^000000]";
+			mes "Solo que dicen que estos ratonsitos ^5533ffno se mueven^000000, por lo cual son deliciosamente faciles de cazar.";
+			sleep2 2000;
+			next;
+			mes "[^cc6600Gato Gatuno^000000]";
+			mes "Ve a por ellos !";
+			close;
+		}
+		mes "[^cc6600Gato Gatuno^000000]";
+		mes "Como molestas... mira, te dare algo a cambio de que me dejes dormir.";
+		next;
+		mes "[^cc6600Gato Gatuno^000000]";
+		mes "Pero primero quiero que me des 100 Star Dust...";
+		next;
+		mes "[^cc6600Gato Gatuno^000000]";
+		mes "Broma... nada mas traeme aqui 300 Piece of Cake, tengo mucha hambre.";
+		set gato_q,1;
+		close;
+	}
+mes "[^cc6600Gato Gatuno^000000]";
+mes "¿Que quieres?";
+next;
+	switch (select("No se.:Maldito flojo:Sigue durmiendo...")) {
+		case 1:
+			mes "[^cc6600Gato Gatuno^000000]";
+			mes "Bruto.";
+			sleep2 2000;
+			mes "ZzZzz...";
+			set gato,gato+1;
+			close;
+		case 2:
+			mes "[^cc6600Gato Gatuno^000000]";
+			mes " . . . ";
+			sleep2 1000;
+			mes "... ZzzZZ...";
+			set gato,gato+1;
+			close;
+		case 3:
+			mes "[^cc6600Gato Gatuno^000000]";
+			mes "Bueno.";
+			set gato,gato+1;
+			close;
+	}
+OnInit:
+	setarray .@m0$[0], "G","a","t","o"," ","G","a","t","u","n","o";
+	setarray .@m1$[0], "C","o","m","e"," ","y"," ","d","u","e","r","m","e";
+	do {
+		if (.@i == 2) set .@i, 0;
+		for (set .@c, 0; .@c < getarraysize(getd(".@m" + .@i + "$")); set .@c, .@c + 1) {
+			set .@f$, .@f$ + getd(".@m" + .@i + "$[" + .@c + "]");
+			waitingroom .@f$,0;
+			sleep 350;
+			delwaitingroom;
+		}
+		for (set .@c, 0; .@c < 6; set .@c, .@c + 1) {
+			waitingroom "",0;
+			sleep 250;
+			delwaitingroom;
+			waitingroom .@f$,0;
+			sleep 250;
+			delwaitingroom;
+		}
+		waitingroom .@f$,0;
+		sleep 3000;
+		set .@f$, "";
+		delwaitingroom;
+		set .@i, .@i + 1;
+	} while(1);
+end;
+}
+ma_fild01,113,85,4	script	Ratonsito Azul#01	1209,{
+	if(gato_q == 2) {
+		if(raton_n1 == 1) {
+			mes "Kiu ru kiu kiu !!";
+			close2;
+			dispbottom "Al parecer ya haz cazado a este ratonsito.";
+			end;
+		}
+		mes "Kiu kiu !!"; set gato_rq,gato_rq+1;
+		close2;
+		message strcharinfo(0),"Ratonsitos [ "+gato_rq+" / 5 ].";
+		set raton_n1,1;
+		end;
+	}
+}
+ecl_fild01,184,74,4	script	Ratonsito Azul#02	1209,{
+	if(gato_q == 2) {
+		if(raton_n2 == 1) {
+			mes "Kiu ru kiu kiu !!";
+			close2;
+			dispbottom "Al parecer ya haz cazado a este ratonsito.";
+			end;
+		}
+		mes "Kiu kiu !!"; set gato_rq,gato_rq+1;
+		close2;
+		message strcharinfo(0),"Ratonsitos [ "+gato_rq+" / 5 ].";
+		set raton_n2,1;
+		end;
+	}
+}
+prontera,183,263,4	script	Ratonsito Azul#03	1209,{
+	if(gato_q == 2) {
+		if(raton_n3 == 1) {
+			mes "Kiu ru kiu kiu !!";
+			close2;
+			dispbottom "Al parecer ya haz cazado a este ratonsito.";
+			end;
+		}
+		mes "Kiu kiu !!"; set gato_rq,gato_rq+1;
+		close2;
+		message strcharinfo(0),"Ratonsitos [ "+gato_rq+" / 5 ].";
+		set raton_n3,1;
+		end;
+	}
+}
+iz_dun01,229,86,4	script	Ratonsito Azul#04	1209,{
+	if(gato_q == 2) {
+		if(raton_n4 == 1) {
+			mes "Kiu ru kiu kiu !!";
+			close2;
+			dispbottom "Al parecer ya haz cazado a este ratonsito.";
+			end;
+		}
+		mes "Kiu kiu !!"; set gato_rq,gato_rq+1;
+		close2;
+		message strcharinfo(0),"Ratonsitos [ "+gato_rq+" / 5 ].";
+		set raton_n4,1;
+		end;
+	}
+}
+ecl_fild01,149,247,4	script	Ratonsito Azul#05	1209,{
+	if(gato_q == 2) {
+		if(raton_n5 == 1) {
+			mes "Kiu ru kiu kiu !!";
+			close2;
+			dispbottom "Al parecer ya haz cazado a este ratonsito.";
+			end;
+		}
+		mes "Kiu kiu !!"; set gato_rq,gato_rq+1;
+		close2;
+		message strcharinfo(0),"Ratonsitos [ "+gato_rq+" / 5 ].";
+		set raton_n5,1;
+		end;
+	}
+}

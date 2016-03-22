@@ -1,0 +1,493 @@
+-	script	PremioNewYear	-1,{
+OnPCBaseLvUpEvent:
+getmapxy(@mapa$,@x,@y,0);
+	if(@mapa$ == "ordeal_1-1" && BaseLevel >= 120 && evento_ny == 1) {
+		set $limite,$limite+1;
+		if($limite <= 21) {
+			mes "[^008800Manejador del Evento^000000]";
+			mes "Felicidades ^5533ff"+strcharinfo(0)+"^000000 eres el ganador ^ff0000No."+$limite+"^000000 del evento de año nuevo.";
+			getitem 9038,1;
+			sleep2 1000;
+			getitem 643,1;
+			sleep2 1000;
+			getitem 554,100;
+			sleep2 1000;
+			atcommand "@cash 100";
+			logmes strcharinfo(0)+" ha sido ganador del Evento de Año nuevo.";
+			getitem 7711,20;
+			set evento_ny,2;
+			mapannounce @mapa$,"Ha sido el ganador No. "+$limite+", Felicidades!",bc_map,0xFF6060;
+			close;
+		}
+		mes "[^008800Manejador del Evento^000000]";
+		mes "Lo siento pero has subido a nivel 120 en lugar ^ff0000No."+$limite+"^000000 y no has ganado nada.";
+		close;
+	}
+}
+ordeal_1-1,152,173,4	script	Letrero#01	857,{ callfunc "P_Letrero",1; }
+ordeal_1-1,167,164,4	script	Letrero#02	857,{ callfunc "P_Letrero",2; }
+ordeal_1-1,174,145,4	script	Letrero#03	857,{ callfunc "P_Letrero",3; }
+ordeal_1-1,164,130,4	script	Letrero#04	857,{ callfunc "P_Letrero",4; }
+ordeal_1-1,145,122,4	script	Letrero#05	857,{ callfunc "P_Letrero",5; }
+ordeal_1-1,135,131,4	script	Letrero#06	857,{ callfunc "P_Letrero",6; }
+ordeal_1-1,123,145,4	script	Letrero#07	857,{ callfunc "P_Letrero",7; }
+ordeal_1-1,128,165,4	script	Letrero#08	857,{ callfunc "P_Letrero",8; }
+function	script	P_Letrero	{
+mes "^ff0000Sala No."+getarg(0)+"^000000";
+mes " ";
+mes "Las salas contienen distintos monstruos dependiendo el nivel.";
+close;
+}
+ordeal_1-1,150,158,4	script	Manejador del Evento#newyear	582,{
+mes "[^008800Manejador del Evento^000000]";
+	if(evento_ny == 2) {
+		mes "¿Deseas salir de la sala?";
+		select("Ir a Prontera");
+		warp "prontera",150,180;
+		savepoint "prontera",150,180;
+		close;
+	}
+mes "Bienvenid"+(Sex?"o":"a")+" ^"+(Sex?"0000ff":"ff0000")+strcharinfo(0)+"^000000";
+mes "¿En que te puedo ayudar?";
+next;
+	if(evento_ny == 1) {
+		switch (select("Heal:Job Master:Platinum Skills:Rental:Tienda Basica")) {
+			case 1:
+				close2;
+				specialeffect2 313;
+				percentheal 100,100;
+				end;
+			case 2:
+				callfunc "P_JobMaster";
+			case 3:
+				callfunc "P_Platinum";
+			case 4:
+				callfunc "P_Rental";
+			case 5:
+				callshop "P_Tienda";
+		}
+	}
+	switch (select("Registrarse en el Evento:Informacion:^777777Salir^000000")) {
+		case 1:
+			if (BaseLevel > 1 || JobLevel > 1) {
+				mes "[^008800Manejador del Evento^000000]";
+				mes "Lo siento pero necesitas ser nivel 1/1.";
+				close2;
+				emotion e_sry;
+				end;
+			}
+			mes "[^008800Manejador del Evento^000000]";
+			mes "Por favor confirma el nombre de tu personaje en el siguiente cuadro de texto:";
+			next;
+			input @nombre$;
+			if(@nombre$ != strcharinfo(0)) {
+				mes "[^008800Manejador del Evento^000000]";
+				mes "Lo siento pero ese no es tu nombre.";
+				close;
+			}
+			set evento_ny,1;
+			savepoint "ordeal_1-1",150,150;
+			mes "[^008800Manejador del Evento^000000]";
+			mes "Te has registrado en el evento satisfactoriamente.";
+			next;
+			mes "[^008800Manejador del Evento^000000]";
+			mes "Vuelve a hablar conmigo y tendras acceso a distintos servicios.";
+			close;
+		case 2:
+			mes "[^008800Manejador del Evento^000000]";
+			mes "El sentido de este evento es que comiences con un personaje desde Novice 1/1 y lo subas hasta nivel 120.";
+			next;
+			mes "[^008800Manejador del Evento^000000]";
+			mes "En el instante que subas a level 120 se te otorgara tu premio siempre y cuando seas ^ff0000de los primeros 20 en serlo.^000000";
+			next;
+			mes "[^008800Manejador del Evento^000000]";
+			mes "En la sala se invocaran gran cantidad de mobs en el transcurso del evento, donde el GM a cargo ^5533ffGM Kael^000000 decidira que mobs tirar.";
+			next;
+			mes "[^008800Manejador del Evento^000000]";
+			mes "Cuando te hayas registrado conmigo tendras la posibilidad de suarme como Job Master, Healer, Kafra, Platinum NPC, Rental y tienda basica.";
+			next;
+			mes "[^008800Manejador del Evento^000000]";
+			mes "Solo se podra subir de nivel en esta sala y en ninguna otra.";
+			next;
+			mes "[^008800Manejador del Evento^000000]";
+			mes "Y como ultimo, ^ff0000NO ESTA PERMITIDO EL DOUBLE LOGIN.^000000";
+			sleep2 500;
+			mes " ";
+			mes "Este mensaje durara 6 segundos, que te quede clara la regla.";
+			sleep2 7000;
+			close;
+		case 3:
+			close;
+	}
+}
+-	shop	P_Tienda	-1,502:200,503:550,504:1200,506:40,645:800,656:1500,657:3000,533:999,611:40,601:60,602:300,717:600,610:4000,1065:100,1750:1,13200:1,13250:4,1212:-1,1252:-1,1702:-1,1901:-1,1960:-1,1610:-1,1807:-1,1118:-1,1108:-1,1403:-1,2103:-1
+function	script	P_JobMaster	{
+function Cambiar_Clase;
+function Ver_Sexo;
+	cutin "fly_trock",2;
+	mes "[^008800Manejador del Evento^000000]";
+	if (Class > 4049) {
+		mes "No hay mas profesiones a las que puedas cambiar.";
+		close2; cutin "",255; emotion e_no1; end;
+	}
+	if (checkfalcon() || checkcart() || checkriding() || ismounting()) {
+		mes "Por favor remueve tu ^5533ff"+((checkfalcon())?"Falcon":"")+((checkcart())?"Carro":"")+((checkriding())?"Peco Peco":"")+((ismounting())?"Montura":"")+"^000000 antes de cambiar de profesion.";
+		close2; cutin "",255; emotion e_sry; end;
+	}
+	if (SkillPoint) {
+		mes "Por favor utiliza todos tus puntos de skill antes de proceder.";
+		close2; cutin "",255; emotion e_sry; end;
+	}
+	set .@eac, eaclass();
+	set .@i,roclass(.@eac&EAJ_UPPERMASK);
+	if (.@i > 6 && .@i < 22) {
+		if (BaseLevel < 99 || JobLevel < 50) {
+			set .@blvl, 99-BaseLevel; set .@jlvl, 50-JobLevel;
+			mes "Necesitas ^ff6060"+((.@blvl>0)?.@blvl+"^000000^ff8800"+((.@jlvl>0)?"/ ":""):"")+" Base "+((.@jlvl>0)?"y "+.@jlvl+"^000000 Job mas":"")+" para continuar.";
+			close2; cutin "",255; emotion e_sry; end;
+		}
+		if (Class > 21) {
+			mes "¿Preparado para cambiar a 3ra. clase?";
+			next;
+			Cambiar_Clase(roclass(.@eac|EAJL_THIRD));
+			close2; cutin "",255; end;
+		}
+		while(1) {
+			mes "¿En que puedo ayudarte?.";
+			next;
+			set .@i, select(" ~ ^0055FFRenacer^000000: ~ ^777777Cancelar^000000");
+			if (.@i == 2) {
+				close2; cutin "",255; end;
+			}
+			mes "[^008800Manejador del Evento^000000]";
+			mes "¿Estas segur"+(Sex?"o":"a")+"?";
+			next;
+			Cambiar_Clase(4001);
+			mes "[^008800Manejador del Evento^000000]"; 
+		} 
+	}
+	set .@j1, roclass(.@eac|EAJL_2_1);
+	set .@j2,roclass(.@eac|EAJL_2_2);
+	if ((.@eac&EAJ_UPPERMASK) == EAJ_SUPER_NOVICE) setarray .@exp[0],roclass(.@eac|EAJL_THIRD),99;
+	if (Class == Job_Ninja) setarray .@exp[0],.@j1,70;
+	if (pc_renacer < 1 && BaseLevel >= 99) {
+		if (Class == Job_Gunslinger || Class == Job_Taekwon || Class == Job_Soul_Linker || Class == Job_Star_Gladiator) setarray .@exp[0],2058,50;
+	}
+	if (.@exp[0]) {
+		if (BaseLevel < 99 || JobLevel < .@exp[1]) {
+			set .@blvl, 99-BaseLevel; set .@jlvl, .@exp[1]-JobLevel;
+			mes "Necesitas ^ff6060"+((.@blvl>0)?.@blvl+"^000000^ff8800"+((.@jlvl>0)?"/ ":""):"")+((.@jlvl>0)?.@jlvl+"^000000 niveles mas":"")+" para continuar.";
+			close2; cutin "",255; end; 
+		}
+		if(.@exp[0] == 2058) {
+			mes "Elige una opcion.";
+			if(select(" ~ Expandir Job","^777777Cancelar^000000") == 2) {
+				close2; cutin "",255; end;
+			}
+			specialeffect2 488; sleep2 2000; specialeffect2 537; specialeffect2 261; specialeffect2 203; specialeffect2 203; specialeffect2 418; specialeffect2 418;
+			set pc_renacer,1;
+			getitem 2751,1;
+			resetlvl(4);
+			close2; cutin "",255; end;
+		} else {
+			mes "¿Deseas cambiar a ^cc6600"+jobname(.@exp[0])+"^000000?";
+			next;
+			Cambiar_Clase(.@exp[0]);
+		}
+		close2; cutin "",255; end;
+	}
+	if (.@eac&EAJL_2)
+		if (.@eac&(EAJL_UPPER|EAJL_BABY) || roclass(.@eac|EAJL_UPPER) == -1) {
+			mes "No hay mas profesiones a las que puedas cambiar.";
+			close2; cutin "",255; end;
+		}
+	if ((.@eac&EAJ_BASEMASK) == EAJ_NOVICE) {
+		if (JobLevel < 10)
+			mes "Necesitas como minimo Job "+10+" para cambiar a 1era. clase.";
+		else if (Class == 4001 && lastJob) {
+			mes "¿List"+(Sex?"o":"a")+" para cambiar de profesion?";
+			next;
+			Cambiar_Clase(roclass((eaclass(lastJob)&EAJ_BASEMASK)|EAJL_UPPER)); 
+		} else switch(Class) {
+			case 0: Cambiar_Clase(1,2,3,4,5,6,23,4046,24,25,4023);
+			case 4001: Cambiar_Clase(4002,4003,4004,4005,4006,4007);
+			case 4023: Cambiar_Clase(4024,4025,4026,4027,4028,4029,4045);
+			default: mes "Un error ha ocurrido."; break;
+		}
+		close2; cutin "",255; end; 
+	}
+	if (roclass(.@eac|EAJL_2_1) == -1 || roclass(.@eac|EAJL_2_2) == -1)
+		mes "No hay mas profesiones a las que puedas cambiar.";
+	else if (!(.@eac&EAJL_2) && JobLevel < 40)
+		mes "Necesitas Job "+40+" para poder cambiar a 2da. clase.";
+	else if (lastJob && (.@eac&EAJL_UPPER)) {
+		mes "¿List"+(Sex?"o":"a")+" para elegir tu nueva profesion?";
+		next;
+		Cambiar_Clase(lastJob+4001);
+	}
+	else Cambiar_Clase(.@j1,.@j2);
+	close2; cutin "",255; end;
+
+function Cambiar_Clase {
+	while(1) {
+		if (getargcount() > 1) {
+			mes "Elige una profesion.";
+			set .@menu$,"";
+			for(set .@i,0; .@i<getargcount(); set .@i,.@i+1)
+				set .@menu$, .@menu$+" ~ "+jobname(getarg(.@i))+":";
+			set .@menu$, .@menu$+" ~ ^777777Cancelar^000000";
+			next;
+			set .@i, getarg(select(.@menu$)-1,0);
+			if (!.@i) { close2; cutin "",255; end; }
+			if ((.@i == 23 || .@i == 4045) && BaseLevel < 45) {
+				mes "[^008800Manejador del Evento^000000]";
+				mes "Necesitas "+45+" de nivel base para cambiar a "+jobname(.@i)+".";
+				close2; cutin "",255; end;
+			}
+			mes "[^008800Manejador del Evento^000000]";
+			mes "¿Estas segur"+(Sex?"o":"a")+"?";
+			next; 
+		}
+		else set .@i, getarg(0);
+		if (select(" ~ Cambiar a ^0055FF"+jobname(.@i)+"^000000: ~ ^777777"+((getargcount() > 1)?"Atras":"Cancelar")+"^000000")==1) {
+			specialeffect2 488; sleep2 2000; specialeffect2 537; specialeffect2 261; specialeffect2 203; specialeffect2 203; specialeffect2 418; specialeffect2 418;
+			mes "[^008800Manejador del Evento^000000]";
+			mes "Ahora eres un"+Ver_Sexo(jobname(.@i))+" ^0055FF"+jobname(.@i)+"^000000!";
+			if (.@i==4001) set lastJob, Class;
+			jobchange .@i;
+			if (.@i==4001 || .@i==4023) resetlvl(1);
+			close2; cutin "",255; end;
+		}
+		if (getargcount() == 1) return;
+		mes "[^008800Manejador del Evento^000000]";
+	}
+	end;
+}
+
+function Ver_Sexo {
+	switch (sex) {
+		case 0:
+			return "a ";
+		case 1:
+			return " ";
+	}
+}
+
+Get_Platinum:
+	skill 142,1,0;
+	switch(BaseClass) {
+		case 0: if (Class !=23) skill 143,1,0; break;
+		case 1: skill 144,1,0; skill 145,1,0; skill 146,1,0; break;
+		case 2: skill 157,1,0; break;
+		case 3: skill 147,1,0; skill 148,1,0; break;
+		case 4: skill 156,1,0; break;
+		case 5: skill 153,1,0; skill 154,1,0; skill 155,1,0; break;
+		case 6: skill 149,1,0; skill 150,1,0; skill 151,1,0; skill 152,1,0; break;
+		default: break;
+	}
+	switch(roclass(eaclass()&EAJ_UPPERMASK)) {
+		case 7: skill 1001,1,0; break;
+		case 8: skill 1014,1,0; break;
+		case 9: skill 1006,1,0; break;
+		case 10: skill 1012,1,0; skill 1013,1,0; break;
+		case 11: skill 1009,1,0; break;
+		case 12: skill 1003,1,0; skill 1004,1,0; break;
+		case 14: skill 1002,1,0; break;
+		case 15: skill 1015,1,0; skill 1016,1,0; break;
+		case 16: skill 1007,1,0; skill 1008,1,0; skill 1017,1,0; skill 1018,1,0; skill 1019,1,0; break;
+		case 17: skill 1005,1,0; break;
+		case 18: skill 238,1,0; break;
+		case 19: skill 1010,1,0; break;
+		case 20: skill 1011,1,0; break;
+		default: break;
+	}
+	return;
+}
+//Sala 1
+ordeal_1-1,142,271,0,0	monster	--ja--	1008,15,3000,1000,0
+ordeal_1-1,30,145,0,0	monster	--ja--	1097,30,3000,1000,0
+ordeal_1-1,145,250,0,0	monster	--ja--	1002,30,3000,1000,0
+ordeal_1-1,139,272,0,0	monster	--ja--	1007,15,3000,1000,0
+ordeal_1-1,145,234,0,0	monster	--ja--	1002,30,3000,1000,0
+//Sala 2
+ordeal_1-1,198,205,0,0	monster	--ja--	1015,10,3000,1000,0
+ordeal_1-1,221,229,0,0	monster	--ja--	1015,10,3000,1000,0
+ordeal_1-1,237,252,0,0	monster	--ja--	1076,30,3000,1000,0
+ordeal_1-1,237,252,0,0	monster	--ja--	1019,10,3000,1000,0
+ordeal_1-1,237,252,0,0	monster	--ja--	1031,30,3000,1000,0
+ordeal_1-1,237,252,0,0	monster	--ja--	1028,30,3000,1000,0
+//Sala 3
+ordeal_1-1,219,153,0,0	monster	--ja--	1881,15,60000,10000,0
+ordeal_1-1,239,154,0,0	monster	--ja--	1881,15,120000,10000,0
+ordeal_1-1,273,160,0,0	monster	--ja--	1881,15,30000,10000,0
+ordeal_1-1,219,153,0,0	monster	--ja--	1880,30,3000,1000,0
+ordeal_1-1,239,154,0,0	monster	--ja--	1880,30,3000,1000,0
+ordeal_1-1,273,160,0,0	monster	--ja--	1880,30,3000,1000,0
+//Sala 4
+ordeal_1-1,205,101,0,0	monster	--ja--	1028,7,3000,1000,0
+ordeal_1-1,225,81,0,0	monster	--ja--	1028,7,3000,1000,0
+ordeal_1-1,252,60,0,0	monster	--ja--	1028,13,3000,1000,0
+ordeal_1-1,205,101,0,0	monster	--ja--	1117,5,3000,1000,0
+ordeal_1-1,225,81,0,0	monster	--ja--	1117,5,3000,1000,0
+ordeal_1-1,252,60,0,0	monster	--ja--	1117,10,3000,1000,0
+//Sala 5
+ordeal_1-1,153,78,0,0	monster	--ja--	1106,10,3000,1000,0
+ordeal_1-1,153,58,0,0	monster	--ja--	1113,50,3000,1000,0
+//Sala 6
+ordeal_1-1,103,95,0,0	monster	--ja--	2313,4,3000,1000,0
+ordeal_1-1,86,77,0,0	monster	--ja--	2313,4,3000,1000,0
+ordeal_1-1,62,47,0,0	monster	--ja--	2314,4,3000,1000,0
+ordeal_1-1,103,95,0,0	monster	--ja--	2314,4,3000,1000,0
+ordeal_1-1,86,77,0,0	monster	--ja--	2314,4,3000,1000,0
+ordeal_1-1,62,47,0,0	monster	--ja--	2313,4,3000,1000,0
+//Sala 7
+ordeal_1-1,26,139,0,0	monster	--ja--	1198,20,3000,1000,0
+//Sala 8
+ordeal_1-1,50,243,0,0	boss_monster	--ja--	1115,1,240000,10000,0
+function	script	P_Platinum	{
+	mes "[Platinum Skill NPC]";
+	mes "Yo puedo darte tus Skills Platinum dependiendo de tu Job. ¿Quieres tenerlas ahora?";
+	next;
+	if ( select ("Si:No") == 2 ) {
+		mes "[Platinum Skill NPC]";
+		mes "Aww.. Quieres mis servicios!";
+		mes "*sob* BIEN!";
+		mes "Ten buen día";
+		close;
+	}
+	mes "[Platinum Skill NPC]";
+	mes "Veo que eres "+ jobname(basejob) +" Class. Te dare tus Skills ahora";
+	skill 142,1,0;
+	if ( basejob == Job_Novice ) skill 143,1,0;
+	if ( baseclass == Job_Swordman) {
+		skill 144,1,0;
+		skill 145,1,0;
+		skill 146,1,0;
+	} else if ( baseclass == Job_Mage ) {
+		skill 157,1,0;
+	} else if ( baseclass == Job_Archer ) {
+		skill 147,1,0;
+		skill 148,1,0;
+	} else if ( baseclass == Job_Acolyte ) {
+		skill 156,1,0;
+	} else if ( baseclass == Job_Merchant ) {
+		skill 153,1,0;
+		skill 154,1,0;
+		skill 155,1,0;
+	} else if ( baseclass == Job_Thief ) {
+		skill 149,1,0;
+		skill 150,1,0;
+		skill 151,1,0;
+		skill 152,1,0;
+	}
+	if ( basejob == Job_Knight ) {
+		skill 1001,1,0;
+	} else if ( basejob == Job_Crusader ) {
+		skill 1002,1,0;
+	} else if ( basejob == Job_Wizard ) {
+		skill 1006,1,0;
+	} else if ( basejob == Job_Sage ) {
+		if ( !getskilllv(1008) && !getskilllv(1017) && !getskilllv(1018) && !getskilllv(1019) ) {
+			mes "Que elementos quieres tener ?";
+			next;
+			mes "Recuerda solo uno";
+			next;
+			switch(select("-Vamos","- Adios")) {
+				case 1: skill 1008,1,0; skill 1018,1,0; skill 1017,1,0; skill 1019,1,0; skill 1007,1,0; break;
+				default:
+			}
+			mes "[Kafra Express]";
+	 	}
+	} else if ( basejob == Job_Hunter ) {
+		skill 1009,1,0;
+	} else if ( basejob == Job_Bard ) {
+		skill 1010,1,0;
+	} else if ( basejob == Job_Dancer ) {
+		skill 1011,1,0;
+	} else if ( basejob == Job_Priest ) {
+		skill 1014,1,0;
+	} else if ( basejob == Job_Monk ) {
+		skill 1015,1,0;
+		skill 1016,10,0;
+	} else if ( basejob == Job_Blacksmith ) {
+		skill 1012,1,0;
+		skill 1013,1,0;
+	} else if ( basejob == Job_Alchem ) {
+		skill 238,1,0;
+		if ( !alch_bock ) {
+			getitem 7434,1;
+			set alch_bock,1;
+		}
+	} else if ( basejob == Job_Assassin ) {
+		skill 1003,1,0;
+		skill 1004,1,0;
+	} else if ( basejob == Job_Rogue ) {
+		skill 1005,1,0;
+	}
+	mes "Tu ahora tienes todas las Skills para ese job";
+	next;
+	mes "[Platinum Skill NPC]";
+	mes "Ten buen día.";
+	close;
+}
+function	script	P_Rental	{
+	mes "[^008800Manejador del Evento^000000]";
+	mes "Hola, aquí puedes alquilar Carros, Halcones, Pecopecos, Dragones, Grifos o Magic Gears.";
+	next;
+	switch(select("Carro:Halcon:PecoPeco:Dragon:Grifo:Magic Gear")) {
+		case 1:
+			if((BaseClass == Job_Merchant || BaseJob == Job_SuperNovice) && checkcart() == 0 && getskilllv("MC_PUSHCART")>0) {
+				setcart;
+				close;
+			}else{
+				mes "[^008800Manejador del Evento^000000]";
+				mes "Lo siento " + strcharinfo(0) + ", Por favor, asegurate de tener el job y la habilidad requerida.";
+				close;
+			}
+		case 2:
+			if(BaseJob != Job_Archer && BaseClass == Job_Archer && checkfalcon() == 0 && getskilllv("HT_FALCON")>0) {
+				setfalcon;
+				close;
+			}else{
+				mes "[^008800Manejador del Evento^000000]";
+				mes "Lo siento " + strcharinfo(0) + ", Por favor, asegurate de tener el job y la habilidad requerida.";
+				close;
+			}					
+		case 3:
+			if (BaseJob != Job_Swordman && BaseClass == Job_Swordman && checkriding() == 0 && getskilllv("KN_RIDING")>0 && Class != 4054 && Class != 4060 && Class != 4066 && Class != 4073) {
+				setriding;
+				close;
+			}else{
+				mes "[^008800Manejador del Evento^000000]";
+				mes "Lo siento " + strcharinfo(0) + ", Por favor, asegurate de tener el job y la habilidad requerida.";
+				close;
+			}
+		case 4:
+			if (BaseJob != Job_Swordman && BaseClass == Job_Swordman && checkriding() == 0 && getskilllv("RK_DRAGONTRAINING")>0) {
+				setdragon;
+				close;
+			}else{
+				mes "[^008800Manejador del Evento^000000]";
+				mes "Lo siento " + strcharinfo(0) + ", Por favor, asegurate de tener el job y la habilidad requerida.";
+				close;
+			}
+		case 5:
+			if (BaseJob != Job_Swordman && BaseClass == Job_Swordman && checkriding() == 0 && getskilllv("KN_RIDING")>0 && Class == 4073 || Class == 4066) {
+				setriding;
+				close;
+			}else{
+				mes "[^008800Manejador del Evento^000000]";
+				mes "Lo siento " + strcharinfo(0) + ", Por favor, asegurate de tener el job y la habilidad requerida.";
+				close;
+			}
+		case 6:
+			if (BaseJob != Job_Merchant && BaseClass == Job_Merchant && checkriding() == 0 && getskilllv("NC_MADOLICENCE")>0 && Class == 4064 || Class == 4058) {
+				setmadogear;
+				close;
+			}else{
+				mes "[^008800Manejador del Evento^000000]";
+				mes "Lo siento " + strcharinfo(0) + ", Por favor, asegurate de tener el job y la habilidad requerida.";
+				close;
+			}
+	}
+}

@@ -153,7 +153,6 @@ void findfile(const char *p, const char *pat, void (func)(const char*))
 int check_filepath(const char* filepath)
 {
 	DWORD Attribute;
-
 	if (Attribute = GetFileAttributes(filepath)) {
 		if ((Attribute&INVALID_FILE_ATTRIBUTES) && GetLastError() == ERROR_FILE_NOT_FOUND) {
 			SetLastError(0);
@@ -163,7 +162,6 @@ int check_filepath(const char* filepath)
 		else
 			return 2;
 	}
-
 	return 0;
 }
 
@@ -171,8 +169,8 @@ int check_filepath(const char* filepath)
 
 #define MAX_DIR_PATH 2048
 
+
 /**
- * Check if the path is a directory or file
  * @param filepath: Location of file
  * @return 0 = Error
  *         1 = Directory

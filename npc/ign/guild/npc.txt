@@ -1,0 +1,387 @@
+//roy_in02,106,107,5	duplicate(Cat Paw Merchant Guild)	Cat Paw Merchant Krim	549
+//roy_in02,104,107,5	duplicate(Gate Manager#realm)	Gate Manager#gtw_f00	421
+//roy_in02,108,100,4	duplicate(Investment Status Board)	Investment Status Board::InvestStatus_Gtw	857
+
+roy_in02,73,38,4	script	Encargada de Misiones::GLD01	114,{
+	set .npc$,"[^008800Encargada de Misiones^000000]";
+	function close3;
+	function quest;
+	cutin "kafra_04",2;
+	set @GID,getcharid(2);
+	query_sql("SELECT `guild_town` FROM `guild` WHERE `guild_id` = '"+@GID+"'",@gtown);
+	mes .npc$;
+	if(@GID < 1) {
+		mes "Necesitas estar en un Gremio.";
+		close3;
+	}
+	if(@gtown < 1) {
+		mes "No eres miembro de la Aldea de Gremios, por favor que tu Guild Master se registre.";
+		close3;
+	}
+	mes "Aquí podrás obtener misiones para atender las necesidades de la ciudad, por favor elije que misión atenderás.";
+	next;
+	switch(select("^777777Salir^000000:^008800Ayuda a cultivar^000000:^cc6600Transporta objetos^000000:^5533ffAtender a los turistas^000000:^008800El reparador^000000:^ff6060Cucarachas al por mayor^000000:^0000ffGatos Ladrones^000000:^008800Bañistas en Peligro^000000")) {
+		case 1: close3;
+		case 2: quest(1,14052,14059,.npc$);
+		case 3: quest(1,14053,14060,.npc$);
+		case 4: quest(1,14054,14061,.npc$);
+		case 5: quest(1,14055,14062,.npc$);
+		case 6: quest(2,14056,14063,.npc$);
+		case 7: quest(2,14057,14064,.npc$);
+		case 8: quest(2,14058,14065,.npc$);
+	}
+	close3;
+	function	quest	{
+		switch(getarg(0)) {
+			case 1:
+				if(checkquest(getarg(1)) == -1) {
+					if(checkquest(getarg(2),PLAYTIME) == 2) {
+						mes getarg(3);
+						mes "¿Segur"+(Sex?"o":"a")+" que deseas aceptar esta Quest?";
+						next;
+						if(select("Aceptar Quest","No aceptar") == 2) {
+							mes getarg(3);
+							mes "Elige otra quest o vuelve después entonces.";
+							close2;
+							cutin "",255;
+							end;
+						}
+						erasequest getarg(2);
+						setquest getarg(1);
+						mes getarg(3);
+						mes "Sigue las instrucciones de ^5533ffALT + U^000000, buena suerte.";
+						close2;
+						cutin "",255;
+						end;
+					} else {
+						if(checkquest(getarg(2),PLAYTIME) == -1) {
+							mes getarg(3);
+							mes "¿Segur"+(Sex?"o":"a")+" que deseas aceptar esta Quest?";
+							next;
+							if(select("Aceptar Quest","No aceptar") == 2) {
+								mes getarg(3);
+								mes "Elige otra quest o vuelve después entonces.";
+								close2;
+								cutin "",255;
+								end;
+							}
+							erasequest getarg(2);
+							setquest getarg(1);
+							mes getarg(3);
+							mes "Sigue las instrucciones de ^5533ffALT + U^000000, buena suerte.";
+							close2;
+							cutin "",255;
+							end;
+						} else {
+							mes getarg(3);
+							mes "Lo siento pero debes esperar 5 horas antes de volver a tomar esta misión.";
+							close2;
+							cutin "",255;
+							end;
+						}
+					}
+				}
+				if((checkquest(getarg(1)) == 0) || (checkquest(getarg(1)) == 1)) {
+					mes getarg(3);
+					mes "La misión no ha sido completada aún.";
+					close2;
+					cutin "",255;
+					end;
+				}
+				if(checkquest(getarg(1)) == 2) {
+					mes getarg(3);
+					mes "Buen trabajo, aquí está tu recompenza";
+					erasequest getarg(1);
+					setquest getarg(2);
+					getitem 18174,rand(1,4);
+					guildgetexp 50000;
+					dispbottom "Tu gremio ha ganado 50,000 de EXP.";
+					close2;
+					cutin "",255;
+					end;
+				}
+			case 2:
+				if(checkquest(getarg(1),HUNTING) == -1) {
+					if(checkquest(getarg(2),PLAYTIME) == 2) {
+						mes getarg(3);
+						mes "¿Segur"+(Sex?"o":"a")+" que deseas aceptar esta Quest?";
+						next;
+						if(select("Aceptar Quest","No aceptar") == 2) {
+							mes getarg(3);
+							mes "Elige otra quest o vuelve después entonces.";
+							close2;
+							cutin "",255;
+							end;
+						}
+						erasequest getarg(2);
+						setquest getarg(1);
+						mes getarg(3);
+						mes "Sigue las instrucciones de ^5533ffALT + U^000000, buena suerte.";
+						close2;
+						cutin "",255;
+						end;
+					} else {
+						if(checkquest(getarg(2),PLAYTIME) == -1) {
+							mes getarg(3);
+							mes "¿Segur"+(Sex?"o":"a")+" que deseas aceptar esta Quest?";
+							next;
+							if(select("Aceptar Quest","No aceptar") == 2) {
+								mes getarg(3);
+								mes "Elige otra quest o vuelve después entonces.";
+								close2;
+								cutin "",255;
+								end;
+							}
+							erasequest getarg(2);
+							setquest getarg(1);
+							mes getarg(3);
+							mes "Sigue las instrucciones de ^5533ffALT + U^000000, buena suerte.";
+							close2;
+							cutin "",255;
+							end;
+						} else {
+							mes getarg(3);
+							mes "Lo siento pero debes esperar 5 horas antes de volver a tomar esta misión.";
+							close2;
+							cutin "",255;
+							end;
+						}
+					}
+				}
+				if((checkquest(getarg(1),HUNTING) == 0) || (checkquest(getarg(1),HUNTING) == 1)) {
+					mes getarg(3);
+					mes "La misión no ha sido completada aún.";
+					close2;
+					cutin "",255;
+					end;
+				}
+				if(checkquest(getarg(1),HUNTING) == 2) {
+					mes getarg(3);
+					mes "Buen trabajo, aquí está tu recompenza";
+					erasequest getarg(1);
+					setquest getarg(2);
+					getitem 18174,rand(1,4);
+					guildgetexp 50000;
+					dispbottom "Tu gremio ha ganado 50,000 de EXP.";
+					close2;
+					cutin "",255;
+					end;
+				}
+		}
+	}
+	function	close3	{
+		close2;
+		cutin "",255;
+		end;
+	}
+}
+roy_in02,78,38,4	script	Recepcionista::GLD02	115,{
+	set .npc$,"[^cc6600Recepcionista^000000]";
+	function close3;
+	cutin "kafra_03",2;
+	set @GID,getcharid(2);
+	query_sql("SELECT `guild_town` FROM `guild` WHERE `guild_id` = '"+@GID+"'",@gtown);
+	query_sql("SELECT `guild_lv` FROM `guild` WHERE `guild_id` = '"+@GID+"'",@glevel);
+	mes .npc$;
+	if(@gtown < 1) {
+		mes "Hola, yo estoy encargada de registrar a los nuevos gremios a nuestra comunidad.";
+		mes "Por favor elige qué deseas hacer.";
+		next;
+		switch(select("^5533ffRegistrar mi Gremio^000000:^777777Salir^000000")) {
+			case 1:
+				mes .npc$;
+				if(@GID == 0) {
+					mes "Lo siento pero tú no estás en ninguna guild.";
+					close3;
+				}
+				if(getguildmaster(@GID) != strcharinfo(0)) {
+					mes "Necesitas ser el Guild Master para poder registrar tu Gremio.";
+					close3;
+				}
+				if(@glevel < 10) {
+					mes "Lo siento pero tú gremio necesita ser Nivel 10 para registrarse.";
+					close3;
+				}
+				mes "Bien, pasemos a registrar tu gremio, por favor coloca el nombre exacto a continuación.";
+				next;
+				input @gremio$;
+				query_sql("SELECT `name` FROM `guild` WHERE `guild_id` = '"+@GID+"'",@gname$);
+				mes .npc$;
+				if(@gremio$ != @gname$) {
+					mes "Lo siento pero ese no es el nombre correcto de tu guild, vuelve a intentar otra ves.";
+					close3;
+				}
+				mes "Bien, he registrado a tu gremio en la aldea de gremios, ya puedes hacer uso del resto de los servicios.";
+				query_sql("UPDATE `guild` SET `guild_town`='1' WHERE `guild_id` = '"+@GID+"'");
+				close3;
+			case 2:
+				mes .npc$;
+				mes "Vuelve cuando quieras.";
+				close3;
+		}
+	} else {
+		mes "Ya estás registrado en la Aldea de Gremios, disfruta tu estancia.";
+		close3;
+	}
+	function	close3	{
+		close2;
+		cutin "",255;
+		end;
+	}
+}
+roy_in02,84,38,4	script	Encargada de Rentas::guild_h	117,{
+	set .npc$,"[^5533ffEncargada de Rentas^000000]";
+	function close3;
+	cutin "kafra_01",2;
+	set @GID,getcharid(2);
+	query_sql("SELECT `guild_town` FROM `guild` WHERE `guild_id` = '"+@GID+"'",@gtown);
+	mes .npc$;
+		if(@gtown < 1) {
+			mes "Tu gremio no está registrado correctamente, por favor dile a tu Guild Master que visite a la ^cc6600Recepcionista^000000 a mi izquierda.";
+			close3;
+		}
+	mes "Hola, aquí podrás elegir tu Casa de Gremio, antes que nada necesitarás ^5533ff1,000 de Fama^000000.";
+	next;
+		switch(select("Obtener una Casa de Gremio:¿Cómo conseguir fama?:^777777Salir^000000")) {
+			case 1:
+				mes .npc$;
+				if(@GID == 0) {
+					mes "Lo siento pero tú no estás en ninguna guild.";
+					close3;
+				}
+				if(getguildmaster(@GID) != strcharinfo(0)) {
+					mes "Necesitas ser el Guild Master para poder registrar tu Gremio.";
+					close3;
+				}
+				query_sql("SELECT `map` FROM `guild` WHERE `guild_id` = '"+@GID+"'",@map$);
+				query_sql("SELECT `guild_lv` FROM `guild` WHERE `guild_id` = '"+@GID+"'",@glevel);
+				query_sql("SELECT `fame` FROM `guild` WHERE `guild_id` = '"+@GID+"'",@fama);
+				if(@map$ == "") {
+					if(@glevel < 25) {
+						mes "Tu gremio necesita ser nivel 25 para poder tener una Casa de Gremio.";
+						close3;
+					}
+					if(@fama < 1000) {
+						mes "Necesitas ^cc66001,000 de Fama^000000 en Administración para poder comprar una Casa de Gremio.";
+						close3;
+					}
+					mes "Todos los trámites están correctos, ahora por favor elige qué estilo de casa deseas.";
+					setarray .@casas$[0],"Payon","Prontera","Morroc","Geffen","Alberta","Izlude","Aldebaran";
+					setarray .@ini$[0],"a","b","c","d","e","f","g";
+					setarray .@x[0],19,24,19,19,35,19,19;
+					setarray .@y[0],4,4,4,3,20,3,3;
+					next;
+					for(set .@i,1;.@i < getarraysize(.@casas$);set .@i,.@i+1) {
+						set .@menu$,.@menu$+"^5533ff[ ^000000"+.@casas$[.@i]+" ^5533ff]^000000";
+						set .@menu$,.@menu$+":";
+					}
+					set .@j,select(.@menu$);
+					mes .npc$;
+					mes "¿Estás seguro de utilizar la Casa de Gremio de ^5533ff"+.@casas$[.@j]+"^000000?";
+					next;
+					if(select("Sí, la usaré","Deseo elegir otra") == 2) {
+						mes .npc$;
+						mes "Entonces habla nuevamente conmigo para elegir otra casa.";
+						close3;
+					}
+					S_renta:
+					set .@n,rand(1,22);
+					set @casarent$,"rent"+.@ini$[.@j]+.@n;
+					if(getd("$h_"+@casarent$+"_use") == 0) {
+						setd "$h_"+@casarent$+"_use",1;
+						query_sql("UPDATE `guild` SET `map`='"+@casarent$+"' WHERE `guild_id` = '"+@GID+"'");
+						query_sql("UPDATE `guild` SET `x`='"+.@x[.@j]+"' WHERE `guild_id` = '"+@GID+"'");
+						query_sql("UPDATE `guild` SET `y`='"+.@y[.@j]+"' WHERE `guild_id` = '"+@GID+"'");
+						set @fama2,@fama - 1000;
+						query_sql("UPDATE `guild` SET `fame`='"+@fama2+"' WHERE `guild_id` = '"+@GID+"'");
+						mes .npc$;
+						mes "Bien, gracias por obtener la casa N# "+.@n+" de ^5533ff"+.@casas$[.@j]+"^000000, diviértete en ella con tus miembros.";
+						close3;
+					} else goto S_renta;
+					close3;
+				}
+				mes "Tu gremio ya posee usa casa, usa el comando ^5533ff@ghouse^000000 para accesar a ella.";
+				close3;
+			case 2:
+				mes .npc$;
+				mes "Para conseguir fama debes de completar quest gremiales que serán obtenibles con la ^008800Encargada de Misiones^000000, al completar cada una te dará una cantidad de Guild Fame Coin, que cualquier miembro de tu gremio podrá depositar con ^ff6060Administración^000000";
+				close3;
+			case 3:
+				mes .npc$;
+				mes "Vuelve cuando quieras.";
+				close3;
+		}
+	function	close3	{
+		close2;
+		cutin "",255;
+		end;
+	}
+OnCommand:
+set @GID,getcharid(2);
+query_sql("SELECT `map` FROM `guild` WHERE `guild_id` = '"+@GID+"'",@map$);
+	if(@map$ == "") {
+		dispbottom "@ghouse ha fallado.";
+		dispbottom "Tu gremio no posee una Casa de Gremio.";
+		end;
+	}
+	query_sql("SELECT `x` FROM `guild` WHERE `guild_id` = '"+@GID+"'",@x);
+	query_sql("SELECT `y` FROM `guild` WHERE `guild_id` = '"+@GID+"'",@y);
+	getmapxy(@mapa$,@x2,@y2,0);
+	if(getmapflag(@mapa$,mf_pvp) || getmapflag(@mapa$,mf_gvg)) {
+		dispbottom "@ghouse ha fallado.";
+		dispbottom "Este comando no se puede utilizar en PvP o GvG.";
+		end;
+	}
+	warp @map$,@x,@y;
+	end;
+OnInit:
+	bindatcmd "ghouse","guild_h::OnCommand",0,0;
+	end;
+}
+roy_in02,90,38,4	script	Administración::GLD04	113,{
+	set .npc$,"[^ff6060Administración^000000]";
+	function close3;
+	cutin "kafra_05",2;
+	set @GID,getcharid(2);
+	query_sql("SELECT `guild_town` FROM `guild` WHERE `guild_id` = '"+@GID+"'",@gtown);
+	mes .npc$;
+		if(@GID == 0) {
+			mes "Lo siento pero tú no estás en ninguna guild.";
+			close3;
+		}
+		if(@gtown < 1) {
+			mes "Tu gremio no está registrado correctamente, por favor dile a tu Guild Master que visite a la ^cc6600Recepcionista^000000 a mi izquierda.";
+			close3;
+		}
+	mes "¡Hola!, aquí podrás depositar monedas de fama para usarla para distintas transacciones, recuerda que al depositarlas no podrán ser retiradas.";
+	next;
+	if(select("Depositar ^5533ffGuild Fame Coins^000000","^777777Salir^000000") == 2) {
+		mes .npc$;
+		mes "Vuelve cuando desees depositar Guild Fame Coins.";
+		close3;
+	}
+	mes .npc$;
+	mes "Entonces, dime, ¿cuántas ^5533ffGuild Fame Coin^000000 quieres depositar?";
+	next;
+	input @coins;
+	if(countitem(18174) < @coins) {
+		mes .npc$;
+		mes "Oye, no tienes esa cantidad de monedas, coloca una cantidad bien.";
+		close3;
+	}
+	delitem 18174,@coins;
+	query_sql("SELECT `fame` FROM `guild` WHERE `guild_id` = '"+@GID+"'",@fame);
+	set @new_fame,@fame+@coins;
+	query_sql("UPDATE `guild` SET `fame`='"+@new_fame+"' WHERE `guild_id` = '"+@GID+"'");
+	mes .npc$;
+	mes "La transacción se ha completado:";
+	mes "Anterior Fama: ^cc6600"+@fame+"^000000";
+	mes "Coins Depositadas: ^5533ff"+@coins+"^000000";
+	mes "Fama Actual: ^ff0000"+@new_fame+"^000000";
+	close3;
+	function	close3	{
+		close2;
+		cutin "",255;
+		end;
+	}
+}

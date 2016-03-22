@@ -612,6 +612,9 @@ OnStartArena:
 	set .@Defence,getcastledata(strnpcinfo(4),3)-5;
 	if (.@Defence < 0) set .@Defence, 0;
 	setcastledata strnpcinfo(4),3,.@Defence;
+	// Ranker
+	callfunc "RankEmperium",.@GID;
+	callfunc "RankGuild",1,0,.@GID,.@Economy,.@Defence;
 	// Set new owner
 	setcastledata strnpcinfo(4),1,.@GID;
 	// Clear castle's data.
@@ -1501,6 +1504,7 @@ OnGuardianStoneDied:
 	}
 	else mapannounce strnpcinfo(2),"The "+((.@num == 1)?"1st":"2nd")+" Guardian Stone has been destroyed!",bc_map,"0x00ff00";
 	donpcevent "gard"+.@num+"#"+strnpcinfo(2)+"::OnReset";
+	callfunc "RankGuild",0,1,getcharid(2),0,0;
 	initnpctimer;
 	end;
 

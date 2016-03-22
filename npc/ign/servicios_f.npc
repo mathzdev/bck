@@ -1,0 +1,996 @@
+function	script	Transporte_M	{
+	mes "[^ff0000Kafra Employee^000000]";
+	mes "¿A dónde deseas ir?";
+	next;
+	set .@a,0;
+	while(.@a < getarraysize($@WEd0)) {
+		set .@b,$@WEd0[.@a];
+		set .@a$[.@a],getd("$@WEb"+.@b+"$");
+		set .@b,getd("$@WEc"+.@b);
+		if(.@b) {
+			if(Zeny < .@b) set .@a$[.@a],"^bbbbbb"+.@a$[.@a]+" ^bb0000("+.@b+" z)^000000";
+			else set .@a$[.@a],.@a$[.@a]+" ^00bb00("+.@b+" z)^000000";
+		}
+		set .@a,.@a + 1;
+	}
+	set .@a,select("^000088Último Warp^000000 [ "+(lastwarp$ ? lastwarp$ : "^ff0000Ninguno^000000")+" ]",.@a$[0],.@a$[1],.@a$[2],.@a$[3],.@a$[4],.@a$[5],.@a$[6],.@a$[7],.@a$[8],.@a$[9],.@a$[10],.@a$[11],.@a$[12],.@a$[13],.@a$[14],.@a$[15],.@a$[16],.@a$[17],.@a$[18],.@a$[19]);
+	if(.@a == 1) {
+		if(lastx < 1 || lasty < 1) {
+			mes $@WARP$;
+			mes "Primero teletranspórtate a un mapa antes de usar éste servicio.";
+			close2;
+			emotion e_bzz;
+			cutin "",255;
+			end;
+		}
+		mes $@WARP$;
+		mes "Bien, te teletransportare a tu ultimo mapa:";
+		mes "^008800"+lastwarp$+"^000000";
+		close2;
+		specialeffect2 71;
+		sleep2 500;
+		specialeffect2 402;
+		sleep2 500;
+		emotion 12;
+		specialeffect2 6;
+		sleep2 200;
+		specialeffect2 304;
+		cutin "",255;
+		warp lastwarp$,lastx,lasty;
+		end;
+	}
+	set .@a,$@WEd0[.@a - 2];
+	set .@b,getd("$@WEc"+.@a);
+	callsub Ona0,.@b;
+	mes "[^ff0000Kafra Employee^000000]";
+	if(.@a == 1) {
+		getmapxy .@m$,.@x,.@y,0;
+		set Zeny,Zeny - .@b;
+		mes "Muy bien.";
+		mes "A partir de ahora este lugar quedará guardado como tu Punto de Inicio.";
+		save .@m$,.@x,.@y;
+		specialeffect2 500;
+		close2;
+		emotion 12;
+		cutin "",255;
+		end;
+	}
+	mes "Elige tu Destino.";
+	next;
+	do {
+		cleararray .@a$[0],"",getarraysize(.@a$);
+		set .@c,0;
+		while(.@c < getarraysize(getd("$@WEd"+.@a))) {
+			set .@d,getd("$@WEd"+.@a+"["+.@c+"]");
+			set .@e,getd("$@WEa"+.@d);
+			set .@b$,"bbbbbb";
+			set .@c$,"";
+			if(getd("$@WEe"+.@d+"$") == "") {
+				set .@g,getarraysize(getd("$@WEd"+.@d));
+				set .@f,0;
+				while(.@g && !.@f) {
+					set .@g,.@g - 1;
+					set .@e,getd("$@WEa"+getd("$@WEd"+.@d+"["+.@g+"]"));
+					if(!.@e || (getd($@WEm$+"WE_"+(.@e / 31)) & pow(2,.@e % 31))) set .@f,1;
+				}
+				if(.@f) set .@b$,"000000";
+			}
+			else if(!.@e || (getd($@WEm$+"WE_"+(.@e / 31)) & pow(2,.@e % 31))) {
+				set .@b$,"000000";
+				set .@g,0;
+				set .@f,getarraysize(getd("$@WEh"+.@d+"$"));
+				while(.@f > 0) {
+					set .@f,.@f - 1;
+					set .@g,.@g + getmapusers(getd("$@WEh"+.@d+"$["+.@f+"]"));
+				}
+				if(.@g) set .@c$,"00bb00";
+				else set .@c$,"aaaaaa";
+				set .@c$," [^"+.@c$+""+.@g+"^000000]";
+			}
+			set .@a$[.@c],"^"+.@b$+""+getd("$@WEb"+.@d+"$")+"^000000"+.@c$;
+			set .@c,.@c + 1;
+		}
+		if(.@h) set .@b$,"Atrás";
+		else set .@b$,"Salir";
+		set .@c,select("^880000"+.@b$+"^000000",.@a$[0],.@a$[1],.@a$[2],.@a$[3],.@a$[4],.@a$[5],.@a$[6],.@a$[7],.@a$[8],.@a$[9],.@a$[10],.@a$[11],.@a$[12],.@a$[13],.@a$[14],.@a$[15],.@a$[16],.@a$[17],.@a$[18],.@a$[19],.@a$[20],.@a$[21],.@a$[22],.@a$[23],.@a$[24],.@a$[25],.@a$[26],.@a$[27],.@a$[28],.@a$[29],.@a$[30],.@a$[31],.@a$[32],.@a$[33],.@a$[34],.@a$[35],.@a$[36],.@a$[37],.@a$[38],.@a$[39],.@a$[40],.@a$[41],.@a$[42],.@a$[43],.@a$[44],.@a$[45],.@a$[46],.@a$[47],.@a$[48],.@a$[49]);
+		if(.@c == 1) {
+			if(.@h) {
+				set .@a,.@h;
+				set .@h,0;
+			}
+			else {
+				mes "[^ff0000Kafra Employee^000000]";
+				mes "Hasta pronto.";
+				emotion 12;
+				close2; cutin "",255; end;
+			}
+		}
+		else {
+			set .@c,.@c - 2;
+			if(warper_u != 1) {
+				if(compare(.@a$[.@c],"^bbbbbb")) {
+					mes "[^ff0000Kafra Employee^000000]";
+					mes "Lo siento.";
+					mes "Este destino aún no se encuentra disponible.";
+					emotion 40;
+					close2; cutin "",255; end;
+				}
+			}
+			set .@h,.@a;
+			set .@a,getd("$@WEd"+.@a+"["+.@c+"]");
+		}
+	} while(getd("$@WEe"+.@a+"$") == "");
+	callsub Ona0,.@b;
+	set Zeny,Zeny - .@b;
+	mes "[^ff0000Kafra Employee^000000]";
+	mes "Muy bien.";
+	mes "Espera un segundo mientras te abro un portal...";
+	close2;
+	specialeffect2 71;
+	sleep2 500;
+	specialeffect2 402;
+	sleep2 500;
+	emotion 12;
+	specialeffect2 6;
+	sleep2 200;
+	specialeffect2 304;
+	warp getd("$@WEe"+.@a+"$"),getd("$@WEf"+.@a),getd("$@WEg"+.@a);
+	getmapxy .@m$,.@x,.@y,0;
+	set lastwarp$,.@m$;
+	set lastx,.@x;
+	set lasty,.@y;
+	end;
+Ona0:
+	set .@a,getarg(0);
+	if(Zeny < .@a) {
+		mes "[^ff0000Kafra Employee^000000]";
+		mes "Lo siento.";
+		mes "Para utilizar este servicio deberás pagar ^880000"+.@a+" z^000000.";
+		emotion 40;
+		close2; cutin "",255; end;
+	}
+	return;
+}
+
+function	script	Reset_M	{
+mes "[^ff0000Kafra Employee^000000]";
+mes "Bienvenid"+(Sex?"o":"a")+" "+strcharinfo(0);
+mes "Reset Actuales: ^ff0000"+(reset_cnt-1)+"^000000";
+next;
+mes "[^ff0000Kafra Employee^000000]";
+mes "¿En que te puedo ayudar hoy?";
+next;
+	switch (select("Resetear:Informacion:^777777Salir^000000")) {
+		case 1:
+			if(BaseLevel < 76) {
+				mes "[^ff0000Kafra Employee^000000]";
+				mes "¿Que deseas resetear?";
+					switch (select("Status ^5533ff=>^000000 ^ff000010,000^000000z:Skills ^5533ff=>^000000 ^ff000010,000^000000z:Ambos ^5533ff=>^000000 ^ff000015,000^000000z")) {
+						case 1:
+							if (Zeny < 10000) {
+								mes "No tienes el Zeny suficiente.";
+								close2; cutin "",255; end;
+							}
+							set Zeny,Zeny - 10000;
+							ResetStatus;
+							mes "Hecho.";
+							close2; cutin "",255; end;
+						case 2:
+							if (Zeny < 10000) {
+								mes "No tienes el Zeny suficiente.";
+								close2; cutin "",255; end;
+							}
+							set Zeny,Zeny - 10000;
+							ResetSkill;
+							mes "Hecho.";
+							close2; cutin "",255; end;
+						case 3:
+							if (Zeny < 15000) {
+								mes "No tienes el Zeny suficiente.";
+								close2; cutin "",255; end;
+							}
+							set Zeny,Zeny - 15000;
+							ResetStatus;
+							ResetSkill;
+							if( achi26 < 1 ) {
+								achieve 26;
+								set achi26,1;
+							}
+							mes "Hecho.";
+							close2; cutin "",255; end;
+					}
+			}
+			if (reset_cnt == 0) {
+				set reset_cnt,1;
+			}
+			set reset_prc,(BaseLevel*743)+(reset_cnt*10000);
+				if(countitem(671) < 1) {
+					mes "[^ff0000Kafra Employee^000000]";
+					mes "Necesitas tener al menos una IGN Coin.";
+					close2; cutin "",255; end;
+				}
+				mes "[^ff0000Kafra Employee^000000]";
+				mes "¿Que deseas resetear?";
+					switch (select("Status ^5533ff=>^000000 ^ff0000"+reset_prc+"^000000z:Skills ^5533ff=>^000000 ^ff0000"+reset_prc+"^000000z:Ambos ^5533ff=>^000000 ^ff0000"+((reset_prc*2)-(BaseLevel*743))+"^000000z")) {
+						case 1:
+							if (Zeny < reset_prc) {
+								mes "No tienes el Zeny suficiente.";
+								close2; cutin "",255; end;
+							}
+							set Zeny,Zeny - reset_prc;
+							ResetStatus;
+							set reset_cnt,reset_cnt+1;
+							mes "Hecho.";
+							close2; cutin "",255; end;
+						case 2:
+							if (Zeny < reset_prc) {
+								mes "No tienes el Zeny suficiente.";
+								close2; cutin "",255; end;
+							}
+							set Zeny,Zeny - reset_prc;
+							ResetSkill;
+							set reset_cnt,reset_cnt+1;
+							mes "Hecho.";
+							close2; cutin "",255; end;
+						case 3:
+							if (Zeny < ((reset_prc*2)-(BaseLevel*743))) {
+								mes "No tienes el Zeny suficiente.";
+								close2; cutin "",255; end;
+							}
+							set Zeny,Zeny - ((reset_prc*2)-(BaseLevel*743));
+							ResetStatus;
+							ResetSkill;
+							if( achi26 < 1 ) {
+								achieve 26;
+								set achi26,1;
+							}
+							set reset_cnt,reset_cnt+1;
+							mes "Hecho.";
+							close2; cutin "",255; end;
+					}
+		case 2:
+			mes "[^ff0000Kafra Employee^000000]";
+			mes "Te puedo resetear Status y Skills por un precio razonable.";
+			next;
+			mes "[^ff0000Kafra Employee^000000]";
+			mes "Primero comenzarás con 10,000 z.";
+			next;
+			mes "[^ff0000Kafra Employee^000000]";
+			mes "Dependiendo de cuantas veces hayas reseteado esa cantidad de 10,000z se multiplicará por dos e irá incrementando el precio según tu nivel.";
+			next;
+			mes "[^ff0000Kafra Employee^000000]";
+			mes "Ten cuidado de cuantas veces lo haces, que llegará a precios inimaginables.";
+			next;
+			mes "[^ff0000Kafra Employee^000000]";
+			mes "Si eres menor de nivel 75 te costará solo 15,000 z el paquete completo.";
+			close2; cutin "",255; end;
+		case 3:
+			mes "[^ff0000Kafra Employee^000000]";
+			mes "Nos vemos pronto.";
+			close2; cutin "",255; end;
+	}
+}
+function	script	Build_M	{
+function ObtMenu;
+function Guardar;
+function Cargar;
+	setarray .@b[0],4,100000,5000,5000,175,7227,1;
+	if (BaseLevel < .@b[4]) {
+		message strcharinfo(0),"Necesitas ser Lv. "+.@b[4]+" para usar esto.";
+		end;
+	}
+	switch(select("^5533ffGuardar Build^000000:^5533ffCargar Build^000000:^ff6060Renombrar Build^000000:^777777Salir^000000")) {
+		case 1:
+			if (.@b[1])
+				message strcharinfo(0),"Necesitas "+.@b[1]+" Zeny y "+.@b[6]+"x"+getitemname(.@b[5])+" para guardar una build.";
+			setarray .@b[7],ObtMenu(.@b[0]);
+			if (Zeny<.@b[1]) {
+				message strcharinfo(0),"No tienes suficiente Zeny.";
+				close2; cutin "",255; end;
+			}
+			if (countitem(.@b[5]) < .@b[6]) {
+				message strcharinfo(0),"No tienes "+getitemname(.@b[5])+" suficientes.";
+				close2; cutin "",255; end;
+			}
+			if (getd("Build_"+.@b[7]+"$")!="") {
+				message strcharinfo(0),"¿Renombrar la Build #"+.@b[7]+"?";
+				if(select("Guardar nueva build:^777777Salir^000000")==2) close2; cutin "",255; end;
+			}
+			Guardar(.@b[7]);
+			message strcharinfo(0),"Coloca un nombre para tu Build.";
+			input getd("Build_"+.@b[7]+"n$");
+			message strcharinfo(0),"Build #"+.@b[7]+" ("+getd("Build_"+.@b[7]+"n$")+") guardada.";
+			delitem .@b[5],.@b[6];
+			set Zeny, Zeny-.@b[1];
+			close2; cutin "",255; end;
+		case 2:
+			if (.@b[2]) message strcharinfo(0),"Necesitas "+.@b[2]+" Zeny para cargar una build.";
+			setarray .@b[7],ObtMenu(.@b[0]);
+			if (getd("Build_"+.@b[7]+"$")=="") {
+				message strcharinfo(0),"No se ha encontrado ninguna build";
+				close2; cutin "",255; end;
+			}
+			if (Zeny<.@b[2]) {
+				message strcharinfo(0),"No tienes suficiente Zeny";
+				close2; cutin "",255; end;
+			}
+			Cargar(getd("Build_"+.@b[7]+"$"));
+			message strcharinfo(0),"Build #"+.@b[7]+" cargada.";
+			set Zeny, Zeny-.@b[2];
+			close2; cutin "",255; end;
+		case 3:
+			if (.@b[3]) message strcharinfo(0),"Necesitas "+.@b[3]+" Zeny para renombrar una build.";
+			setarray .@b[7], ObtMenu(.@b[0]);
+			if (getd("Build_"+.@b[7]+"$")=="") {
+				message strcharinfo(0),"No se han encontrado builds.";
+				close2; cutin "",255; end;
+			}
+			if (Zeny<.@b[3]) {
+				message strcharinfo(0),"No tienes suficiente Zeny.";
+				close2; cutin "",255; end;
+			}
+			message strcharinfo(0),"Coloca un nuevo nombre para la Build #"+.@b[7]+" ("+getd("Build_"+.@b[7]+"n$")+").";
+			input getd("Build_"+.@b[7]+"n$");
+			message strcharinfo(0),"Build #"+.@b[7]+" renombrada.";
+			set Zeny, Zeny-.@b[3];
+			close2; cutin "",255; end;
+		case 4:
+			close2; cutin "",255; end;
+	}
+	function ObtMenu {
+		set .@menu$,"";
+		for(set .@i,1; .@i<=getarg(0); set .@i,.@i+1)
+			set .@menu$, .@menu$+"Slot ["+.@i+"] ("+((getd("Build_"+.@i+"n$")=="")?"^777777vacío":"^0055FF"+getd("Build_"+.@i+"n$"))+"^000000):";
+		return select(.@menu$);
+	}
+	function Guardar {
+		set .@s$,"";
+		for(set .@i,13; .@i<19; set .@i,.@i+1)
+			set .@s$,.@s$+readparam(.@i)+"|";
+		setd "Build_"+getarg(0)+"$", .@s$+StatusPoint;
+		return;
+	}
+	function Cargar {
+		specialeffect2 488;
+		sleep2 5000;
+		progressbar "0xFF0000",5;
+		specialeffect2 537;
+		specialeffect2 261;
+		specialeffect2 203;
+		specialeffect2 203;
+		specialeffect2 418;
+		specialeffect2 418;
+		ResetStatus;
+		explode(.@s$,getarg(0),"|");
+		for(set .@i,0; .@i<6; set .@i,.@i+1)
+			statusup2 (.@i+13), atoi(.@s$[.@i])-1;
+		set StatusPoint, atoi(.@s$[6]);
+		return;
+	}
+}
+function	script	Jobmaster_M	{
+function Cambiar_Clase;
+function Ver_Sexo;
+	mes "[^ff0000Kafra Employee^000000]";
+	if (Class > 4049) {
+		mes "No hay mas profesiones a las que puedas cambiar.";
+		close2; cutin "",255; emotion e_no1; end;
+	}
+	if (checkfalcon() || checkcart() || checkriding() || ismounting()) {
+		mes "Por favor remueve tu ^5533ff"+((checkfalcon())?"Falcon":"")+((checkcart())?"Carro":"")+((checkriding())?"Peco Peco":"")+((ismounting())?"Montura":"")+"^000000 antes de cambiar de profesion.";
+		close2; cutin "",255; emotion e_sry; end;
+	}
+	if (SkillPoint) {
+		mes "Puedes eliminar todos tus puntos de skill para proceder.";
+		if(select("No deseo eliminarlos","Eliminar puntos de skill") == 1) {
+			mes "Por favor utiliza todos tus puntos de skill antes de proceder.";
+			close2; cutin "",255; emotion e_sry; end;
+		}
+		set SkillPoint,0;
+	}
+	set .@eac, eaclass();
+	set .@i,roclass(.@eac&EAJ_UPPERMASK);
+	if (.@i > 6 && .@i < 22) {
+		if (BaseLevel < 99 || JobLevel < 50) {
+			set .@blvl, 99-BaseLevel; set .@jlvl, 50-JobLevel;
+			mes "Necesitas ^ff6060"+((.@blvl>0)?.@blvl+"^000000^ff8800"+((.@jlvl>0)?"/ ":""):"")+" Base "+((.@jlvl>0)?"y "+.@jlvl+"^000000 Job mas":"")+" para continuar.";
+			close2; cutin "",255; emotion e_sry; end;
+		}
+		if (Class > 21) {
+			mes "¿Preparado para cambiar a 3ra. clase?";
+			next;
+			Cambiar_Clase(roclass(.@eac|EAJL_THIRD));
+			close2; cutin "",255; end;
+		}
+		while(1) {
+			mes "¿En que puedo ayudarte?.";
+			next;
+			set .@i, select(" ~ ^0055FFRenacer^000000: ~ ^FF00003ra. clase^000000: ~ ^777777Cancelar^000000");
+			if (.@i == 3) {
+				close2; cutin "",255; end;
+			}
+			mes "[^ff0000Kafra Employee^000000]";
+			mes "¿Estas segur"+(Sex?"o":"a")+"?";
+			next;
+			Cambiar_Clase(((.@i==1)?4001:roclass(.@eac|EAJL_THIRD)));
+			mes "[^ff0000Kafra Employee^000000]"; 
+		} 
+	}
+	set .@j1, roclass(.@eac|EAJL_2_1);
+	set .@j2,roclass(.@eac|EAJL_2_2);
+	if (Class == Job_SuperNovice)
+			setarray .@exp[0],4190,99;
+	if (Class == Job_Super_Baby)
+			setarray .@exp[0],4191,99;
+	if (Class == Job_Ninja)
+			setarray .@exp[0],.@j1,70;
+	if (Class == Job_Gunslinger)
+			setarray .@exp[0],4215,70;
+	if (.@exp[0]) {
+		if (BaseLevel < 99 || JobLevel < .@exp[1]) {
+			set .@blvl, 99-BaseLevel;
+			set .@jlvl, .@exp[1]-JobLevel;
+			mes "Necesitas Base ^ff6060"+((.@blvl>0)?.@blvl+"^000000^ff8800"+((.@jlvl>0)?"/ ":""):"")+((.@jlvl>0)?.@jlvl+"^000000 Job niveles mas":"")+" para continuar.";
+			close2; cutin "",255; end; 
+		}
+		mes "¿Deseas cambiar a ^cc6600"+jobname(.@exp[0])+"^000000?";
+		next;
+		Cambiar_Clase(.@exp[0]);
+		close2; cutin "",255; end;
+	}
+	if (.@eac&EAJL_2)
+		if (.@eac&(EAJL_UPPER|EAJL_BABY) || roclass(.@eac|EAJL_UPPER) == -1) {
+			mes "No hay mas profesiones a las que puedas cambiar.";
+			close2; cutin "",255; end;
+		}
+	if ((.@eac&EAJ_BASEMASK) == EAJ_NOVICE) {
+		if (JobLevel < 10)
+			mes "Necesitas como minimo Job "+10+" para cambiar a 1era. clase.";
+		else if (Class == 4001 && lastJob) {
+			mes "¿List"+(Sex?"o":"a")+" para cambiar de profesion?";
+			next;
+			Cambiar_Clase(roclass((eaclass(lastJob)&EAJ_BASEMASK)|EAJL_UPPER)); 
+		} else switch(Class) {
+			case 0:
+				Cambiar_Clase(1,2,3,4,5,6,23,4046,24,25,4023);
+			case 4001:
+				Cambiar_Clase(4002,4003,4004,4005,4006,4007);
+			case 4023:
+				Cambiar_Clase(4024,4025,4026,4027,4028,4029,4045);
+			default:
+				mes "Un error ha ocurrido.";
+				break;
+		}
+		close2; cutin "",255; end; 
+	}
+	if(Class == Job_Gunslinger) {
+		if(JobLevel < 70) {
+			mes "Necesitas Job 70 para poder cambiar a 2da. clase.";
+			close2;
+			cutin "",255;
+			end;
+		}
+		mes "¿List"+(Sex?"o":"a")+" para ser "+jobname(4215)+"?";
+		next;
+		Cambiar_Clase(4215);
+	} else {
+		if (roclass(.@eac|EAJL_2_1) == -1 || roclass(.@eac|EAJL_2_2) == -1) {
+			mes "No hay mas profesiones a las que puedas cambiar.";
+			close;
+		}
+		else if (!(.@eac&EAJL_2) && JobLevel < 40) {
+			mes "Necesitas Job "+40+" para poder cambiar a 2da. clase.";
+			close;
+		}
+		else if (lastJob && (.@eac&EAJL_UPPER)) {
+			mes "¿List"+(Sex?"o":"a")+" para elegir tu nueva profesion?";
+			next;
+			Cambiar_Clase(lastJob+4001);
+		}
+	}
+	Cambiar_Clase(.@j1,.@j2);
+	close2; cutin "",255; end;
+
+function Cambiar_Clase {
+	while(1) {
+		if (getargcount() > 1) {
+			mes "Elige una profesion.";
+			set .@menu$,"";
+			for(set .@i,0; .@i<getargcount(); set .@i,.@i+1)
+				set .@menu$, .@menu$+" ~ "+jobname(getarg(.@i))+":";
+			set .@menu$, .@menu$+" ~ ^777777Cancelar^000000";
+			next;
+			set .@i, getarg(select(.@menu$)-1,0);
+			if (!.@i) { close2; cutin "",255; end; }
+			if ((.@i == 23 || .@i == 4045) && BaseLevel < 45) {
+				mes "[^ff0000Kafra Employee^000000]";
+				mes "Necesitas "+45+" de nivel base para cambiar a "+jobname(.@i)+".";
+				close2; cutin "",255; end;
+			}
+			mes "[^ff0000Kafra Employee^000000]";
+			mes "¿Estas segur"+(Sex?"o":"a")+"?";
+			next; 
+		}
+		else set .@i, getarg(0);
+		if (select(" ~ Cambiar a ^0055FF"+jobname(.@i)+"^000000: ~ ^777777"+((getargcount() > 1)?"Atras":"Cancelar")+"^000000")==1) {
+			specialeffect2 488; sleep2 2000; specialeffect2 537; specialeffect2 261; specialeffect2 203; specialeffect2 203; specialeffect2 418; specialeffect2 418;
+			mes "[^ff0000Kafra Employee^000000]";
+			mes "Ahora eres un"+Ver_Sexo(jobname(.@i))+" ^0055FF"+jobname(.@i)+"^000000!";
+			if (.@i==4001) set lastJob, Class;
+			achieve callfunc("AchievementJob",.@i);
+			jobchange .@i;
+			if (.@i==4001 || .@i==4023) resetlvl(1);
+			atcommand "@blvl 1";
+			close2; cutin "",255; end;
+		}
+		if (getargcount() == 1) return;
+		mes "[^ff0000Kafra Employee^000000]";
+	}
+	end;
+}
+function Ver_Sexo {
+	switch (sex) {
+		case 0:
+			return "a ";
+		case 1:
+			return " ";
+	}
+}
+
+Get_Platinum:
+	skill 142,1,0;
+	skill "NV_FIRSTAID",1,SKILL_PERM;
+	switch (BaseClass) {
+	case Job_Novice:
+		if (Class != Job_SuperNovice)
+			skill "NV_TRICKDEAD",1,SKILL_PERM;
+		break;
+	case Job_Swordman:
+		skill "SM_MOVINGRECOVERY",1,SKILL_PERM;
+		skill "SM_FATALBLOW",1,SKILL_PERM;
+		skill "SM_AUTOBERSERK",1,SKILL_PERM;
+		break;
+	case Job_Mage:
+		skill "MG_ENERGYCOAT",1,SKILL_PERM;
+		break;
+	case Job_Archer:
+		skill "AC_MAKINGARROW",1,SKILL_PERM;
+		skill "AC_CHARGEARROW",1,SKILL_PERM;
+		break;
+	case Job_Acolyte:
+		skill "AL_HOLYLIGHT",1,SKILL_PERM;
+		break;
+	case Job_Merchant:
+		skill "MC_CARTREVOLUTION",1,SKILL_PERM;
+		skill "MC_CHANGECART",1,SKILL_PERM;
+		skill "MC_LOUD",1,SKILL_PERM;
+		break;
+	case Job_Thief:
+		skill "TF_SPRINKLESAND",1,SKILL_PERM;
+		skill "TF_BACKSLIDING",1,SKILL_PERM;
+		skill "TF_PICKSTONE",1,SKILL_PERM;
+		skill "TF_THROWSTONE",1,SKILL_PERM;
+		break;
+	default:
+		break;
+	}
+	switch (BaseJob) {
+	case Job_Knight:
+		skill "KN_CHARGEATK",1,SKILL_PERM;
+		break;
+	case Job_Priest:
+		skill "PR_REDEMPTIO",1,SKILL_PERM;
+		break;
+	case Job_Wizard:
+		skill "WZ_SIGHTBLASTER",1,SKILL_PERM;
+		break;
+	case Job_Blacksmith:
+		skill "BS_UNFAIRLYTRICK",1,SKILL_PERM;
+		skill "BS_GREED",1,SKILL_PERM;
+		break;
+	case Job_Hunter:
+		skill "HT_PHANTASMIC",1,SKILL_PERM;
+		break;
+	case Job_Assassin:
+		skill "AS_SONICACCEL",1,SKILL_PERM;
+		skill "AS_VENOMKNIFE",1,SKILL_PERM;
+		break;
+	case Job_Crusader:
+		skill "CR_SHRINK",1,SKILL_PERM;
+		break;
+	case Job_Monk:
+		skill "MO_KITRANSLATION",1,SKILL_PERM;
+		skill "MO_BALKYOUNG",1,SKILL_PERM;
+		break;
+	case Job_Sage:
+		skill "SA_CREATECON",1,SKILL_PERM;
+		skill "SA_ELEMENTWATER",1,SKILL_PERM;
+		skill "SA_ELEMENTGROUND",1,SKILL_PERM;
+		skill "SA_ELEMENTFIRE",1,SKILL_PERM;
+		skill "SA_ELEMENTWIND",1,SKILL_PERM;
+		break;
+	case Job_Rogue:
+		skill "RG_CLOSECONFINE",1,SKILL_PERM;
+		break;
+	case Job_Alchemist:
+		skill "AM_BIOETHICS",1,SKILL_PERM;
+		break;
+	case Job_Bard:
+		skill "BA_PANGVOICE",1,SKILL_PERM;
+		break;
+	case Job_Dancer:
+		skill "DC_WINKCHARM",1,SKILL_PERM;
+		break;
+	default:
+		break;
+	}
+	return;
+}
+
+function	script	AchievementJob	{
+	set .@i,getarg(0);
+	set .@eac, eaclass();
+	if (.@i > 6 && .@i < 22)
+		return 3;
+	if (Class == Job_Gunslinger || Class == Job_SuperNovice || Class == Job_Super_Baby || Class == Job_Ninja)
+		return 2;
+	if ((.@eac&EAJ_BASEMASK) == EAJ_NOVICE) {
+		switch(Class) {
+			case 0:
+				return 1;
+			case 4001:
+				return 4;
+			case 4023:
+				return 6;
+		}
+		return 0;
+	}
+	if (lastJob && (.@eac&EAJL_UPPER))
+		return 4;
+	return 5;
+}
+
+function	script	Estilista_M	{
+	if(doram == 1)
+		setarray .@Styles[1],getbattleflag("max_cloth_color"),78,8;
+	else
+		setarray .@Styles[1],getbattleflag("max_cloth_color"),68,getbattleflag("max_hair_color");
+	setarray .@Look[1],7,1,6;
+	mes "[^ff0000Kafra Employee^000000]";
+	mes "Bienvenid"+(Sex ? "o caballero":"a señorita");
+	mes "¿Qué quiere cambiar el día de hoy?";
+	set .@s, select(" ~ Color de Ropa: ~ Estilo de Pelo: ~ Color de Pelo: ~ Cambiar Ropa (^ff00003er Job^000000)");
+	if(.@s == 4) {
+		if(Class == Job_Royal_Guard || Class == Job_Royal_Guard_T || Class == Job_Guillotine_Cross || Class == Job_Guillotine_Cross_T || Class == Job_Genetic || Class == Job_Genetic_T || Class == Job_Mechanic || Class == Job_Mechanic_T) {
+			if(b_look == 0) {
+				setlook LOOK_BODY2,1;
+				set b_look,1;
+			} else {
+				setlook LOOK_BODY2,0;
+				set b_look,0;
+			}
+			message strcharinfo(0),"Bien, he cambiado tu estilo de ropa.";
+		} else
+			message strcharinfo(0),"Lo siento, pero no hay ropas extras para tu clase.";
+	} else {
+		set .@Revert, getlook(.@Look[.@s]);
+			if(doram == 1)
+				set .@min,71;
+			else
+				set .@min,1;
+		set .@Style,.@min;
+		if( achi19 < 1 ) {
+			achieve 19;
+			set achi19,1;
+		}
+		while(1) {
+			setlook .@Look[.@s], .@Style;
+			message strcharinfo(0),"Éste es el estilo #"+.@Style+".";
+
+				set .@menu$, " ~ Siguiente (^0055FF"+((.@Style!=.@Styles[.@s])?.@Style+1:.@min)+"^000000): ~ Anterior (^0055FF"+((.@Style!=.@min)?.@Style-1:.@Styles[.@s])+"^000000): ~ Ir al...: ~ Revertir al original (^0055FF"+.@Revert+"^000000)";
+				switch(select(.@menu$)) {
+				case 1: set .@Style, ((.@Style!=.@Styles[.@s])?.@Style+1:.@min); break;
+				case 2: set .@Style, ((.@Style!=.@min)?.@Style-1:.@Styles[.@s]); break;
+				case 3: message strcharinfo(0),"Elige un estilo del "+.@min+" al "+.@Styles[.@s]+".";
+					input .@Style,.@min,.@Styles[.@s];
+					if (!.@Style) set .@Style, rand(.@min,.@Styles[.@s]);
+					break;
+				case 4: set .@Style, .@Revert; setlook .@Look[.@s], .@Revert; break;
+			}
+		}
+	}
+	mes "Vuelve pronto.";
+	close2;
+	emotion e_no1;
+	cutin "",255;
+	end;
+}
+function	script	Banco_M	{
+mes "[^ff0000Kafra Employee^000000]";
+set @kb_int,(gettime(6) * 31) + gettime(5);
+set @income,0;
+	if (#CuentaBanco > 0 || #kb_int < @kb_int) {
+		set @income,(#CuentaBanco / 1000) * (@kb_int - #kb_int);
+		if (@income < 0) {
+			mes "^ff0000Al parecer los intereses se han bugeado, te dare todo tu dinero antes de que algo malo pase^000000.";
+			set Zeny,Zeny+#CuentaBanco;
+			dispbottom "Se te han devuelto "+#CuentaBanco+" Zeny.";
+			set #CuentaBanco,0;
+			close2; cutin "",255; end;
+		}
+		if (@income > 20000000)
+			set @income,20000000;
+	}
+	set #kb_int,@kb_int;
+		if(#CuentaBanco == 0)
+			mes "Podriamos abrirte una cuenta.";
+		if(@income>0)
+			mes "Intereses: ^135445" + @income + "^000000 zeny.";
+	set #CuentaBanco,#CuentaBanco + @income;
+		if(#CuentaBanco > 0) {
+			mes "Tu Cuenta: ^135445" + #CuentaBanco + "^000000 zeny.";
+		}
+	mes "¿Que deseas hacer?";
+	next;
+	if(#CuentaBanco == 0) {
+		if(select("~ Abrir una cuenta","~ ^777777Salir^000000") == 2) {
+			mes "[^ff0000Kafra Employee^000000]";
+			mes "Nos veremos luego, entonces.";
+			close2;
+			cutin "",255;
+			end;
+		}
+	}
+	switch (select("~ Depositar Dinero:~ Retirar Dinero:~ ^777777Salir^000000")) {
+		case 1:
+			mes "[^ff0000Kafra Employee^000000]";
+			mes "Por favor, digame cuanto zeny quisieras depositar.";
+			next;
+			input @kafrabank;
+			if(@kafrabank < 1000) {
+				mes "[^ff0000Kafra Employee^000000]";
+				mes "Lo sentimos, la cantidad minima de zeny que debe depositar es 1.000 zeny.";
+				close2;
+				cutin "",255;
+				end;
+			}
+			if(@kafrabank > 5000000) {
+				mes "[^ff0000Kafra Employee^000000]";
+				mes "Lo siento. El deposito maximo que puedes hacer es 5,000,000 zeny .";
+				close2;
+				cutin "",255;
+				end;
+			}
+			if(@kafrabank > Zeny) {
+				mes "[^ff0000Kafra Employee^000000]";
+				mes "No tienes bastante zeny para esta operacion.";
+				close2;
+				cutin "",255;
+				end;
+			}
+			set Zeny,Zeny - @kafrabank;
+			set #CuentaBanco,#CuentaBanco + @kafrabank;
+			mes "[^ff0000Kafra Employee^000000]";
+			mes "Has hecho un depósito de ^135445" + @kafrabank + "z^000000.";
+			logmes "Bank %: " + @income +"z, Depósito: "+ @kafrabank +"z, Final: "+ #CuentaBanco +"z"; 
+			close2;
+			cutin "",255;
+			end;
+		case 2:
+			if(#CuentaBanco == 0) {
+				mes "[^ff0000Kafra Employee^000000]";
+				mes "No hay suficiente Zeny en tu cuenta";
+				close2;
+				cutin "",255;
+				end;
+			}
+			mes "[^ff0000Kafra Employee^000000]";
+			mes "Tu Cuenta: ^135445" + #CuentaBanco + "^000000 zeny.";
+			mes "¿Cuánto zeny desea retirar?";
+			next;
+			input @kafrabank;
+			if(@kafrabank < 1) {
+				mes "[^ff0000Kafra Employee^000000]";
+				mes "No hay suficiente Zeny en tu cuenta.";
+				close2;
+				cutin "",255;
+				end;
+			}
+			if(@kafrabank > 5000000) {
+				mes "[^ff0000Kafra Employee^000000]";
+				mes "La maxima cantidad que puedes retirar es de 5,000,000 zeny.";
+				close2;
+				cutin "",255;
+				end;
+			}
+			if(@kafrabank > #CuentaBanco) {
+				mes "[^ff0000Kafra Employee^000000]";
+				mes "No tienes suficiente Zeny en tu cuenta.";
+				close2;
+				cutin "",255;
+				end;
+			}
+			set #CuentaBanco,#CuentaBanco - @kafrabank;
+			set Zeny,Zeny + @kafrabank;
+			mes"[^cc6600Banco^000000]";
+			mes "Aquí están tus ^135445" + @kafrabank + "z^000000.";
+			logmes "Bank %: " + @income +"z, Retira: "+ @kafrabank +"z, Final: "+ #CuentaBanco +"z";
+			close2;
+			cutin "",255;
+			end;
+		case 3:
+			mes "[^ff0000Kafra Employee^000000]";
+			mes "Espero verlo nuevamente por aqui.";
+			close2;
+			cutin "",255;
+			end;
+	}
+end;
+}
+function	script	Platinum_M	{
+	mes "[^ff0000Servicios^000000]";
+	mes "Yo puedo darte tus Skills Platinum dependiendo de tu Job.";
+	mes "¿Quieres tenerlas ahora?";
+	next;
+	if ( select ("Obtener Skills:No, gracias") == 2 ) {
+		mes "[^ff0000Servicios^000000]";
+		mes "Vuelve cuando quieras.";
+		close;
+	}
+	mes "[^ff0000Servicios^000000]";
+	mes "Veo que eres un ^5533ff"+ jobname(basejob) +"^000000.";
+	mes "En un momento te otorgaré tus skills.";
+	progressbar "5533ff",3;
+	skill "NV_FIRSTAID",1,SKILL_PERM;
+	switch (BaseClass) {
+	case Job_Novice:
+		if (Class != Job_SuperNovice)
+			skill "NV_TRICKDEAD",1,SKILL_PERM;
+		break;
+	case Job_Swordman:
+		skill "SM_MOVINGRECOVERY",1,SKILL_PERM;
+		skill "SM_FATALBLOW",1,SKILL_PERM;
+		skill "SM_AUTOBERSERK",1,SKILL_PERM;
+		break;
+	case Job_Mage:
+		skill "MG_ENERGYCOAT",1,SKILL_PERM;
+		break;
+	case Job_Archer:
+		skill "AC_MAKINGARROW",1,SKILL_PERM;
+		skill "AC_CHARGEARROW",1,SKILL_PERM;
+		break;
+	case Job_Acolyte:
+		skill "AL_HOLYLIGHT",1,SKILL_PERM;
+		break;
+	case Job_Merchant:
+		skill "MC_CARTREVOLUTION",1,SKILL_PERM;
+		skill "MC_CHANGECART",1,SKILL_PERM;
+		skill "MC_LOUD",1,SKILL_PERM;
+		break;
+	case Job_Thief:
+		skill "TF_SPRINKLESAND",1,SKILL_PERM;
+		skill "TF_BACKSLIDING",1,SKILL_PERM;
+		skill "TF_PICKSTONE",1,SKILL_PERM;
+		skill "TF_THROWSTONE",1,SKILL_PERM;
+		break;
+	default:
+		break;
+	}
+	switch (BaseJob) {
+	case Job_Knight:
+		skill "KN_CHARGEATK",1,SKILL_PERM;
+		break;
+	case Job_Priest:
+		skill "PR_REDEMPTIO",1,SKILL_PERM;
+		break;
+	case Job_Wizard:
+		skill "WZ_SIGHTBLASTER",1,SKILL_PERM;
+		break;
+	case Job_Blacksmith:
+		skill "BS_UNFAIRLYTRICK",1,SKILL_PERM;
+		skill "BS_GREED",1,SKILL_PERM;
+		break;
+	case Job_Hunter:
+		skill "HT_PHANTASMIC",1,SKILL_PERM;
+		break;
+	case Job_Assassin:
+		skill "AS_SONICACCEL",1,SKILL_PERM;
+		skill "AS_VENOMKNIFE",1,SKILL_PERM;
+		break;
+	case Job_Crusader:
+		skill "CR_SHRINK",1,SKILL_PERM;
+		break;
+	case Job_Monk:
+		skill "MO_KITRANSLATION",1,SKILL_PERM;
+		skill "MO_BALKYOUNG",1,SKILL_PERM;
+		break;
+	case Job_Sage:
+		skill "SA_CREATECON",1,SKILL_PERM;
+		skill "SA_ELEMENTWATER",1,SKILL_PERM;
+		skill "SA_ELEMENTGROUND",1,SKILL_PERM;
+		skill "SA_ELEMENTFIRE",1,SKILL_PERM;
+		skill "SA_ELEMENTWIND",1,SKILL_PERM;
+		break;
+	case Job_Rogue:
+		skill "RG_CLOSECONFINE",1,SKILL_PERM;
+		break;
+	case Job_Alchemist:
+		skill "AM_BIOETHICS",1,SKILL_PERM;
+		break;
+	case Job_Bard:
+		skill "BA_PANGVOICE",1,SKILL_PERM;
+		break;
+	case Job_Dancer:
+		skill "DC_WINKCHARM",1,SKILL_PERM;
+		break;
+	default:
+		break;
+	}
+	specialeffect2 456;
+	mes "Muy bien, ahora tienes todas tus Platinum Skills";
+	next;
+	mes "[^ff0000Servicios^000000]";
+	mes "Suerte con tu aventura.";
+	close;
+}
+function	script	Universal_M	{
+	mes "[^ff0000Kafra Employee^000000]";
+	mes "Aquí puedes alquilar Carros, Halcones, Pecopecos, Dragones, Grifos o Magic Gears.";
+	next;
+	switch(select("Carro:Halcón:Peco Peco:Dragón:Grifo:Magic Gear")) {
+		case 1:
+			if(checkcart() == 0 && getskilllv("MC_PUSHCART")>0) {
+				setcart;
+				close;
+			}else{
+				mes "[^ff0000Kafra Employee^000000]";
+				mes "Lo siento " + strcharinfo(0) + ", Por favor, asegurate de tener el job y la habilidad requerida.";
+				close;
+			}
+		case 2:
+			if (!checkfalcon() && getskilllv("HT_FALCON") && !checkoption(Option_Wug) && !checkoption(Option_Wugrider)) {
+				setfalcon;
+				close;
+			}else{
+				mes "[^ff0000Kafra Employee^000000]";
+				mes "Lo siento " + strcharinfo(0) + ", Por favor, asegurate de tener el job y la habilidad requerida.";
+				close;
+			}					
+		case 3:
+			if (BaseJob != Job_Swordman && BaseClass == Job_Swordman && checkriding() == 0 && getskilllv("KN_RIDING")>0 && Class != 4054 && Class != 4060 && Class != 4066 && Class != 4073) {
+				setriding;
+				close;
+			}else{
+				mes "[^ff0000Kafra Employee^000000]";
+				mes "Lo siento " + strcharinfo(0) + ", Por favor, asegurate de tener el job y la habilidad requerida.";
+				close;
+			}
+		case 4:
+			if (BaseJob != Job_Swordman && BaseClass == Job_Swordman && checkriding() == 0 && getskilllv("RK_DRAGONTRAINING")>0) {
+				setdragon;
+				close;
+			}else{
+				mes "[^ff0000Kafra Employee^000000]";
+				mes "Lo siento " + strcharinfo(0) + ", Por favor, asegurate de tener el job y la habilidad requerida.";
+				close;
+			}
+		case 5:
+			if (BaseJob != Job_Swordman && BaseClass == Job_Swordman && checkriding() == 0 && getskilllv("KN_RIDING")>0 && Class == 4073 || Class == 4066) {
+				setriding;
+				close;
+			}else{
+				mes "[^ff0000Kafra Employee^000000]";
+				mes "Lo siento " + strcharinfo(0) + ", Por favor, asegurate de tener el job y la habilidad requerida.";
+				close;
+			}
+		case 6:
+			if (BaseJob != Job_Merchant && BaseClass == Job_Merchant && checkriding() == 0 && getskilllv("NC_MADOLICENCE")>0 && Class == 4064 || Class == 4058 || Class == 4100) {
+				setmadogear;
+				close;
+			}else{
+				mes "[^ff0000Kafra Employee^000000]";
+				mes "Lo siento " + strcharinfo(0) + ", Por favor, asegurate de tener el job y la habilidad requerida.";
+				close;
+			}
+	}
+}

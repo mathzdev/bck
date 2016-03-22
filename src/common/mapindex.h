@@ -6,7 +6,7 @@
 
 #include "../config/renewal.h"
 
-#define MAX_MAPINDEX 2000
+#define MAX_MAPINDEX 4000
 
 //Some definitions for the mayor city maps.
 #define MAP_PRONTERA "prontera"
@@ -34,7 +34,7 @@
 #define MAP_VEINS "veins"
 #define MAP_JAIL "sec_pri"
 #ifdef RENEWAL
-	#define MAP_NOVICE "iz_int"
+	#define MAP_NOVICE "ilyo_kwan"
 #else
 	#define MAP_NOVICE "new_1-1"
 #endif
@@ -50,6 +50,7 @@
 #define MAP_MALAYA "malaya"
 #define MAP_ECLAGE "eclage"
 #define MAP_ECLAGE_IN "ecl_in01"
+#define MAP_GUILDTOWN "glemior"
 
 const char* mapindex_getmapname(const char* string, char* output);
 const char* mapindex_getmapname_ext(const char* string, char* output);

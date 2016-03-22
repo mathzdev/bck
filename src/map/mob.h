@@ -14,6 +14,7 @@
 // Change this to increase the table size in your mob_db to accomodate a larger mob database.
 // Be sure to note that IDs 4001 to 4048 are reserved for advanced/baby/expanded classes.
 // Notice that the last 1000 entries are used for player clones, so always set this to desired value +1000
+#define MIN_MOB_DB 1000
 #define MAX_MOB_DB 5000
 
 //The number of drops all mobs have and the max drop-slot that the steal skill will attempt to steal from.
@@ -129,6 +130,8 @@ struct mob_db {
 	int maxskill;
 	struct mob_skill skill[MAX_MOBSKILL];
 	struct spawn_info spawn[10];
+	bool ffa; // Ignore noks protection
+	bool hunting; // Hunting Mission Allowed
 };
 
 struct mob_data {
@@ -158,6 +161,7 @@ struct mob_data {
 		unsigned char steal_flag; //number of steal tries (to prevent steal exploit on mobs with few items) [Lupus]
 		unsigned char attacked_count; //For rude attacked.
 		int provoke_flag; // Celest
+		unsigned inmunity: 1; // Battleground Inmunity
 	} state;
 	struct guardian_data* guardian_data;
 	struct s_dmglog {
@@ -171,13 +175,23 @@ struct mob_data {
 	short mob_id;
 	unsigned int tdmg; //Stores total damage given to the mob, for exp calculations. [Skotlex]
 	int level;
-	int target_id,attacked_id,norm_attacked_id;
+	int target_id,attacked_id;
 	int areanpc_id; //Required in OnTouchNPC (to avoid multiple area touchs)
 	unsigned int bg_id; // BattleGround System
+//	int bg_id; // BattleGround System
 
 	unsigned int next_walktime,last_thinktime,last_linktime,last_pcneartime,dmgtick;
 	short move_fail_count;
 	short lootitem_count;
+	struct {
+		bool is_event, no_expdrop, no_slaves, announce_killer, announce_hprate, is_war, drop_boost;
+		unsigned hp_show : 3;
+		unsigned int max_hp; // Custom Max HP value
+		unsigned allow_warp : 2;
+		unsigned ai_type : 3;
+		int party_id, guild_id, guild_emblem_id, faction_id;
+		short item_drop, item_amount, exp_boost;
+	} option;
 	short min_chase;
 	unsigned char walktoxy_fail_count; //Pathfinding succeeds but the actual walking failed (e.g. Icewall lock)
 
@@ -273,10 +287,11 @@ int mob_once_spawn_area(struct map_session_data* sd, int16 m,
 bool mob_ksprotected (struct block_list *src, struct block_list *target);
 
 int mob_spawn_guardian(const char* mapname, int16 x, int16 y, const char* mobname, int mob_id, const char* event, int guardian, bool has_index);	// Spawning Guardians [Valaris]
-int mob_spawn_bg(const char* mapname, int16 x, int16 y, const char* mobname, int mob_id, const char* event, unsigned int bg_id);
+int mob_spawn_bg(const char* mapname, short x, short y, const char* mobname, int class_, const char* event, int bg_id);
 int mob_guardian_guildchange(struct mob_data *md); //Change Guardian's ownership. [Skotlex]
 
 int mob_randomwalk(struct mob_data *md,unsigned int tick);
+int mob_once_spawn_especial(struct map_session_data *sd, const char *mapname, short x, short y, const char *mobname, int class_, int amount, const char *event, int hp_mod, short size, short ai_type, bool no_slaves, short allow_warp, short hp_show, bool announce_hprate, bool announce_killer, bool no_expdrop, int TeamID, short item_drop, short item_amount, bool is_war, short exp_boost, bool drop_boost);
 int mob_warpchase(struct mob_data *md, struct block_list *target);
 int mob_target(struct mob_data *md,struct block_list *bl,int dist);
 int mob_unlocktarget(struct mob_data *md, unsigned int tick);
@@ -309,6 +324,7 @@ int mob_deleteslave(struct mob_data *md);
 
 int mob_random_class (int *value, size_t count);
 int mob_get_random_id(int type, int flag, int lv);
+int mob_get_random_id_lv(int lv, int range);
 int mob_class_change(struct mob_data *md,int mob_id);
 int mob_warpslave(struct block_list *bl, int range);
 int mob_linksearch(struct block_list *bl,va_list ap);

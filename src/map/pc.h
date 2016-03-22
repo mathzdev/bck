@@ -583,41 +583,7 @@ struct map_session_data {
 	int ham_mvpid;
 
 	// BG Rank [DanielArt]
-	struct s_bgstats{
-		int rank_games;
-		int deserter;
-		int win;
-		int lost;
-		int tie;
-		int leader_win;
-		int leader_tie;
-		int leader_lost;
-		int eos_wins;
-		int boss_wins;
-		int sc_wins;
-		int ti_wins;
-		int ctf_wins;
-		int td_wins;
-		int cq_wins;
-		int ru_wins;
-		int dom_wins;
-		int eos_tie;
-		int boss_tie;
-		int ti_tie;
-		int ctf_tie;
-		int td_tie;
-		int sc_tie;
-		int dom_tie;
-		int eos_lost;
-		int boss_lost;
-		int ti_lost;
-		int ctf_lost;
-		int td_lost;
-		int sc_lost;
-		int cq_lost;
-		int ru_lost;
-		int dom_lost;
-	} bgstats;
+	struct s_bgstats{ int rank_games,deserter,win,lost,tie,leader_win,leader_tie,leader_lost,eos_wins,boss_wins,sc_wins,ti_wins,ctf_wins,td_wins,cq_wins,ru_wins,dom_wins,eos_tie,boss_tie,ti_tie,ctf_tie,td_tie,sc_tie,dom_tie,eos_lost,boss_lost,ti_lost,ctf_lost,td_lost,sc_lost,cq_lost,ru_lost,dom_lost; } bgstats;
 
 	// Sistema de Oficios [DanielArt]
 	short oficio;

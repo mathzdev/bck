@@ -527,6 +527,7 @@ extern struct Battle_Config
 	int max_trans_parameter;
 	int max_third_trans_parameter;
 	int max_extended_parameter;
+	int max_sumoner_parameter;
 	int max_third_aspd;
 	int vcast_stat_scale;
 

@@ -940,6 +940,8 @@ enum e_job {
 	JOB_OBORO,
 
 	JOB_REBELLION = 4215,
+	
+	JOB_SUMMONER = 4218,
 
 	JOB_MAX,
 };

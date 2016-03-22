@@ -1,18 +1,17 @@
 // Copyright (c) Athena Dev Teams - Licensed under GNU GPL
 // For more information, see LICENCE in the main folder
 
-#include "../common/cbasetypes.h"
-#include "../common/malloc.h"
-#include "../common/showmsg.h"
-#include "../common/strlib.h"
-#include "../common/timer.h"
+#include "cbasetypes.h"
+#include "malloc.h"
+#include "showmsg.h"
+#include "strlib.h"
+#include "timer.h"
 #include "sql.h"
 
 #ifdef WIN32
-#include "../common/winapi.h"
+#include "winapi.h"
 #endif
 #include <mysql.h>
-#include <string.h>// strlen/strnlen/memcpy/memset
 #include <stdlib.h>// strtoul
 
 #define SQL_CONF_NAME "conf/inter_athena.conf"
@@ -87,7 +86,16 @@ Sql* Sql_Malloc(void)
 
 static int Sql_P_Keepalive(Sql* self);
 
-/// Establishes a connection.
+/**
+ * Establishes a connection to schema
+ * @param self : sql handle
+ * @param user : username to access
+ * @param passwd : password
+ * @param host : hostname
+ * @param port : port
+ * @param db : schema name
+ * @return 
+ */
 int Sql_Connect(Sql* self, const char* user, const char* passwd, const char* host, uint16 port, const char* db)
 {
 	if( self == NULL )

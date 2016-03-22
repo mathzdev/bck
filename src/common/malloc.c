@@ -1,11 +1,10 @@
 // Copyright (c) Athena Dev Teams - Licensed under GNU GPL
 // For more information, see LICENCE in the main folder
 
-#include "../common/malloc.h"
-#include "../common/core.h"
-#include "../common/showmsg.h"
+#include "malloc.h"
+#include "core.h"
+#include "showmsg.h"
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>

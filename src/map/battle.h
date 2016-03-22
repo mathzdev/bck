@@ -37,26 +37,27 @@ enum e_battle_flag {
 
 /// Battle check target [Skotlex]
 enum e_battle_check_target {
-	BCT_NOONE		= 0x000000, /// No one
-	BCT_SELF		= 0x010000, /// Self
-	BCT_ENEMY		= 0x020000, /// Enemy
-	BCT_PARTY		= 0x040000, /// Party members
-	BCT_GUILDALLY	= 0x080000, /// Only allies, NOT guildmates
-	BCT_NEUTRAL		= 0x100000, /// Neutral target
-	BCT_SAMEGUILD	= 0x200000, /// Guildmates, No Guild Allies
+	BCT_NOONE		= 0x000000, ///< No one
+	BCT_SELF		= 0x010000, ///< Self
+	BCT_ENEMY		= 0x020000, ///< Enemy
+	BCT_PARTY		= 0x040000, ///< Party members
+	BCT_GUILDALLY	= 0x080000, ///< Only allies, NOT guildmates
+	BCT_NEUTRAL		= 0x100000, ///< Neutral target
+	BCT_SAMEGUILD	= 0x200000, ///< Guildmates, No Guild Allies
 
-	BCT_ALL			= 0x3F0000, /// All targets
+	BCT_ALL			= 0x3F0000, ///< All targets
 
-	BCT_GUILD		= BCT_SAMEGUILD|BCT_GUILDALLY, /// Guild AND Allies (BCT_SAMEGUILD|BCT_GUILDALLY)
-	BCT_NOGUILD		= BCT_ALL&~BCT_GUILD, /// Except guildmates
-	BCT_NOPARTY		= BCT_ALL&~BCT_PARTY, /// Except party members
-	BCT_NOENEMY		= BCT_ALL&~BCT_ENEMY, /// Except enemy
+	BCT_WOS			= 0x400000, ///< Except self (currently used for skipping if src == bl in skill_area_sub)
+	BCT_GUILD		= BCT_SAMEGUILD|BCT_GUILDALLY,	///< Guild AND Allies (BCT_SAMEGUILD|BCT_GUILDALLY)
+	BCT_NOGUILD		= BCT_ALL&~BCT_GUILD,			///< Except guildmates
+	BCT_NOPARTY		= BCT_ALL&~BCT_PARTY,			///< Except party members
+	BCT_NOENEMY		= BCT_ALL&~BCT_ENEMY,			///< Except enemy
 };
 
 /// Damage structure
 struct Damage {
 #ifdef RENEWAL
-	int statusAtk, statusAtk2, weaponAtk, weaponAtk2, equipAtk, equipAtk2, masteryAtk, masteryAtk2;
+	int64 statusAtk, statusAtk2, weaponAtk, weaponAtk2, equipAtk, equipAtk2, masteryAtk, masteryAtk2;
 #endif
 	int64 damage, /// Right hand damage
 		damage2; /// Left hand damage
@@ -80,10 +81,11 @@ struct block_list;
 // Damage Calculation
 
 struct Damage battle_calc_attack(int attack_type,struct block_list *bl,struct block_list *target,uint16 skill_id,uint16 skill_lv,int flag);
+struct Damage battle_calc_attack_plant(struct Damage wd, struct block_list *src,struct block_list *target, uint16 skill_id, uint16 skill_lv);
 
 int64 battle_calc_return_damage(struct block_list *bl, struct block_list *src, int64 *, int flag, uint16 skill_id, bool status_reflect);
 
-void battle_drain(struct map_session_data *sd, struct block_list *tbl, int64 rdamage, int64 ldamage, int race, int boss);
+void battle_drain(struct map_session_data *sd, struct block_list *tbl, int64 rdamage, int64 ldamage, int race, int class_, bool infdef);
 
 int battle_attr_ratio(int atk_elem,int def_type, int def_lv);
 int64 battle_attr_fix(struct block_list *src, struct block_list *target, int64 damage,int atk_elem,int def_type, int def_lv);
@@ -93,9 +95,8 @@ int battle_calc_cardfix(int attack_type, struct block_list *src, struct block_li
 int64 battle_calc_damage(struct block_list *src,struct block_list *bl,struct Damage *d,int64 damage,uint16 skill_id,uint16 skill_lv);
 int64 battle_calc_gvg_damage(struct block_list *src,struct block_list *bl,int64 damage,uint16 skill_id,int flag);
 int64 battle_calc_bg_damage(struct block_list *src,struct block_list *bl,int64 damage,uint16 skill_id,int flag);
-int64 battle_calc_pvpevent_damage(struct block_list *src, struct block_list *bl, int64 damage, int skill_num, int flag);
-int64 battle_calc_faction_damage(struct block_list *src, struct block_list *bl, int64 damage, int skill_num, int flag);
 
+void battle_damage(struct block_list *src, struct block_list *target, int64 damage, int delay, uint16 skill_lv, uint16 skill_id, enum damage_lv dmg_lv, unsigned short attack_type, bool additional_effects, unsigned int tick);
 int battle_delay_damage (unsigned int tick, int amotion, struct block_list *src, struct block_list *target, int attack_type, uint16 skill_id, uint16 skill_lv, int64 damage, enum damage_lv dmg_lv, int ddelay, bool additional_effects);
 
 // Summary normal attack treatment (basic attack)
@@ -115,6 +116,9 @@ int battle_check_target(struct block_list *src, struct block_list *target,int fl
 bool battle_check_range(struct block_list *src,struct block_list *bl,int range);
 
 void battle_consume_ammo(struct map_session_data* sd, int skill, int lv);
+
+bool is_infinite_defense(struct block_list *target, int flag);
+
 // Settings
 
 #define MIN_HAIR_STYLE battle_config.min_hair_style
@@ -123,6 +127,8 @@ void battle_consume_ammo(struct map_session_data* sd, int skill, int lv);
 #define MAX_HAIR_COLOR battle_config.max_hair_color
 #define MIN_CLOTH_COLOR battle_config.min_cloth_color
 #define MAX_CLOTH_COLOR battle_config.max_cloth_color
+#define MIN_BODY_STYLE battle_config.min_body_style
+#define MAX_BODY_STYLE battle_config.max_body_style
 
 extern struct Battle_Config
 {
@@ -159,8 +165,6 @@ extern struct Battle_Config
 	int mvp_item_second_get_time;
 	int mvp_item_third_get_time;
 	int base_exp_rate,job_exp_rate;
-	int base_exp_rate_boss,job_exp_rate_boss;
-	int base_exp_rate_bonus,job_exp_rate_bonus;
 	int drop_rate0item;
 	int death_penalty_type;
 	int death_penalty_base,death_penalty_job;
@@ -196,7 +200,6 @@ extern struct Battle_Config
 	int summons_trigger_autospells;
 	int pc_walk_delay_rate; //Adjusts can't walk delay after being hit for players. [Skotlex]
 	int walk_delay_rate; //Adjusts can't walk delay after being hit. [Skotlex]
-	int walk_delay_rate_boss; // Adjusts can't walk delay after bein hit por Boss monsters [Zephyrus]
 	int multihit_delay;  //Adjusts can't walk delay per hit on multi-hitting skills. [Skotlex]
 	int quest_skill_learn;
 	int quest_skill_reset;
@@ -207,7 +210,6 @@ extern struct Battle_Config
 	int guild_skill_relog_delay;
 	int emergency_call;
 	int guild_aura;
-	int guild_skills_separed_delay;
 	int pc_invincible_time;
 
 	int pet_catch_rate;
@@ -320,6 +322,7 @@ extern struct Battle_Config
 	int item_drop_card_min,item_drop_card_max;
 	int item_drop_equip_min,item_drop_equip_max;
 	int item_drop_mvp_min,item_drop_mvp_max;	// End Addition
+	int item_drop_mvp_mode; //rAthena addition [Playtester]
 	int item_drop_heal_min,item_drop_heal_max;	// Added by Valatris
 	int item_drop_use_min,item_drop_use_max;	//End
 	int item_drop_treasure_min,item_drop_treasure_max; //by [Skotlex]
@@ -356,9 +359,6 @@ extern struct Battle_Config
 	int bone_drop;
 	int buyer_name;
 	int dancing_weaponswitch_fix;
-	int gm_channel_operator;
-	int pc_validate_items;
-	int pc_validate_stats;
 
 // eAthena additions
 	int night_at_start; // added by [Yor]
@@ -411,7 +411,6 @@ extern struct Battle_Config
 	int berserk_cancels_buffs; // [Aru]
 	int debuff_on_logout; // Removes a few "official" negative Scs on logout. [Skotlex]
 	int mob_ai; //Configures various mob_ai settings to make them smarter or dumber(official). [Skotlex]
-	int mob_chase_refresh; //How often a monster should refresh its chase [Playtester]
 	int hom_setting; //Configures various homunc settings which make them behave unlike normal characters.. [Skotlex]
 	int dynamic_mobs; // Dynamic Mobs [Wizputer] - battle_athena flag implemented by [random]
 	int mob_remove_damaged; // Dynamic Mobs - Remove mobs even if damaged [Wizputer]
@@ -441,7 +440,8 @@ extern struct Battle_Config
 	int allow_skill_without_day; // [Komurka]
 	int allow_es_magic_pc; // [Skotlex]
 	int skill_wall_check; // [Skotlex]
-	int cell_stack_limit; // [Skotlex]
+	int official_cell_stack_limit; // [Playtester]
+	int custom_cell_stack_limit; // [Skotlex]
 	int skill_caster_check; // [Skotlex]
 	int sc_castcancel; // [Skotlex]
 	int pc_sc_def_rate; // [Skotlex]
@@ -455,32 +455,17 @@ extern struct Battle_Config
 	int autospell_stacking; //Enables autospell cards to stack. [Skotlex]
 	int override_mob_names; //Enables overriding spawn mob names with the mob_db names. [Skotlex]
 	int min_chat_delay; //Minimum time between client messages. [Skotlex]
-	int channel_min_chat_delay; //Minimum time between client channel messages.
 	int friend_auto_add; //When accepting friends, both get friended. [Skotlex]
 	int hvan_explosion_intimate;	// fix [albator]
 	int hom_rename;
 	int homunculus_show_growth ;	//[orn]
 	int homunculus_friendly_rate;
 	int quest_exp_rate;
-
-	// [Terra Custom Settings]
 	int autotrade_mapflag;
 	int at_timeout;
-	int at_tax;
 	int homunculus_autoloot;
 	int idle_no_autoloot;
 	int max_guild_alliance;
-	int max_guild_opposition;
-	int mob_graveyard;
-	int pc_graveyard;
-
-	int pvpmode_onlypc;
-	int pvpmode_gvgreductions;
-	int pvpmode_expbonus;
-	int pvpmode_nowarp_cmd;
-	int pvpmode_enable_delay;
-	int pvpmode_disable_delay;
-
 	int ksprotection;
 	int auction_feeperhour;
 	int auction_maximumprice;
@@ -491,6 +476,7 @@ extern struct Battle_Config
 	int invincible_nodamage;
 	int mob_slave_keep_target;
 	int autospell_check_range;	//Enable range check for autospell bonus. [L0ne_W0lf]
+	int knockback_left;
 	int client_reshuffle_dice;  // Reshuffle /dice
 	int client_sort_storage;
 	int feature_buying_store;
@@ -505,16 +491,6 @@ extern struct Battle_Config
 	int hom_S_max_level;
 	int hom_S_growth_level;
 
-	// [Flood Protection - Automute]
-	int chat_allowed_per_interval;
-	int chat_time_interval;
-	int chat_flood_automute;
-
-	// [Action Limits]
-	int action_keyboard_limit;
-	int action_mouse_limit;
-	int action_dual_limit;
-
 	// [BattleGround Settings]
 	int bg_update_interval;
 	int bg_short_damage_rate;
@@ -523,66 +499,6 @@ extern struct Battle_Config
 	int bg_magic_damage_rate;
 	int bg_misc_damage_rate;
 	int bg_flee_penalty;
-	int bg_idle_announce;
-	int bg_idle_autokick;
-	int bg_reserved_char_id;
-	int bg_items_on_pvp;
-	int bg_reward_rates;
-	int bg_ranking_bonus;
-
-	int bg_ranked_mode;
-	int bg_ranked_max_games;
-	int bg_reportafk_leaderonly;
-	int bg_queue2team_balanced;
-	int bg_logincount_check;
-	int bg_queue_onlytowns;
-
-	int bg_eAmod_mode;
-
-	// Faction System
-	int faction_allow_party;
-	int faction_allow_guild;
-	int faction_allow_chat;
-	int faction_allow_vending;
-	int faction_allow_trade;
-
-	int faction_short_damage_rate;
-	int faction_long_damage_rate;
-	int faction_weapon_damage_rate;
-	int faction_magic_damage_rate;
-	int faction_misc_damage_rate;
-
-	// [Reserved Chars ID]
-	int ancient_reserved_char_id;
-	int costume_reserved_char_id;
-	int woe_reserved_char_id;
-
-	// [PVP Event Settings]
-	int pvpevent_short_damage_rate;
-	int pvpevent_long_damage_rate;
-	int pvpevent_weapon_damage_rate;
-	int pvpevent_magic_damage_rate;
-	int pvpevent_misc_damage_rate;
-	int pvpevent_flee_penalty;
-	int pvpevent_cashperkill;
-	// [Custom Settings Terra RO]
-	int channel_system_enable;
-	int channel_announces;
-	int channel_announce_join;
-	int skill_zeny2item;
-
-	int myinfo_event_vote_points;
-	int vending_cash_id;
-	int vending_zeny_id;
-
-	int guild_wars;
-	int region_display; // Region Notifications
-	int super_woe_enable;
-	int at_changegm_cost;
-
-	int mob_slave_adddrop;
-	int reflect_damage_fix;
-	int anti_mayapurple_hack;
 
 	// rAthena
 	int max_third_parameter;
@@ -647,6 +563,7 @@ extern struct Battle_Config
 	int fame_pharmacy_10;
 
 	int disp_serverbank_msg;
+	int disp_servervip_msg;
 	int warg_can_falcon;
 	int path_blown_halt;
 	int rental_mount_speed_boost;
@@ -665,19 +582,25 @@ extern struct Battle_Config
 	int arrow_shower_knockback;
 	int devotion_rdamage_skill_only;
 	int max_extended_aspd;
-	// Premium Account System
-	int premium_group_id;
-	int premium_bonusexp;
-	int premium_dropboost;
-
-	// Aura Settings
-	int aura_pvpmode_enable;
-	int aura_pvpmode_top10;
-	int aura_top10_bgranked;
-	int aura_top10_bgnormal;
-
-	int max_stat_validate;
-
+	int mob_chase_refresh; //How often a monster should refresh its chase [Playtester]
+	int mob_icewall_walk_block; //How a normal monster should be trapped in icewall [Playtester]
+	int boss_icewall_walk_block; //How a boss monster should be trapped in icewall [Playtester]
+	int snap_dodge; // Enable or disable dodging damage snapping away [csnv]
+	int stormgust_knockback;
+	int default_fixed_castrate;
+	int default_bind_on_equip;
+	int pet_ignore_infinite_def; // Makes fixed damage of petskillattack2 ignores infinite defense
+	int homunculus_evo_intimacy_need;
+	int homunculus_evo_intimacy_reset;
+	int monster_loot_search_type;
+	int feature_roulette;
+	int monster_hp_bars_info;
+	int min_body_style;
+	int max_body_style;
+	int save_body_style;
+	int mob_eye_range_bonus; //Vulture's Eye and Snake's Eye range bonus
+	int mob_stuck_warning; //Show warning if a monster is stuck too long
+	int skill_eightpath_algorithm; //Official path algorithm
 } battle_config;
 
 void do_init_battle(void);

@@ -22,7 +22,7 @@ typedef struct AccountDBIterator AccountDBIterator;
 AccountDB* account_db_sql(void);
 
 struct mmo_account {
-	int account_id;
+	uint32 account_id;
 	char userid[NAME_LENGTH];
 	char pass[32+1];        // 23+1 for plaintext, 32+1 for md5-ed passwords
 	char sex;               // gender (M/F/S)
@@ -38,13 +38,10 @@ struct mmo_account {
 	char birthdate[10+1];   // assigned birth date (format: YYYY-MM-DD, default: 0000-00-00)
 	char pincode[PINCODE_LENGTH+1];		// pincode system
 	time_t pincode_change;	// (timestamp): last time of pincode change
-	int account_reg2_num;
-	int bank_vault;
 #ifdef VIP_ENABLE
 	int old_group;
 	time_t vip_time;
 #endif
-	struct global_reg account_reg2[ACCOUNT_REG2_NUM]; // account script variables (stored on login server)
 };
 
 
@@ -108,7 +105,7 @@ struct AccountDB {
 	/// @param self Database
 	/// @param account_id Account id
 	/// @return true if successful
-	bool (*remove)(AccountDB* self, const int account_id);
+	bool (*remove)(AccountDB* self, const uint32 account_id);
 
 	/// Modifies the data of an existing account.
 	/// Uses acc->account_id to identify the account.
@@ -124,7 +121,7 @@ struct AccountDB {
 	/// @param acc Pointer that receives the account data
 	/// @param account_id Target account id
 	/// @return true if successful
-	bool (*load_num)(AccountDB* self, struct mmo_account* acc, const int account_id);
+	bool (*load_num)(AccountDB* self, struct mmo_account* acc, const uint32 account_id);
 
 	/// Finds an account with userid and copies it to acc.
 	///
@@ -140,6 +137,9 @@ struct AccountDB {
 	/// @return Iterator
 	AccountDBIterator* (*iterator)(AccountDB* self);
 };
+
+void mmo_send_global_accreg(AccountDB* self, int fd, int account_id, int char_id);
+void mmo_save_global_accreg(AccountDB* self, int fd, int account_id, int char_id);
 
 
 #endif // __ACCOUNT_H_INCLUDED__

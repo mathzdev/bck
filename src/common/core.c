@@ -7,24 +7,19 @@
 #include "core.h"
 #include "strlib.h"
 #ifndef MINICORE
-#include "db.h"
+#include "ers.h"
 #include "socket.h"
 #include "timer.h"
 #include "thread.h"
 #include "mempool.h"
 #include "sql.h"
-#include "cbasetypes.h"
-#include "msg_conf.h"
 #endif
-
-#include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
-#include <string.h>
 #ifndef _WIN32
 #include <unistd.h>
 #else
-#include "../common/winapi.h" // Console close event handling
+#include "winapi.h" // Console close event handling
 #include <direct.h> // _chdir
 #endif
 
@@ -37,8 +32,6 @@ void (*shutdown_callback)(void) = NULL;
 #endif
 
 int runflag = CORE_ST_RUN;
-int arg_c = 0;
-char **arg_v = NULL;
 char db_path[12] = "db"; /// relative path for db from server
 
 char *SERVER_NAME = NULL;
@@ -226,7 +219,7 @@ const char* get_svn_revision(void) {
 				// XML File format
 				while (fgets(line,sizeof(line),fp))
 					if (strstr(line,"revision=")) break;
-				if (sscanf(line," %*[^\"]\"%d%*[^\n]", &rev) == 1) {
+				if (sscanf(line," %*[^\"]\"%11d%*[^\n]", &rev) == 1) {
 					snprintf(svn_version_buffer, sizeof(svn_version_buffer), "%d", rev);
 				}
 			}
@@ -266,7 +259,7 @@ const char *get_git_hash (void) {
 
 	if( (fp = fopen(".git/"GIT_ORIGIN, "r")) != NULL ) {
 		char line[64];
-		char *rev = malloc(sizeof(char) * 50);
+		char *rev = (char*)malloc(sizeof(char) * 50);
 
 		if( fgets(line, sizeof(line), fp) && sscanf(line, "%40s", rev) )
 			snprintf(GitHash, sizeof(GitHash), "%s", rev);
@@ -326,21 +319,20 @@ void usercheck(void)
 int main (int argc, char **argv)
 {
 	{// initialize program arguments
-		char *p1 = SERVER_NAME = argv[0];
+		char *p1;
 		if((p1 = strrchr(argv[0], '/')) != NULL ||  (p1 = strrchr(argv[0], '\\')) != NULL ){
 			char *pwd = NULL; //path working directory
 			int n=0;
 			SERVER_NAME = ++p1;
 			n = p1-argv[0]; //calc dir name len
-			pwd = safestrncpy(malloc(n + 1), argv[0], n);
+			pwd = safestrncpy((char*)malloc(n + 1), argv[0], n);
 			if(chdir(pwd) != 0)
 				ShowError("Couldn't change working directory to %s for %s, runtime will probably fail",pwd,SERVER_NAME);
 			free(pwd);
+		}else{
+			// On Windows the .bat files have the executeable names as parameters without any path seperator [Lemongrass]
+			SERVER_NAME = argv[0];
 		}
-		
-		arg_c = argc;
-		arg_v = argv;
-		
 	}
 
 	malloc_init();// needed for Show* in display_title() [FlavioJS]
@@ -383,6 +375,7 @@ int main (int argc, char **argv)
 	db_final();
 	mempool_final();
 	rathread_final();
+	ers_final();
 #endif
 
 	malloc_final();

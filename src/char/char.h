@@ -15,6 +15,9 @@
 extern int login_fd; //login file descriptor
 extern int char_fd; //char file descriptor
 
+#define MAX_STARTPOINT 5
+#define MAX_STARTITEM 32
+
 enum E_CHARSERVER_ST {
 	CHARSERVER_ST_RUNNING = CORE_ST_LAST,
 	CHARSERVER_ST_STARTING,
@@ -27,7 +30,6 @@ enum {
 	TABLE_CART,
 	TABLE_STORAGE,
 	TABLE_GUILD_STORAGE,
-	TABLE_EXT_STORAGE,
 };
 
 struct Schema_Config {
@@ -41,7 +43,6 @@ struct Schema_Config {
 	char charlog_db[DB_NAME_LEN];
 	char storage_db[DB_NAME_LEN];
 	char interlog_db[DB_NAME_LEN];
-	char reg_db[DB_NAME_LEN];
 	char skill_db[DB_NAME_LEN];
 	char memo_db[DB_NAME_LEN];
 	char guild_db[DB_NAME_LEN];
@@ -66,11 +67,14 @@ struct Schema_Config {
 	char ragsrvinfo_db[DB_NAME_LEN];
 	char elemental_db[DB_NAME_LEN];
 	char bonus_script_db[DB_NAME_LEN];
-	char rentstorage_db[DB_NAME_LEN];
-	char achievement_db[DB_NAME_LEN];
+	char acc_reg_num_table[DB_NAME_LEN];
+	char acc_reg_str_table[DB_NAME_LEN];
+	char char_reg_str_table[DB_NAME_LEN];
+	char char_reg_num_table[DB_NAME_LEN];
 };
 extern struct Schema_Config schema_config;
 
+#if PACKETVER_SUPPORTS_PINCODE
 /// Pincode system
 enum pincode_state {
 	PINCODE_OK		= 0,
@@ -78,6 +82,10 @@ enum pincode_state {
 	PINCODE_NOTSET	= 2,
 	PINCODE_EXPIRED	= 3,
 	PINCODE_NEW		= 4,
+	PINCODE_ILLEGAL = 5,
+#if 0
+	PINCODE_KSSN	= 6, // Not supported since we do not store KSSN
+#endif
 	PINCODE_PASSED	= 7,
 	PINCODE_WRONG	= 8,
 	PINCODE_MAXSTATE
@@ -87,7 +95,11 @@ struct Pincode_Config {
 	int pincode_changetime;
 	int pincode_maxtry;
 	bool pincode_force;
+	bool pincode_allow_repeated;
+	bool pincode_allow_sequential;
 };
+#endif
+
 struct CharMove_Config {
 	bool char_move_enabled;
 	bool char_movetoused;
@@ -124,14 +136,18 @@ struct CharServ_Config {
 
 	struct CharMove_Config charmove_config;
 	struct Char_Config char_config;
+#if PACKETVER_SUPPORTS_PINCODE
 	struct Pincode_Config pincode_config;
+#endif
 
 	int save_log; // show loading/saving messages
 	int log_char;	// loggin char or not [devil]
 	int log_inter;	// loggin inter or not [devil]
 	int char_check_db;	///cheking sql-table at begining ?
 
-	struct point start_point; // Initial position the player will spawn on server
+	struct point start_point[MAX_STARTPOINT]; // Initial position the player will spawn on the server
+	short start_point_count; // Number of positions read
+	struct startitem start_items[MAX_STARTITEM]; // Initial items the player with spawn with on the server
 	int console;
 	int max_connect_user;
 	int gm_allow_group;
@@ -139,11 +155,9 @@ struct CharServ_Config {
 	int start_zeny;
 	int guild_exp_rate;
 
-	// eAmod
-	int guild_base_members;
-	int guild_add_members;
-	int bg_regular_rewards[3];
-	int bg_ranked_rewards[3];
+	char default_map[MAP_NAME_LENGTH];
+	unsigned short default_map_x;
+	unsigned short default_map_y;
 };
 extern struct CharServ_Config charserv_config;
 
@@ -159,8 +173,8 @@ extern struct mmo_map_server map_server[MAX_MAP_SERVERS];
 
 #define AUTH_TIMEOUT 30000
 struct auth_node {
-	int account_id;
-	int char_id;
+	uint32 account_id;
+	uint32 char_id;
 	uint32 login_id1;
 	uint32 login_id2;
 	uint32 ip;
@@ -170,21 +184,22 @@ struct auth_node {
 	unsigned changing_mapservers : 1;
 	uint8 version;
 };
-DBMap* char_get_authdb(); // int account_id -> struct auth_node*
+DBMap* char_get_authdb(); // uint32 account_id -> struct auth_node*
 
 struct online_char_data {
-	int account_id;
-	int char_id;
+	uint32 account_id;
+	uint32 char_id;
 	int fd;
 	int waiting_disconnect;
 	short server; // -2: unknown server, -1: not connected, 0+: id of server
 	bool pincode_success;
 };
-DBMap* char_get_onlinedb(); // int account_id -> struct online_char_data*
+DBMap* char_get_onlinedb(); // uint32 account_id -> struct online_char_data*
 
 struct char_session_data {
 	bool auth; // whether the session is authed or not
-	int account_id, login_id1, login_id2, sex;
+	uint32 account_id, login_id1, login_id2;
+	int sex;
 	int found_char[MAX_CHARS]; // ids of chars on this account
 	char email[40]; // e-mail (default: a@a.com) by [Yor]
 	time_t expiration_time; // # of seconds 1/1/1970 (timestamp): Validity limit of the account (0 = unlimited)
@@ -202,37 +217,28 @@ struct char_session_data {
 	time_t pincode_change;
 	uint16 pincode_try;
 	// Addon system
-	int bank_vault;
 	unsigned int char_moves[MAX_CHARS]; // character moves left
 	uint8 isvip;
 	time_t unban_time[MAX_CHARS];
 	int charblock_timer;
+	uint8 flag; // &1 - Retrieving guild bound items
 };
 
 
 struct mmo_charstatus;
-DBMap* char_get_chardb(); // int char_id -> struct mmo_charstatus*
+DBMap* char_get_chardb(); // uint32 char_id -> struct mmo_charstatus*
 
 //Custom limits for the fame lists. [Skotlex]
 extern int fame_list_size_chemist;
 extern int fame_list_size_smith;
 extern int fame_list_size_taekwon;
-// eAmod
-extern int fame_list_size_pvprank;
-extern int fame_list_size_bgrank;
-extern int fame_list_size_bg;
-
 // Char-server-side stored fame lists [DracoRPG]
 extern struct fame_list smith_fame_list[MAX_FAME_LIST];
 extern struct fame_list chemist_fame_list[MAX_FAME_LIST];
 extern struct fame_list taekwon_fame_list[MAX_FAME_LIST];
-// eAmod
-extern struct fame_list pvprank_fame_list[MAX_FAME_LIST];
-extern struct fame_list bgrank_fame_list[MAX_FAME_LIST];
-extern struct fame_list bg_fame_list[MAX_FAME_LIST];
 
 #define DEFAULT_AUTOSAVE_INTERVAL 300*1000
-#define MAX_CHAR_BUF 144 //Max size (for WFIFOHEAD calls)
+#define MAX_CHAR_BUF 150 //Max size (for WFIFOHEAD calls)
 
 int char_search_mapserver(unsigned short map, uint32 ip, uint16 port);
 int char_lan_subnetcheck(uint32 ip);
@@ -240,49 +246,51 @@ int char_lan_subnetcheck(uint32 ip);
 int char_count_users(void);
 DBData char_create_online_data(DBKey key, va_list args);
 int char_db_setoffline(DBKey key, DBData *data, va_list ap);
-void char_set_char_online(int map_id, int char_id, int account_id);
-void char_set_char_offline(int char_id, int account_id);
+void char_set_char_online(int map_id, uint32 char_id, uint32 account_id);
+void char_set_char_offline(uint32 char_id, uint32 account_id);
 void char_set_all_offline(int id);
-void char_disconnect_player(int account_id);
+void char_disconnect_player(uint32 account_id);
 int char_chardb_waiting_disconnect(int tid, unsigned int tick, int id, intptr_t data);
 
+int char_mmo_gender(const struct char_session_data *sd, const struct mmo_charstatus *p, char sex);
 int char_mmo_char_tobuf(uint8* buffer, struct mmo_charstatus* p);
-int char_mmo_char_tosql(int char_id, struct mmo_charstatus* p);
-int char_mmo_char_fromsql(int char_id, struct mmo_charstatus* p, bool load_everything);
+int char_mmo_char_tosql(uint32 char_id, struct mmo_charstatus* p);
+int char_mmo_char_fromsql(uint32 char_id, struct mmo_charstatus* p, bool load_everything);
 int char_mmo_chars_fromsql(struct char_session_data* sd, uint8* buf);
-int char_delete_char_sql(int char_id);
-int char_rename_char_sql(struct char_session_data *sd, int char_id);
+int char_delete_char_sql(uint32 char_id);
+int char_rename_char_sql(struct char_session_data *sd, uint32 char_id);
 int char_divorce_char_sql(int partner_id1, int partner_id2);
-int char_ranking_reset(int type); // eAmod Codes
-int char_item_remove4all(int nameid); // eAmod Codes
-int char_dump2sql(int char_id); // eAmod Codes
-void char_ip_premium(uint32 ip, struct mmo_charstatus* p); // eAmod Codes
 int char_memitemdata_to_sql(const struct item items[], int max, int id, int tableswitch);
 
-void disconnect_player(int account_id);
+void disconnect_player(uint32 account_id);
 
 int char_married(int pl1,int pl2);
 int char_child(int parent_id, int child_id);
 int char_family(int pl1,int pl2,int pl3);
 
-int char_request_accreg2(int account_id, int char_id);
-int char_save_accreg2(unsigned char* buf, int len);
+int char_request_accreg2(uint32 account_id, uint32 char_id);
 
 //extern bool char_gm_read;
-int char_loadName(int char_id, char* name);
+int char_loadName(uint32 char_id, char* name);
 int char_check_char_name(char * name, char * esc_name);
 
 void char_pincode_decrypt( uint32 userSeed, char* pin );
 int char_pincode_compare( int fd, struct char_session_data* sd, char* pin );
 void char_auth_ok(int fd, struct char_session_data *sd);
-void char_set_charselect(int account_id);
+void char_set_charselect(uint32 account_id);
 void char_read_fame_list(void);
 
-#if PACKETVER >= 20120307
+#if PACKETVER >= 20151001
+int char_make_new_char_sql(struct char_session_data* sd, char* name_, int slot, int hair_color, int hair_style, short start_job, short unknown, int sex);
+#elif PACKETVER >= 20120307
 int char_make_new_char_sql(struct char_session_data* sd, char* name_, int slot, int hair_color, int hair_style);
 #else
 int char_make_new_char_sql(struct char_session_data* sd, char* name_, int str, int agi, int vit, int int_, int dex, int luk, int slot, int hair_color, int hair_style);
 #endif
+
+void char_set_session_flag_(int account_id, int val, bool set);
+#define char_set_session_flag(account_id, val)   ( char_set_session_flag_((account_id), (val), true)  )
+#define char_unset_session_flag(account_id, val) ( char_set_session_flag_((account_id), (val), false) )
 
 //For use in packets that depend on an sd being present [Skotlex]
 #define FIFOSD_CHECK(rest) { if(RFIFOREST(fd) < rest) return 0; if (sd==NULL || !sd->auth) { RFIFOSKIP(fd,rest); return 0; } }

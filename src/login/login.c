@@ -19,7 +19,6 @@
 #include "../common/timer.h"
 #include "../common/msg_conf.h"
 #include "../common/cli.h"
-#include "../common/ers.h"
 #include "../common/utils.h"
 #include "../common/mmo.h"
 #include "../config/core.h"
@@ -31,9 +30,7 @@
 #include "loginchrif.h"
 #include "logincnslif.h"
 
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #define LOGIN_MAX_MSG 30				/// Max number predefined in msg_conf
 static char* msg_table[LOGIN_MAX_MSG];	/// Login Server messages_conf
@@ -93,9 +90,9 @@ DBData login_create_online_user(DBKey key, va_list args) {
  * @param account_id : aid connected
  * @return the new online_login_data for that user
  */
-struct online_login_data* login_add_online_user(int char_server, int account_id){
+struct online_login_data* login_add_online_user(int char_server, uint32 account_id){
 	struct online_login_data* p;
-	p = idb_ensure(online_db, account_id, login_create_online_user);
+	p = (struct online_login_data*)idb_ensure(online_db, account_id, login_create_online_user);
 	p->char_server = char_server;
 	if( p->waiting_disconnect != INVALID_TIMER ) {
 		delete_timer(p->waiting_disconnect, login_waiting_disconnect_timer);
@@ -110,7 +107,7 @@ struct online_login_data* login_add_online_user(int char_server, int account_id)
  *  Checking if user was already scheduled for deletion, and remove that timer if found.
  * @param account_id : aid to remove from db
  */
-void login_remove_online_user(int account_id) {
+void login_remove_online_user(uint32 account_id) {
 	struct online_login_data* p;
 	p = (struct online_login_data*)idb_get(online_db, account_id);
 	if( p == NULL )
@@ -151,7 +148,7 @@ int login_waiting_disconnect_timer(int tid, unsigned int tick, int id, intptr_t 
  * @see DBApply
  */
 int login_online_db_setoffline(DBKey key, DBData *data, va_list ap) {
-	struct online_login_data* p = db_data2ptr(data);
+	struct online_login_data* p = (struct online_login_data*)db_data2ptr(data);
 	int server = va_arg(ap, int);
 	if( server == -1 ) {
 		p->char_server = -1;
@@ -174,7 +171,7 @@ int login_online_db_setoffline(DBKey key, DBData *data, va_list ap) {
  * @see DBApply
  */
 static int login_online_data_cleanup_sub(DBKey key, DBData *data, va_list ap) {
-	struct online_login_data *character= db_data2ptr(data);
+	struct online_login_data *character= (struct online_login_data*)db_data2ptr(data);
 	if (character->char_server == -2) //Unknown server.. set them offline
 		login_remove_online_user(character->account_id);
 	return 0;
@@ -246,7 +243,6 @@ int login_mmo_auth_new(const char* userid, const char* pass, const char sex, con
 	safestrncpy(acc.pincode, "", sizeof(acc.pincode));
 	acc.pincode_change = 0;
 	acc.char_slots = MIN_CHARS;
-	acc.bank_vault = 0;
 #ifdef VIP_ENABLE
 	acc.vip_time = 0;
 	acc.old_group = 0;
@@ -581,6 +577,10 @@ bool login_config_read(const char* cfgName, bool normal) {
 			if( msg_silent ) /* only bother if we actually have this enabled */
 				ShowInfo("Console Silent Setting: %d\n", atoi(w2));
 		}
+		else if (strcmpi(w1, "console_msg_log") == 0)
+			console_msg_log = atoi(w2);
+		else if  (strcmpi(w1, "console_log_filepath") == 0)
+			safestrncpy(console_log_filepath, w2, sizeof(console_log_filepath));
 		else if(!strcmpi(w1, "log_login"))
 			login_config.log_login = (bool)config_switch(w2);
 		else if(!strcmpi(w1, "new_account"))
@@ -811,6 +811,9 @@ void set_server_type(void) {
  */
 int do_init(int argc, char** argv) {
 	runflag = LOGINSERVER_ST_STARTING;
+
+	// Init default value
+	safestrncpy(console_log_filepath, "./log/login-msg_log.log", sizeof(console_log_filepath));
 
 	// initialize engine
 	accounts = account_db_sql();

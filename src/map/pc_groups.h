@@ -78,7 +78,7 @@ static const struct {
 	{ "disable_pvm", PC_PERM_DISABLE_PVM },
 	{ "disable_pvp", PC_PERM_DISABLE_PVP },
 	{ "disable_commands_when_dead", PC_PERM_DISABLE_CMD_DEAD },
-	{ "channel_operator", PC_PERM_CHANNEL_ADMIN },
+	{ "channel_admin", PC_PERM_CHANNEL_ADMIN },
 	{ "can_trade_bounded", PC_PERM_TRADE_BOUNDED },
 	{ "item_unconditional", PC_PERM_ITEM_UNCONDITIONAL },
 	{ "command_enable",PC_PERM_ENABLE_COMMAND },

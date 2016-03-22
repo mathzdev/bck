@@ -10,11 +10,7 @@
 #include "itemdb.h"
 #include "clif.h"
 #include "pc.h"
-#include "log.h"
 #include "intif.h"
-
-#include <time.h>
-#include <string.h>
 
 void mail_clear(struct map_session_data *sd)
 {
@@ -52,36 +48,26 @@ int mail_removezeny(struct map_session_data *sd, short flag)
 	{  //Zeny send
 		pc_payzeny(sd,sd->mail.zeny,LOG_TYPE_MAIL, NULL);
 	}
+	if (sd->mail.zeny > 0)
+		clif_updatestatus(sd, SP_ZENY);
 	sd->mail.zeny = 0;
 
 	return 1;
 }
 
 /**
-* Attempt to set item or zeny
-* @param sd
+* Attempt to set item or zeny to a mail
+* @param sd : player attaching the content
 * @param idx 0 - Zeny; >= 2 - Inventory item
-* @param amount
+* @param amount : amout of zeny or number of item
 * @return True if item/zeny can be set, False if failed
 */
-bool mail_setitem(struct map_session_data *sd, short idx, int amount) {
-	if( sd->state.secure_items )
-	{
-		clif_displaymessage(sd->fd, "You can't attach. Blocked with @security");
-		return 1;
-	}
+bool mail_setitem(struct map_session_data *sd, short idx, uint32 amount) {
 
 	if( pc_istrading(sd) )
 		return false;
 
-	if( battle_config.super_woe_enable )
-	{
-		clif_displaymessage(sd->fd, "Super WoE don't allow send items/zeny with attachments");
-		return 1;
-	}
-
-	if( idx == 0 )
-	{ // Zeny Transfer
+	if( idx == 0 ) { // Zeny Transfer
 		if( !pc_can_give_items(sd) )
 			return false;
 
@@ -167,7 +153,7 @@ int mail_openmail(struct map_session_data *sd)
 {
 	nullpo_ret(sd);
 
-	if( sd->state.storage_flag || sd->state.vending || sd->state.buyingstore || sd->state.trading || sd->npc_id || sd->npc_shopid )
+	if( sd->state.storage_flag || sd->state.vending || sd->state.buyingstore || sd->state.trading )
 		return 0;
 
 	clif_Mail_window(sd->fd, 0);

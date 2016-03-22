@@ -4,8 +4,9 @@
 #ifndef	_MMO_H_
 #define	_MMO_H_
 
-#include "../common/cbasetypes.h"
-#include "../common/db.h"
+#include "cbasetypes.h"
+#include "../config/core.h"
+#include "db.h"
 #include <time.h>
 
 // server->client protocol version
@@ -20,10 +21,12 @@
 // see conf/battle/client.conf for other version
 
 #ifndef PACKETVER
-	//#define PACKETVER 20131223
 	#define PACKETVER 20130807
 	//#define PACKETVER 20120410
 #endif
+
+// Check if the specified packetversion supports the pincode system
+#define PACKETVER_SUPPORTS_PINCODE PACKETVER>=20110309
 
 ///Remove/Comment this line to disable sc_data saving. [Skotlex]
 #define ENABLE_SC_SAVING
@@ -32,21 +35,21 @@
 #define HOTKEY_SAVING
 
 #if PACKETVER < 20090603
-        // (27 = 9 skills x 3 bars)               (0x02b9,191)
-        #define MAX_HOTKEYS 27
+	// (27 = 9 skills x 3 bars)               (0x02b9,191)
+	#define MAX_HOTKEYS 27
 #elif PACKETVER < 20090617
-        // (36 = 9 skills x 4 bars)               (0x07d9,254)
-        #define MAX_HOTKEYS 36
+	// (36 = 9 skills x 4 bars)               (0x07d9,254)
+	#define MAX_HOTKEYS 36
 #else
-        // (38 = 9 skills x 4 bars & 2 Quickslots)(0x07d9,268)
-        #define MAX_HOTKEYS 38
+	// (38 = 9 skills x 4 bars & 2 Quickslots)(0x07d9,268)
+	#define MAX_HOTKEYS 38
 #endif
 
-#define MAX_MAP_PER_SERVER 3000 /// Increased to allow creation of Instance Maps
+#define MAX_MAP_PER_SERVER 1500 /// Increased to allow creation of Instance Maps
 #define MAX_INVENTORY 100 ///Maximum items in player inventory
 /** Max number of characters per account. Note that changing this setting alone is not enough if the client is not hexed to support more characters as well.
 * Max value tested was 265 */
-#define MAX_CHARS 40
+#define MAX_CHARS 9 
 /** Number of slots carded equipment can have. Never set to less than 4 as they are also used to keep the data of forged items/equipment. [Skotlex]
 * Note: The client seems unable to receive data for more than 4 slots due to all related packets having a fixed size. */
 #define MAX_SLOTS 4
@@ -55,17 +58,11 @@
 #define MAX_BANK_ZENY SINT32_MAX ///Max zeny in Bank
 #define MAX_FAME 1000000000 ///Max fame points
 #define MAX_CART 100 ///Maximum item in cart
-#define MAX_SKILL 6000 ///Maximum skill data
-#define MAX_SKILL_TREE 400 ///eAmod moved here for skill usage data
-#define GLOBAL_REG_NUM 256 ///Max permanent character variables per char
-#define ACCOUNT_REG_NUM 64 ///Max permanent local account variables per account
-#define ACCOUNT_REG2_NUM 16 ///Max permanent global account variables per account
-#define MAX_REG_NUM 256 ///Should hold the max of GLOBAL/ACCOUNT/ACCOUNT2 (needed for some arrays that hold all three)
+#define MAX_SKILL 1200 ///Maximum skill can be hold by Player, Homunculus, & Mercenary (skill list) AND skill_db limit
 #define DEFAULT_WALK_SPEED 150 ///Default walk speed
 #define MIN_WALK_SPEED 20 ///Min walk speed
 #define MAX_WALK_SPEED 1000 ///Max walk speed
 #define MAX_STORAGE 600 ///Max number of storage slots a player can have, (up to ~850 tested)
-#define MAX_EXTRA_STORAGE 100 ///eAmod Extra Storage Size
 #define MAX_GUILD_STORAGE 600 ///Max number of storage slots a guild
 #define MAX_PARTY 12 ///Max party member
 #define MAX_GUILD 16+10*6	///Increased max guild members +6 per 1 extension levels [Lupus]
@@ -73,10 +70,11 @@
 #define MAX_GUILDEXPULSION 32 ///Max Guild expulsion
 #define MAX_GUILDALLIANCE 16 ///Max Guild alliance
 #define MAX_GUILDSKILL	15 ///Increased max guild skills because of new skills [Sara-chan]
-#define MAX_GUILDLEVEL 70 ///Max Guild level
+#define MAX_GUILDLEVEL 50 ///Max Guild level
 #define MAX_GUARDIANS 8	///Local max per castle. If this value is increased, need to add more fields on MySQL `guild_castle` table [Skotlex]
 #define MAX_QUEST_OBJECTIVES 3 ///Max quest objectives for a quest
-#define MAX_PC_BONUS_SCRIPT 20 ///Max bonus script
+#define MAX_QUEST_DROPS 3 ///Max quest drops for a quest
+#define MAX_PC_BONUS_SCRIPT 50 ///Max bonus script can be fetched from `bonus_script` table on player load [Cydh]
 
 // for produce
 #define MIN_ATTRIBUTE 0
@@ -142,10 +140,6 @@
 #define MAX_ELEMENTAL_CLASS 12
 #define EL_CLASS_BASE 2114
 #define EL_CLASS_MAX (EL_CLASS_BASE+MAX_ELEMENTAL_CLASS-1)
-
-//Achievement System
-#define ACHIEVEMENT_MAX 50
-#define ACHIEVEMENT_OBJETIVE_MAX 5
 
 enum item_types {
 	IT_HEALING = 0,
@@ -225,15 +219,21 @@ struct point {
 	short x,y;
 };
 
+struct startitem {
+	unsigned short nameid, amount;
+	short pos;
+};
+
 enum e_skill_flag
 {
 	SKILL_FLAG_PERMANENT,
 	SKILL_FLAG_TEMPORARY,
 	SKILL_FLAG_PLAGIARIZED,
-	SKILL_FLAG_REPLACED_LV_0, // temporary skill overshadowing permanent skill of level 'N - SKILL_FLAG_REPLACED_LV_0',
-	SKILL_FLAG_PERM_GRANTED, // permanent, granted through someway e.g. script
-	SKILL_FLAG_TMP_COMBO, //@FIXME for homon combo atm
-	//...
+	SKILL_FLAG_PERM_GRANTED, // Permanent, granted through someway e.g. script
+	SKILL_FLAG_TMP_COMBO, //@FIXME for homunculus combo atm
+
+	//! NOTE: This flag be the last flag, and don't change the value if not needed!
+	SKILL_FLAG_REPLACED_LV_0 = 10, // temporary skill overshadowing permanent skill of level 'N - SKILL_FLAG_REPLACED_LV_0',
 };
 
 enum e_mmo_charstatus_opt {
@@ -243,21 +243,24 @@ enum e_mmo_charstatus_opt {
 };
 
 struct s_skill {
-	unsigned short id;
-	unsigned char lv;
-	unsigned char flag; // see enum e_skill_flag
+	uint16 id;
+	uint8 lv;
+	uint8 flag; // see enum e_skill_flag
 };
 
-struct global_reg {
-	char str[32];
-	char value[256];
+struct script_reg_state {
+	unsigned int type : 1; // because I'm a memory hoarder and having them in the same struct would be a 8-byte/instance waste while ints outnumber str on a 10000-to-1 ratio.
+	unsigned int update : 1; // whether it needs to be sent to char server for insertion/update/delete
 };
 
-//Holds array of global registries, used by the char server and converter.
-struct accreg {
-	int account_id, char_id;
-	int reg_num;
-	struct global_reg reg[MAX_REG_NUM];
+struct script_reg_num {
+	struct script_reg_state flag;
+	int value;
+};
+
+struct script_reg_str {
+	struct script_reg_state flag;
+	char *value;
 };
 
 //For saving status changes across sessions. [Skotlex]
@@ -266,12 +269,13 @@ struct status_change_data {
 	long val1, val2, val3, val4, tick; //Remaining duration.
 };
 
-#define MAX_BONUS_SCRIPT_LENGTH 1024
+#define MAX_BONUS_SCRIPT_LENGTH 512
 struct bonus_script_data {
-	char script[MAX_BONUS_SCRIPT_LENGTH];
-	long tick;
-	char type;
-	short flag, icon;
+	char script_str[MAX_BONUS_SCRIPT_LENGTH]; //< Script string
+	uint32 tick; ///< Tick
+	uint16 flag; ///< Flags @see enum e_bonus_script_flags
+	int16 icon; ///< Icon SI
+	uint8 type; ///< 0 - None, 1 - Buff, 2 - Debuff
 };
 
 struct skill_cooldown_data {
@@ -284,23 +288,19 @@ struct storage_data {
 	struct item items[MAX_STORAGE];
 };
 
-struct extra_storage_data {
-	int storage_amount;
-	struct item items[MAX_EXTRA_STORAGE];
-};
-
+/// Guild storgae struct
 struct guild_storage {
-	int dirty;
-	int guild_id;
-	short storage_status;
-	short storage_amount;
-	struct item items[MAX_GUILD_STORAGE];
-	unsigned short lock;
+	bool dirty; ///< Dirty status, need to be saved
+	int guild_id; ///< Guild ID
+	short storage_amount; ///< Amount of item on storage
+	struct item items[MAX_GUILD_STORAGE]; ///< Item entries
+	bool locked; ///< If locked, can't use storage when item bound retrieval
+	uint32 opened; ///< Holds the char_id that open the storage
 };
 
 struct s_pet {
-	int account_id;
-	int char_id;
+	uint32 account_id;
+	uint32 char_id;
 	int pet_id;
 	short class_;
 	short level;
@@ -316,7 +316,7 @@ struct s_pet {
 struct s_homunculus {	//[orn]
 	char name[NAME_LENGTH];
 	int hom_id;
-	int char_id;
+	uint32 char_id;
 	short class_;
 	short prev_class;
 	int hp,max_hp,sp,max_sp;
@@ -328,19 +328,26 @@ struct s_homunculus {	//[orn]
 	unsigned int exp;
 	short rename_flag;
 	short vaporize; //albator
-	int str ;
-	int agi ;
-	int vit ;
-	int int_ ;
-	int dex ;
-	int luk ;
+	int str;
+	int agi;
+	int vit;
+	int int_;
+	int dex;
+	int luk;
+
+	int str_value;
+	int agi_value;
+	int vit_value;
+	int int_value;
+	int dex_value;
+	int luk_value;
 
 	char spiritball; //for homun S [lighta]
 };
 
 struct s_mercenary {
 	int mercenary_id;
-	int char_id;
+	uint32 char_id;
 	short class_;
 	int hp, sp;
 	unsigned int kill_count;
@@ -349,7 +356,7 @@ struct s_mercenary {
 
 struct s_elemental {
 	int elemental_id;
-	int char_id;
+	uint32 char_id;
 	short class_;
 	int mode;
 	int hp, sp, max_hp, max_sp, matk, atk, atk2;
@@ -358,8 +365,8 @@ struct s_elemental {
 };
 
 struct s_friend {
-	int account_id;
-	int char_id;
+	uint32 account_id;
+	uint32 char_id;
 	char name[NAME_LENGTH];
 };
 
@@ -371,149 +378,16 @@ struct hotkey {
 };
 #endif
 
-struct s_killrank {
-	unsigned short
-		kill_count,
-		death_count;
-	int score;
-};
-
-struct s_battleground_stats {
-	unsigned int
-		top_damage,
-		damage_done,
-		damage_received,
-		boss_damage;
-	unsigned short
-		// Triple Inferno
-		skulls,
-		ti_wins, ti_lost, ti_tie,
-		// Tierra EoS
-		eos_flags,
-		eos_bases,
-		eos_wins, eos_lost, eos_tie,
-		// Tierra Bossnia
-		boss_killed,
-		boss_flags,
-		boss_wins, boss_lost, boss_tie,
-		// Tierra Domination
-		dom_bases,
-		dom_off_kills,
-		dom_def_kills,
-		dom_wins, dom_lost, dom_tie,
-		// Flavius TD
-		td_kills,
-		td_deaths,
-		td_wins, td_lost, td_tie,
-		// Flavius SC
-		sc_stole,
-		sc_captured,
-		sc_droped,
-		sc_wins, sc_lost, sc_tie,
-		// Flavius CTF
-		ctf_taken,
-		ctf_captured,
-		ctf_droped,
-		ctf_wins, ctf_lost, ctf_tie,
-		// Conquest
-		emperium_kill,
-		barricade_kill,
-		gstone_kill,
-		cq_wins, cq_lost,
-		// Rush
-		ru_captures,
-		ru_wins, ru_lost;
-
-	unsigned int // Ammo
-		sp_heal_potions,
-		hp_heal_potions,
-		yellow_gemstones,
-		red_gemstones,
-		blue_gemstones,
-		poison_bottles,
-		acid_demostration,
-		acid_demostration_fail,
-		support_skills_used,
-		healing_done,
-		wrong_support_skills_used,
-		wrong_healing_done,
-		sp_used,
-		zeny_used,
-		spiritb_used,
-		ammo_used;
-	unsigned short
-		kill_count,
-		death_count,
-		win, lost, tie,
-		leader_win, leader_lost, leader_tie,
-		deserter, rank_games;
-
-	int score, points, rank_points;
-};
-
-struct s_woestats {
-	int score;
-	unsigned short
-		kill_count,
-		death_count;
-	unsigned int
-		top_damage,
-		damage_done,
-		damage_received;
-	unsigned int
-		emperium_damage,
-		guardian_damage,
-		barricade_damage,
-		gstone_damage;
-	unsigned short
-		emperium_kill,
-		guardian_kill,
-		barricade_kill,
-		gstone_kill;
-	unsigned int // Ammo
-		sp_heal_potions,
-		hp_heal_potions,
-		yellow_gemstones,
-		red_gemstones,
-		blue_gemstones,
-		poison_bottles,
-		acid_demostration,
-		acid_demostration_fail,
-		support_skills_used,
-		healing_done,
-		wrong_support_skills_used,
-		wrong_healing_done,
-		sp_used,
-		zeny_used,
-		spiritb_used,
-		ammo_used;
-};
-
-struct s_skillcount {
-	unsigned short id,count;
-};
-
-/////////////////////////////////////////////////////////////
-// Achievement System
-/////////////////////////////////////////////////////////////
-struct s_achievement {
-	int id;
-	int count[ACHIEVEMENT_OBJETIVE_MAX];
-	bool completed;
-};
-/////////////////////////////////////////////////////////////
-
 struct mmo_charstatus {
-	int char_id;
-	int account_id;
-	int partner_id;
-	int father;
-	int mother;
-	int child;
+	uint32 char_id;
+	uint32 account_id;
+	uint32 partner_id;
+	uint32 father;
+	uint32 mother;
+	uint32 child;
 
-	unsigned int base_exp,job_exp,bg_exp;
+	unsigned int base_exp,job_exp;
 	int zeny;
-	int bank_vault;
 
 	short class_;
 	unsigned int status_point,skill_point;
@@ -521,8 +395,8 @@ struct mmo_charstatus {
 	unsigned int option;
 	short manner; // Defines how many minutes a char will be muted, each negative point is equivalent to a minute.
 	unsigned char karma;
-	short hair,hair_color,clothes_color;
-	int party_id,guild_id,pet_id,hom_id,mer_id,ele_id,faction_id;
+	short hair,hair_color,clothes_color,body;
+	int party_id,guild_id,pet_id,hom_id,mer_id,ele_id;
 	int fame;
 
 	// Mercenary Guilds Rank
@@ -530,34 +404,22 @@ struct mmo_charstatus {
 	int spear_faith, spear_calls;
 	int sword_faith, sword_calls;
 
-	time_t last_tick;
-	unsigned int playtime;
-
 	short weapon; // enum weapon_type
 	short shield; // view-id
 	short head_top,head_mid,head_bottom;
 	short robe;
 
 	char name[NAME_LENGTH];
-	unsigned int base_level,job_level,bg_level;
-	short str,agi,vit,int_,dex,luk;
+	unsigned int base_level,job_level;
+	unsigned short str,agi,vit,int_,dex,luk;
 	unsigned char slot,sex;
 
 	uint32 mapip;
 	uint16 mapport;
 
-	// Ranking Data
-	struct s_killrank pvp, pk;
-	struct s_battleground_stats bgstats;
-	struct s_skillcount bg_skillcount[MAX_SKILL_TREE]; // BG Limited
-	struct s_woestats wstats;
-	struct s_skillcount skillcount[MAX_SKILL_TREE]; // WoE Limited
-
 	struct point last_point,save_point,memo_point[MAX_MEMOPOINTS];
 	struct item inventory[MAX_INVENTORY],cart[MAX_CART];
 	struct storage_data storage;
-	struct extra_storage_data ext_storage;
-
 	struct s_skill skill[MAX_SKILL];
 
 	struct s_friend friends[MAX_FRIENDS]; //New friend system [Skotlex]
@@ -565,7 +427,6 @@ struct mmo_charstatus {
 	struct hotkey hotkeys[MAX_HOTKEYS];
 #endif
 	bool show_equip,allow_party;
-	unsigned char iprank;
 	short rename;
 
 	time_t delete_date;
@@ -579,6 +440,8 @@ struct mmo_charstatus {
 	bool cashshop_sent; // Whether the player has received the CashShop list
 
 	uint32 uniqueitem_counter;
+
+	unsigned char hotkey_rowshift;
 };
 
 typedef enum mail_status {
@@ -589,17 +452,17 @@ typedef enum mail_status {
 
 struct mail_message {
 	int id;
-	int send_id;
-	char send_name[NAME_LENGTH];
-	int dest_id;
-	char dest_name[NAME_LENGTH];
+	uint32 send_id;                 //hold char_id of sender
+	char send_name[NAME_LENGTH];    //sender nickname
+	uint32 dest_id;                 //hold char_id of receiver
+	char dest_name[NAME_LENGTH];    //receiver nickname
 	char title[MAIL_TITLE_LENGTH];
 	char body[MAIL_BODY_LENGTH];
 
 	mail_status status;
 	time_t timestamp; // marks when the message was sent
 
-	int zeny;
+	uint32 zeny;
 	struct item item;
 };
 
@@ -628,18 +491,9 @@ struct auction_data {
 	int auction_end_timer;
 };
 
-struct registry {
-	int global_num;
-	struct global_reg global[GLOBAL_REG_NUM];
-	int account_num;
-	struct global_reg account[ACCOUNT_REG_NUM];
-	int account2_num;
-	struct global_reg account2[ACCOUNT_REG2_NUM];
-};
-
 struct party_member {
-	int account_id;
-	int char_id;
+	uint32 account_id;
+	uint32 char_id;
 	char name[NAME_LENGTH];
 	unsigned short class_;
 	unsigned short map;
@@ -659,7 +513,7 @@ struct party {
 
 struct map_session_data;
 struct guild_member {
-	int account_id, char_id;
+	uint32 account_id, char_id;
 	short hair,hair_color,gender,class_,lv;
 	uint64 exp;
 	int exp_payper;
@@ -680,49 +534,19 @@ struct guild_alliance {
 	int opposition;
 	int guild_id;
 	char name[NAME_LENGTH];
-	bool war;
 };
 
 struct guild_expulsion {
 	char name[NAME_LENGTH];
 	char mes[40];
-	int account_id;
+	uint32 account_id;
 };
 
 struct guild_skill {
 	int id,lv;
 };
 
-#define RANK_CASTLES 34 // eAMod Setting for Castle Ranking
-
-struct guild_rank_data {
-	unsigned short
-		capture, // Number of times you have captured this castle
-		emperium, // Number of times you have break an emperium on this castle
-		treasure, // Number of opened treasures
-		top_eco, // Max economy reach on this castle
-		top_def, // Max defense reach on this castle
-		invest_eco, // Total of Economy points
-		invest_def, // Total of Defense points
-		offensive_score,
-		defensive_score;
-	unsigned int
-		posesion_time,
-		zeny_eco,
-		zeny_def;
-	unsigned short
-		skill_battleorder,
-		skill_regeneration,
-		skill_restore,
-		skill_emergencycall;
-	struct {
-		unsigned int
-			kill_count,
-			death_count;
-	} off, def, ext, ali;
-	bool changed;
-};
-
+struct Channel;
 struct guild {
 	int guild_id;
 	short guild_lv, connect_member, max_member, average_lv;
@@ -738,15 +562,10 @@ struct guild {
 	struct guild_alliance alliance[MAX_GUILDALLIANCE];
 	struct guild_expulsion expulsion[MAX_GUILDEXPULSION];
 	struct guild_skill skill[MAX_GUILDSKILL];
-
-	struct guild_rank_data castle[RANK_CASTLES];
-
-	int skill_block_timer[MAX_GUILDSKILL];
+	struct Channel *channel;
 
 	/* Used by char-server to save events for guilds */
 	unsigned short save_flag;
-	bool war;
-	time_t war_tick;
 };
 
 struct guild_castle {
@@ -763,7 +582,6 @@ struct guild_castle {
 	int payTime;
 	int createTime;
 	int visibleC;
-	time_t capture_tick; // [WoE Ranking] 
 	struct {
 		unsigned visible : 1;
 		int id; // object id
@@ -816,6 +634,7 @@ enum e_guild_skill {
 	GD_MAX,
 };
 
+#define MAX_SKILL_ID GD_MAX
 
 //These mark the ID of the jobs, as expected by the client. [Skotlex]
 enum e_job {
@@ -849,7 +668,6 @@ enum e_job {
 	JOB_SUMMER,
 	JOB_HANBOK,
 	JOB_OKTOBERFEST,
-	JOB_SUMMONER = 35, //[DanielArt]
 	JOB_MAX_BASIC,
 
 	JOB_NOVICE_HIGH = 4001,
@@ -992,20 +810,62 @@ enum bound_type {
 	BOUND_CHAR, /// 4 - Character Bound
 	BOUND_MAX,
 
-	//BOUND_ONEQUIP = 1, //! TODO
+	BOUND_ONEQUIP = 1, ///< Show notification when item will be bound on equip
 	BOUND_DISPYELLOW = 2, /// Shows the item name in yellow color
 };
 
-// sanity checks...
+enum e_pc_reg_loading {
+	PRL_NONE = 0x0,
+	PRL_CHAR = 0x1,
+	PRL_ACCL = 0x2, // local
+	PRL_ACCG = 0x4, // global
+	PRL_ALL = 0xFF,
+};
+
+// Sanity checks...
 #if MAX_ZENY > INT_MAX
 #error MAX_ZENY is too big
+#endif
+
+// This sanity check is required, because some other places(like skill.c) rely on this
+#if MAX_PARTY < 2
+#error MAX_PARTY is too small, you need at least 2 players for a party
+#endif
+
+#ifndef VIP_ENABLE
+	#define MIN_STORAGE MAX_STORAGE // If the VIP system is disabled the min = max.
+	#define MIN_CHARS MAX_CHARS // Default number of characters per account.
+	#define MAX_CHAR_BILLING 0
+	#define MAX_CHAR_VIP 0
 #endif
 
 #if (MIN_CHARS + MAX_CHAR_VIP + MAX_CHAR_BILLING) > MAX_CHARS
 #error Config of MAX_CHARS is invalid
 #endif
+
 #if MIN_STORAGE > MAX_STORAGE
 #error Config of MIN_STORAGE is invalid
+#endif
+
+#ifdef PACKET_OBFUSCATION
+	#if PACKETVER < 20110817
+		#undef PACKET_OBFUSCATION
+	#endif
+#endif
+
+/* Feb 1st 2012 */
+#if PACKETVER >= 20120201
+	#define NEW_CARTS
+	#ifndef ENABLE_SC_SAVING
+	#warning "Cart won't be able to be saved for relog"
+	#endif
+#if PACKETVER >= 20150826
+	#define MAX_CARTS 12		// used for 3 new cart design
+#else
+	#define MAX_CARTS 9
+#endif
+#else
+	#define MAX_CARTS 5
 #endif
 
 #endif /* _MMO_H_ */

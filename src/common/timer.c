@@ -1,29 +1,27 @@
 // Copyright (c) Athena Dev Teams - Licensed under GNU GPL
 // For more information, see LICENCE in the main folder
 
-#include "../common/cbasetypes.h"
-#include "../common/db.h"
-#include "../common/malloc.h"
-#include "../common/showmsg.h"
-#include "../common/utils.h"
-#include "../common/nullpo.h"
+#include "cbasetypes.h"
+#include "db.h"
+#include "malloc.h"
+#include "showmsg.h"
+#include "utils.h"
+#include "nullpo.h"
 #include "timer.h"
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 
 #ifdef WIN32
-#include "../common/winapi.h" // GetTickCount()
+#include "winapi.h" // GetTickCount()
 #else
-#include <unistd.h>
-#include <sys/time.h> // struct timeval, gettimeofday()
 #endif
 
 // If the server can't handle processing thousands of monsters
 // or many connected clients, please increase TIMER_MIN_INTERVAL.
-#define TIMER_MIN_INTERVAL 50
+// The official interval of 20ms is however strongly recommended,
+// as it is needed for perfect server-client syncing.
+#define TIMER_MIN_INTERVAL 20
 #define TIMER_MAX_INTERVAL 1000
 
 // timers (array)

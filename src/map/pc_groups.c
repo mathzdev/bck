@@ -4,7 +4,6 @@
 #include "../common/conf.h"
 #include "../common/db.h"
 #include "../common/malloc.h"
-#include "../common/nullpo.h"
 #include "../common/showmsg.h"
 #include "../common/strlib.h" // strcmp
 #include "../common/socket.h"
@@ -142,7 +141,7 @@ static void read_config(void)
 		
 		// Check if all commands and permissions exist
 		iter = db_iterator(pc_group_db);
-		for (group_settings = dbi_first(iter); dbi_exists(iter); group_settings = dbi_next(iter)) {
+		for (group_settings = (GroupSettings *)dbi_first(iter); dbi_exists(iter); group_settings = (GroupSettings *)dbi_next(iter)) {
 			config_setting_t *commands = group_settings->commands, *permissions = group_settings->permissions;
 			int count = 0, j;
 
@@ -187,7 +186,7 @@ static void read_config(void)
 		i = 0; // counter for processed groups
 		while (i < group_count) {
 			iter = db_iterator(pc_group_db);
-			for (group_settings = dbi_first(iter); dbi_exists(iter); group_settings = dbi_next(iter)) {
+			for (group_settings = (GroupSettings *)dbi_first(iter); dbi_exists(iter); group_settings = (GroupSettings *)dbi_next(iter)) {
 				config_setting_t *inherit = NULL,
 				                 *commands = group_settings->commands,
 					             *permissions = group_settings->permissions;
@@ -252,7 +251,7 @@ static void read_config(void)
 
 		// Pack permissions into GroupSettings.e_permissions for faster checking
 		iter = db_iterator(pc_group_db);
-		for (group_settings = dbi_first(iter); dbi_exists(iter); group_settings = dbi_next(iter)) {
+		for (group_settings = (GroupSettings *)dbi_first(iter); dbi_exists(iter); group_settings = (GroupSettings *)dbi_next(iter)) {
 			config_setting_t *permissions = group_settings->permissions;
 			int c, count = config_setting_length(permissions);
 
@@ -277,9 +276,9 @@ static void read_config(void)
 	if( ( pc_group_max = group_count ) ) {
 		DBIterator *iter = db_iterator(pc_group_db);
 		GroupSettings *group_settings = NULL;
-		int* group_ids = aMalloc( pc_group_max * sizeof(int) );
+		int* group_ids = (int*)aMalloc( pc_group_max * sizeof(int) );
 		int i = 0;
-		for (group_settings = dbi_first(iter); dbi_exists(iter); group_settings = dbi_next(iter)) {
+		for (group_settings = (GroupSettings *)dbi_first(iter); dbi_exists(iter); group_settings = (GroupSettings *)dbi_next(iter)) {
 			group_ids[i++] = group_settings->id;
 		}
 		
@@ -369,9 +368,7 @@ void pc_group_pc_load(struct map_session_data * sd) {
 bool pc_group_has_permission(int group_id, int permission)
 {
 	GroupSettings *group = NULL;
-	if ((group = id2group(group_id)) == NULL) 
-		return false;
-	return ((group->e_permissions&permission) != 0);
+	return (group = id2group(group_id)) == NULL ? false : (group->e_permissions&permission) != 0;
 }
 
 /**
@@ -381,9 +378,7 @@ bool pc_group_has_permission(int group_id, int permission)
 bool pc_group_should_log_commands(int group_id)
 {
 	GroupSettings *group = NULL;
-	if ((group = id2group(group_id)) == NULL) 
-		return false;
-	return group->log_commands;
+	return (group = id2group(group_id)) == NULL ? false : group->log_commands;
 }
 
 /**
@@ -433,12 +428,6 @@ void do_init_pc_groups(void)
 	pc_group_db = idb_alloc(DB_OPT_RELEASE_DATA);
 	pc_groupname_db = stridb_alloc(DB_OPT_DUP_KEY, 0);
 	read_config();
-
-	if( battle_config.premium_group_id && !pc_group_exists(battle_config.premium_group_id) )
-	{
-		battle_config.premium_group_id = 0;
-		ShowWarning("conf/battle/eAmod.conf premium_group_id is enabled but group dont exist, disabling...\n");
-	}
 }
 
 /**

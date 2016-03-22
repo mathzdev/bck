@@ -22,9 +22,7 @@
 #include "loginclif.h"
 #include "loginchrif.h"
 
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 /**
  * Transmit auth result to client.
@@ -402,7 +400,7 @@ static int logclif_parse_reqkey(int fd, struct login_session_data *sd){
 static int logclif_parse_reqcharconnec(int fd, struct login_session_data *sd, char* ip){
 	if (RFIFOREST(fd) < 86)
 		return 0;
-	{
+	else {
 		int result;
 		char server_name[20];
 		char message[256];
@@ -432,7 +430,7 @@ static int logclif_parse_reqcharconnec(int fd, struct login_session_data *sd, ch
 		if( runflag == LOGINSERVER_ST_RUNNING &&
 			result == -1 &&
 			sd->sex == 'S' &&
-			sd->account_id >= 0 && sd->account_id < ARRAYLENGTH(ch_server) &&
+			sd->account_id < ARRAYLENGTH(ch_server) &&
 			!session_isValid(ch_server[sd->account_id].fd) )
 		{
 			ShowStatus("Connection of the char-server '%s' accepted.\n", server_name);

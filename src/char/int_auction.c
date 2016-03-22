@@ -30,7 +30,7 @@ static int auction_count(int char_id, bool buy)
 	struct auction_data *auction;
 	DBIterator *iter = db_iterator(auction_db_);
 
-	for( auction = dbi_first(iter); dbi_exists(iter); auction = dbi_next(iter) )
+	for( auction = (struct auction_data *)dbi_first(iter); dbi_exists(iter); auction = (struct auction_data *)dbi_next(iter) )
 	{
 		if( (buy && auction->buyer_id == char_id) || (!buy && auction->seller_id == char_id) )
 			i++;
@@ -50,8 +50,8 @@ void auction_save(struct auction_data *auction)
 		return;
 
 	StringBuf_Init(&buf);
-	StringBuf_Printf(&buf, "UPDATE `%s` SET `seller_id` = '%d', `seller_name` = ?, `buyer_id` = '%d', `buyer_name` = ?, `price` = '%d', `buynow` = '%d', `hours` = '%d', `timestamp` = '%lu', `nameid` = '%hu', `item_name` = ?, `type` = '%d', `refine` = '%d', `attribute` = '%d', `unique_id` = '%"PRIu64"'",
-		schema_config.auction_db, auction->seller_id, auction->buyer_id, auction->price, auction->buynow, auction->hours, (unsigned long)auction->timestamp, auction->item.nameid, auction->type, auction->item.refine, auction->item.attribute, auction->item.unique_id);
+	StringBuf_Printf(&buf, "UPDATE `%s` SET `seller_id` = '%d', `seller_name` = ?, `buyer_id` = '%d', `buyer_name` = ?, `price` = '%d', `buynow` = '%d', `hours` = '%d', `timestamp` = '%lu', `nameid` = '%hu', `item_name` = ?, `type` = '%d', `refine` = '%d', `attribute` = '%d'",
+		schema_config.auction_db, auction->seller_id, auction->buyer_id, auction->price, auction->buynow, auction->hours, (unsigned long)auction->timestamp, auction->item.nameid, auction->type, auction->item.refine, auction->item.attribute);
 	for( j = 0; j < MAX_SLOTS; j++ )
 		StringBuf_Printf(&buf, ", `card%d` = '%hu'", j, auction->item.card[j]);
 	StringBuf_Printf(&buf, " WHERE `auction_id` = '%d'", auction->auction_id);
@@ -135,18 +135,6 @@ static void mapif_Auction_message(int char_id, unsigned char result)
 	chmapif_sendall(buf,7);
 }
 
-static void mapif_Auction_data(struct auction_data *auction, unsigned char result)
-{ // Send Auction data to map servers
-	unsigned char buf[sizeof(struct auction_data) + 5];
-	int len = sizeof(struct auction_data) + 5;
-
-	WBUFW(buf,0) = 0x3857;
-	WBUFW(buf,2) = len;
-	WBUFB(buf,4) = result;
-	memcpy(WBUFP(buf,5), auction, sizeof(struct auction_data));
-	chmapif_sendall(buf,len);
-}
-
 static int auction_end_timer(int tid, unsigned int tick, int id, intptr_t data)
 {
 	struct auction_data *auction;
@@ -164,7 +152,6 @@ static int auction_end_timer(int tid, unsigned int tick, int id, intptr_t data)
 		ShowInfo("Auction End: id %u.\n", auction->auction_id);
 
 		auction->auction_end_timer = INVALID_TIMER;
-		mapif_Auction_data(auction, 2);
 		auction_delete(auction);
 	}
 
@@ -462,17 +449,13 @@ static void mapif_parse_Auction_bid(int fd)
 		mapif_Auction_message(char_id, 6); // You have won the auction
 		mail_sendmail(0, msg_txt(200), auction->seller_id, auction->seller_name, msg_txt(201), msg_txt(211), auction->buynow, NULL);
 
-		mapif_Auction_data(auction, 1);
 		auction_delete(auction);
-	}
-	else
-	{
-		auction_save(auction);
-		mapif_Auction_data(auction, 0);
-		mapif_Auction_bid(fd, char_id, 0, 1); // You have successfully bid in the auction
+		return;
 	}
 
-	return;
+	auction_save(auction);
+
+	mapif_Auction_bid(fd, char_id, 0, 1); // You have successfully bid in the auction
 }
 
 /*==========================================

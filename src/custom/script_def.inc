@@ -9,6 +9,3 @@
  **/
 
 //BUILDIN_DEF(example,""),
-	BUILDIN_DEF(itemheal,"ii"),
-	BUILDIN_DEF(playertalk,"is"), // [Valaris]
-	BUILDIN_DEF(showscript,"s?"),

@@ -17,9 +17,7 @@
 #include "char_logif.h"
 #include "char_mapif.h"
 
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 /**
  * Packet send to all map-servers, attach to ourself
@@ -91,41 +89,6 @@ int chmapif_send(int fd, unsigned char *buf, unsigned int len){
 }
 
 
-/**
- * Send map-servers single fame ranking list - eAmod Code
- */
-int chmapif_send_fame_list_single(int fd, int type)
-{
-	int len = 6, i, size;
-	unsigned char buf[6 + MAX_FAME_LIST * sizeof(struct fame_list)];
-	struct fame_list* list;
-
-	switch(type)
-	{
-		case 1:  size = fame_list_size_smith;   list = smith_fame_list;   break;
-		case 2:  size = fame_list_size_chemist; list = chemist_fame_list; break;
-		case 3:  size = fame_list_size_taekwon; list = taekwon_fame_list; break;
-		case 4:  size = fame_list_size_pvprank; list = pvprank_fame_list; break;
-		case 5:  size = fame_list_size_bgrank;  list = bgrank_fame_list;  break;
-		case 6:  size = fame_list_size_bg;      list = bg_fame_list;      break;
-		default: return 0;
-	}
-
-	WBUFW(buf,0) = 0x2b34;
-	WBUFW(buf,4) = type;
-	for( i = 0; i < size && list[i].id; i++ )
-	{
-		memcpy(WBUFP(buf,len),&list[i],sizeof(struct fame_list));
-		len += sizeof(struct fame_list);
-	}
-	WBUFW(buf,2) = len;
-
-	if( fd != -1 )
-		chmapif_send(fd, buf, len);
-	else
-		chmapif_sendall(buf, len);
-	return 0;
-}
 
 /**
  * Send map-servers fames ranking lists
@@ -134,62 +97,34 @@ int chmapif_send_fame_list_single(int fd, int type)
  * @param fd: fd to send packet too (map-serv) if -1 send to all
  * @return : 0 success
  */
-int chmapif_send_fame_list(int fd)
-{
-	int i, len = 14;
-	unsigned char buf[14 + 6 * MAX_FAME_LIST * sizeof(struct fame_list)];
+int chmapif_send_fame_list(int fd){
+	int i, len = 8;
+	unsigned char buf[32000];
 
-	for( i = 0; i < fame_list_size_bg && bg_fame_list[i].id; i++ )
-	{
-		memcpy(WBUFP(buf,len),&bg_fame_list[i],sizeof(struct fame_list));
-		len += sizeof(struct fame_list);
-	}
-	// add bgrank's block length
-	WBUFW(buf,12) = len;
+	WBUFW(buf,0) = 0x2b1b;
 
-	for( i = 0; i < fame_list_size_bgrank && bgrank_fame_list[i].id; i++ )
-	{
-		memcpy(WBUFP(buf,len),&bgrank_fame_list[i],sizeof(struct fame_list));
-		len += sizeof(struct fame_list);
-	}
-	// add bgrank's block length
-	WBUFW(buf,10) = len;
-
-	for( i = 0; i < fame_list_size_pvprank && pvprank_fame_list[i].id; i++ )
-	{
-		memcpy(WBUFP(buf,len),&pvprank_fame_list[i],sizeof(struct fame_list));
-		len += sizeof(struct fame_list);
-	}
-	// add pvprank's block length
-	WBUFW(buf,8) = len;
-
-	for( i = 0; i < fame_list_size_smith && smith_fame_list[i].id; i++ )
-	{
-		memcpy(WBUFP(buf,len),&smith_fame_list[i],sizeof(struct fame_list));
+	for(i = 0; i < fame_list_size_smith && smith_fame_list[i].id; i++) {
+		memcpy(WBUFP(buf, len), &smith_fame_list[i], sizeof(struct fame_list));
 		len += sizeof(struct fame_list);
 	}
 	// add blacksmith's block length
-	WBUFW(buf,6) = len;
+	WBUFW(buf, 6) = len;
 
-	for( i = 0; i < fame_list_size_chemist && chemist_fame_list[i].id; i++ )
-	{
-		memcpy(WBUFP(buf,len),&chemist_fame_list[i],sizeof(struct fame_list));
+	for(i = 0; i < fame_list_size_chemist && chemist_fame_list[i].id; i++) {
+		memcpy(WBUFP(buf, len), &chemist_fame_list[i], sizeof(struct fame_list));
 		len += sizeof(struct fame_list);
 	}
 	// add alchemist's block length
-	WBUFW(buf,4) = len;
+	WBUFW(buf, 4) = len;
 
-	for( i = 0; i < fame_list_size_taekwon && taekwon_fame_list[i].id; i++ )
-	{
-		memcpy(WBUFP(buf,len),&taekwon_fame_list[i],sizeof(struct fame_list));
+	for(i = 0; i < fame_list_size_taekwon && taekwon_fame_list[i].id; i++) {
+		memcpy(WBUFP(buf, len), &taekwon_fame_list[i], sizeof(struct fame_list));
 		len += sizeof(struct fame_list);
 	}
+	// add total packet length
+	WBUFW(buf, 2) = len;
 
-	// Header
-	WBUFW(buf,0) = 0x2b1b;
-	WBUFW(buf,2) = len;
-
-	if( fd != -1 )
+	if (fd != -1)
 		chmapif_send(fd, buf, len);
 	else
 		chmapif_sendall(buf, len);
@@ -226,6 +161,79 @@ void chmapif_sendall_playercount(int users){
 }
 
 /**
+ * Send some misc info to new map-server.
+ * - Server name for whisper name
+ * - Default map
+ * HZ 0x2afb <size>.W <status>.B <name>.24B <mapname>.11B <map_x>.W <map_y>.W
+ * @param fd
+ **/
+static void chmapif_send_misc(int fd) {
+	uint16 offs = 5;
+	unsigned char buf[45];
+
+	memset(buf, '\0', sizeof(buf));
+	WBUFW(buf, 0) = 0x2afb;
+	// 0 succes, 1:failure
+	WBUFB(buf, 4) = 0;
+	// Send name for wisp to player
+	memcpy(WBUFP(buf, 5), charserv_config.wisp_server_name, NAME_LENGTH);
+	// Default map
+	memcpy(WBUFP(buf, (offs+=NAME_LENGTH)), charserv_config.default_map, MAP_NAME_LENGTH); // 29
+	WBUFW(buf, (offs+=MAP_NAME_LENGTH)) = charserv_config.default_map_x; // 41
+	WBUFW(buf, (offs+=2)) = charserv_config.default_map_y; // 43
+	offs+=2;
+
+	// Length
+	WBUFW(buf, 2) = offs;
+	chmapif_send(fd, buf, offs);
+}
+
+/**
+ * Sends maps to all map-server
+ * HZ 0x2b04 <size>.W <ip>.L <port>.W { <map>.?B }.?B
+ * @param fd
+ * @param map_id
+ * @param count Number of map from new map-server has
+ **/
+static void chmapif_send_maps(int fd, int map_id, int count, unsigned char *mapbuf) {
+	uint16 x;
+
+	if (count == 0) {
+		ShowWarning("Map-server %d has NO maps.\n", map_id);
+	}
+	else {
+		unsigned char buf[16384];
+		// Transmitting maps information to the other map-servers
+		WBUFW(buf,0) = 0x2b04;
+		WBUFW(buf,2) = count * 4 + 10;
+		WBUFL(buf,4) = htonl(map_server[map_id].ip);
+		WBUFW(buf,8) = htons(map_server[map_id].port);
+		memcpy(WBUFP(buf,10), mapbuf, count * 4);
+		chmapif_sendallwos(fd, buf, WBUFW(buf,2));
+	}
+
+	// Transmitting the maps of the other map-servers to the new map-server
+	for (x = 0; x < ARRAYLENGTH(map_server); x++) {
+		if (map_server[x].fd > 0 && x != map_id) {
+			uint16 i, j;
+
+			WFIFOHEAD(fd,10 +4*ARRAYLENGTH(map_server[x].map));
+			WFIFOW(fd,0) = 0x2b04;
+			WFIFOL(fd,4) = htonl(map_server[x].ip);
+			WFIFOW(fd,8) = htons(map_server[x].port);
+			j = 0;
+			for(i = 0; i < ARRAYLENGTH(map_server[x].map); i++)
+				if (map_server[x].map[i])
+					WFIFOW(fd,10+(j++)*4) = map_server[x].map[i];
+			if (j > 0) {
+				WFIFOW(fd,2) = j * 4 + 10;
+				WFIFOSET(fd,WFIFOW(fd,2));
+			}
+		}
+	}
+}
+
+/**
  * This function is called when the map-serv initialise is chrif interface.
  * Map-serv sent us his map indexes so we can transfert a player from a map-serv to another when necessary
  * We reply by sending back the char_serv_wisp_name  fame list and
@@ -234,7 +242,9 @@ void chmapif_sendall_playercount(int users){
  * @return : 0 not enough data received, 1 success
  */
 int chmapif_parse_getmapname(int fd, int id){
-	int j = 0, i = 0;
+	int i = 0, j = 0;
+	unsigned char *mapbuf;
+
 	if (RFIFOREST(fd) < 4 || RFIFOREST(fd) < RFIFOW(fd,2))
 		return 0;
 
@@ -245,52 +255,17 @@ int chmapif_parse_getmapname(int fd, int id){
 		j++;
 	}
 
+	mapbuf = RFIFOP(fd,4);
+	RFIFOSKIP(fd,RFIFOW(fd,2));
+
 	ShowStatus("Map-Server %d connected: %d maps, from IP %d.%d.%d.%d port %d.\n",
 				id, j, CONVIP(map_server[id].ip), map_server[id].port);
 	ShowStatus("Map-server %d loading complete.\n", id);
 
-	// send name for wisp to player
-	WFIFOHEAD(fd, 3 + NAME_LENGTH);
-	WFIFOW(fd,0) = 0x2afb;
-	WFIFOB(fd,2) = 0; //0 succes, 1:failure
-	memcpy(WFIFOP(fd,3), charserv_config.wisp_server_name, NAME_LENGTH);
-	WFIFOSET(fd,3+NAME_LENGTH);
-
+	chmapif_send_misc(fd);
 	chmapif_send_fame_list(fd); //Send fame list.
+	chmapif_send_maps(fd, id, j, mapbuf);
 
-	{
-		int x;
-		if (j == 0) {
-			ShowWarning("Map-server %d has NO maps.\n", id);
-		} else {
-			unsigned char buf[16384];
-			// Transmitting maps information to the other map-servers
-			WBUFW(buf,0) = 0x2b04;
-			WBUFW(buf,2) = j * 4 + 10;
-			WBUFL(buf,4) = htonl(map_server[id].ip);
-			WBUFW(buf,8) = htons(map_server[id].port);
-			memcpy(WBUFP(buf,10), RFIFOP(fd,4), j * 4);
-			chmapif_sendallwos(fd, buf, WBUFW(buf,2));
-		}
-		// Transmitting the maps of the other map-servers to the new map-server
-		for(x = 0; x < ARRAYLENGTH(map_server); x++) {
-			if (map_server[x].fd > 0 && x != id) {
-				WFIFOHEAD(fd,10 +4*ARRAYLENGTH(map_server[x].map));
-				WFIFOW(fd,0) = 0x2b04;
-				WFIFOL(fd,4) = htonl(map_server[x].ip);
-				WFIFOW(fd,8) = htons(map_server[x].port);
-				j = 0;
-				for(i = 0; i < ARRAYLENGTH(map_server[x].map); i++)
-					if (map_server[x].map[i])
-						WFIFOW(fd,10+(j++)*4) = map_server[x].map[i];
-				if (j > 0) {
-					WFIFOW(fd,2) = j * 4 + 10;
-					WFIFOSET(fd,WFIFOW(fd,2));
-				}
-			}
-		}
-	}
-	RFIFOSKIP(fd,RFIFOW(fd,2));
 	return 1;
 }
 
@@ -303,7 +278,7 @@ int chmapif_parse_getmapname(int fd, int id){
 int chmapif_parse_askscdata(int fd){
 	if (RFIFOREST(fd) < 10)
 		return 0;
-	{
+	else {
 #ifdef ENABLE_SC_SAVING
 		int aid, cid;
 		aid = RFIFOL(fd,2);
@@ -376,7 +351,7 @@ int chmapif_parse_getusercount(int fd, int id){
 int chmapif_parse_regmapuser(int fd, int id){
 	if (RFIFOREST(fd) < 6 || RFIFOREST(fd) < RFIFOW(fd,2))
 		return 0;
-	{
+	else {
 		//TODO: When data mismatches memory, update guild/party online/offline states.
 		DBMap* online_char_db = char_get_onlinedb();
 		int i;
@@ -386,7 +361,7 @@ int chmapif_parse_regmapuser(int fd, int id){
 		for(i = 0; i < map_server[id].users; i++) {
 			int aid = RFIFOL(fd,6+i*8);
 			int cid = RFIFOL(fd,6+i*8+4);
-			struct online_char_data* character = idb_ensure(online_char_db, aid, char_create_online_data);
+			struct online_char_data* character = (struct online_char_data*)idb_ensure(online_char_db, aid, char_create_online_data);
 			if( character->server > -1 && character->server != id )
 			{
 				ShowNotice("Set map user: Character (%d:%d) marked on map server %d, but map server %d claims to have (%d:%d) online!\n",
@@ -412,7 +387,7 @@ int chmapif_parse_regmapuser(int fd, int id){
 int chmapif_parse_reqsavechar(int fd, int id){
 	if (RFIFOREST(fd) < 4 || RFIFOREST(fd) < RFIFOW(fd,2))
 		return 0;
-	{
+	else {
 		int aid = RFIFOL(fd,4), cid = RFIFOL(fd,8), size = RFIFOW(fd,2);
 		struct online_char_data* character;
 		DBMap* online_char_db = char_get_onlinedb();
@@ -451,6 +426,20 @@ int chmapif_parse_reqsavechar(int fd, int id){
 }
 
 /**
+ * Inform mapserv of a new character selection request
+ * @param fd : FD link tomapserv
+ * @param aid : Player account id
+ * @param res : result, 0=not ok, 1=ok
+ */
+void chmapif_charselres(int fd, uint32 aid, uint8 res){
+	WFIFOHEAD(fd,7);
+	WFIFOW(fd,0) = 0x2b03;
+	WFIFOL(fd,2) = aid;
+	WFIFOB(fd,6) = res;
+	WFIFOSET(fd,7);
+}
+
+/**
  * Player Requesting char-select from map_serv
  * @param fd: wich fd to parse from
  * @return : 0 not enough data received, 1 success
@@ -459,7 +448,7 @@ int chmapif_parse_authok(int fd){
 	if( RFIFOREST(fd) < 19 )
 		return 0;
 	else{
-		int account_id = RFIFOL(fd,2);
+		uint32 account_id = RFIFOL(fd,2);
 		uint32 login_id1 = RFIFOL(fd,6);
 		uint32 login_id2 = RFIFOL(fd,10);
 		uint32 ip = RFIFOL(fd,14);
@@ -467,11 +456,7 @@ int chmapif_parse_authok(int fd){
 		RFIFOSKIP(fd,19);
 
 		if( runflag != CHARSERVER_ST_RUNNING ){
-			WFIFOHEAD(fd,7);
-			WFIFOW(fd,0) = 0x2b03;
-			WFIFOL(fd,2) = account_id;
-			WFIFOB(fd,6) = 0;// not ok
-			WFIFOSET(fd,7);
+			chmapif_charselres(fd,account_id,0);
 		}else{
 			struct auth_node* node;
 			DBMap*  auth_db = char_get_authdb();
@@ -498,12 +483,7 @@ int chmapif_parse_authok(int fd){
 					character->pincode_success = true;
 				}
 			}
-
-			WFIFOHEAD(fd,7);
-			WFIFOW(fd,0) = 0x2b03;
-			WFIFOL(fd,2) = account_id;
-			WFIFOB(fd,6) = 1;// ok
-			WFIFOSET(fd,7);
+			chmapif_charselres(fd,account_id,1);
 		}
 	}
 	return 1;
@@ -591,6 +571,20 @@ int chmapif_parse_req_skillcooldown(int fd){
 }
 
 /**
+ * Inform the mapserv, of a change mapserv request
+ * @param fd :Link to mapserv
+ * @param nok : 0=accepted or no=1
+ */
+void chmapif_changemapserv_ack(int fd, bool nok){
+    WFIFOHEAD(fd,30);
+    WFIFOW(fd,0) = 0x2b06;
+    memcpy(WFIFOP(fd,2), RFIFOP(fd,2), 28);
+    if(nok) 
+	WFIFOL(fd,6) = 0; //Set login1 to 0.(not ok)
+    WFIFOSET(fd,30);
+}
+
+/**
  * Player requesting to change map-serv
  * @param fd: wich fd to parse from
  * @return : 0 not enough data received, 1 success
@@ -598,7 +592,7 @@ int chmapif_parse_req_skillcooldown(int fd){
 int chmapif_parse_reqchangemapserv(int fd){
 	if (RFIFOREST(fd) < 39)
 		return 0;
-	{
+	else {
 		int map_id, map_fd = -1;
 		struct mmo_charstatus* char_data;
 		struct mmo_charstatus char_dat;
@@ -644,21 +638,14 @@ int chmapif_parse_reqchangemapserv(int fd){
 			node->changing_mapservers = 1;
 			idb_put(auth_db, aid, node);
 
-			data = idb_ensure(online_char_db, aid, char_create_online_data);
+			data = (struct online_char_data*)idb_ensure(online_char_db, aid, char_create_online_data);
 			data->char_id = char_data->char_id;
 			data->server = map_id; //Update server where char is.
 
 			//Reply with an ack.
-			WFIFOHEAD(fd,30);
-			WFIFOW(fd,0) = 0x2b06;
-			memcpy(WFIFOP(fd,2), RFIFOP(fd,2), 28);
-			WFIFOSET(fd,30);
+			chmapif_changemapserv_ack(fd,0);
 		} else { //Reply with nak
-			WFIFOHEAD(fd,30);
-			WFIFOW(fd,0) = 0x2b06;
-			memcpy(WFIFOP(fd,2), RFIFOP(fd,2), 28);
-			WFIFOL(fd,6) = 0; //Set login1 to 0.
-			WFIFOSET(fd,30);
+			chmapif_changemapserv_ack(fd,1);
 		}
 		RFIFOSKIP(fd,39);
 	}
@@ -675,8 +662,8 @@ int chmapif_parse_reqchangemapserv(int fd){
 int chmapif_parse_askrmfriend(int fd){
 	if (RFIFOREST(fd) < 10)
 		return 0;
-	{
-		int char_id, friend_id;
+	else {
+		uint32 char_id, friend_id;
 		char_id = RFIFOL(fd,2);
 		friend_id = RFIFOL(fd,6);
 		if( SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `%s` WHERE `char_id`='%d' AND `friend_id`='%d' LIMIT 1",
@@ -730,7 +717,7 @@ int chmapif_parse_reqnewemail(int fd){
 
 /**
  * Forward a change of status for account to login-serv
- * @param fd: wich fd to parse from
+ * @param fd: which fd to parse from
  * @return : 0 not enough data received, 1 success
  */
 int chmapif_parse_fwlog_changestatus(int fd){
@@ -740,17 +727,21 @@ int chmapif_parse_fwlog_changestatus(int fd){
 		int result = 0; // 0-login-server request done, 1-player not found, 2-gm level too low, 3-login-server offline, 4-current group level > VIP group level
 		char esc_name[NAME_LENGTH*2+1];
 		char answer = true;
-
 		int aid = RFIFOL(fd,2); // account_id of who ask (-1 if server itself made this request)
 		const char* name = (char*)RFIFOP(fd,6); // name of the target character
-		int operation = RFIFOW(fd,30); // type of operation: 1-block, 2-ban, 3-unblock, 4-unban, 5-changesex, 6-vip, 7-bank
-		int32 timediff = RFIFOL(fd,32);
-		int val1 = RFIFOL(fd,36);
-		int val2 = RFIFOL(fd,40);
+		int operation = RFIFOW(fd,30); // type of operation @see enum chrif_req_op
+		int32 timediff = 0;
+		int val1 = 0, sex = SEX_MALE;
+
+		if (operation == CHRIF_OP_LOGIN_BAN || operation == CHRIF_OP_LOGIN_VIP) {
+			timediff = RFIFOL(fd, 32);
+			val1 = RFIFOL(fd, 36);
+		} else if (operation == CHRIF_OP_CHANGECHARSEX)
+			sex = RFIFOB(fd, 32);
 		RFIFOSKIP(fd,44);
 
 		Sql_EscapeStringLen(sql_handle, esc_name, name, strnlen(name, NAME_LENGTH));
-		if( SQL_ERROR == Sql_Query(sql_handle, "SELECT `account_id` FROM `%s` WHERE `name` = '%s'", schema_config.char_db, esc_name) )
+		if( SQL_ERROR == Sql_Query(sql_handle, "SELECT `account_id`, `char_id` FROM `%s` WHERE `name` = '%s'", schema_config.char_db, esc_name) )
 			Sql_ShowDebug(sql_handle);
 		else if( Sql_NumRows(sql_handle) == 0 ) {
 			result = 1; // 1-player not found
@@ -759,10 +750,12 @@ int chmapif_parse_fwlog_changestatus(int fd){
 			Sql_ShowDebug(sql_handle);
 			result = 1;
 		} else {
-			int t_aid; //targit account id
+			int t_aid; // target account id
+			int t_cid; // target char id
 			char* data;
 
 			Sql_GetData(sql_handle, 0, &data, NULL); t_aid = atoi(data);
+			Sql_GetData(sql_handle, 1, &data, NULL); t_cid = atoi(data);
 			Sql_FreeResult(sql_handle);
 
 			if(!chlogif_isconnected())
@@ -771,55 +764,56 @@ int chmapif_parse_fwlog_changestatus(int fd){
 			//	if( acc != -1 && isGM(acc) < isGM(account_id) )
 			//		result = 2; // 2-gm level too low
 			else {
+				//! NOTE: See src/char/chrif.h::enum chrif_req_op for the number
 				switch( operation ) {
-				case 1: // block
-					WFIFOHEAD(login_fd,10);
-					WFIFOW(login_fd,0) = 0x2724;
-					WFIFOL(login_fd,2) = t_aid;
-					WFIFOL(login_fd,6) = 5; // new account status
-					WFIFOSET(login_fd,10);
-				break;
-				case 2: // ban
-					WFIFOHEAD(login_fd,10);
-					WFIFOW(login_fd, 0) = 0x2725;
-					WFIFOL(login_fd, 2) = t_aid;
-					WFIFOL(login_fd, 6) = timediff;
-					WFIFOSET(login_fd,10);
-				break;
-				case 3: // unblock
-					WFIFOHEAD(login_fd,10);
-					WFIFOW(login_fd,0) = 0x2724;
-					WFIFOL(login_fd,2) = t_aid;
-					WFIFOL(login_fd,6) = 0; // new account status
-					WFIFOSET(login_fd,10);
-				break;
-				case 4: // unban
-					WFIFOHEAD(login_fd,6);
-					WFIFOW(login_fd,0) = 0x272a;
-					WFIFOL(login_fd,2) = t_aid;
-					WFIFOSET(login_fd,6);
-				break;
-				case 5: // changesex
-					answer = false;
-					WFIFOHEAD(login_fd,6);
-					WFIFOW(login_fd,0) = 0x2727;
-					WFIFOL(login_fd,2) = t_aid;
-					WFIFOSET(login_fd,6);
-				break;
-				case 6:
-					answer = (val1&4); // vip_req val1=type, &1 login send return, &2 update timestamp, &4 map send answer
-					chlogif_reqvipdata(t_aid, val1, timediff, fd);
-					break;
-				case 7:
-					answer = (val1&1); //val&1 request answer, val1&2 save data
-					chlogif_BankingReq(aid, val1, val2);
-					break;
+					case CHRIF_OP_LOGIN_BLOCK: // block
+						WFIFOHEAD(login_fd,10);
+						WFIFOW(login_fd,0) = 0x2724;
+						WFIFOL(login_fd,2) = t_aid;
+						WFIFOL(login_fd,6) = 5; // new account status
+						WFIFOSET(login_fd,10);
+						break;
+					case CHRIF_OP_LOGIN_BAN: // ban
+						WFIFOHEAD(login_fd,10);
+						WFIFOW(login_fd, 0) = 0x2725;
+						WFIFOL(login_fd, 2) = t_aid;
+						WFIFOL(login_fd, 6) = timediff;
+						WFIFOSET(login_fd,10);
+						break;
+					case CHRIF_OP_LOGIN_UNBLOCK: // unblock
+						WFIFOHEAD(login_fd,10);
+						WFIFOW(login_fd,0) = 0x2724;
+						WFIFOL(login_fd,2) = t_aid;
+						WFIFOL(login_fd,6) = 0; // new account status
+						WFIFOSET(login_fd,10);
+						break;
+					case CHRIF_OP_LOGIN_UNBAN: // unban
+						WFIFOHEAD(login_fd,6);
+						WFIFOW(login_fd,0) = 0x272a;
+						WFIFOL(login_fd,2) = t_aid;
+						WFIFOSET(login_fd,6);
+						break;
+					case CHRIF_OP_LOGIN_CHANGESEX: // changesex
+						answer = false;
+						WFIFOHEAD(login_fd,6);
+						WFIFOW(login_fd,0) = 0x2727;
+						WFIFOL(login_fd,2) = t_aid;
+						WFIFOSET(login_fd,6);
+						break;
+					case CHRIF_OP_LOGIN_VIP: // vip
+						answer = (val1&4); // vip_req val1=type, &1 login send return, &2 update timestamp, &4 map send answer
+						chlogif_reqvipdata(t_aid, val1, timediff, fd);
+						break;
+					case CHRIF_OP_CHANGECHARSEX: // changecharsex
+						answer = false;
+						chlogif_parse_ackchangecharsex(t_cid, sex);
+						break;
 				} //end switch operation
 			} //login is connected
 		}
 
 		// send answer if a player asks, not if the server asks
-		if( aid != -1 && answer) { // Don't send answer for changesex
+		if( aid != -1 && answer) { // Don't send answer for changesex/changecharsex
 			WFIFOHEAD(fd,34);
 			WFIFOW(fd, 0) = 0x2b0f;
 			WFIFOL(fd, 2) = aid;
@@ -833,7 +827,7 @@ int chmapif_parse_fwlog_changestatus(int fd){
 }
 
 /**
- * Transmit the acknolegement of divorce of partner_id1 and partner_id2
+ * Transmit the acknowledgement of divorce of partner_id1 and partner_id2
  * Update the list associated and transmit the new ranking
  * @param partner_id1: char id1 divorced
  * @param partner_id2: char id2 divorced
@@ -860,45 +854,6 @@ int chmapif_parse_reqdivorce(int fd){
 }
 
 /**
- * Received a Ranking Reset request
- * @param fd: wich fd to parse from
- * @return : 0 not enough data received, 1 success
- */
-int chmapif_parse_reqranking_reset(int fd){
-	if( RFIFOREST(fd) < 4 )
-		return 0;
-	char_ranking_reset(RFIFOW(fd,2));
-	RFIFOSKIP(fd,4);
-	return 1;
-}
-
-/**
- * Received a Item full removal request
- * @param fd: wich fd to parse from
- * @return : 0 not enough data received, 1 success
- */
-int chmapif_parse_reqitem_remove4all(int fd){
-	if( RFIFOREST(fd) < 4 )
-		return 0;
-	char_item_remove4all(RFIFOW(fd,2));
-	RFIFOSKIP(fd,4);
-	return 1;
-}
-
-/**
- * Received a Char backup file request
- * @param fd: wich fd to parse from
- * @return : 0 not enough data received, 1 success
- */
-int chmapif_parse_reqchar_dump2sql(int fd){
-	if (RFIFOREST(fd) < 6)
-		return 0;
-	char_dump2sql((int)RFIFOL(fd,2));
-	RFIFOSKIP(fd,6);
-	return 1;
-}
-
-/**
  * Receive rates of this map index
  * @author [Wizputer]
  * @param fd: wich fd to parse from
@@ -907,7 +862,7 @@ int chmapif_parse_reqchar_dump2sql(int fd){
 int chmapif_parse_updmapinfo(int fd){
 	if( RFIFOREST(fd) < 14 )
 		return 0;
-	{
+	else {
 		char esc_server_name[sizeof(charserv_config.server_name)*2+1];
 		Sql_EscapeString(sql_handle, esc_server_name, charserv_config.server_name);
 		if( SQL_ERROR == Sql_Query(sql_handle, "INSERT INTO `%s` SET `index`='%d',`name`='%s',`exp`='%d',`jexp`='%d',`drop`='%d'",
@@ -1043,96 +998,98 @@ int chmapif_parse_keepalive(int fd){
  * @return : 0 not enough data received, 1 success
  */
 int chmapif_parse_reqauth(int fd, int id){
-    if (RFIFOREST(fd) < 20)
-            return 0;
+	if (RFIFOREST(fd) < 20)
+		return 0;
+	else {
+		uint32 account_id;
+		uint32 char_id;
+		uint32 login_id1;
+		unsigned char sex;
+		uint32 ip;
+		struct auth_node* node;
+		struct mmo_charstatus* cd;
+		struct mmo_charstatus char_dat;
+		bool autotrade;
 
-    {
-        int account_id;
-        int char_id;
-        int login_id1;
-        char sex;
-        uint32 ip;
-        struct auth_node* node;
-        struct mmo_charstatus* cd;
-        struct mmo_charstatus char_dat;
-        bool autotrade;
+		DBMap*  auth_db = char_get_authdb();
+		DBMap* char_db_ = char_get_chardb();
 
-        DBMap*  auth_db = char_get_authdb();
-        DBMap* char_db_ = char_get_chardb();
+		account_id = RFIFOL(fd,2);
+		char_id    = RFIFOL(fd,6);
+		login_id1  = RFIFOL(fd,10);
+		sex        = RFIFOB(fd,14);
+		ip         = ntohl(RFIFOL(fd,15));
+		autotrade  = RFIFOB(fd,19);
+		RFIFOSKIP(fd,20);
 
-        account_id = RFIFOL(fd,2);
-        char_id    = RFIFOL(fd,6);
-        login_id1  = RFIFOL(fd,10);
-        sex        = RFIFOB(fd,14);
-        ip         = ntohl(RFIFOL(fd,15));
-        autotrade  = RFIFOB(fd,19);
-        RFIFOSKIP(fd,20);
+		node = (struct auth_node*)idb_get(auth_db, account_id);
+		cd = (struct mmo_charstatus*)uidb_get(char_db_,char_id);
+		if( cd == NULL )
+		{	//Really shouldn't happen. (or autotrade)
+				char_mmo_char_fromsql(char_id, &char_dat, true);
+				cd = (struct mmo_charstatus*)uidb_get(char_db_,char_id);
+		}
+		if( runflag == CHARSERVER_ST_RUNNING && autotrade && cd ){
+			uint16 mmo_charstatus_len = sizeof(struct mmo_charstatus) + 25;
+			if (cd->sex == 99)
+				cd->sex = sex;
 
-        node = (struct auth_node*)idb_get(auth_db, account_id);
-        cd = (struct mmo_charstatus*)uidb_get(char_db_,char_id);
-        if( cd == NULL )
-        {	//Really shouldn't happen.
-                char_mmo_char_fromsql(char_id, &char_dat, true);
-                cd = (struct mmo_charstatus*)uidb_get(char_db_,char_id);
-        }
-        if( runflag == CHARSERVER_ST_RUNNING && autotrade && cd ){
-            uint32 mmo_charstatus_len = sizeof(struct mmo_charstatus) + 25;
-            cd->sex = sex;
+			WFIFOHEAD(fd,mmo_charstatus_len);
+			WFIFOW(fd,0) = 0x2afd;
+			WFIFOW(fd,2) = mmo_charstatus_len;
+			WFIFOL(fd,4) = account_id;
+			WFIFOL(fd,8) = 0;
+			WFIFOL(fd,12) = 0;
+			WFIFOL(fd,16) = 0;
+			WFIFOL(fd,20) = 0;
+			WFIFOB(fd,24) = 0;
+			memcpy(WFIFOP(fd,25), cd, sizeof(struct mmo_charstatus));
+			WFIFOSET(fd, WFIFOW(fd,2));
 
-			char_ip_premium(ip, cd); // eAmod Codes
+			char_set_char_online(id, char_id, account_id);
+		} else if( runflag == CHARSERVER_ST_RUNNING &&
+			cd != NULL &&
+			node != NULL &&
+			node->account_id == account_id &&
+			node->char_id == char_id &&
+			node->login_id1 == login_id1
+			//&& node->ip == ip
+#if PACKETVER < 20141016
+			&& node->sex == sex
+#endif
+			)
+		{// auth ok
+			uint16 mmo_charstatus_len = sizeof(struct mmo_charstatus) + 25;
+			if (cd->sex == 99)
+				cd->sex = sex;
 
-            WFIFOHEAD(fd,mmo_charstatus_len);
-            WFIFOW(fd,0) = 0x2afd;
-            WFIFOW(fd,2) = mmo_charstatus_len;
-            WFIFOL(fd,4) = account_id;
-            WFIFOL(fd,8) = 0;
-            WFIFOL(fd,12) = 0;
-            WFIFOL(fd,16) = 0;
-            WFIFOL(fd,20) = 0;
-            WFIFOB(fd,24) = 0;
-            memcpy(WFIFOP(fd,25), cd, sizeof(struct mmo_charstatus));
-            WFIFOSET(fd, WFIFOW(fd,2));
+			WFIFOHEAD(fd,mmo_charstatus_len);
+			WFIFOW(fd,0) = 0x2afd;
+			WFIFOW(fd,2) = mmo_charstatus_len;
+			WFIFOL(fd,4) = account_id;
+			WFIFOL(fd,8) = node->login_id1;
+			WFIFOL(fd,12) = node->login_id2;
+			WFIFOL(fd,16) = (uint32)node->expiration_time; // FIXME: will wrap to negative after "19-Jan-2038, 03:14:07 AM GMT"
+			WFIFOL(fd,20) = node->group_id;
+			WFIFOB(fd,24) = node->changing_mapservers;
+			memcpy(WFIFOP(fd,25), cd, sizeof(struct mmo_charstatus));
+			WFIFOSET(fd, WFIFOW(fd,2));
 
-            char_set_char_online(id, char_id, account_id);
-        } else if( runflag == CHARSERVER_ST_RUNNING &&
-            cd != NULL &&
-            node != NULL &&
-            node->account_id == account_id &&
-            node->char_id == char_id &&
-            node->login_id1 == login_id1 &&
-            node->sex == sex /*&&
-            node->ip == ip*/ )
-        {// auth ok
-            uint32 mmo_charstatus_len = sizeof(struct mmo_charstatus) + 25;
-            cd->sex = sex;
-
-            WFIFOHEAD(fd,mmo_charstatus_len);
-            WFIFOW(fd,0) = 0x2afd;
-            WFIFOW(fd,2) = mmo_charstatus_len;
-            WFIFOL(fd,4) = account_id;
-            WFIFOL(fd,8) = node->login_id1;
-            WFIFOL(fd,12) = node->login_id2;
-            WFIFOL(fd,16) = (uint32)node->expiration_time; // FIXME: will wrap to negative after "19-Jan-2038, 03:14:07 AM GMT"
-            WFIFOL(fd,20) = node->group_id;
-            WFIFOB(fd,24) = node->changing_mapservers;
-            memcpy(WFIFOP(fd,25), cd, sizeof(struct mmo_charstatus));
-            WFIFOSET(fd, WFIFOW(fd,2));
-
-            // only use the auth once and mark user online
-            idb_remove(auth_db, account_id);
-            char_set_char_online(id, char_id, account_id);
-        } else {// auth failed
-                WFIFOHEAD(fd,19);
-                WFIFOW(fd,0) = 0x2b27;
-                WFIFOL(fd,2) = account_id;
-                WFIFOL(fd,6) = char_id;
-                WFIFOL(fd,10) = login_id1;
-                WFIFOB(fd,14) = sex;
-                WFIFOL(fd,15) = htonl(ip);
-                WFIFOSET(fd,19);
-        }
-    }
-    return 1;
+			// only use the auth once and mark user online
+			idb_remove(auth_db, account_id);
+			char_set_char_online(id, char_id, account_id);
+		} else {// auth failed
+			WFIFOHEAD(fd,19);
+			WFIFOW(fd,0) = 0x2b27;
+			WFIFOL(fd,2) = account_id;
+			WFIFOL(fd,6) = char_id;
+			WFIFOL(fd,10) = login_id1;
+			WFIFOB(fd,14) = sex;
+			WFIFOL(fd,15) = htonl(ip);
+			WFIFOSET(fd,19);
+		}
+	}
+	return 1;
 }
 
 /**
@@ -1142,7 +1099,7 @@ int chmapif_parse_reqauth(int fd, int id){
  */
 int chmapif_parse_updmapip(int fd, int id){
 	if (RFIFOREST(fd) < 6) 
-            return 0;
+		return 0;
 	map_server[id].ip = ntohl(RFIFOL(fd, 2));
 	ShowInfo("Updated IP address of map-server #%d to %d.%d.%d.%d.\n", id, CONVIP(map_server[id].ip));
 	RFIFOSKIP(fd,6);
@@ -1200,9 +1157,6 @@ int chmapif_parse_updfamelist(int fd){
                     case 1:  size = fame_list_size_smith;   list = smith_fame_list;   break;
                     case 2:  size = fame_list_size_chemist; list = chemist_fame_list; break;
                     case 3:  size = fame_list_size_taekwon; list = taekwon_fame_list; break;
-					case 4:  size = fame_list_size_pvprank; list = pvprank_fame_list; break;
-					case 5:  size = fame_list_size_bgrank;  list = bgrank_fame_list;  break;
-					case 6:  size = fame_list_size_bg;      list = bg_fame_list;      break;
                     default: size = 0;                      list = NULL;              break;
             }
 
@@ -1232,24 +1186,13 @@ int chmapif_parse_updfamelist(int fd){
                             ARR_MOVE(player_pos, fame_pos, list, struct fame_list);
                             list[fame_pos].fame = fame;
                     }
-                    chmapif_send_fame_list_single(-1,type);
+                    chmapif_send_fame_list(-1);
             }
 
             RFIFOSKIP(fd,11);
     }
     return 1;
 }
-
-//HZ 0x2b29 <aid>L <bank_vault>L
-int chmapif_BankingAck(int32 account_id, int32 bank_vault){
-	unsigned char buf[11];
-	WBUFW(buf,0) = 0x2b29;
-	WBUFL(buf,2) = account_id;
-	WBUFL(buf,6) = bank_vault;
-	chmapif_sendall(buf, 10); //inform all maps-attached
-	return 1;
-}
-
 
 /*
  * HZ 0x2b2b
@@ -1312,7 +1255,8 @@ int chmapif_parse_reqcharban(int fd){
 				|| SQL_SUCCESS != SqlStmt_BindParam(stmt,  1, SQLDT_INT,    (void*)&t_cid,     sizeof(t_cid))
 				|| SQL_SUCCESS != SqlStmt_Execute(stmt)
 
-				) {
+				)
+			{
 				SqlStmt_ShowDebug(stmt);
 				SqlStmt_Free(stmt);
 				return 1;
@@ -1336,13 +1280,13 @@ int chmapif_parse_reqcharban(int fd){
 }
 
 int chmapif_parse_reqcharunban(int fd){
-	if (RFIFOREST(fd) < 6)
-            return 0;
+	if (RFIFOREST(fd) < 6+NAME_LENGTH)
+		return 0;
 	else {
-		int cid = RFIFOL(fd,2);
-		RFIFOSKIP(fd,6);
+		const char* name = (char*)RFIFOP(fd,6);
+		RFIFOSKIP(fd,6+NAME_LENGTH);
 
-		if( SQL_ERROR == Sql_Query(sql_handle, "UPDATE `%s` SET `unban_time` = '0' WHERE `char_id` = '%d' LIMIT 1", schema_config.char_db, cid) ) {
+		if( SQL_ERROR == Sql_Query(sql_handle, "UPDATE `%s` SET `unban_time` = '0' WHERE `name` = '%s' LIMIT 1", schema_config.char_db, name) ) {
 			Sql_ShowDebug(sql_handle);
 			return 1;
 		}
@@ -1350,94 +1294,131 @@ int chmapif_parse_reqcharunban(int fd){
 	return 1;
 }
 
-/** [Cydh]
-* Get bonus_script data(s) from table to load
-* @param fd
-*/
+/**
+ * ZA 0x2b2d
+ * <cmd>.W <char_id>.L
+ * AZ 0x2b2f
+ * <cmd>.W <len>.W <cid>.L <count>.B { <bonus_script_data>.?B }
+ * Get bonus_script data(s) from table to load then send to player
+ * @param fd
+ * @author [Cydh]
+ **/
 int chmapif_bonus_script_get(int fd) {
 	if (RFIFOREST(fd) < 6)
-            return 0;
+		return 0;
 	else {
-		int cid;
-		cid = RFIFOL(fd,2);
+		uint8 num_rows = 0;
+		uint32 cid = RFIFOL(fd,2);
+		struct bonus_script_data tmp_bsdata;
+		SqlStmt* stmt = SqlStmt_Malloc(sql_handle);
+
 		RFIFOSKIP(fd,6);
 
-		if (SQL_ERROR == Sql_Query(sql_handle,"SELECT `script`, `tick`, `flag`, `type`, `icon` FROM `%s` WHERE `char_id`='%d'",
-			schema_config.bonus_script_db,cid))
+		if (SQL_ERROR == SqlStmt_Prepare(stmt,
+			"SELECT `script`, `tick`, `flag`, `type`, `icon` FROM `%s` WHERE `char_id` = '%d' LIMIT %d",
+			schema_config.bonus_script_db, cid, MAX_PC_BONUS_SCRIPT) ||
+			SQL_ERROR == SqlStmt_Execute(stmt) ||
+			SQL_ERROR == SqlStmt_BindColumn(stmt, 0, SQLDT_STRING, &tmp_bsdata.script_str, sizeof(tmp_bsdata.script_str), NULL, NULL) ||
+			SQL_ERROR == SqlStmt_BindColumn(stmt, 1, SQLDT_UINT32, &tmp_bsdata.tick, 0, NULL, NULL) ||
+			SQL_ERROR == SqlStmt_BindColumn(stmt, 2, SQLDT_UINT16, &tmp_bsdata.flag, 0, NULL, NULL) ||
+			SQL_ERROR == SqlStmt_BindColumn(stmt, 3, SQLDT_UINT8,  &tmp_bsdata.type, 0, NULL, NULL) ||
+			SQL_ERROR == SqlStmt_BindColumn(stmt, 4, SQLDT_INT16,  &tmp_bsdata.icon, 0, NULL, NULL)
+			)
 		{
-			Sql_ShowDebug(sql_handle);
+			SqlStmt_ShowDebug(stmt);
+			SqlStmt_Free(stmt);
 			return 1;
 		}
-		if (Sql_NumRows(sql_handle) > 0) {
-			struct bonus_script_data bsdata;
-			int count;
-			char *data;
 
-			WFIFOHEAD(fd,10+50*sizeof(struct bonus_script_data));
-			WFIFOW(fd,0) = 0x2b2f;
-			WFIFOL(fd,4) = cid;
-			for (count = 0; count < MAX_PC_BONUS_SCRIPT && SQL_SUCCESS == Sql_NextRow(sql_handle); ++count) {
-				Sql_GetData(sql_handle,0,&data,NULL); memcpy(bsdata.script,data,strlen(data)+1);
-				Sql_GetData(sql_handle,1,&data,NULL); bsdata.tick = atoi(data);
-				Sql_GetData(sql_handle,2,&data,NULL); bsdata.flag = atoi(data);
-				Sql_GetData(sql_handle,3,&data,NULL); bsdata.type = atoi(data);
-				Sql_GetData(sql_handle,4,&data,NULL); bsdata.icon = atoi(data);
-				memcpy(WFIFOP(fd,10+count*sizeof(struct bonus_script_data)),&bsdata,sizeof(struct bonus_script_data));
-			}
-			if (count >= MAX_PC_BONUS_SCRIPT)
-				ShowWarning("Too many bonus_script for %d, some of them were not loaded.\n",cid);
-			if (count > 0) {
-				WFIFOW(fd,2) = 10 + count*sizeof(struct bonus_script_data);
-				WFIFOW(fd,8) = count;
-				WFIFOSET(fd,WFIFOW(fd,2));
+		if ((num_rows = (uint8)SqlStmt_NumRows(stmt)) > 0) {
+			uint8 i;
+			uint32 size = 9 + num_rows * sizeof(struct bonus_script_data);
 
-				//Clear the data once loaded.
-				if (SQL_ERROR == Sql_Query(sql_handle,"DELETE FROM `%s` WHERE `char_id`='%d'",schema_config.bonus_script_db,cid))
-					Sql_ShowDebug(sql_handle);
-				ShowInfo("Loaded %d bonus_script for char_id: %d\n",count,cid);
+			WFIFOHEAD(fd, size);
+			WFIFOW(fd, 0) = 0x2b2f;
+			WFIFOW(fd, 2) = size;
+			WFIFOL(fd, 4) = cid;
+			WFIFOB(fd, 8) = num_rows;
+
+			for (i = 0; i < num_rows && SQL_SUCCESS == SqlStmt_NextRow(stmt); i++) {
+				struct bonus_script_data bsdata;
+				memset(&bsdata, 0, sizeof(bsdata));
+				memset(bsdata.script_str, '\0', sizeof(bsdata.script_str));
+
+				safestrncpy(bsdata.script_str, tmp_bsdata.script_str, strlen(tmp_bsdata.script_str)+1);
+				bsdata.tick = tmp_bsdata.tick;
+				bsdata.flag = tmp_bsdata.flag;
+				bsdata.type = tmp_bsdata.type;
+				bsdata.icon = tmp_bsdata.icon;
+				memcpy(WFIFOP(fd, 9 + i * sizeof(struct bonus_script_data)), &bsdata, sizeof(struct bonus_script_data));
 			}
+
+			WFIFOSET(fd, size);
+
+			ShowInfo("Bonus Script loaded for CID=%d. Total: %d.\n", cid, i);
+
+			if (SQL_ERROR == SqlStmt_Prepare(stmt,"DELETE FROM `%s` WHERE `char_id`='%d'",schema_config.bonus_script_db,cid) ||
+				SQL_ERROR == SqlStmt_Execute(stmt))
+				SqlStmt_ShowDebug(stmt);
 		}
-		Sql_FreeResult(sql_handle);
+		SqlStmt_Free(stmt);
 	}
 	return 1;
 }
 
-/** [Cydh]
-* Save bonus_script data(s) to the table
-* @param fd
-*/
+/**
+ * ZA 0x2b2e
+ * <cmd>.W <len>.W <char_id>.L <count>.B { <bonus_script>.?B }
+ * Save bonus_script data(s) to the table
+ * @param fd
+ * @author [Cydh]
+ **/
 int chmapif_bonus_script_save(int fd) {
 	if (RFIFOREST(fd) < 4 || RFIFOREST(fd) < RFIFOW(fd,2))
-            return 0;
+		return 0;
 	else {
-		int count, cid;
+		uint32 cid = RFIFOL(fd,4);
+		uint8 count = RFIFOB(fd,8);
 
-		cid = RFIFOL(fd,4);
-		count = RFIFOW(fd,8);
+		if (SQL_ERROR == Sql_Query(sql_handle,"DELETE FROM `%s` WHERE `char_id` = '%d'", schema_config.bonus_script_db, cid))
+			Sql_ShowDebug(sql_handle);
 
 		if (count > 0) {
-			struct bonus_script_data bs;
+			char esc_script[MAX_BONUS_SCRIPT_LENGTH*2];
+			struct bonus_script_data bsdata;
 			StringBuf buf;
-			int i;
-			char esc_script[MAX_BONUS_SCRIPT_LENGTH] = "";
+			uint8 i;
 
 			StringBuf_Init(&buf);
-			StringBuf_Printf(&buf,"INSERT INTO `%s` (`char_id`, `script`, `tick`, `flag`, `type`, `icon`) VALUES ",schema_config.bonus_script_db);
+			StringBuf_Printf(&buf, "INSERT INTO `%s` (`char_id`, `script`, `tick`, `flag`, `type`, `icon`) VALUES ", schema_config.bonus_script_db);
 			for (i = 0; i < count; ++i) {
-				memcpy(&bs,RFIFOP(fd,10+i*sizeof(struct bonus_script_data)),sizeof(struct bonus_script_data));
-				Sql_EscapeString(sql_handle,esc_script,bs.script);
+				memcpy(&bsdata, RFIFOP(fd, 9 + i*sizeof(struct bonus_script_data)), sizeof(struct bonus_script_data));
+				Sql_EscapeString(sql_handle, esc_script, bsdata.script_str);
 				if (i > 0)
 					StringBuf_AppendStr(&buf,", ");
-				StringBuf_Printf(&buf,"('%d','%s','%d','%d','%d','%d')",cid,esc_script,bs.tick,bs.flag,bs.type,bs.icon);
+				StringBuf_Printf(&buf, "('%d','%s','%d','%d','%d','%d')", cid, esc_script, bsdata.tick, bsdata.flag, bsdata.type, bsdata.icon);
 			}
 			if (SQL_ERROR == Sql_QueryStr(sql_handle,StringBuf_Value(&buf)))
 				Sql_ShowDebug(sql_handle);
+
 			StringBuf_Destroy(&buf);
-			ShowInfo("Saved %d bonus_script for char_id: %d\n",count,cid);
+			ShowInfo("Bonus Script saved for CID=%d. Total: %d.\n", cid, count);
 		}
 		RFIFOSKIP(fd,RFIFOW(fd,2));
 	}
 	return 1;
+}
+
+/**
+ * Inform the mapserv wheater his login attemp to us was a success or not
+ * @param fd : file descriptor to parse, (link to mapserv)
+ * @param errCode 0:success, 3:fail
+ */
+void chmapif_connectack(int fd, uint8 errCode){
+	WFIFOHEAD(fd,3);
+	WFIFOW(fd,0) = 0x2af9;
+	WFIFOB(fd,2) = errCode;
+	WFIFOSET(fd,3);
 }
 
 /**
@@ -1449,7 +1430,7 @@ int chmapif_bonus_script_save(int fd) {
  */
 int chmapif_parse(int fd){
 	int id; //mapserv id
-        
+
 	ARR_FIND( 0, ARRAYLENGTH(map_server), id, map_server[id].fd == fd );
 	if( id == ARRAYLENGTH(map_server) )
 	{// not a map server
@@ -1468,52 +1449,47 @@ int chmapif_parse(int fd){
 	while(RFIFOREST(fd) >= 2){
 		int next=1;
 		switch(RFIFOW(fd,0)){
-            case 0x2736: next=chmapif_parse_updmapip(fd,id); break;
-            case 0x2afa: next=chmapif_parse_getmapname(fd,id); break;
-            case 0x2afc: next=chmapif_parse_askscdata(fd); break;
-            case 0x2afe: next=chmapif_parse_getusercount(fd,id); break; //get nb user
-            case 0x2aff: next=chmapif_parse_regmapuser(fd,id); break; //register users
-            case 0x2b01: next=chmapif_parse_reqsavechar(fd,id); break;
-            case 0x2b02: next=chmapif_parse_authok(fd); break;
-            case 0x2b05: next=chmapif_parse_reqchangemapserv(fd); break;
-            case 0x2b07: next=chmapif_parse_askrmfriend(fd); break;
-            case 0x2b08: next=chmapif_parse_reqcharname(fd); break;
-            case 0x2b0a: next=chmapif_parse_req_skillcooldown(fd); break;
-            case 0x2b0c: next=chmapif_parse_reqnewemail(fd); break;
-            case 0x2b0e: next=chmapif_parse_fwlog_changestatus(fd); break;
-            case 0x2b10: next=chmapif_parse_updfamelist(fd); break;
-            case 0x2b11: next=chmapif_parse_reqdivorce(fd); break;
-			// eAmod Codes
-			case 0x2b30: next=chmapif_parse_reqranking_reset(fd); break;
-			case 0x2b32: next=chmapif_parse_reqitem_remove4all(fd); break;
-			case 0x2b35: next=chmapif_parse_reqchar_dump2sql(fd); break;
-			// -----------
-            case 0x2b15: next=chmapif_parse_req_saveskillcooldown(fd); break;
-            case 0x2b16: next=chmapif_parse_updmapinfo(fd); break;
-            case 0x2b17: next=chmapif_parse_setcharoffline(fd); break;
-            case 0x2b18: next=chmapif_parse_setalloffline(fd,id); break;
-            case 0x2b19: next=chmapif_parse_setcharonline(fd,id); break;
-            case 0x2b1a: next=chmapif_parse_reqfamelist(fd); break;
-            case 0x2b1c: next=chmapif_parse_save_scdata(fd); break;
-            case 0x2b23: next=chmapif_parse_keepalive(fd); break;
-            case 0x2b26: next=chmapif_parse_reqauth(fd,id); break;
-            case 0x2b28: chmapif_parse_reqcharban(fd); break; //charban
-            case 0x2b2a: chmapif_parse_reqcharunban(fd); break; //charunban
-            //case 0x2b2c: /*free*/; break;
-            case 0x2b2d: chmapif_bonus_script_get(fd); break; //Load data
-            case 0x2b2e: chmapif_bonus_script_save(fd); break;//Save data
-            case 0x3008: next=chmapif_parse_fw_configstats(fd); break;
-            default:
-            {
-                    // inter server - packet
-                    int r = inter_parse_frommap(fd);
-                    if (r == 1) break;		// processed
-                    if (r == 2) return 0;	// need more packet
-                    // no inter server packet. no char server packet -> disconnect
-                    ShowError("Unknown packet 0x%04x from map server, disconnecting.\n", RFIFOW(fd,0));
-                    set_eof(fd);
-                    return 0;
-            }
+			case 0x2afa: next=chmapif_parse_getmapname(fd,id); break;
+			case 0x2afc: next=chmapif_parse_askscdata(fd); break;
+			case 0x2afe: next=chmapif_parse_getusercount(fd,id); break; //get nb user
+			case 0x2aff: next=chmapif_parse_regmapuser(fd,id); break; //register users
+			case 0x2b01: next=chmapif_parse_reqsavechar(fd,id); break;
+			case 0x2b02: next=chmapif_parse_authok(fd); break;
+			case 0x2b05: next=chmapif_parse_reqchangemapserv(fd); break;
+			case 0x2b07: next=chmapif_parse_askrmfriend(fd); break;
+			case 0x2b08: next=chmapif_parse_reqcharname(fd); break;
+			case 0x2b0a: next=chmapif_parse_req_skillcooldown(fd); break;
+			case 0x2b0c: next=chmapif_parse_reqnewemail(fd); break;
+			case 0x2b0e: next=chmapif_parse_fwlog_changestatus(fd); break;
+			case 0x2b10: next=chmapif_parse_updfamelist(fd); break;
+			case 0x2b11: next=chmapif_parse_reqdivorce(fd); break;
+			case 0x2b13: next=chmapif_parse_updmapip(fd,id); break;
+			case 0x2b15: next=chmapif_parse_req_saveskillcooldown(fd); break;
+			case 0x2b16: next=chmapif_parse_updmapinfo(fd); break;
+			case 0x2b17: next=chmapif_parse_setcharoffline(fd); break;
+			case 0x2b18: next=chmapif_parse_setalloffline(fd,id); break;
+			case 0x2b19: next=chmapif_parse_setcharonline(fd,id); break;
+			case 0x2b1a: next=chmapif_parse_reqfamelist(fd); break;
+			case 0x2b1c: next=chmapif_parse_save_scdata(fd); break;
+			case 0x2b23: next=chmapif_parse_keepalive(fd); break;
+			case 0x2b26: next=chmapif_parse_reqauth(fd,id); break;
+			case 0x2b28: next=chmapif_parse_reqcharban(fd); break; //charban
+			case 0x2b2a: next=chmapif_parse_reqcharunban(fd); break; //charunban
+			//case 0x2b2c: /*free*/; break;
+			case 0x2b2d: next=chmapif_bonus_script_get(fd); break; //Load data
+			case 0x2b2e: next=chmapif_bonus_script_save(fd); break;//Save data
+			case 0x3008: next=chmapif_parse_fw_configstats(fd); break;
+			default:
+			{
+					// inter server - packet
+					int r = inter_parse_frommap(fd);
+					if (r == 1) break;		// processed
+					if (r == 2) return 0;	// need more packet
+					// no inter server packet. no char server packet -> disconnect
+					ShowError("Unknown packet 0x%04x from map server, disconnecting.\n", RFIFOW(fd,0));
+					set_eof(fd);
+					return 0;
+			}
 		} // switch
 		if(next==0) return 0; //avoid processing rest of packet
 	} // while

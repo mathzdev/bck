@@ -2,21 +2,17 @@
 // For more information, see LICENCE in the main folder
 
 #include "../common/mmo.h"
-#include "../common/malloc.h"
 #include "../common/showmsg.h"
 #include "../common/socket.h"
 #include "../common/strlib.h"
 #include "../common/sql.h"
-#include "../common/timer.h"
 #include "char.h"
 #include "char_mapif.h"
 #include "inter.h"
 
-#include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 
-static int mail_fromsql(int char_id, struct mail_data* md)
+static int mail_fromsql(uint32 char_id, struct mail_data* md)
 {
 	int i, j;
 	struct mail_message *msg;
@@ -49,14 +45,14 @@ static int mail_fromsql(int char_id, struct mail_data* md)
 		msg = &md->msg[i];
 		Sql_GetData(sql_handle, 0, &data, NULL); msg->id = atoi(data);
 		Sql_GetData(sql_handle, 1, &data, NULL); safestrncpy(msg->send_name, data, NAME_LENGTH);
-		Sql_GetData(sql_handle, 2, &data, NULL); msg->send_id = atoi(data);
+		Sql_GetData(sql_handle, 2, &data, NULL); msg->send_id = strtoul(data, NULL, 10);
 		Sql_GetData(sql_handle, 3, &data, NULL); safestrncpy(msg->dest_name, data, NAME_LENGTH);
-		Sql_GetData(sql_handle, 4, &data, NULL); msg->dest_id = atoi(data);
+		Sql_GetData(sql_handle, 4, &data, NULL); msg->dest_id = strtoul(data, NULL, 10);
 		Sql_GetData(sql_handle, 5, &data, NULL); safestrncpy(msg->title, data, MAIL_TITLE_LENGTH);
 		Sql_GetData(sql_handle, 6, &data, NULL); safestrncpy(msg->body, data, MAIL_BODY_LENGTH);
-		Sql_GetData(sql_handle, 7, &data, NULL); msg->timestamp = atoi(data);
+		Sql_GetData(sql_handle, 7, &data, NULL); msg->timestamp = atoi(data); //strtoull ?
 		Sql_GetData(sql_handle, 8, &data, NULL); msg->status = (mail_status)atoi(data);
-		Sql_GetData(sql_handle, 9, &data, NULL); msg->zeny = atoi(data);
+		Sql_GetData(sql_handle, 9, &data, NULL); msg->zeny = strtoul(data, NULL, 10);
 		item = &msg->item;
 		Sql_GetData(sql_handle,10, &data, NULL); item->amount = (short)atoi(data);
 		Sql_GetData(sql_handle,11, &data, NULL); item->nameid = atoi(data);
@@ -66,7 +62,6 @@ static int mail_fromsql(int char_id, struct mail_data* md)
 		Sql_GetData(sql_handle,15, &data, NULL); item->unique_id = strtoull(data, NULL, 10);
 		Sql_GetData(sql_handle,16, &data, NULL); item->bound = atoi(data);
 		item->expire_time = 0;
-		item->favorite = 0;
 
 		for (j = 0; j < MAX_SLOTS; j++)
 		{
@@ -184,7 +179,6 @@ static bool mail_loadmessage(int mail_id, struct mail_message* msg)
 		Sql_GetData(sql_handle,15, &data, NULL); msg->item.unique_id = strtoull(data, NULL, 10);
 		Sql_GetData(sql_handle,16, &data, NULL); msg->item.bound = atoi(data);
 		msg->item.expire_time = 0;
-		msg->item.favorite = 0;
 
 		for( j = 0; j < MAX_SLOTS; j++ )
 		{
@@ -202,7 +196,7 @@ static bool mail_loadmessage(int mail_id, struct mail_message* msg)
 /*==========================================
  * Client Inbox Request
  *------------------------------------------*/
-static void mapif_Mail_sendinbox(int fd, int char_id, unsigned char flag)
+static void mapif_Mail_sendinbox(int fd, uint32 char_id, unsigned char flag)
 {
 	struct mail_data md;
 	mail_fromsql(char_id, &md);
@@ -241,7 +235,7 @@ static bool mail_DeleteAttach(int mail_id)
 	int i;
 
 	StringBuf_Init(&buf);
-	StringBuf_Printf(&buf, "UPDATE `%s` SET `zeny` = '0', `nameid` = '0', `amount` = '0', `refine` = '0', `attribute` = '0', `identify` = '0', `unique_id` = '0'", schema_config.mail_db);
+	StringBuf_Printf(&buf, "UPDATE `%s` SET `zeny` = '0', `nameid` = '0', `amount` = '0', `refine` = '0', `attribute` = '0', `identify` = '0'", schema_config.mail_db);
 	for (i = 0; i < MAX_SLOTS; i++)
 		StringBuf_Printf(&buf, ", `card%d` = '0'", i);
 	StringBuf_Printf(&buf, " WHERE `id` = '%d'", mail_id);
@@ -258,7 +252,7 @@ static bool mail_DeleteAttach(int mail_id)
 	return true;
 }
 
-static void mapif_Mail_getattach(int fd, int char_id, int mail_id)
+static void mapif_Mail_getattach(int fd, uint32 char_id, int mail_id)
 {
 	struct mail_message msg;
 
@@ -294,7 +288,7 @@ static void mapif_parse_Mail_getattach(int fd)
 /*==========================================
  * Delete Mail
  *------------------------------------------*/
-static void mapif_Mail_delete(int fd, int char_id, int mail_id)
+static void mapif_Mail_delete(int fd, uint32 char_id, int mail_id)
 {
 	bool failed = false;
 	if ( SQL_ERROR == Sql_Query(sql_handle, "DELETE FROM `%s` WHERE `id` = '%d'", schema_config.mail_db, mail_id) )
@@ -337,7 +331,7 @@ void mapif_Mail_new(struct mail_message *msg)
 /*==========================================
  * Return Mail
  *------------------------------------------*/
-static void mapif_Mail_return(int fd, int char_id, int mail_id)
+static void mapif_Mail_return(int fd, uint32 char_id, int mail_id)
 {
 	struct mail_message msg;
 	int new_mail = 0;
@@ -401,7 +395,7 @@ static void mapif_parse_Mail_send(int fd)
 {
 	struct mail_message msg;
 	char esc_name[NAME_LENGTH*2+1];
-	int account_id = 0;
+	uint32 account_id = 0;
 
 	if(RFIFOW(fd,2) != 8 + sizeof(struct mail_message))
 		return;

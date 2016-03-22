@@ -8225,7 +8225,7 @@ int pc_itemheal(struct map_session_data *sd,int itemid, int hp,int sp)
 			sp = 0;
 #endif
 		if (sd->sc.data[SC_BITESCAR])
-			hp = 0
+			hp = 0;
 	}
 
 	return status_heal(&sd->bl, hp, sp, 1);

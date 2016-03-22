@@ -52,9 +52,9 @@ ACMD_FUNC(adopt)
 		clif_Adopt_request(b_sd, sd, p_sd->status.account_id);
 		return 0;
 	}
-
 	if (response < ADOPT_MORE_CHILDREN) { // No displaymessage for client-type responses
-		sprintf(atcmd_output, msg_txt(sd, 744 + response - 1));
+		short msg_response = (744 + response - 1);
+		sprintf(atcmd_output, msg_txt(sd, msg_response));
 		clif_displaymessage(fd, atcmd_output);
 	}
 	return -1;

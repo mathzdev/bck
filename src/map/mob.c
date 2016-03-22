@@ -3535,7 +3535,7 @@ int mobskill_use(struct mob_data *md, unsigned int tick, int event)
 			switch (skill_target) {
 				case MST_RANDOM: //Pick a random enemy within skill range.
 					bl = battle_getenemy(&md->bl, DEFAULT_ENEMY_TYPE(md),
-						skill_get_range2(&md->bl, ms[i].skill_id, ms[i].skill_lv), true);
+						skill_get_range2(&md->bl, ms[i].skill_id, ms[i].skill_lv,true));
 					break;
 				case MST_TARGET:
 				case MST_AROUND5:

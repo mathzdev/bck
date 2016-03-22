@@ -21,8 +21,14 @@
 // see conf/battle/client.conf for other version
 
 #ifndef PACKETVER
-	#define PACKETVER 20150916
-	//#define PACKETVER 20120410
+	#define PACKETVER 20151029
+#endif
+
+// hamsterguard->client
+// define on HamsterGuard.xml too
+// Remember to add md5 hash to HamsterGuard.xml and conf/client_athena.conf
+#ifndef HAMSTERGUARD
+	#define HAMSTERGUARD 2632016
 #endif
 
 // Check if the specified packetversion supports the pincode system

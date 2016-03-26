@@ -1,0 +1,86 @@
+lasagna,197,173,4	script	Charle	10166,{
+	mes "[Charle]";
+	mes "Me pregunto por qué nuestros árboles tienen chocolate...";
+	next;
+	mes "[Billy]";
+	donpcevent "Billy::OnEmotion1";
+	mes "Es uno de los productos que exportamos, hacemos pan con ellos, no sé como, pero lo hacemos.";
+	next;
+	mes "[Charle]";
+	mes "Y si es una ciudad de gatos... para qué tiene quesos en las calles.";
+	next;
+	donpcevent "Billy::OnEmotion2";
+	mes "[Billy]";
+	mes "¿Pues qué crees que comen los gatos? Usamos para cazar eso.";
+	close;
+}
+lasagna,195,173,5	script	Billy	10164,{
+	mes "[Charle]";
+	mes "Me pregunto por qué nuestros árboles tienen chocolate...";
+	next;
+	mes "[Billy]";
+	emotion e_swt;
+	mes "Es uno de los productos que exportamos, hacemos pan con ellos, no sé como, pero lo hacemos.";
+	next;
+	mes "[Charle]";
+	mes "Y si es una ciudad de gatos... para qué tiene quesos en las calles.";
+	next;
+	emotion e_heh;
+	mes "[Billy]";
+	mes "¿Pues qué crees que comen los gatos? Usamos para cazar eso.";
+	close;
+OnEmotion1: emotion e_swt; end;
+OnEmotion2: emotion e_heh; end;
+}
+lasagna,236,193,5	script	Richy	10167,{
+	mes "[Richy]";
+	mes "No me gusta la comida enlatada... espera...";
+	next;
+	mes "[Richy]";
+	mes "...¡¡ES ATÚN!!";
+	close;
+}
+lasagna,239,195,4	script	Madgaret	10165,{
+	mes "[Madgared]";
+	mes "Sólo cómete tu sopa y ya por favor.";
+	close;
+}
+lasa_fild01,96,266,4	script	Soldado Doram#01	10162,{
+	mes "[Soldado Doram]";
+	mes "¿Quieres pasar al otro lado?";
+	next;
+	if(select("Vamos","Ahora no") == 1)
+		warp "lasa_fild01",94,294;
+	close;
+}
+lasa_fild01,96,292,4	script	Soldado Doram#02	10162,{
+	mes "[Soldado Doram]";
+	mes "¿Quieres pasar al otro lado?";
+	next;
+	if(select("Vamos","Ahora no") == 1)
+		warp "lasa_fild01",95,259;
+	close;
+}
+lasa_fild02,97,45,4	script	Olio	10155,{
+	mes "[Olio]";
+	if(Class != 4218) {
+		mes "Me encargo de recibir a los nuevos gato-aventureros al mundo.";
+		close;
+	}
+	if(DR_REC < 1) {
+		mes "Bienvenido a Lasagna, nuestra tierra y capital.";
+		next;
+		mes "[Olio]";
+		mes "Antes de salir de la isla te recomiendo subir un poco tu nivel y recolectar equipo básico.";
+		next;
+		mes "[Olio]";
+		mes "Si vas a la izquierda desde aquí, llegarás a la ciudad, allí encontrarás todo lo que ocupas.";
+		next;
+		mes "[Olio]";
+		mes "Te deseo la mejor de las suertes.";
+		DR_REC = 1;
+		close;
+	}
+	mes "Si vas a la izquierda desde aquí, llegarás a la ciudad, allí encontrarás todo lo que ocupas.";
+	close;
+}

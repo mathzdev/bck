@@ -54,3 +54,17 @@
 2979:18716,{ bonus bMaxHPRate,15; bonus2 bSubEle,Ele_Fire,10; bonus bLongAtkRate,30; }
 15117:20744:22047,{ bonus bMaxHPrate,25; bonus bMaxSPrate,25; set .@r,getequiprefinerycnt(EQI_GARMENT) + getequiprefinerycnt(EQI_ARMOR) + getequiprefinerycnt(EQI_SHOES); if(.@r >= 30) { bonus bMaxHPrate,10; bonus bMaxSPrate,10; bonus bSpeedAddRate,3; } }
 35056:35057,{ bonus2 bSubRace,RC_Dragon,30; bonus2 bSubSize,Size_Large,30; bonus2 bSubEle,Ele_Fire,30; bonus bLongAtkDef,30; }
+// Combos Doram
+15156:20790:22085,{ bonus bMaxHP,4000; bonus bNoCastCancel,0; bonus bFixedCastrate,-25; }
+36026:36039,{ bonus bAllStats,2; bonus2 bAddMonsterDropItem,11552,2; }
+15126:20788:22083,{ bonus bMaxHP,2000; bonus bNoCastCancel,0; bonus bFixedCastrate,-15; }
+28413:28381:15129:20789:22084,{ bonus bMaxHPrate,15; bonus bMaxSPrate,5; bonus bHealPower,10; itemskill "AC_HEAL",5,1; }
+28414:28381:15129:20789:22084,{ bonus bMaxHPrate,20; bonus bMaxSPrate,10; bonus bHealPower,20; itemskill "AC_HEAL",7,1; }
+28415:28381:15129:20789:22084,{ bonus bMaxHPrate,25; bonus bMaxSPrate,15; bonus bHealPower,30; itemskill "AC_HEAL",9,1; }
+28416:28380:15156:20790:22085,{ bonus bMaxHPrate,10; bonus bMaxSPrate,10; bonus2 bSkillAtk,"SU_CN_METEOR",100; }
+28417:28380:15156:20790:22085,{ bonus bMaxHPrate,15; bonus bMaxSPrate,15; bonus2 bSkillAtk,"SU_CN_METEOR",150; }
+28418:28380:15156:20790:22085,{ bonus bMaxHPrate,20; bonus bMaxSPrate,20; bonus2 bSkillAtk,"SU_CN_METEOR",200; }
+28419:28382:15126:20788:22083,{ bonus bMaxHPrate,20; bonus bMaxSPrate,3; bonus2 bSkillAtk,"SU_LUNATICCARROTBEAT",100; }
+28420:28382:15126:20788:22083,{ bonus bMaxHPrate,25; bonus bMaxSPrate,6; bonus2 bSkillAtk,"SU_LUNATICCARROTBEAT",150; }
+28421:28382:15126:20788:22083,{ bonus bMaxHPrate,30; bonus bMaxSPrate,9; bonus2 bSkillAtk,"SU_LUNATICCARROTBEAT",200; }
+

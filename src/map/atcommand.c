@@ -1894,7 +1894,7 @@ ACMD_FUNC(hair_color)
 
 /*==========================================
  * @go [city_number or city_name] - Updated by Harbin
- * Added Glemior [DanielArt]
+ * Added Glemior, Lasagna and City Modified [DanielArt]
  *------------------------------------------*/
 ACMD_FUNC(go)
 {
@@ -1916,21 +1916,21 @@ ACMD_FUNC(go)
 #else
 		{ MAP_IZLUDE,      128, 114 }, //  5=Izlude
 #endif
-		{ MAP_ALDEBARAN,   140, 131 }, //  6=Al de Baran
+		{ MAP_ALDEBARAN,   140, 114 }, //  6=Al de Baran
 		{ MAP_LUTIE,       147, 134 }, //  7=Lutie
-		{ MAP_COMODO,      209, 143 }, //  8=Comodo
-		{ MAP_YUNO,        157,  51 }, //  9=Yuno
-		{ MAP_AMATSU,      198,  84 }, // 10=Amatsu
+		{ MAP_COMODO,      189, 162 }, //  8=Comodo
+		{ MAP_YUNO,        158, 191 }, //  9=Yuno
+		{ MAP_AMATSU,      113, 159 }, // 10=Amatsu
 		{ MAP_GONRYUN,     160, 120 }, // 11=Gonryun
-		{ MAP_UMBALA,       89, 157 }, // 12=Umbala
+		{ MAP_UMBALA,      129, 132 }, // 12=Umbala
 		{ MAP_NIFLHEIM,     21, 153 }, // 13=Niflheim
-		{ MAP_LOUYANG,     217,  40 }, // 14=Louyang
+		{ MAP_LOUYANG,     218, 103 }, // 14=Louyang
 #ifdef RENEWAL
 		{ MAP_NOVICE,       144, 81  }, // 15=Training Grounds (Renewal)
 #else
 		{ MAP_NOVICE,       53, 111 }, // 15=Training Grounds
 #endif
-		{ MAP_JAIL,         23,  61 }, // 16=Prison
+		{ MAP_MERCADO,     134, 100 }, // 16=Mercado
 		{ MAP_JAWAII,      249, 127 }, // 17=Jawaii
 		{ MAP_AYOTHAYA,    151, 117 }, // 18=Ayothaya
 		{ MAP_EINBROCH,     64, 200 }, // 19=Einbroch
@@ -1951,6 +1951,7 @@ ACMD_FUNC(go)
 		{ MAP_MALAYA,      242, 211 }, // 34=Malaya Port
 		{ MAP_ECLAGE,      110,  39 }, // 35=Eclage
 		{ MAP_GUILDTOWN,   200, 319 }, // 36=Guild Town
+		{ MAP_LASAGNA,     169, 160 }, // 37=Lasagna
 	};
 
 	nullpo_retr(-1, sd);
@@ -2072,6 +2073,8 @@ ACMD_FUNC(go)
 		town = 35;
 	} else if (strncmp(map_name, "guild", 4) == 0) {
 		town = 36;
+	} else if (strncmp(map_name, "lasagna", 4) == 0) {
+		town = 37;
 	}
 
 	if (town >= 0 && town < ARRAYLENGTH(data))

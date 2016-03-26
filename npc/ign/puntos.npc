@@ -91,12 +91,16 @@ if( @whispervar0$ == "-setting" ){
 		close2;
 		cutin "",255;
 		end;
+OnCmdAyuda:
+message strcharinfo(0),"@ayudapuntos - Ayuda sobre sistema de Puntos por Hora.";
+message strcharinfo(0),"Por cada hora que juegues con nosotros recibirás [ "+.cash1+" ] Gold Coin la cual podrás comerciar en el Casino de Prontera por increibles objetos.";
+message strcharinfo(0),"Recuerda que si estás en las mismas coordenadas por más de 4 se detendra tu tiempo y tendras que reloguear.";
+message strcharinfo(0),"Para no recibir los mensajes del tiempo que llevas jugando, usa el comando @showtime";
+message strcharinfo(0),"Para detener en caso de AFK emergente usa @afktime y se guardara tu tiempo por un limite de una hora.";
+message strcharinfo(0),"Para saber cuánto tiempo llevas jugando o si se ha cancelado tu bono escribe @viewtime.";
+end;
 OnPCLoginEvent:
-dispbottom "~ Bienvenido a IGN Ragnarok Online ~";
-dispbottom "Por cada hora que juegues con nosotros recibirás [ "+.cash1+" ] Gold Coin la cual podrás comerciar en el Casino de Prontera por increibles objetos.";
-dispbottom "Recuerda que si estás en las mismas coordenadas por más de 4 se detendra tu tiempo y tendras que reloguear.";
-dispbottom "Para no recibir los mensajes del tiempo que llevas jugando, usa el comando @showtime";
-dispbottom "Para detener en caso de AFK emergente usa @afktime y se guardara tu tiempo por un limite de una hora.";
+message strcharinfo(0),"Escribe @ayudapuntos para conocer el sistema y beneficios de Puntos por Hora.";
 addtimer 60000,"puntos_hora::OnOneMinute";
 addtimer 3600000,"puntos_hora::OnOneHora";
 set p_hora,0;
@@ -181,6 +185,7 @@ OnCommand: // @showtime command.
 end;	
 OnInit:
 	bindatcmd "showtime","puntos_hora::OnCommand",0,0;
+	bindatcmd "ayudapuntos","puntos_hora::OnCmdAyuda",0,0;
 	set .cash1,1;
 	set .cash7,5;
 	set .gmlvl,80;

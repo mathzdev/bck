@@ -289,6 +289,7 @@ mes "Por favor elige la sala Player vs Player a la que deseas asistir:";
 	}
 OnClock0000:
 OnWhisperGlobal:
+OnInit:
 	setarray .mr$[0],"guild_vs1","guild_vs2","guild_vs4","pvp_y_1-2","pvp_n_1-1","pvp_n_1-2","pvp_n_1-3","pvp_n_1-4","pvp_n_1-5";
 	set $mar$,.mr$[rand(0,getarraysize(.mr$))];
 	setmapflag $mar$,mf_pvp;
@@ -301,9 +302,6 @@ OnWhisperGlobal:
 	setmapflag $mar$,mf_nowarp;
 	setmapflag $mar$,mf_nobranch;
 	setmapflag $mar$,mf_noexppenalty;
-	end;
-OnInit:
-	donpcevent "pvp_s::OnWhisperGlobal";
 	do {
 		set .userspvp,(getmapusers("cell_game")+getmapusers("guild_vs2")+getmapusers($mar$));
 		delwaitingroom;
@@ -371,3 +369,4 @@ geffen,112,69,5	duplicate(pvp_s)	Salas PvP#02	467
 payon,179,114,4	duplicate(pvp_s)	Salas PvP#03	467
 alberta,111,68,5	duplicate(pvp_s)	Salas PvP#04	467
 izlude,123,117,5	duplicate(pvp_s)	Salas PvP#05	467
+lasagna,161,159,5	duplicate(pvp_s)	Salas PvP#06	467

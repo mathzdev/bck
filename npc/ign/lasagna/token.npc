@@ -1,0 +1,55 @@
+-	itemshop	Chyara_Shop	-1,25142:0,1681:1,1683:1,1685:5,1687:10,1690:15,1691:20,1692:25,1693:30,1684:1,1686:5,1694:15,1695:20,1696:25,1697:30,15126:10,15129:20,15150:5,15151:15,15156:30,19084:20,20788:10,20789:20,20790:30,22076:15,22077:10,22083:10,22084:20,22085:30,28374:5,28380:20,28381:20,28382:20
+-	itemshop	Talisman_Shop	-1,25142:0,28413:15,28414:30,28415:60,28416:15,28417:30,28418:60,28419:15,28420:30,28421:60,28422:30,28423:30,28424:30
+lasagna,136,247,4	script	Chyara	10156,{
+	if(countitem(25142) > 0) {
+		mes "[Chyara]";
+		mes "¡Bienvenido a la tienda de Doram Token!";
+		next;
+		if(select("^5533ffAbrir la tienda^000000:Nos vemos") == 1) {
+			mes "[Chyara]";
+			mes "De acuerdo, aquí vamos.";
+			close2;
+			callshop "Chyara_Shop",1;
+			end;
+		}
+		mes "[Chyara]";
+		mes "De acuerdo, vuelve cuando quieras.";
+		close;
+	}
+	mes "[Chyara]";
+	mes "¡¿Qué tal?!";
+	mes "Soy el principal comerciante de los Doram.";
+	next;
+	mes "[Chyara]";
+	mes "El dinero me sobra, pero últimamente los mercaderes sólo aceptan ^5533ffDoram Token^000000.";
+	next;
+	mes "[Chyara]";
+	mes "La cual es la moneda principal de los Doram.";
+	next;
+	mes "[Chyara]";
+	mes "Si obtiene alguna ^5533ffDoram Token^000000, ven a verme, y te ofreceré grandes cosas a cambio.";
+	close2;
+	emotion e_no1;
+	end;
+}
+lasagna,140,299,4	script	Aglio	10154,{
+	mes "[Aglio]";
+	mes "He obtenido un gran botín últimamente.";
+	next;
+	mes "[Aglio]";
+	mes "Te puedo vender una parte de mi botín por ^5533ffDoram Token^000000.";
+	mes "¿Qué dices?";
+	next;
+	if(select("Claro, déjame ver:No, gracias") == 2) {
+		mes "[Aglio]";
+		mes "De acuerdo, vuelve cuando quieras algo.";
+		close;
+		emotion e_no1;
+		end;
+	}
+	mes "[Aglio]";
+	mes "Aquí tienes, compra lo que quieras.";
+	close2;
+	callshop "Talisman_Shop",1;
+	end;
+}

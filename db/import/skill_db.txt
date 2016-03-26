@@ -67,7 +67,13 @@
 //    0x20000 - skill that affects SC_GLOOMYDAY_SK
 // 17 Name
 // 18 Description
+
 //****
-// Creator
-392,0,6,4,0,0x1,0,1,0,no,0,0,0,none,0,0x0,		CR_ALCHEMY,Alchemy
-393,0,6,4,0,0x1,0,1,0,no,0,0,0,none,0,0x0,		CR_SYNTHESISPOTION,Potion Synthesis
+// Oficios
+392,0,6,4,0,0x1,0,1,0,no,0,0,0,none,0,0x0,		CR_ALCHEMY,Sewing
+393,0,6,4,0,0x1,0,1,0,no,0,0,0,none,0,0x0,		CR_SYNTHESISPOTION,Woodcutter
+
+//****
+// Summoner
+5028,9,8,2,0,0x2,2:2:4:4:5,5,1:2:3:4:5,yes,0,0,0,magic,0,0x0,		SU_CN_METEOR,Catnip Meteor
+

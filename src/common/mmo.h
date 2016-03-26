@@ -111,7 +111,7 @@
 #define MAX_SKILLCOOLDOWN 20
 
 //Size of the fame list arrays.
-#define MAX_FAME_LIST 5
+#define MAX_FAME_LIST 10
 
 //Limits to avoid ID collision with other game objects
 #define START_ACCOUNT_NUM 2000000

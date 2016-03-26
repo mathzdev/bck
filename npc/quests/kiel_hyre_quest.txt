@@ -5745,8 +5745,8 @@ yuno_fild12,232,222,0	script	Old Fisherman	709,{
 		mes "how much you love handouts,";
 		mes "but you're not getting any.";
 		mes "Now, if you bring me some";
-		mes "Raw Fish, I'd be more friendly~";
-		if (countitem(544) >= 10)  {
+		mes "^5533ffFresh Fish^000000, I'd be more friendly~";
+		if (countitem(579) >= 10)  {
 			next;
 			mes "[Fisherman]";
 			mes "Oh, is all this fish";
@@ -5812,7 +5812,7 @@ yuno_fild12,232,222,0	script	Old Fisherman	709,{
 			mes "Let's see, he lived in";
 			mes "a hut near the northeast";
 			mes "forest guard camp.";
-			delitem 544,10; //Fish_Slice
+			delitem 579,10; //Fresh_Fish
 			set KielHyreQuest,62;
 			close;
 		}

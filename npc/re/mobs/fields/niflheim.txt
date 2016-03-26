@@ -164,7 +164,7 @@ OnInit:
 
 OnLoDDead:
 	killmonster "niflheim",strnpcinfo(3)+"::OnInvasionMonsters";
-	donpcevent "OnMvPKillEvent::OnLordOfDeath"; // Ranking MvP [DanielArt]
+	callfunc("mvpd","Lord of Death",1,"0xFF7F24",28,rand(1,5));
 	initnpctimer;
 OnInvasionMonsters:
 	end;

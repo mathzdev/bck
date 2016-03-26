@@ -6031,7 +6031,7 @@
 12015,Rusty_Arrow_Container,Rusty Arrow Quiver,2,2,,250,,,,,0xFFFFFFFF,63,2,,,,,,{ getitem 1762,500; },{},{}
 12016,Speed_Up_Potion,Speed Potion,2,2,,100,,,,,0xFFFFFFFF,63,2,,,,,,{ sc_start SC_SPEEDUP1,5000,50; },{},{}
 12017,Slow_Down_Potion,Slow Potion,2,2,,100,,,,,0xFFFFFFFF,63,2,,,,,,{ sc_start SC_SLOWDOWN,5000,100; },{},{}
-12018,Fire_Cracker,Firecracker,2,2,,20,,,,,0xFFFFFFFF,63,2,,,,,,{},{},{}
+12018,Firework,Firework,2,2,,20,,,,,0xFFFFFFFF,63,2,,,,,,{},{},{}
 12019,Holy_Egg,Holy Egg,11,2,,150,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "ALL_RESURRECTION",2; },{},{}
 12020,Water_Of_Darkness,Cursed Water,11,2,,30,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "ITEM_ENCHANTARMS",8; },{},{}
 12021,Pork_Belly,Pork,0,0,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemheal rand(70,99),0; },{},{}

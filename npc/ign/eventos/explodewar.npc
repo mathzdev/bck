@@ -13,6 +13,7 @@
 //========================================================
 pvp_n_7-5	mapflag	nomobloot
 pvp_n_7-5	mapflag	nomvploot
+pvp_n_7-5	mapflag	restricted	3
 pvp_n_7-5	mapflag	noskill
 -	script	EXPLOWAR	-1,{
 OnWhisperGlobal:
@@ -87,7 +88,8 @@ OnChestBreak:
 			warp "Save",0,0;
 		}
 	}
-	if(getmapusers("pvp_n_7-5") == 1) {
+	if(getmapusers("pvp_n_7-5") == 1 && @explofix < 1) {
+		@explofix = 1;
 		killmonsterall "pvp_n_7-5";
 		announce "[ "+strcharinfo(0)+" ] ha ganado el evento de Guerra Explosiva, ¡felicidades!",bc_all,0xFF8800;
 		mapannounce "pvp_n_7-5","[Guerra Explosiva] Haz ganado el evento, ve al centro a recoger tu premio.",bc_map,0xFF8800;
@@ -129,20 +131,21 @@ prontera,159,176,4	script	Guerra Explosiva::explowar_npc	55,{
 	mes .npc$;
 	mes "Antes de iniciar el evento se te explicará cómo se juega, así que presta atención.";
 	next;
-	if (checkweight(502,100) == 0) {
-		mes .npc$;
-		mes "Tienes demaciado peso, por favor guarda algunas cosas en el almacén.";
-		close;
-	}
-	for(set .@i,1; .@i <= 21; set .@i,.@i +1) {
-		if(getequipisequiped(.@i))
-			unequip .@i;
-	}
 	mes .npc$;
-	mes "Se te ha desequipado todo, debido a que serás expulsado si juegas con equipo colocado.";
+	mes "Se te desequipará todo antes de entrar, debido a que serás expulsado si juegas con equipo colocado.";
 	next;
 	switch(select("Ingresar al Evento ^0000ff~ ^cc6600[ ^5533ff"+getmapusers("pvp_n_7-5")+" ^cc6600]:^777777Salir^000000")) {
 		case 1:
+			if (checkweight(502,100) == 0) {
+				mes .npc$;
+				mes "Tienes demaciado peso, por favor guarda algunas cosas en el almacén.";
+				close;
+			}
+			@explofix = 0;
+			for(set .@i,1; .@i <= 21; set .@i,.@i +1) {
+				if(getequipisequiped(.@i))
+			unequip .@i;
+			}
 			sleep2 1000;
 			set @evt_diewar,1;
 			warp "pvp_n_7-5",100,100;

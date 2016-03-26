@@ -9815,7 +9815,10 @@ static bool clif_process_message(struct map_session_data* sd, int format, char**
 	}
 
 #if PACKETVER >= 20151001
-	message[messagelen++] = '\0';
+	if (message[messagelen-1] != '\0')
+	{
+		message[messagelen++] = '\0';
+	}
 #endif
 
 	// the declared length must match real length
@@ -10632,6 +10635,10 @@ void clif_parse_GlobalMessage(int fd, struct map_session_data* sd)
 
 	char *name, *message, *fakename = NULL;
 	int namelen, messagelen;
+
+#if PACKETVER >= 20151001
+	textlen++;
+#endif
 
 	bool is_fake;
 
@@ -15851,7 +15858,7 @@ void clif_parse_Adopt_request(int fd, struct map_session_data *sd)
 	TBL_PC *tsd = map_id2sd(RFIFOL(fd,packet_db[sd->packet_ver][RFIFOW(fd,0)].pos[0]));
 	TBL_PC *p_sd = map_charid2sd(sd->status.partner_id);
 
-	if( pc_can_Adopt(sd, p_sd, tsd) == ADOPT_ALLOWED )
+	if( pc_try_adopt(sd, p_sd, tsd) == ADOPT_ALLOWED )
 	{
 		tsd->adopt_invite = sd->status.account_id;
 		clif_Adopt_request(tsd, sd, p_sd->status.account_id);

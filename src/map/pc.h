@@ -582,14 +582,18 @@ struct map_session_data {
 	// HamsterGuard Mob MVP ID Verify [DanielArt]
 	int ham_mvpid;
 
-	// BG Rank [DanielArt]
-	struct s_bgstats{ int rank_games,deserter,win,lost,tie,leader_win,leader_tie,leader_lost,eos_wins,boss_wins,sc_wins,ti_wins,ctf_wins,td_wins,cq_wins,ru_wins,dom_wins,eos_tie,boss_tie,ti_tie,ctf_tie,td_tie,sc_tie,dom_tie,eos_lost,boss_lost,ti_lost,ctf_lost,td_lost,sc_lost,cq_lost,ru_lost,dom_lost; } bgstats;
-
 	// Sistema de Oficios [DanielArt]
 	short oficio;
 	short oficio_ex;
 	short tailorexp;
 	short carpenterexp;
+
+	// BG Status
+	int bg_win;
+	int bg_lose;
+	int bg_tie;
+	int bg_rank;
+	int bg_deserter;
 
 	// Mail System [Zephyrus]
 	struct s_mail {

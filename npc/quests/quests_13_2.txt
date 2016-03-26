@@ -4471,6 +4471,10 @@ mid_camp,147,256,3	script	Rune Midgarts Magician#1	735,{
 
 function	script	jewel_13_2	{
 	.@color$ = getarg(0);
+	if (checkquest(8241) == 1 && countitem(7575) < 1)
+		getitem 7575,1;
+	if (checkquest(8242) == 1 && countitem(7576) < 1)
+		getitem 7576,1;
 	if (ep13_2_rhea < 5) {
 		mes "- Under a round pile of earth, -";
 		mes "- there's a "+ .@color$ +" Gem -";
@@ -4496,7 +4500,10 @@ function	script	jewel_13_2	{
 				mes "- You dug up a pile of earth -";
 				mes "- and pulled out the "+ .@color$ +" Gem -";
 				setquest 8240+.@num;
-				getitem 7574+.@num,1;
+				switch (getarg(1)) {
+					case 1: getitem 7575,1; break;
+					case 2: getitem 7576,1; break;
+				}
 				close;
 			}
 			else {

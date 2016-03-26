@@ -11,8 +11,8 @@ niflheim,362,274,0	warp	haunt05-1	1,1,haunt_e,152,157
 
 haunt_e,0,0,0,0	monster	Giant Whisper	1186,2,0,0,0
 haunt_h,0,0,0,0	monster	Giant Whisper	1186,2,0,0,0
-haunt_h,0,0,0,0	monster	Masked Chimu	3496,7,0,0,0
-haunt_h,0,0,0,0	monster	Pirate Ghost	3500,7,0,0,0
-haunt_h,0,0,0,0	monster	Ghost Book	3498,7,0,0,0
+haunt_h,0,0,0,0	monster	Masked Chimu	3457,7,0,0,0
+haunt_h,0,0,0,0	monster	Pirate Ghost	3461,7,0,0,0
+haunt_h,0,0,0,0	monster	Ghost Book	3459,7,0,0,0
 haunt_h,0,0,0,0	monster	Whisper	1179,20,0,0,0
 haunt_e,0,0,0,0	monster	Whisper	1179,5,0,0,0

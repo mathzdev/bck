@@ -58,10 +58,6 @@ int pc_expiration_tid = INVALID_TIMER;
 struct fame_list smith_fame_list[MAX_FAME_LIST];
 struct fame_list chemist_fame_list[MAX_FAME_LIST];
 struct fame_list taekwon_fame_list[MAX_FAME_LIST];
-struct fame_list pvprank_fame_list[MAX_FAME_LIST];
-struct fame_list pvpevent_fame_list[MAX_FAME_LIST];
-struct fame_list bgrank_fame_list[MAX_FAME_LIST];
-struct fame_list bg_fame_list[MAX_FAME_LIST];
 
 static unsigned int equip_pos[EQI_MAX]={EQP_ACC_L,EQP_ACC_R,EQP_SHOES,EQP_GARMENT,EQP_HEAD_LOW,EQP_HEAD_MID,EQP_HEAD_TOP,EQP_ARMOR,EQP_HAND_L,EQP_HAND_R,EQP_COSTUME_HEAD_TOP,EQP_COSTUME_HEAD_MID,EQP_COSTUME_HEAD_LOW,EQP_COSTUME_GARMENT,EQP_AMMO,EQP_SHADOW_ARMOR,EQP_SHADOW_WEAPON,EQP_SHADOW_SHIELD,EQP_SHADOW_SHOES,EQP_SHADOW_ACC_R,EQP_SHADOW_ACC_L};
 
@@ -1447,14 +1443,21 @@ void pc_reg_received(struct map_session_data *sd)
 	// Cooking Exp
 	sd->cook_mastery = pc_readglobalreg(sd, add_str("COOK_MASTERY"));
 	
-	// HamsterGuard Mob MVP ID
+	// HamsterGuard Mob MVP ID [DanielArt]
 	//sd->ham_mvpid = pc_readglobalreg(sd, add_str("ham_mvpid"));
 
-	// Oficios
+	// Oficios [DanielArt]
 	sd->oficio = pc_readglobalreg(sd, add_str("Oficio"));
 	sd->oficio_ex = pc_readglobalreg(sd, add_str("Oficio2"));
 	sd->tailorexp = pc_readglobalreg(sd, add_str("TailorExp"));
 	sd->carpenterexp = pc_readglobalreg(sd, add_str("CarpenterExp"));
+
+	// BG Status [DanielArt]
+	sd->bg_win = pc_readglobalreg(sd, add_str("BG_WIN"));
+	sd->bg_lose = pc_readglobalreg(sd, add_str("BG_LOSE"));
+	sd->bg_tie = pc_readglobalreg(sd, add_str("BG_TIE"));
+	sd->bg_rank = pc_readglobalreg(sd, add_str("BG_RANK"));
+	sd->bg_deserter = pc_readglobalreg(sd, add_str("BG_DESERTER"));
 
 	if( (sd->class_&MAPID_BASEMASK) == MAPID_TAEKWON )
 	{ // Better check for class rather than skill to prevent "skill resets" from unsetting this
@@ -1468,20 +1471,6 @@ void pc_reg_received(struct map_session_data *sd)
 	{
 		sprintf(varname, "Mission_ID%d", i + 1);
 		sd->hunting[i].mob_id = pc_readglobalreg(sd,add_str(varname));
-		/*short m,rep;
-		 // Corrección de mobs repetidos [DanielArt]
-		for( m = 0; m < MAX_HUNTING_MOB; i++ )
-			if(sd->hunting[m].mob_id == sd->hunting[i].mob_id)
-				rep = 1;
-			else
-				rep = 0;
-		while (rep > 0) {
-			for( m = 0; m < MAX_HUNTING_MOB; i++ )
-				if(sd->hunting[m].mob_id == sd->hunting[i].mob_id)
-					rep = 1;
-				else
-					rep = 0;
-		}*/
 		sprintf(varname, "Mission_Count%d", i + 1);
 		sd->hunting[i].count = pc_readglobalreg(sd,add_str(varname));
 	}
@@ -8225,7 +8214,7 @@ int pc_itemheal(struct map_session_data *sd,int itemid, int hp,int sp)
 			sp = 0;
 #endif
 		if (sd->sc.data[SC_BITESCAR])
-			hp = 0
+			hp = 0;
 	}
 
 	return status_heal(&sd->bl, hp, sp, 1);

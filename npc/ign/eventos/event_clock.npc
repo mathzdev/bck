@@ -6,10 +6,15 @@
 OnMinute20:
 OnMinute50:
 	if(rand(100) < 50) {
-		switch (rand(1,10)) {
+		switch (rand(1,12)) {
 			case 1:
 				//Busca Poring
 				donpcevent "BUSCAPO::OnBuscaPoring";
+				break;
+			case 11:
+			case 12:
+				//Last-Man Standing
+				donpcevent "LASTMAN::OnLastMan";
 				break;
 			case 2:
 			case 8:
@@ -45,6 +50,7 @@ end;
 function	script	F_Event	{
 	switch (getarg(0)) {
 		case 1:
+			message strcharinfo(0),"Haz recibido tus premios en tu inventario.";
 			getitem 7711,getarg(1);
 			return;
 	}

@@ -120,4 +120,4 @@ c_tower3_,0,0,0,0	monster	Owl Viscount	2921,3,0,0,0
 c_tower3_,0,0,0,0	monster	Owl Viscount	2921,6,120000,0,0
 c_tower3_,0,0,0,0	monster	Owl Marquess	2923,1,0,0,0
 c_tower3_,0,0,0,0	monster	Owl Marquess	2923,5,120000,0,0
-c_tower3_,0,0,0,0	boss_monster	Time Holder	3074,1,10800000,600000,0,"OnMvPKillEvent::OnTimeHolder"
+c_tower3_,0,0,0,0	boss_monster	Time Holder	3074,1,10800000,600000,"OnMvPKillEvent::OnTimeHolder"

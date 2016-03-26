@@ -1,0 +1,26 @@
+conch_in	mapflag	noteleport
+conch_in	mapflag	nosave	SavePoint
+conch_in	mapflag	nowarp
+conch_in	mapflag	nomemo
+lasagna,151,55,0	warp	lasagna001	2,2,lasa_fild01,129,376
+lasa_fild01,134,382,0	warp	lasagna001-1	2,2,lasagna,157,67
+lasagna,326,49,0	warp	lasagna002	2,2,lasa_fild02,24,98
+lasa_fild02,16,98,0	warp	lasagna002-1	2,2,lasagna,326,61
+lasagna,361,92,0	warp	lasagna003	2,2,lasa_fild01,342,367
+lasa_fild01,341,376,0	warp	lasagna003-1	2,2,lasagna,350,92
+lasa_fild02,349,244,0	warp	lasagna003	2,2,lasa_dun01,28,144
+lasa_dun01,18,144,0	warp	lasagna003-1	2,2,lasa_fild02,340,244
+lasa_dun01,160,98,0	warp	lasagna004	2,2,lasa_dun02,29,172
+lasa_dun02,17,172,0	warp	lasagna004-1	2,2,lasa_dun01,152,100
+lasa_dun02,145,58,0	warp	lasagna005	2,2,lasa_dun03,190,24
+lasa_dun03,190,14,0	warp	lasagna005-1	2,2,lasa_dun02,145,50
+conch_in,140,35,0	warp	lasagna006	1,1,lasagna,193,120
+lasagna,198,120,0	warp	lasagna006-1	1,1,conch_in,140,30
+conch_in,64,34,0	warp	lasagna007	1,1,lasagna,174,205
+lasagna,174,212,0	warp	lasagna007-1	1,1,conch_in,63,29
+conch_in,36,60,0	warp	lasagna008	1,1,lasagna,129,114
+lasagna,135,114,0	warp	lasagna008-1	1,1,conch_in,27,60
+conch_in,102,86,0	warp	lasagna009	1,1,lasagna,62,116
+lasagna,56,115,0	warp	lasagna009-1	1,1,conch_in,102,92
+conch_in,158,60,0	warp	lasagna007	1,1,lasagna,70,202
+lasagna,63,201,0	warp	lasagna007-1	1,1,conch_in,165,60

@@ -7,13 +7,13 @@
 // \/_/    \/_/\/_/\/__/ \/_/\/_/\/____/\/_/\/_/\/__/\/_/
 //
 //========================================================
-// ---				     Atrapa al Poring                ---
+// ---                 Atrapa al Poring                ---
 //========================================================
 // ---                   by DanielArt                  ---
 //========================================================
-findporing	mapflag	nomobloot
-findporing	mapflag	nomvploot
-findporing	mapflag	noskill
+aqt_fild01	mapflag	nomobloot
+aqt_fild01	mapflag	nomvploot
+aqt_fild01	mapflag	noskill
 -	script	BUSCAPO	-1,{
 OnWhisperGlobal:
 OnBuscaPoring:
@@ -41,28 +41,53 @@ OnBuscaPoring:
 	donpcevent "Busca al Poring::OnTalk2";
 	sleep2 15000;
 	announce "[Busca al Poring]: ¡El evento ha comenzado!.",bc_all,"0xffb6c1";
-	monster "findporing",0,0,"Poring",1002,99,"BUSCAPO::OnNormalDie";
-	monster "findporing",0,0,"Poring",1002,1,"BUSCAPO::OnPremioDie";
+	monster "aqt_fild01",0,0,"Poring",1002,99,"BUSCAPO::OnNormalDie";
+	monster "aqt_fild01",0,0,"Poring",1002,1,"BUSCAPO::OnPremioDie";
 	donpcevent "Busca al Poring::OnDisable";
 	end;
 OnNormalDie:
-	monster "findporing",0,0,"Poring",1002,1,"BUSCAPO::OnNormalDie";
+	callsub S_CheckEquip;
+	monster "aqt_fild01",0,0,"Poring",1002,1,"BUSCAPO::OnNormalDie";
 	end;
 OnPremioDie:
+	callsub S_CheckEquip;
 	announce "[Busca al Poring]: "+strcharinfo(0)+" ha encontrado al Poring Premiado, ¡felicidades!",bc_all,"0xffb6c1";
 	callfunc "F_Event",1,rand(1,5);
 	message strcharinfo(0),"Felicidades por ganar el Evento.";
 	sleep2 1500;
-	killmonsterall "findporing";
-	mapwarp "findporing","prontera",150,180;
+	killmonsterall "aqt_fild01";
+	mapwarp "aqt_fild01","prontera",150,180;
 	end;
+S_CheckEquip:
+	sc_end SC_ALL;
+	for(set .@i,1; .@i <= 21; set .@i,.@i +1) {
+		if(getequipisequiped(.@i)) {
+			sleep2 500;
+			mapannounce "aqt_fild01",strcharinfo(0)+" ha sido expulsado del evento por usar equipo, lo que va contra las reglas.",bc_blue;
+			warp "Save",0,0;
+		}
+	}
+	return;
 }
 prontera,161,174,4	script	Busca al Poring	1002,{
 	message strcharinfo(0),"El evento está a punto de empezar.";
 	sleep2 1500;
+	message strcharinfo(0),"Antes de entrar se te desequipará todo, si usas equipo serás expulsado.";
+	sleep2 1500;
 	message strcharinfo(0),"¿Deseas ir al evento?";
-	select("Participar en el Evento ^0000ff["+getmapusers("findporing")+"]^000000");
-	warp "findporing",0,0;
+	select("Participar en el Evento ^0000ff["+getmapusers("aqt_fild01")+"]^000000");
+	if (checkweight(502,100) == 0) {
+		mes .npc$;
+		mes "Tienes demaciado peso, por favor guarda algunas cosas en el almacén.";
+		close;
+	}
+	@explofix = 0;
+	for(set .@i,1; .@i <= 21; set .@i,.@i +1) {
+		if(getequipisequiped(.@i))
+	unequip .@i;
+	}
+	sleep2 1000;
+	warp "aqt_fild01",78,133;
 	end;
 OnEnable:
 	enablenpc strnpcinfo(0);

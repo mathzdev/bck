@@ -189,7 +189,7 @@ struct mob_data {
 		unsigned int max_hp; // Custom Max HP value
 		unsigned allow_warp : 2;
 		unsigned ai_type : 3;
-		int party_id, guild_id, guild_emblem_id, faction_id;
+		int party_id, guild_id, guild_emblem_id;
 		short item_drop, item_amount, exp_boost;
 	} option;
 	short min_chase;
@@ -287,7 +287,7 @@ int mob_once_spawn_area(struct map_session_data* sd, int16 m,
 bool mob_ksprotected (struct block_list *src, struct block_list *target);
 
 int mob_spawn_guardian(const char* mapname, int16 x, int16 y, const char* mobname, int mob_id, const char* event, int guardian, bool has_index);	// Spawning Guardians [Valaris]
-int mob_spawn_bg(const char* mapname, short x, short y, const char* mobname, int class_, const char* event, int bg_id);
+int mob_spawn_bg(const char* mapname, int16 x, int16 y, const char* mobname, int mob_id, const char* event, unsigned bg_id);
 int mob_guardian_guildchange(struct mob_data *md); //Change Guardian's ownership. [Skotlex]
 
 int mob_randomwalk(struct mob_data *md,unsigned int tick);

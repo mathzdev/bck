@@ -177,100 +177,39 @@ OnRecvCastle:
 		killmonsterall strnpcinfo(2);
 		if (compare(strnpcinfo(2),"aldeg")) {
 			// Normal Spawns
-			monster strnpcinfo(2),0,0,"Evil Druid",1117,10;
-			monster strnpcinfo(2),0,0,"Khalitzburg",1132,4;
-			monster strnpcinfo(2),0,0,"Abysmal Knight",1219,2;
-			monster strnpcinfo(2),0,0,"Executioner",1205,1;
-			monster strnpcinfo(2),0,0,"Penomena",1216,10;
-			monster strnpcinfo(2),0,0,"Alarm",1193,18;
-			monster strnpcinfo(2),0,0,"Clock",1269,9;
-			monster strnpcinfo(2),0,0,"Raydric Archer",1276,7;
-			monster strnpcinfo(2),0,0,"Wanderer",1208,3;
-			monster strnpcinfo(2),0,0,"Alice",1275,1;
-			monster strnpcinfo(2),0,0,"Bloody Knight",1268,1;
-			monster strnpcinfo(2),0,0,"Dark Lord",1272,1;
 			// Set Emperium room spawn coordinates and spawn monsters.
 			if (strnpcinfo(2) == "aldeg_cas01") { setarray .@emproom[0],216,23; }
 			else if (strnpcinfo(2) == "aldeg_cas02") { setarray .@emproom[0],213,23; }
 			else if (strnpcinfo(2) == "aldeg_cas03") { setarray .@emproom[0],205,31; }
 			else if (strnpcinfo(2) == "aldeg_cas04") { setarray .@emproom[0],36,217; }
 			else if (strnpcinfo(2) == "aldeg_cas05") { setarray .@emproom[0],27,101; }
-			monster strnpcinfo(2),.@emproom[0],.@emproom[1],"Dark Lord",1272,1;
-			monster strnpcinfo(2),.@emproom[0],.@emproom[1],"Tower Keeper",1270,4;
-			monster strnpcinfo(2),.@emproom[0],.@emproom[1],"Bloody Knight",1268,1;
-			monster strnpcinfo(2),.@emproom[0],.@emproom[1],"Abysmal Knight",1219,1;
-			monster strnpcinfo(2),.@emproom[0],.@emproom[1],"Raydric Archer",1276,5;
 		}
 		else if (compare(strnpcinfo(2),"gefg")) {
 			// Normal Spawns
-			monster strnpcinfo(2),0,0,"Evil Druid",1117,10;
-			monster strnpcinfo(2),0,0,"Wind Ghost",1263,11;
-			monster strnpcinfo(2),0,0,"Bathory",1102,10;
-			monster strnpcinfo(2),0,0,"Jakk",1130,10;
-			monster strnpcinfo(2),0,0,"Marduk",1140,20;
-			monster strnpcinfo(2),0,0,"Raydric",1163,9;
-			monster strnpcinfo(2),0,0,"Alice",1275,1;
-			monster strnpcinfo(2),0,0,"Abysmal Knight",1219,1;
-			monster strnpcinfo(2),0,0,"Moonlight Flower",1150,1;
-			monster strnpcinfo(2),0,0,"Phreeoni",1159,1;
 			// Set Emperium room spawn coordinates and spawn monsters.
 			if (strnpcinfo(2) == "gefg_cas01") { setarray .@emproom[0],197,181; }
 			else if (strnpcinfo(2) == "gefg_cas02") { setarray .@emproom[0],176,178; }
 			else if (strnpcinfo(2) == "gefg_cas03") { setarray .@emproom[0],244,166; }
 			else if (strnpcinfo(2) == "gefg_cas04") { setarray .@emproom[0],174,177; }
 			else if (strnpcinfo(2) == "gefg_cas05") { setarray .@emproom[0],194,184; }
-			monster strnpcinfo(2),.@emproom[0],.@emproom[1],"Mysteltainn",1203,1;
-			monster strnpcinfo(2),.@emproom[0],.@emproom[1],"Orc Hero",1087,1;
-			monster strnpcinfo(2),.@emproom[0],.@emproom[1],"High Orc",1213,10;
-			monster strnpcinfo(2),.@emproom[0],.@emproom[1],"Orc Archer",1189,10;
 		}
 		else if (compare(strnpcinfo(2),"payg")) {
 			// Normal Spawns
-			monster strnpcinfo(2),0,0,"Greatest General",1277,9;
-			monster strnpcinfo(2),0,0,"Wanderer",1208,10;
-			monster strnpcinfo(2),0,0,"Mutant Dragonoid",1262,5;
-			monster strnpcinfo(2),0,0,"Bathory",1102,5;
-			monster strnpcinfo(2),0,0,"Moonlight Flower",1150,1;
-			monster strnpcinfo(2),0,0,"Eddga",1115,1;
-			monster strnpcinfo(2),0,0,"Horong",1129,11;
-			monster strnpcinfo(2),0,0,"Raydric Archer",1276,5;
-			monster strnpcinfo(2),0,0,"Kobold Archer",1282,4;
-			monster strnpcinfo(2),0,0,"Gargoyle",1253,5;
 			// Set Emperium room spawn coordinates and spawn monsters.
 			if (strnpcinfo(2) == "payg_cas01") { setarray .@emproom[0],139,139; }
 			else if (strnpcinfo(2) == "payg_cas02") { setarray .@emproom[0],38,25; }
 			else if (strnpcinfo(2) == "payg_cas03") { setarray .@emproom[0],269,265; }
 			else if (strnpcinfo(2) == "payg_cas04") { setarray .@emproom[0],270,28; }
 			else if (strnpcinfo(2) == "payg_cas05") { setarray .@emproom[0],30,30; }
-			monster strnpcinfo(2),.@emproom[0],.@emproom[1],"Moonlight Flower",1150,1;
-			monster strnpcinfo(2),.@emproom[0],.@emproom[1],"Eddga",1115,1;
-			monster strnpcinfo(2),.@emproom[0],.@emproom[1],"Wanderer",1208,6;
-			monster strnpcinfo(2),.@emproom[0],.@emproom[1],"Raydric Archer",1276,5;
 		}
 		else if (compare(strnpcinfo(2),"prtg")) {
 			// Normal Spawns
-			monster strnpcinfo(2),0,0,"Raydric",1163,1;
-			monster strnpcinfo(2),0,0,"Khalitzburg",1132,10;
-			monster strnpcinfo(2),0,0,"Abysmal Knight",1219,5;
-			monster strnpcinfo(2),0,0,"Bloody Knight",1268,5;
-			monster strnpcinfo(2),0,0,"Stormy Knight",1251,1;
-			monster strnpcinfo(2),0,0,"Hatii",1252,1;
-			monster strnpcinfo(2),0,0,"Raydric Archer",1276,5;
-			monster strnpcinfo(2),0,0,"Gryphon",1259,2;
-			monster strnpcinfo(2),0,0,"Chimera",1283,3;
-			monster strnpcinfo(2),0,0,"Alice",1275,1;
-			monster strnpcinfo(2),0,0,"Zealotus",1200,1;
 			// Set Emperium room spawn coordinates and spawn monsters.
 			if (strnpcinfo(2) == "prtg_cas01") { setarray .@emproom[0],197,197; }
 			else if (strnpcinfo(2) == "prtg_cas02") { setarray .@emproom[0],157,174; }
 			else if (strnpcinfo(2) == "prtg_cas03") { setarray .@emproom[0],16,220; }
 			else if (strnpcinfo(2) == "prtg_cas04") { setarray .@emproom[0],291,14; }
 			else if (strnpcinfo(2) == "prtg_cas05") { setarray .@emproom[0],266,266; }
-			monster strnpcinfo(2),.@emproom[0],.@emproom[1],"Guardian Knight",1268,1;
-			monster strnpcinfo(2),.@emproom[0],.@emproom[1],"Guardian Master",1251,1;
-			monster strnpcinfo(2),.@emproom[0],.@emproom[1],"Hatii",1252,1;
-			monster strnpcinfo(2),.@emproom[0],.@emproom[1],"Guardian Knight",1219,1;
-			monster strnpcinfo(2),.@emproom[0],.@emproom[1],"Raydric Archer",1276,5;
 		}
 		// Add custom Guild Castles here.
 		else {

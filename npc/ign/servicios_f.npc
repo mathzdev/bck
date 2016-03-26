@@ -386,6 +386,15 @@ function Ver_Sexo;
 			mes "Por favor utiliza todos tus puntos de skill antes de proceder.";
 			close2; cutin "",255; emotion e_sry; end;
 		}
+		mes "[^ff0000Kafra Employee^000000]";
+		mes "¿Estás ^ff7700COMPLETAMENTE SEGURO DE ELIMINAR TODOS TUS PUNTOS DE SKILL^000000?";
+		next;
+		mes "[^ff0000Kafra Employee^000000]";
+		mes "Si lo haces, no lo podrás recuperar en un futuro.";
+		if(select("No, lo siento","Que sí...") == 1) {
+			mes "Por favor utiliza todos tus puntos de skill antes de proceder.";
+			close2; cutin "",255; emotion e_sry; end;
+		}
 		set SkillPoint,0;
 	}
 	set .@eac, eaclass();
@@ -651,10 +660,10 @@ function	script	AchievementJob	{
 }
 
 function	script	Estilista_M	{
-	if(doram == 1)
-		setarray .@Styles[1],getbattleflag("max_cloth_color"),78,8;
+	if(Class == 4218)
+		setarray .@Styles[1],getbattleflag("max_cloth_color"),6,6;
 	else
-		setarray .@Styles[1],getbattleflag("max_cloth_color"),68,getbattleflag("max_hair_color");
+		setarray .@Styles[1],getbattleflag("max_cloth_color"),60,getbattleflag("max_hair_color");
 	setarray .@Look[1],7,1,6;
 	mes "[^ff0000Kafra Employee^000000]";
 	mes "Bienvenid"+(Sex ? "o caballero":"a señorita");
@@ -674,11 +683,7 @@ function	script	Estilista_M	{
 			message strcharinfo(0),"Lo siento, pero no hay ropas extras para tu clase.";
 	} else {
 		set .@Revert, getlook(.@Look[.@s]);
-			if(doram == 1)
-				set .@min,71;
-			else
-				set .@min,1;
-		set .@Style,.@min;
+		set .@Style,1;
 		if( achi19 < 1 ) {
 			achieve 19;
 			set achi19,1;

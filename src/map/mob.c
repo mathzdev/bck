@@ -842,7 +842,7 @@ int mob_spawn_guardian(const char* mapname, short x, short y, const char* mobnam
 /*==========================================
  * Summoning BattleGround [Zephyrus]
  *------------------------------------------*/
-int mob_spawn_bg(const char* mapname, short x, short y, const char* mobname, int class_, const char* event, int bg_id)
+int mob_spawn_bg(const char* mapname, int16 x, int16 y, const char* mobname, int mob_id, const char* event, unsigned bg_id)
 {
 	struct mob_data *md = NULL;
 	struct spawn_data data;
@@ -857,16 +857,16 @@ int mob_spawn_bg(const char* mapname, short x, short y, const char* mobname, int
 	memset(&data, 0, sizeof(struct spawn_data));
 	data.m = m;
 	data.num = 1;
-	if( md->mob_id <= 0 )
+	if( mob_id <= 0 )
 	{
-		md->mob_id = mob_get_random_id(-md->mob_id-1,1,99);
-		if( !md->mob_id ) return 0;
+		mob_id = mob_get_random_id(-mob_id-1,1,99);
+		if( !mob_id ) return 0;
 	}
 
-	data.id = md->mob_id;
+	data.id = mob_id;
 	if( (x <= 0 || y <= 0) && !map_search_freecell(NULL, m, &x, &y, -1,-1, 1) )
 	{
-		ShowWarning("mob_spawn_bg: Couldn't locate a spawn cell for guardian class %d (bg_id %d) at map %s\n",md->mob_id, bg_id, map[m].name);
+		ShowWarning("mob_spawn_bg: Couldn't locate a spawn cell for guardian class %d (bg_id %d) at map %s\n",mob_id, bg_id, map[m].name);
 		return 0;
 	}
 
@@ -2905,20 +2905,14 @@ int mob_dead(struct mob_data *md, struct block_list *src, int type)
 		if( md->npc_event[0] && !md->state.npc_killmonster ) {
 			if( sd && battle_config.mob_npc_event_type ) {
 				pc_setparam(sd, SP_KILLERRID, sd->bl.id);
-				pc_setreg(sd,add_str("@killedx"),md->bl.x);
-				pc_setreg(sd,add_str("@killedy"),md->bl.y);
 				npc_event(sd,md->npc_event,0);
 			} else if( mvp_sd ) {		
-				pc_setparam(mvp_sd, SP_KILLEDRID, md->mob_id);
-				pc_setreg(mvp_sd,add_str("@killedx"),md->bl.x);
-				pc_setreg(mvp_sd,add_str("@killedy"),md->bl.y);
+				pc_setparam(mvp_sd, SP_KILLERRID, sd?sd->bl.id:0);
 				npc_event(mvp_sd,md->npc_event,0);
 			} else
 				npc_event_do(md->npc_event);
 		} else if( mvp_sd && !md->state.npc_killmonster ) {
-			pc_setparam(mvp_sd, SP_KILLERRID, sd?sd->bl.id:0);
-			pc_setreg(mvp_sd,add_str("@killedx"),md->bl.x);
-			pc_setreg(mvp_sd,add_str("@killedy"),md->bl.y);
+			pc_setparam(mvp_sd, SP_KILLEDRID, md->mob_id);
 			npc_script_event(mvp_sd, NPCE_KILLNPC); // PCKillNPC [Lance]
 		}
 	}
@@ -2954,9 +2948,8 @@ int mob_dead(struct mob_data *md, struct block_list *src, int type)
 		return 5; // Note: Actually, it's 4. Oh well...
 
 	// MvP tomb [GreenBox]
-	if (battle_config.mvp_tomb_enabled && md->spawn->state.boss && map[md->bl.m].flag.notomb != 1) {
+	if (battle_config.mvp_tomb_enabled && md->spawn->state.boss && map[md->bl.m].flag.notomb != 1)
 		mvptomb_create(md, mvp_sd ? mvp_sd->status.name : NULL, time(NULL));
-	}
 
 	if( !rebirth )
 		mob_setdelayspawn(md); //Set respawning.
@@ -3535,7 +3528,7 @@ int mobskill_use(struct mob_data *md, unsigned int tick, int event)
 			switch (skill_target) {
 				case MST_RANDOM: //Pick a random enemy within skill range.
 					bl = battle_getenemy(&md->bl, DEFAULT_ENEMY_TYPE(md),
-						skill_get_range2(&md->bl, ms[i].skill_id, ms[i].skill_lv), true);
+						skill_get_range2(&md->bl, ms[i].skill_id, ms[i].skill_lv,true));
 					break;
 				case MST_TARGET:
 				case MST_AROUND5:

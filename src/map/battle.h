@@ -260,6 +260,7 @@ extern struct Battle_Config
 	int max_sp;
 	int max_lv, aura_lv;
 	int max_parameter, max_baby_parameter;
+	int mvp_exp_reward_message;
 	int max_cart_weight;
 	int skill_log;
 	int battle_log;
@@ -527,7 +528,7 @@ extern struct Battle_Config
 	int max_trans_parameter;
 	int max_third_trans_parameter;
 	int max_extended_parameter;
-	int max_sumoner_parameter;
+	int max_summoner_parameter;
 	int max_third_aspd;
 	int vcast_stat_scale;
 
@@ -631,7 +632,6 @@ extern struct Battle_Config
 	int mob_eye_range_bonus; //Vulture's Eye and Snake's Eye range bonus
 	int monster_atorado; // Muestra una advertencia cuando el mob se atora [DanielArt]
 	int skill_eightpath_algorithm; //Área de servidores oficiales basado de dónde se ataca.
-	int mvp_exp_reward_message;
 } battle_config;
 
 void do_init_battle(void);

@@ -1,0 +1,99 @@
+lastman,96,89,4	script	LASTMAN	139,10,10,{
+OnPCDieEvent:
+OnPCLoginEvent:
+	if(strcharinfo(3) == "lastman")
+		warp "prontera",150,180;
+	end;
+OnTouch:
+OnPCKillEvent:
+	if(strcharinfo(3) == "lastman" && getmapusers("lastman") < 2 && $lastman == 1) {
+		announce "¡"+strcharinfo(0)+" ha ganado el evento de Last-Man Standing!",bc_all,0xFFFFAA;
+		callfunc "F_Event",1,rand(2,6);
+		sleep2 5000;
+		warp "prontera",150,180;
+		set $lastman,0;
+		end;
+	}
+end;
+OnLastMan:
+OnWhisperGlobal:
+	set $lastman,0;
+	removemapflag "lastman",mf_pvp;
+	removemapflag "lastman",mf_pvp_noparty;
+	removemapflag "lastman",mf_pvp_noguild;
+	donpcevent "last_e::OnEnable";
+	announce "¡El Evento de Last-Man Standing comenzará en 2 minutos!",bc_all,0xFFFFAA;
+	sleep2 5000;
+	announce "¡Combate con todo el mundo por ser el último sobreviviente y gana un fabuloso premio!",bc_all,0xFFFFAA;
+	sleep2 5000;
+	announce "Ve a la Ciudad de Prontera para poder participar.",bc_all,0xFFFFAA;
+	sleep2 60000;
+	announce "¡El Evento de Last-Man Standing comenzará en 1 minuto!",bc_all,0xFFFFAA;
+	sleep2 50000;
+	announce "¡El Evento de Last-Man Standing comenzará en 10 segundos!",bc_all,0xFFFFAA;
+	sleep2 11000;
+	set $lastman,1;
+	donpcevent "last_e::OnDisable";
+	announce "¡El Evento de Last-Man Standing ha comenzado!",bc_all,0xFFFFAA;
+	end;
+}
+prontera,160,174,4	script	Last-Man Standing::last_e	623,{
+	mes "[ ^008800Last-Man Standing^000000 ]";
+	mes "¿Listo para el combate?";
+	next;
+	switch(select("Información:^008800Participar^000000 [ "+getmapusers("lastman")+" ]:^777777Salir^000000")) {
+		case 1:
+			mes "[ ^008800Last-Man Standing^000000 ]";
+			mes "Entrarás a un mapa junto con el resto de los usuarios participantes.";
+			next;
+			mes "[ ^008800Last-Man Standing^000000 ]";
+			mes "Dentro, tendrás que buscar la manera de sobrevivir al resto de los usuarios.";
+			close;
+		case 2:
+			warp "lastman",0,0;
+			close;
+		case 3:
+			mes "[ ^008800Last-Man Standing^000000 ]";
+			mes "Vuelve cuando quieras participar.";
+			close;
+	}
+OnEnable:
+	enablenpc "last_e";
+	waitingroom "Last-Man Stand",0;
+	end;
+OnDisable:
+	mapannounce "lastman","¡Prepárate, que el evento está a punto de empezar!",bc_map,0xFFFFAA;
+	sleep2 5000;
+	mapannounce "lastman","¡CUENTA REGRESIVA!.",bc_map,0xFFFFAA;
+	sleep2 1000;
+	mapannounce "lastman","¡5!.",bc_map,0xFFFFAA;
+	sleep2 1000;
+	mapannounce "lastman","¡4!.",bc_map,0xFFFFAA;
+	sleep2 1000;
+	mapannounce "lastman","¡3!.",bc_map,0xFFFFAA;
+	sleep2 1000;
+	mapannounce "lastman","¡2!.",bc_map,0xFFFFAA;
+	sleep2 1000;
+	mapannounce "lastman","¡1!.",bc_map,0xFFFFAA;
+	sleep2 1000;
+	mapannounce "lastman","¡PELEEN!.",bc_map,0xFFFFAA;
+	setmapflag "lastman",mf_pvp;
+	setmapflag "lastman",mf_pvp_noparty;
+	setmapflag "lastman",mf_pvp_noguild;
+OnInit:
+	disablenpc "last_e";
+	delwaitingroom;
+	end;
+}
+lastman	mapflag	nopenalty
+lastman	mapflag	nozenypenalty
+lastman	mapflag	nobranch
+lastman	mapflag	notrade
+lastman	mapflag	clouds
+lastman	mapflag	nomemo
+lastman	mapflag	noteleport
+lastman	mapflag	nowarp
+lastman	mapflag	noreturn
+lastman	mapflag	restricted	3
+lastman	mapflag	nosave	SavePoint
+lastmap	mapflag	nowarpto

@@ -1866,6 +1866,10 @@ moc_para01,112,96,5	script	Administrator Michael	4_M_RUSMAN1,{
 				callsub S_Select,"",
 					13112,"Eden Revolver I","Revolver","HIT-5, attack 44","";//P_Revolver1
 			}
+			if (Class == 4218) {
+				callsub S_Select,"",
+					1699,"Paradise Foxtail I","Foxtail","LongAtk+5%, Dex+3, Int+3","";//P_Foxtail1
+			}
 			mes "Let me see... you will receive..";
 			mes "the Eden Group Boots II and Uniform II.";
 			next;
@@ -1942,6 +1946,10 @@ moc_para01,112,96,5	script	Administrator Michael	4_M_RUSMAN1,{
 			if (Class == Job_Gunslinger) {
 				callsub S_Select,"",
 					13113,"Eden Revolver II","Revolver","HIT-5, attack 60","";//P_Revolver2
+			}
+			if (Class == 4618) {
+				callsub S_Select,"",
+					26100,"Paradise Foxtail II","Foxtail","LongAtk+6%, Dex+4, Int+4","";//P_Foxtail2
 			}
 			mes "Let me see... you will receive..";
 			mes "the Eden Group Boots III and Uniform III.";
@@ -3960,6 +3968,8 @@ moc_para01,111,83,3	script	Blacksmith Thorn#2nd10	2_M_OLDBLSMITH,{
 			}
 			else if (Class == Job_Gunslinger)
 				getitem 13114,1; //P.Revolver III
+			else if (Class == 4618)
+				getitem 26101,1; //P.Foxtail III
 			else {
 				mes "Hmm, you are eligible to receive equipment.";
 				mes "Yeah I understand that.";

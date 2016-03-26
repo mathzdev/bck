@@ -1510,8 +1510,6 @@ nov_gar01
 princesa
 princesa2
 pacman
-poringrace
-findporing
 lastman
 
 // [Xcution RO2]

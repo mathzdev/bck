@@ -1,0 +1,100 @@
+lasa_fild01,48,330,4	script	Jefe Gamberi	10153,{
+	if(Class != 4218) {
+		mes "[Jefe Gamberi]";
+		mes "Fuera de aquí forastero.";
+		close;
+	}
+	callsub S_CheckMision;
+	mes "[Jefe Gamberi]";
+	mes "Que tal mi peludo amigo.";
+	next;
+	mes "[Jefe Gamberi]";
+	mes "Conmigo podrás tomar misiones de caza para obtener ^5533ffDoram Token^000000.";
+	next;
+	if(select("Elegir misión","^777777Salir^000000") == 2) {
+		mes "[Jefe Gamberi]";
+		mes "Vuelve cuando tengas el valor suficiente.";
+		close;
+	}
+	mes "[Jefe Gamberi]";
+	mes "Vale, por favor elige la misión que quieres.";
+	next;
+	set .@menu$,"";
+	while(1) {
+		for( .@i = 0, .@i < getarraysize(.misiones$); .@i++ ) {
+			set .@menu$,.@menu$ + .misiones$[.@i];
+			set .@menu$,.@menu$ + ":";
+		}
+		set .@i,select(.@menu$);
+		.@i -= 1;
+		callsub S_Mision,.misiones$[.@i],.objetivo$[.@i],(17504+.@i),(.@i + 1);
+	}
+end;
+S_Mision:
+	mes "[Jefe Gamberi]";
+	mes "La misión ^ff0000"+getarg(0)+"^000000, consiste en matar ^5533ff"+getarg(1)+"^000000.";
+	next;
+	mes "[Jefe Gamberi]";
+	mes "Todos los monstruos de nuestras misiones los podrás encontrar en nuestros campos y calabozos.";
+	next;
+	mes "[Jefe Gamberi]";
+	mes "¿Deseas cazar ^5533ff"+getarg(1)+"^000000?";
+	next;
+	switch(select("Iniciar ^5533ff"+getarg(0)+"^000000","Elegir otra misión","^777777Salir^000000")) {
+		case 1:
+			mes "[Jefe Gamberi]";
+			mes "De acuerdo, vuelve cuando lo hayas completado.";
+			set Q_GATO,getarg(2);
+			set Q_PRICE,getarg(3);
+			setquest getarg(2);
+			close;
+		case 2:
+			return;
+		case 3:
+			mes "[Jefe Gamberi]";
+			mes "Vuelve cuando tengas el valor suficiente.";
+			close;
+	}
+end;
+S_CheckMision:
+	if(Q_GATO > 0 && checkquest(Q_GATO,HUNTING) == 2) {
+		mes "[Jefe Gamberi]";
+		mes "Excelente trabajo al cazar ^5533ff"+.objetivo$[Q_PRICE-1]+"^000000.";
+		next;
+		mes "[Jefe Gamberi]";
+		mes "Te haz ganado ^ff0000"+Q_PRICE+"x Doram Token^000000.";
+		getitem 25142,Q_PRICE;
+		set Q_PRICE,0;
+		erasequest Q_GATO;
+		set Q_GATO,0;
+		next;
+		mes "[Jefe Gamberi]";
+		mes "Con ésta moneda podrás conseguir grandioso equipo en la ciudad.";
+		next;
+		mes "[Jefe Gamberi]";
+		mes "Vuelve cuando desees otra misión.";
+		close2;
+		npctalk "Aquí te estaré esperando "+strcharinfo(0)+", vuelve pronto.";
+		end;
+	} else if((Q_GATO > 0 && checkquest(Q_GATO,HUNTING) == 0) || (checkquest(Q_GATO) == 0 || checkquest(Q_GATO) == 1)) {
+		mes "[Jefe Gamberi]";
+		mes "Recuerda que debes cazar "+.objetivo$[Q_PRICE-1]+".";
+		next;
+		if(select("Continuar misión","Cancelar misión y elegir otra") == 1) {
+			mes "[Jefe Gamberi]";
+			mes "Suerte.";
+			close;
+		}
+		mes "[Jefe Gamberi]";
+		mes "Vale, vuelve a hablar conmigo para elegir una misión diferente.";
+		erasequest Q_GATO;
+		set Q_PRICE,0;
+		set Q_GATO,0;
+		close;
+	}
+	return;
+OnInit:
+	setarray .misiones$[0],"¡Para el desayuno!","¡Los pequeños bichos!","¡Miel Gatuna!","¡Ranas Dulces, nom nom!","¡Adios Basilisk!","¡La podadora gatuna!","¡El huevaso mayor!";
+	setarray .objetivo$[0],"20 Eggring","20 Leaf Lunatic & Grass Fabre","40 Wild Hornet","40 Sweet Roda Frog","20 Basilisk de cada tipo","50 Jungle Mandragora","1 Big Poring [MvP]";
+	end;
+}

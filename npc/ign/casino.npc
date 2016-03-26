@@ -11,6 +11,8 @@
 //========================================================
 // ---                  by DanielArt                   ---
 //========================================================
+vip	mapflag	noteleport
+vip	mapflag	nosave	SavePoint
 vip,65,51,4	script	Letrero	837,{
 	mes "^5533ffPrimera Planta:";
 	mes "^000000 - Casino & PUB.";

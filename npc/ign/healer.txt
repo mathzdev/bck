@@ -46,3 +46,4 @@ mora,105,106,5	duplicate(Healer)	Healer#33	749
 eclage,304,233,5	duplicate(Healer)	Healer#34	749
 ayo_in01,184,133,3	duplicate(Healer)	Healer#301	749
 verus04,129,214,5	duplicate(Healer)	Healer#302	749
+lasagna,166,161,5	duplicate(Healer)	Healer#303	10152

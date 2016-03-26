@@ -174,7 +174,7 @@ OnDisable:
 OnEnable:
 	enablenpc instance_npcname("#spawnmoblf1");
 	set .@m$,instance_mapname("lafayette");
-	monster .@m$,196,75,"Fan Lizard",3505,10,instance_npcname("#spawnmoblf1")+"::OnMyMobDead";
+	monster .@m$,196,75,"Fan Lizard",3466,10,instance_npcname("#spawnmoblf1")+"::OnMyMobDead";
 	end;
 OnMyMobDead:
 	set .@m$,instance_mapname("lafayette");
@@ -234,17 +234,17 @@ OnDisable:
 OnEnable:
 	enablenpc instance_npcname("#instancelaf");
 	set .@m$,instance_mapname("lafayette");
-	monster .@m$,0,0,"Chibcha",3504,20,instance_npcname("#instancelaf")+"::OnMyMobDead";
-	monster .@m$,0,0,"Fan Lizard",3505,20,instance_npcname("#instancelaf")+"::OnMyMobDead";
-	monster .@m$,0,0,"Flat Salamander",3506,20,instance_npcname("#instancelaf")+"::OnMyMobDead";
-	monster .@m$,0,0,"Larva",3507,20,instance_npcname("#instancelaf")+"::OnMyMobDead";
+	monster .@m$,0,0,"Chibcha",3465,20,instance_npcname("#instancelaf")+"::OnMyMobDead";
+	monster .@m$,0,0,"Fan Lizard",3466,20,instance_npcname("#instancelaf")+"::OnMyMobDead";
+	monster .@m$,0,0,"Flat Salamander",3467,20,instance_npcname("#instancelaf")+"::OnMyMobDead";
+	monster .@m$,0,0,"Larva",3468,20,instance_npcname("#instancelaf")+"::OnMyMobDead";
 	end;
 OnMyMobDead:
 	set .@m$,instance_mapname("lafayette");
 	set .@n,mobcount(.@m$,instance_npcname("#instancelaf")+"::OnMyMobDead");
 	if(.@n < 1) {
 		instance_announce instance_id(),"[Sistema] El Gran Dragón te observa ferozmente desde la cima de un edificio, usa los puentes para llegar a él.",bc_map,0xFF0000;
-		monster .@m$,261,132,"Ancestral Dragon",3508,1,instance_npcname("#instancelaf")+"::OnMyMobDead2";
+		monster .@m$,261,132,"Spicy Dragon",3469,1,instance_npcname("#instancelaf")+"::OnMyMobDead2";
 		end;
 	}
 	instance_announce instance_id(),"[Sistema] Dragones en el mapa: "+.@n,bc_map,0x5533FF;

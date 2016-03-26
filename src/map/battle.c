@@ -1182,7 +1182,7 @@ int64 battle_calc_damage(struct block_list *src,struct block_list *bl,struct Dam
 #endif
 
 		if( damage ) {
-			struct map_session_data *tsd = BL_CAST(BL_PC, target);
+			struct map_session_data *tsd = BL_CAST(BL_PC, src);
 			if( sc->data[SC_DEEPSLEEP] ) {
 				damage += damage / 2; // 1.5 times more damage while in Deep Sleep.
 				status_change_end(bl,SC_DEEPSLEEP,INVALID_TIMER);
@@ -8257,7 +8257,7 @@ static const struct _battle_data {
 	{ "hamsterguard_min_delay",             &battle_config.hamsterguard_min_delay,          100,	0,      INT_MAX,	},
 	{ "hamsterguard_spam_count",            &battle_config.hamsterguard_spam_count,		5,	3,      100,		},
 	{ "hamsterguard_spam_punish",           &battle_config.hamsterguard_spam_punish,	1,	0,      1,		},
-
+	{ "mvp_exp_reward_message",               &battle_config.mvp_exp_reward_message,        0,      0,      1,              },
 };
 
 #ifndef STATS_OPT_OUT

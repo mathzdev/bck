@@ -59,45 +59,6 @@ vip,81,262,3	script	Jefe de Mineros::q_miner	528,{
 		announce "¡"+strcharinfo(0)+", ha emprendido el camino de los Mineros!",bc_all;
 		end;
 	}
-	if(BaseLevel >= 50 && Oficio != 1 && q_min < 1 && callfunc("Oficio_Check",10,1) == 1) {
-		mes "[Jefe de Mineros]";
-		mes "Veo que ya vienes mentalizado a convertirte en un explorador de las minas del mundo.";
-		next;
-		mes "[Jefe de Mineros]";
-		mes "Un extractor de la vida de las piedras para convertirlas en diamantes bellos y relucientes como la vida misma.";
-		next;
-		mes "[Jefe de Mineros]";
-		mes "Nosotros nos dedicamos a extraer minerales de los yacimientos en distintos campos y calabozos del mundo.";
-		next;
-		mes "[Jefe de Mineros]";
-		mes "¿Te unes?";
-		mes "¿O me equivoco?";
-		next;
-		if(select("Te equivocas","Por supuesto que eso quiero") == 1) {
-			mes "[Jefe de Mineros]";
-			mes "Entonces largo de mi vista.";
-			next;
-			mes "[Jefe de Mineros]";
-			mes "Alguien que no valore la belleza de los minerales repudia mi vista.";
-			close2;
-			cutin "",255;
-			end;
-		}
-		mes "[Jefe de Mineros]";
-		mes "Bien, para convertirse en un Minero necesito que me muestre que al menos puede extraer materiales básicos.";
-		next;
-		mes "[Jefe de Mineros]";
-		mes "Para ello deberá de traerme 10 Rough Elunium, de donde usted desee.";
-		next;
-		mes "[Jefe de Mineros]";
-		mes "Aquí lo estaré esperando ansioso.";
-		close2;
-		cutin "",255;
-		set q_min,1;
-		end;
-	}
-	if(callfunc("Oficio_Check",11,1) < 1)
-		set q_min,0;
 	if(q_min == 1) {
 		if(countitem(757) < 10) {
 			mes "[Jefe de Mineros]";
@@ -137,6 +98,46 @@ vip,81,262,3	script	Jefe de Mineros::q_miner	528,{
 		announce "¡"+strcharinfo(0)+", ha emprendido el camino de los Mineros!",bc_all;
 		end;
 	}
+
+	if(BaseLevel >= 50 && Oficio != 1 && q_min < 1 && callfunc("Oficio_Check",10,1) == 1) {
+		mes "[Jefe de Mineros]";
+		mes "Veo que ya vienes mentalizado a convertirte en un explorador de las minas del mundo.";
+		next;
+		mes "[Jefe de Mineros]";
+		mes "Un extractor de la vida de las piedras para convertirlas en diamantes bellos y relucientes como la vida misma.";
+		next;
+		mes "[Jefe de Mineros]";
+		mes "Nosotros nos dedicamos a extraer minerales de los yacimientos en distintos campos y calabozos del mundo.";
+		next;
+		mes "[Jefe de Mineros]";
+		mes "¿Te unes?";
+		mes "¿O me equivoco?";
+		next;
+		if(select("Te equivocas","Por supuesto que eso quiero") == 1) {
+			mes "[Jefe de Mineros]";
+			mes "Entonces largo de mi vista.";
+			next;
+			mes "[Jefe de Mineros]";
+			mes "Alguien que no valore la belleza de los minerales repudia mi vista.";
+			close2;
+			cutin "",255;
+			end;
+		}
+		mes "[Jefe de Mineros]";
+		mes "Bien, para convertirse en un Minero necesito que me muestre que al menos puede extraer materiales básicos.";
+		next;
+		mes "[Jefe de Mineros]";
+		mes "Para ello deberá de traerme 10 Rough Elunium, de donde usted desee.";
+		next;
+		mes "[Jefe de Mineros]";
+		mes "Aquí lo estaré esperando ansioso.";
+		close2;
+		cutin "",255;
+		set q_min,1;
+		end;
+	}
+	if(callfunc("Oficio_Check",11,1) < 1)
+		set q_min,0;
 	mes "[Jefe de Mineros]";
 	mes "Con la minería podrás extraer gran cantidad de materiales de los distintos yacimientos de las mazmorras, lo interesante es encontrarlos.";
 	close2;

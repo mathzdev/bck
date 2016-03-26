@@ -1,10 +1,14 @@
+// Status de Reference:
+// 0 = Recompenza entregada.
+// 1 = El invitado ha alcanzado lvl 150.
+// 2 = Se ha registrado al invitante, pero el invitado aún no es 150.
 -	script	rec_sys	-1,{
 OnPCBaseLvUpEvent:
 	if(BaseLevel < 150)
 		end;
-	else if(#rec_lv == 1) {
+	if(#rec_lv == 1) {
 		query_sql("SELECT `status` FROM `reference` WHERE `invitado`='"+getcharid(3)+"'"),.@s;
-		if(!.@s)
+		if(.@s < 2)
 			end;
 		cutin "ep13_cheshire_h",2;
 		mes "[^cc6600Sistema de Recomendación^000000]";
@@ -15,15 +19,15 @@ OnPCBaseLvUpEvent:
 		cutin "",255;
 		end;
 	}
-	else end;
+end;
 OnPCLoginEvent:
 	query_sql("SELECT `status` FROM `reference` WHERE `invitante`='"+getcharid(3)+"'"),.@s;
 	if(.@s == 1) {
 		cutin "ep13_cheshire_h",2;
 		mes "[^cc6600Sistema de Recomendación^000000]";
 		mes "La persona que te ha recomendado ha llegado a Nivel 150, por lo tanto aquí está tu recompenza.";
-		getitem 671,20;
-		getitem 7711,20;
+		getitem 671,15;
+		getitem 7711,15;
 		set Zeny,Zeny + 1500000;
 		dispbottom "Has obtenido 1,500,000 Zeny.";
 		query_sql("UPDATE `reference` SET `status`='0' WHERE `status`='1' AND `invitante`='"+getcharid(3)+"'");
@@ -62,13 +66,13 @@ OnPCLoginEvent:
 				end;
 			}
 			break;
-		} else if(@inv) {
+		} else if(@inv > 0) {
 			mes "[^cc6600Sistema de Recomendación^000000]";
 			mes "¡De acuerdo!";
 			mes "Hemos registrado que "+@name$+" te ha invitado al servidor, será premiado en cuanto tu subas a Nivel 150, suerte.";
 			set #rec_v,1;
 			set #rec_lv,1;
-			query_sql("INSERT INTO `reference`(invitante,invitado,status) VALUES ('"+@inv+"','"+getcharid(3)+"','0'");
+			query_sql("INSERT INTO `reference`(invitante,invitado,status) VALUES ('"+@inv+"','"+getcharid(3)+"','2'");
 			close;
 		}
 	}

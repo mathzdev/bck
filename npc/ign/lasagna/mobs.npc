@@ -1,0 +1,23 @@
+lasa_fild02,0,0,0,0	monster	Eggring	3495,70,3600,0,0
+lasa_fild02,0,0,0,0	monster	Leaf Lunatic	3496,60,3600,0,0
+lasa_fild02,0,0,0,0	monster	Grass Fabre	3497,60,3600,0,0
+lasa_fild02,0,0,0,0	monster	Sweet Roda Frog	3499,10,3600,0,0
+lasa_fild01,0,0,0,0	monster	Wild Hornet	3498,50,3600,0,0
+lasa_fild01,0,0,0,0	monster	Hunter Wolf	3500,50,3600,0,0
+lasa_fild01,0,0,0,0	monster	Trance Spore	3501,50,3600,0,0
+lasa_fild01,0,0,0,0	monster	Fruit Pom Spider	3507,15,3600,0,0
+lasa_fild01,0,0,0,0	monster	Eggring	3495,15,3600,0,0
+lasa_fild01,0,0,0,0	boss_monster	Big Eggring	3505,1,3600000,1500000,"OnMVPKillEvent::OnBigEggring"
+
+lasa_dun01,0,0,0,0	monster	Scout Basilisk	3502,30,3600,0,0
+lasa_dun01,0,0,0,0	monster	Sweet Roda Frog	3499,30,3600,0,0
+lasa_dun01,0,0,0,0	monster	Jungle Mandragora	3506,10,3600,0,0
+lasa_dun02,0,0,0,0	monster	Charge Basilisk	3503,30,3600,0,0
+lasa_dun02,0,0,0,0	monster	Fruit Pom Spider	3507,15,3600,0,0
+lasa_dun02,0,0,0,0	monster	Jungle Mandragora	3506,20,3600,0,0
+lasa_dun03,0,0,0,0	monster	Charge Basilisk	3503,20,3600,0,0
+lasa_dun03,0,0,0,0	monster	Charge Basilisk	3504,70,3600,0,0
+lasa_dun03,0,0,0,0	monster	Sweet Roda Frog	3499,45,3600,0,0
+lasa_dun03,0,0,0,0	monster	Jungle Mandragora	3506,30,3600,0,0
+
+lasagna,0,0,0,0	monster	Eggring	3495,20,56000,0,0

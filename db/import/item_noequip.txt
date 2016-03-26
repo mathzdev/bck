@@ -24,4 +24,125 @@
 // 4174,6   // Deviling Card has no effect in every PVP or GVG map, and during WoE
 // 501,32   // Red Potion can't be consumed on maps marked as 'restricted zone 1'
 // 519,322  // Milk can't be consumed in PVP and maps marked as 'restricted zone 2' or 'restricted zone 4' (256+64+2)
-
+601,128 //Fly Wing - not really needed here but ...
+602,128 //Butterfly Wing - also not needed
+12212,128 //Giant Fly Wing
+17284,3 // Refined Fly Wing
+17285,3 // Refined Butterfly Wing
+14582,128
+14583,128
+14584,128
+14585,128
+501,128 // Red Potion
+502,128 // Orange Potion
+503,128 // Yellow Potion
+504,128 // White Potion
+507,128 // Red Herb
+508,128 // Yellow Herb
+509,128 // White Herb
+512,128 // Apple
+513,128 // Banana
+515,128 // Carrot
+516,128 // Sweet Potato
+517,128 // Meat
+518,128 // Honey
+519,128 // Milk
+520,128 // Hinalle Leaflet
+521,128 // Aloe Leaflet
+522,128 // Mastela Fruit
+526,128 // Royal Jelly
+528,128 // Monster Food
+529,128 // Candy
+530,128 // Candy Cane
+531,128 // Apple Juice
+532,128 // Banana Juice
+534,128 // Carrot Juice
+535,128 // Pumpkin
+536,128 // Ice Cream
+537,128 // Pet Food
+538,128 // Well Baked Cookie
+539,128 // Piece of Cake
+540,128 // Falcon Food
+541,128 // Peco Peco Food
+544,128 // Fish Slice
+545,128 // Red Slim Potion
+546,128 // Yellowe Slim Potion
+547,128 // White Slim Potion
+549,128 // Yam
+550,128 // Rice Cake
+551,128 // Sushi
+552,128 // Ketupat
+553,128 // Bao
+554,128 // Mochi
+555,128 // Traditional Rice Cake
+556,128 // Rice Cake Stick
+557,128 // Neatly Sliced Rice Cake
+558,128 // Chocolate
+559,128 // Hand-Made Chocolate
+560,128 // Hand-made White Chocolate
+561,128 // White Chocolate
+562,128 // Doublecrust Swiss Fondue
+563,128 // Doublecrust Swiss Fondue
+564,128 // Rice Ball
+565,128 // Vita 500
+566,128 // Tom Yum Goong
+567,128 // Shrimp
+569,128 // Novice Potion
+570,128 // Lucky Candy
+571,128 // Lucky Candy Cane
+572,128 // Lucky Cookie
+573,128 // Chocolate Drink
+574,128 // Egg
+575,128 // 2nd Anniversary Cake
+576,128 // Prickly Fruit
+577,128 // Bag of Grain
+579,128 // Fresh Fish
+580,128 // Bread
+581,128 // Edible Mushroom
+582,128 // Orange
+583,128 // Ketupat
+584,128 // Fish Ball Soup
+585,128 // Brusti
+586,128 // Mother's Cake
+587,128 // Red Thorn Fruit
+588,128 // Spaghetti
+589,128 // Pizza
+590,128 // Brezel
+591,128 // Caviar Pancake
+592,128 // Strawberry Jam Pancake
+593,128 // Honey Pancake
+594,128 // Sour Cream Pancake
+595,128 // Mushroom Pancake
+597,128 // Lovely Choco Tart
+598,128 // Light Red Potion
+599,128 // Light Orange Potion
+11500,128 // Light Yellow Potion
+11501,128 // Light White Potion
+11503,128 // Siege White Potion
+11701,128 // Girl Bunch of Flowers
+11703,128 // Mystery Blood
+11704,128 // Ketupat
+12021,128 // Pork
+12022,128 // Galbi// -> percentheal x,x
+607,128 // Yggdrasil Berry
+608,128 // Yggdrasil Seed
+663,128 // Korean Rice Cake
+685,128 // Ramadan
+12027,128 // Giggling Box
+12135,128 // Green Ale
+12188,128 // Fantastic Moon Snack
+12192,128 // Pumpkin Pie
+12196,128 // Hearty Rice Cake
+12197,128 // Salty Rice Cake
+12233,128 // Kvass
+12234,128 // Fierce Cacao 99%
+12236,128 // Chocolate Tart
+12237,128 // Dollop of Chocolate
+12245,128 // Green Ale
+12257,128 // Cold Medicine
+12271,128 // Military Rations
+12274,128 // Gold Pill 1
+12704,128 // Elixir of Life
+12709,128 // Guyak Candy
+14522,128 // Big Bun
+14524,128 // Superb Fish Slice

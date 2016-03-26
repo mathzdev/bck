@@ -1947,7 +1947,7 @@ int map_quit(struct map_session_data *sd) {
 
 	if( sd->bg_id ) {
 		bg_team_leave(sd,1);
-		sd->bgstats.deserter++;
+		sd->bg_deserter++;
 	}
 
 	pc_itemcd_do(sd,false);

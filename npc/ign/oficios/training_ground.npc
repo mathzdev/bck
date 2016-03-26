@@ -358,7 +358,10 @@ ilyo_kwan,204,106,4	script	Guardia de Seguridad#tg	618,{
 			mes "Muy bien, ¿listo para irte?";
 			next;
 			if(select("Todavía no","Vámonos...") == 2) {
-				warp "izlude",198,210;
+				if(Class == 4218)
+					warp "lasa_fild02",95,41;
+				else
+					warp "izlude",198,210;
 				close;
 			}
 			mes "[Guardia de Seguridad]";

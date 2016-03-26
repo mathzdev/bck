@@ -9814,12 +9814,7 @@ static bool clif_process_message(struct map_session_data* sd, int format, char**
 		messagelen = textlen - NAME_LENGTH; // this should be the message length (w/ zero byte included)
 	}
 
-#if PACKETVER >= 20151001
-	if (message[messagelen-1] != '\0')
-	{
-		message[messagelen++] = '\0';
-	}
-#endif
+	message[messagelen++] = '\0';
 
 	// the declared length must match real length
 	if( messagelen != strnlen(message, messagelen)+1 ) {
@@ -10635,10 +10630,6 @@ void clif_parse_GlobalMessage(int fd, struct map_session_data* sd)
 
 	char *name, *message, *fakename = NULL;
 	int namelen, messagelen;
-
-#if PACKETVER >= 20151001
-	textlen++;
-#endif
 
 	bool is_fake;
 

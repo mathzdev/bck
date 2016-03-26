@@ -73,7 +73,7 @@ L_Enter:
 		end;
 	}
 }
-pvp_n_1-3,100,97,0	scrip	#mapflagoff	-1,1,1,{
+pvp_n_1-3,100,97,0	script	#mapflagoff	-1,1,1,{
 OnTouch:
 	removemapflag instance_mapname("pvp_n_1-3"),mf_nobranch;
 	end;

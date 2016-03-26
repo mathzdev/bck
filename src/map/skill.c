@@ -1849,9 +1849,11 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 		status_change_end(bl, SC_C_MARKER, INVALID_TIMER);
 		break;
 	case SU_SCRATCH:
-		sc_start2(src, bl, SC_BLEEDING, (skill_lv * 3), skill_lv, src->id, skill_get_time(skill_id, skill_lv)); // TODO: What's the chance/time?
+		clif_soundeffectall(&sd->bl, "effect/su_scratch.wav", 0, AREA);
+		sc_start2(src, bl, SC_BLEEDING, (skill_lv * 15), skill_lv, src->id, skill_get_time(skill_id, skill_lv)); // TODO: What's the chance/time?
 		break;
 	case SU_SV_STEMSPEAR:
+		clif_soundeffectall(&sd->bl, "effect/su_stemspear.wav", 0, AREA);
 		sc_start2(src, bl, SC_BLEEDING, 10, skill_lv, src->id, skill_get_time(skill_id, skill_lv));
 		break;
 	case SU_CN_METEOR:
@@ -4611,6 +4613,7 @@ int skill_castend_damage_id (struct block_list* src, struct block_list *bl, uint
 			skill_attack(BF_WEAPON,src,src,bl,skill_id,skill_lv,tick,flag);
 		break;
 	case SU_PICKYPECK:
+		clif_soundeffectall(&sd->bl, "effect/su_pickypeck.wav", 0, AREA);
 		clif_skill_nodamage(src, bl, skill_id, skill_lv, 1);
 	case SU_BITE:
 		skill_attack(BF_WEAPON, src, src, bl, skill_id, skill_lv, tick, flag);
@@ -5735,6 +5738,7 @@ int skill_castend_damage_id (struct block_list* src, struct block_list *bl, uint
 		break;
 
 	case SU_SCAROFTAROU:
+		clif_soundeffectall(&sd->bl, "effect/su_scaroftarou.wav", 0, AREA);
 		sc_start(src, bl, status_skill2sc(skill_id), 10, skill_lv, skill_get_time(skill_id, skill_lv)); // TODO: What's the activation chance for the Bite effect?
 	case SU_SV_STEMSPEAR:
 		skill_attack(skill_get_type(skill_id), src, src, bl, skill_id, skill_lv, tick, flag);
@@ -6433,13 +6437,21 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 	case RL_HEAT_BARREL:
 	case RL_P_ALTER:
 	case RL_E_CHAIN:
-	case SU_FRESHSHRIMP:
-	case SU_ARCLOUSEDASH:
 		clif_skill_nodamage(src,bl,skill_id,skill_lv,
 			sc_start(src,bl,type,100,skill_lv,skill_get_time(skill_id,skill_lv)));
 		break;
-
+	case SU_ARCLOUSEDASH:
+		clif_soundeffectall(&sd->bl, "arclouse_attack.wav", 0, AREA);
+		clif_skill_nodamage(src,bl,skill_id,skill_lv,
+			sc_start(src,bl,type,100,skill_lv,skill_get_time(skill_id,skill_lv)));
+		break;
+	case SU_FRESHSHRIMP:
+		clif_soundeffectall(&sd->bl, "effect/su_brunchofshrimp.wav", 0, AREA);
+		clif_skill_nodamage(src,bl,skill_id,skill_lv,
+			sc_start(src,bl,type,100,skill_lv,skill_get_time(skill_id,skill_lv)));
+		break;
 	case SU_STOOP:
+		clif_soundeffectall(&sd->bl, "leaf_cat_die.wav", 0, AREA);
 		clif_skill_nodamage(src, bl, skill_id, skill_lv, 1);
 		sc_start(src, bl, type, 100, skill_lv, skill_get_time(skill_id, skill_lv));
  		break;
@@ -10777,6 +10789,7 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
  		break;
 
 	case SU_TUNABELLY:
+		clif_soundeffectall(&sd->bl, "effect/su_tunabelly.wav", 0, AREA);
 	{
 		int heal;
 
@@ -10790,6 +10803,7 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 		break;
 
 	case SU_BUNCHOFSHRIMP:
+		clif_soundeffectall(&sd->bl, "effect/su_brunchofshrimp.wav", 0, AREA);
 		if (sd == NULL || sd->status.party_id == 0 || flag&1)
 			clif_skill_nodamage(bl, bl, skill_id, skill_lv, sc_start(src, bl, type, 100, skill_lv, skill_get_time(skill_id, skill_lv)));
 		else if (sd)
@@ -11595,11 +11609,18 @@ int skill_castend_pos2(struct block_list* src, int x, int y, uint16 skill_id, ui
 	case MH_XENO_SLASHER:
 	case LG_KINGS_GRACE:
 	case RL_B_TRAP:
-	case SU_CN_POWDERING:
-	case SU_SV_ROOTTWIST:
 		flag|=1;//Set flag to 1 to prevent deleting ammo (it will be deleted on group-delete).
 	case GS_GROUNDDRIFT: //Ammo should be deleted right away.
 	case GN_WALLOFTHORN:
+		skill_unitsetting(src,skill_id,skill_lv,x,y,0);
+		break;
+	case SU_SV_ROOTTWIST:
+		flag|=1;
+		skill_unitsetting(src,skill_id,skill_lv,x,y,0);
+		clif_soundeffectall(&sd->bl, "effect/su_roottwist.wav", 0, AREA);
+		break;
+	case SU_CN_POWDERING:
+		clif_soundeffectall(&sd->bl, "effect/su_cn_powdering.wav", 0, AREA);
 		skill_unitsetting(src,skill_id,skill_lv,x,y,0);
 		break;
 	case WZ_ICEWALL:

@@ -17,6 +17,8 @@
 18625,Rocket_Helm_RWC,Rocket Helm RWC,4,10000,,1000,,20,,1,0xFFFFFFFF,63,2,256,,95,1,769,{ bonus bAllStats,2; bonus bUnbreakableHelm,0; bonus bSpeedRate,25; },{},{}
 
 // Fixeos
+5498,Wandering_Wolf_Hat,Wandering Wolf Hat,4,20,,600,,5,,1,0xFFFFFFFE,63,2,256,,1,0,490,{ bonus bAgi,5; bonus bFlee,10; bonus2 bIgnoreDefRaceRate,RC_DemiHuman,10; bonus2 bIgnoreDefRaceRate,RC_Brute,10; if(getrefine()>=7){ bonus2 bAddEff,Eff_Bleeding,10; } if(getrefine()>=9){ bonus3 bAutoSpellWhenHit,"MC_LOUD",1,1; } },{},{}
+5483,Odin_Mask,Odin Mask,4,20,,100,,1,,1,0xFFFFFFFF,63,2,512,,1,0,480,{ bonus2 bSubClass,Class_Boss,2; },{},{}
 15066,Engraved_Plate_Armor,Engraved Plate Armor,4,100000,,3000,,120,,1,0x00000002,63,2,16,,150,1,,{ bonus bMdef,25; },{},{}
 11552,Carrot_Salad,Carrot Salad,0,0,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemheal rand(100,200),rand(30,70); sc_start SC_AGIFOOD,180000,1; },{},{}
 1823,BF_Knuckle1,Valorous Battle Fist,5,20,,0,60,,1,0,0x00008100,63,2,2,3,80,1,12,{ bonus bStr,2; bonus bAgi,1; bonus2 bAddRace,RC_DemiHuman,95; bonus2 bAddRace,RC_Player,95; bonus2 bIgnoreDefRaceRate,RC_DemiHuman,20; bonus2 bIgnoreDefRaceRate,RC_Player,20; bonus4 bAutoSpell,"CH_SOULCOLLECT",1,5,0; bonus bUnbreakableWeapon,1; },{},{}

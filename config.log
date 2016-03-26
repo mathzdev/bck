@@ -805,7 +805,7 @@ configure: failed program was:
 configure:5998: result: -shared yes
 configure:6007: checking whether gcc needs -Wl,--no-undefined to check for undefined references in shared objects
 configure:6019: gcc -o conftest  -shared  -DMAXCONN=16384 -I../common -DHAS_TLS  conftest.c  >&5
-/usr/bin/ld: /tmp/cc5XBqPP.o: relocation R_X86_64_PC32 against undefined symbol `foobar' can not be used when making a shared object; recompile with -fPIC
+/usr/bin/ld: /tmp/ccf6ROoj.o: relocation R_X86_64_PC32 against undefined symbol `foobar' can not be used when making a shared object; recompile with -fPIC
 /usr/bin/ld: final link failed: Bad value
 collect2: error: ld returned 1 exit status
 configure:6019: $? = 1
@@ -841,7 +841,7 @@ configure: failed program was:
 configure:6050: result: no
 configure:6063: checking whether gcc needs -fPIC for shared objects
 configure:6079: gcc -o conftest -g -O2 -pipe -ffast-math -Wall -Wno-unused-parameter -Wno-maybe-uninitialized -Wno-clobbered -Wempty-body -Wno-switch -Wno-missing-field-initializers -Wshadow  -shared  -DMAXCONN=16384 -I../common -DHAS_TLS  conftest.c  >&5
-/usr/bin/ld: /tmp/cccK3kAQ.o: relocation R_X86_64_PC32 against symbol `bar' can not be used when making a shared object; recompile with -fPIC
+/usr/bin/ld: /tmp/ccRM6r5T.o: relocation R_X86_64_PC32 against symbol `bar' can not be used when making a shared object; recompile with -fPIC
 /usr/bin/ld: final link failed: Bad value
 collect2: error: ld returned 1 exit status
 configure:6079: $? = 1
@@ -910,8 +910,8 @@ configure:6221: $? = 0
 configure:6221: result: yes
 configure:6398: checking for library containing inflateEnd
 configure:6429: gcc -o conftest -g -O2 -pipe -ffast-math -Wall -Wno-unused-parameter -Wno-maybe-uninitialized -Wno-clobbered -Wempty-body -Wno-switch -Wno-missing-field-initializers -Wshadow -fPIC -fno-strict-aliasing  -DMAXCONN=16384 -I../common -DHAS_TLS -DHAVE_SETRLIMIT -DHAVE_STRNLEN  -I/usr/include  -L/usr/lib conftest.c  >&5
-/tmp/ccH7Xu3p.o: In function `main':
-/home/ragnarok/emu/conftest.c:39: undefined reference to `inflateEnd'
+/tmp/cclrU40T.o: In function `main':
+/home/ragnarok_testserver/Hamster-rAthena/conftest.c:39: undefined reference to `inflateEnd'
 collect2: error: ld returned 1 exit status
 configure:6429: $? = 1
 configure: failed program was:
@@ -969,8 +969,8 @@ configure:6504: gcc -o conftest -g -O2 -pipe -ffast-math -Wall -Wno-unused-param
 conftest.c:35:6: warning: conflicting types for built-in function 'sqrt' [enabled by default]
  char sqrt ();
       ^
-/tmp/cc6qANML.o: In function `main':
-/home/ragnarok/emu/conftest.c:39: undefined reference to `sqrt'
+/tmp/cc4KfTfD.o: In function `main':
+/home/ragnarok_testserver/Hamster-rAthena/conftest.c:39: undefined reference to `sqrt'
 collect2: error: ld returned 1 exit status
 configure:6504: $? = 1
 configure: failed program was:
@@ -1034,8 +1034,8 @@ configure:6626: $? = 0
 configure:6628: result: yes
 configure:6650: checking for library containing pthread_create
 configure:6681: gcc -o conftest -g -O2 -pipe -ffast-math -Wall -Wno-unused-parameter -Wno-maybe-uninitialized -Wno-clobbered -Wempty-body -Wno-switch -Wno-missing-field-initializers -Wshadow -fPIC -fno-strict-aliasing  -DMAXCONN=16384 -I../common -DHAS_TLS -DHAVE_SETRLIMIT -DHAVE_STRNLEN  -I/usr/include -DHAVE_MONOTONIC_CLOCK  -L/usr/lib conftest.c -lm -lz  >&5
-/tmp/ccvHfpMk.o: In function `main':
-/home/ragnarok/emu/conftest.c:39: undefined reference to `pthread_create'
+/tmp/ccMgP6U0.o: In function `main':
+/home/ragnarok_testserver/Hamster-rAthena/conftest.c:39: undefined reference to `pthread_create'
 collect2: error: ld returned 1 exit status
 configure:6681: $? = 1
 configure: failed program was:
@@ -1129,8 +1129,8 @@ configure:7171: checking MySQL library (required)
 configure:7174: result: yes (5.5.47)
 configure:7203: checking for library containing pcre_study
 configure:7234: gcc -o conftest -g -O2 -pipe -ffast-math -Wall -Wno-unused-parameter -Wno-maybe-uninitialized -Wno-clobbered -Wempty-body -Wno-switch -Wno-missing-field-initializers -Wshadow -fPIC -fno-strict-aliasing  -DMAXCONN=16384 -I../common -DHAS_TLS -DHAVE_SETRLIMIT -DHAVE_STRNLEN  -I/usr/include -DHAVE_MONOTONIC_CLOCK  -L/usr/lib conftest.c -lpthread -lm -lz  >&5
-/tmp/ccUgX2LF.o: In function `main':
-/home/ragnarok/emu/conftest.c:39: undefined reference to `pcre_study'
+/tmp/cc2EKbYx.o: In function `main':
+/home/ragnarok_testserver/Hamster-rAthena/conftest.c:39: undefined reference to `pcre_study'
 collect2: error: ld returned 1 exit status
 configure:7234: $? = 1
 configure: failed program was:

@@ -75,5 +75,5 @@
 
 //****
 // Summoner
-5028,9,8,2,0,0x2,2:2:4:4:5,5,1:2:3:4:5,yes,0,0,0,magic,0,0x0,		SU_CN_METEOR,Catnip Meteor
+//5028,9,8,2,3,0,3:3:5:5:7,10,1:2:3:4:5,yes,0,0x2000,0,magic,0,0x0,		SU_CN_METEOR,Catnip Meteor
 

@@ -260,6 +260,7 @@ extern struct Battle_Config
 	int max_sp;
 	int max_lv, aura_lv;
 	int max_parameter, max_baby_parameter;
+	int max_summoner_parameter;
 	int mvp_exp_reward_message;
 	int max_cart_weight;
 	int skill_log;
@@ -528,7 +529,6 @@ extern struct Battle_Config
 	int max_trans_parameter;
 	int max_third_trans_parameter;
 	int max_extended_parameter;
-	int max_summoner_parameter;
 	int max_third_aspd;
 	int vcast_stat_scale;
 

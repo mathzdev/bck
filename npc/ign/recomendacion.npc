@@ -46,8 +46,13 @@ OnPCLoginEvent:
 	mes "Bienvenid"+(Sex?"o ^0000ff":"a ^ff0000")+strcharinfo(0)+" a ^5533ffIGN RO^000000.";
 	mes "Nuestros sistemas han identificado que eres un nuevo usuario en nuestro servidor y nos gustaría saber si ^ff0000alguién te ha invitado^000000.";
 	next;
-	if(select("Me han invitado","^777777Salir^000000")== 2)
-		close;
+	if(select("Me han invitado","^777777Salir^000000")== 2) {
+		mes "[^cc6600Sistema de Recomendación^000000]";
+		mes "Si subes sólo un nivel, no me apareceré jamás frente a tí.";
+		close2;
+		cutin "",255;
+		end;
+	}
 	while (1) {
 		mes "[^cc6600Sistema de Recomendación^000000]";
 		mes "Entonces, por favor escribe el nombre de la persona que te ha invitado.";
@@ -73,7 +78,9 @@ OnPCLoginEvent:
 			set #rec_v,1;
 			set #rec_lv,1;
 			query_sql("INSERT INTO `reference` (invitante,invitado,status) VALUES ('"+@inv+"','"+getcharid(3)+"','2')");
-			close;
+			close2;
+			cutin "",255;
+			end;
 		}
 	}
 end;

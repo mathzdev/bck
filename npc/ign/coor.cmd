@@ -16,10 +16,6 @@ OnInit:
 	end;
 }
 lou_dun02,0,0,0,0	monster	Boiled Rice	1520,40,3600,2600,0
-prt_in	mapflag	battleground
-vip	mapflag	battleground
-bg_room	mapflag	battleground
-payon	mapflag	battleground
 // usage :
 // [npc:Sample]map#512#10
 // [npc:Sample]all#512#123

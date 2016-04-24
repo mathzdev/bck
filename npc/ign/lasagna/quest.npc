@@ -80,16 +80,13 @@ S_CheckMision:
 		mes "[Jefe Gamberi]";
 		mes "Recuerda que debes cazar "+.objetivo$[Q_PRICE-1]+".";
 		next;
-		if(select("Continuar misión","Cancelar misión y elegir otra") == 1) {
+		if(select("Continuar misión","Elegir otra misión.") == 1) {
 			mes "[Jefe Gamberi]";
 			mes "Suerte.";
 			close;
 		}
 		mes "[Jefe Gamberi]";
-		mes "Vale, vuelve a hablar conmigo para elegir una misión diferente.";
-		erasequest Q_GATO;
-		set Q_PRICE,0;
-		set Q_GATO,0;
+		mes "Termina la actual, miau, no sea flojo.";
 		close;
 	}
 	return;

@@ -6067,7 +6067,7 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 						skillratio += 600;
 						break;
 					case SU_CN_METEOR:
-						skillratio += 100 + 100 * skill_lv;
+						skillratio += -60 + 20 * skill_lv;
 						break;
 				}
 
@@ -8062,7 +8062,7 @@ static const struct _battle_data {
 	{ "mob_remove_damaged",                 &battle_config.mob_remove_damaged,              1,      0,      1,              },
 	{ "show_hp_sp_drain",                   &battle_config.show_hp_sp_drain,                0,      0,      1,              },
 	{ "show_hp_sp_gain",                    &battle_config.show_hp_sp_gain,                 1,      0,      1,              },
-	{ "mob_npc_event_type",                 &battle_config.mob_npc_event_type,              1,      0,      1,              },
+	{ "mob_npc_event_type",                 &battle_config.mob_npc_event_type,              1,      0,      2,              },
 	{ "character_size",                     &battle_config.character_size,                  1|2,    0,      1|2,            },
 	{ "mob_max_skilllvl",                   &battle_config.mob_max_skilllvl,                MAX_MOBSKILL_LEVEL, 1, MAX_MOBSKILL_LEVEL, },
 	{ "retaliate_to_master",                &battle_config.retaliate_to_master,             1,      0,      1,              },

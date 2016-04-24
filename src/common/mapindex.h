@@ -34,6 +34,7 @@
 #define MAP_VEINS "veins"
 #define MAP_JAIL "sec_pri"
 #define MAP_MERCADO "Hyrule"
+#define MAP_VERUS "verus04"
 #ifdef RENEWAL
 	#define MAP_NOVICE "ilyo_kwan"
 #else

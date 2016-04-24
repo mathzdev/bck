@@ -1179,7 +1179,9 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 	case WZ_VERMILION:
 		sc_start(src,bl,SC_BLIND,4*skill_lv,skill_lv,skill_get_time2(skill_id,skill_lv));
 		break;
-
+	case WZ_HEAVENDRIVE:
+		status_change_end(bl, SC_SV_ROOTTWIST, INVALID_TIMER);
+		break;
 	case HT_FREEZINGTRAP:
 	case MA_FREEZINGTRAP:
 		sc_start(src,bl,SC_FREEZE,(3*skill_lv+35),skill_lv,skill_get_time2(skill_id,skill_lv));
@@ -1850,11 +1852,11 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 		break;
 	case SU_SCRATCH:
 		clif_soundeffectall(&sd->bl, "effect\\su_scratch.wav", 0, AREA);
-		sc_start2(src, bl, SC_BLEEDING, (skill_lv * 15), skill_lv, src->id, skill_get_time(skill_id, skill_lv)); // TODO: What's the chance/time?
+		sc_start2(src, bl, SC_BLEEDING, (skill_lv * 15), skill_lv, src->id, skill_get_time2(skill_id, skill_lv)); // TODO: What's the chance/time?
 		break;
 	case SU_SV_STEMSPEAR:
 		clif_soundeffectall(&sd->bl, "effect\\su_stemspear.wav", 0, AREA);
-		sc_start2(src, bl, SC_BLEEDING, 10, skill_lv, src->id, skill_get_time(skill_id, skill_lv));
+		sc_start2(src, bl, SC_BLEEDING, 10, skill_lv, src->id, skill_get_time2(skill_id, skill_lv));
 		break;
 	case SU_CN_METEOR:
 		clif_soundeffectall(&sd->bl, "effect\\wizard_meteo.wav", 0, AREA);
@@ -1867,7 +1869,7 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 	case SU_LUNATICCARROTBEAT:
 		clif_soundeffectall(&sd->bl, "effect\\wizard_meteo.wav", 0, AREA);
 		if (skill_area_temp[3] == 1)
-			sc_start(src, bl, SC_STUN, 10, skill_lv, skill_get_time(skill_id, skill_lv)); // TODO: What's the chance/time?
+			sc_start(src, bl, SC_STUN, 10, skill_lv, skill_get_time2(skill_id, skill_lv)); // TODO: What's the chance/time?
 		break;
 	} //end switch skill_id
 
@@ -6429,6 +6431,7 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 	case AB_EXPIATIO:
 	case AB_DUPLELIGHT:
 	case AB_SECRAMENT:
+	case AB_OFFERTORIUM:
 	case NC_ACCELERATION:
 	case NC_HOVERING:
 	case NC_SHAPESHIFT:
@@ -8390,7 +8393,7 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 					sc_start(src,bl,SC_INCMATKRATE,100,-50,skill_get_time2(skill_id,skill_lv));
 					break;
 				case 2:	// all buffs removed
-					status_change_clear_buffs(bl,1);
+					status_change_clear_buffs(bl,9);
 					break;
 				case 3:	// 1000 damage, random armor destroyed
 					{
@@ -9248,18 +9251,6 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 		}
 		break;
 
-	case AB_OFFERTORIUM:{
-		struct status_change *sc = status_get_sc(src);
-		clif_skill_nodamage(src,bl,skill_id,skill_lv,sc_start(src,bl,type,100,skill_lv,skill_get_time(skill_id,skill_lv)));
-		if( sc ) {
-			int sc_toend[] = {SC_CURSE, SC_POISON, SC_HALLUCINATION, SC_CONFUSION, SC_BLEEDING, SC_BURNING, SC_FREEZING, SC_MANDRAGORA};
-			for( i = 0; i < ARRAYLENGTH(sc_toend); i++) {
-				status_change_end(bl, (sc_type)sc_toend[i], INVALID_TIMER);
-			}
-		}
-	}
-		break;
-
 	case WL_WHITEIMPRISON:
 		if( (src == bl || battle_check_target(src, bl, BCT_ENEMY)>0) && !is_boss(bl) )// Should not work with bosses.
 		{
@@ -10113,27 +10104,21 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 
 	case SO_ARRULLO:
 		{
-			// Success chance: [(15 + 5 * Skill Level) + ( Caster's INT / 5 ) + ( Caster's Job Level / 5 ) - ( Target's INT / 6 ) - ( Target's LUK / 10 )] %
-			int rate = (15 + 5 * skill_lv) * 1000 + status_get_int(src) * 200 + (sd ? sd->status.job_level * 200 : 0) - status_get_int(bl) * 1000 / 6 - status_get_luk(bl) * 100;
-			// Resistance: {(Target's Base Level / 20) + (Target's Base INT / 40)} seconds
-			int duration = skill_get_time(skill_id, skill_lv) - (status_get_lv(bl) * 50 + (sd ? sd->status.int_ : status_get_base_status(bl)->int_) * 25);
+			int rate_sk = 4 * skill_lv + (sd ? pc_checkskill(sd, WM_LESSON) * 2 : 0) + status_get_lv(src) / 15 + (sd ? sd->status.job_level / 5 : 0);
 			clif_skill_nodamage(src, bl, skill_id, skill_lv, 1);
-			status_change_start(src,bl,type,rate,skill_lv,0,0,0,max(duration,5000),SCSTART_NORATEDEF|SCSTART_NOTICKDEF); // Avoid general resistance
+			sc_start(src, bl, type, rate_sk, skill_lv, skill_get_time(skill_id, skill_lv));
 		}
 		break;
 
 	case WM_LULLABY_DEEPSLEEP:
 		if (flag&1) {
-			// Resistance: {(Target's Base Level / 20) + (Target's Base INT / 20)} seconds
-			int duration = skill_area_temp[6] - (status_get_lv(bl) * 50 + (sd ? sd->status.int_ : status_get_base_status(bl)->int_) * 50);
-			status_change_start(src,bl,type,skill_area_temp[5],skill_lv,0,0,0,max(duration,5000),SCSTART_NORATEDEF|SCSTART_NOTICKDEF); // Avoid general resistance
+			int rate_sk = 4 * skill_lv + (sd ? pc_checkskill(sd, WM_LESSON) * 2 : 0) + status_get_lv(src) / 15 + (sd ? sd->status.job_level / 5 : 0);
+			int duration = skill_get_time(skill_id, skill_lv) - (status_get_base_status(bl)->int_ * 50 + status_get_lv(bl) * 50); // Duration reduction for Deep Sleep Lullaby is doubled
+			sc_start(src, bl, type, rate_sk, skill_lv, duration);
 		} else {
-			// Success chance: [(Skill Level x 4) + (Voice Lessons Skill Level x 2) + (Caster's Base Level / 15) + (Caster's Job Level / 5)] %
-			skill_area_temp[5] = (4 * skill_lv * 1000) + ((sd) ? pc_checkskill(sd,WM_LESSON) : skill_get_max(WM_LESSON)) * 2000 + (status_get_lv(src) * 1000 / 15) + (sd ? sd->status.job_level * 200 : 0);
-			skill_area_temp[6] = skill_get_time(skill_id,skill_lv);
 			clif_skill_nodamage(src, bl, skill_id, skill_lv, 1);
-			map_foreachinrange(skill_area_sub, bl, skill_get_splash(skill_id, skill_lv), BL_CHAR, src, skill_id, skill_lv, tick, flag|BCT_ALL|BCT_WOS|1, skill_castend_nodamage_id);
-		}
+  			map_foreachinrange(skill_area_sub, bl, skill_get_splash(skill_id, skill_lv), BL_CHAR, src, skill_id, skill_lv, tick, flag|BCT_ALL|BCT_WOS|1, skill_castend_nodamage_id);
+  		}
 		break;
 
 	case SO_SUMMON_AGNI:
@@ -12554,7 +12539,11 @@ struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16 skill_
 	case NPC_EVILLAND:
 		val1=(skill_lv+3)*2;
 		break;
-
+	case SU_CN_METEOR:
+  		limit = flag - (flag&1);
+  		val1 = (flag&1);
+		flag = 0; // Flag should not influence anything else for these skills
+  		break;
 	case WZ_FIREPILLAR:
 		if( map_getcell(src->m, x, y, CELL_CHKLANDPROTECTOR) )
 			return NULL;
@@ -13415,9 +13404,7 @@ int skill_unit_onplace_timer(struct skill_unit *unit, struct block_list *bl, uns
 						++count < SKILLUNITTIMER_INTERVAL/sg->interval && !status_isdead(bl) );
 				}
 				break;
-				case WZ_HEAVENDRIVE:
-					status_change_end(bl, SC_SV_ROOTTWIST, INVALID_TIMER);
-				break;
+				
 #ifndef RENEWAL // The storm gust counter was dropped in renewal
 				case WZ_STORMGUST: //SG counter does not reset per stormgust. IE: One hit from a SG and two hits from another will freeze you.
 					if (tsc)
@@ -19068,14 +19055,14 @@ bool skill_produce_mix(struct map_session_data *sd, uint16 skill_id, unsigned sh
 			clif_produceeffect(sd,0,nameid);
 			clif_misceffect(&sd->bl,3);
 			if (skill_id == CR_SYNTHESISPOTION && (sd->oficio == 5 || sd->oficio_ex == 5)) {
-				pc_setglobalreg(sd, add_str("CarpenterExp"), sd->carpenterexp + 1);
+				pc_setglobalreg(sd, add_str("CarpenterExp"), sd->carpenterexp + 10);
 				nullpo_retr(-1,sd);
 				npc_event(sd,"RankingSkill::OnCar",0);
 			}
 			if (itemdb_wlv(nameid) >= 3 && ((ele? 1 : 0) + sc) >= 3) { // Fame point system [DracoRPG]
 				pc_addfame(sd, battle_config.fame_forge); // Success to forge a lv3 weapon with 3 additional ingredients = +10 fame point
 				if (skill_id == CR_SYNTHESISPOTION && (sd->oficio == 5 || sd->oficio_ex == 5)) {
-					pc_setglobalreg(sd, add_str("CarpenterExp"), sd->carpenterexp + 5);
+					pc_setglobalreg(sd, add_str("CarpenterExp"), sd->carpenterexp + 20);
 					nullpo_retr(-1,sd);
 					npc_event(sd,"RankingSkill::OnCar",0);
 				}
@@ -19124,6 +19111,11 @@ bool skill_produce_mix(struct map_session_data *sd, uint16 skill_id, unsigned sh
 				pc_setglobalreg(sd, add_str("TailorExp"), sd->tailorexp + 1);
 				nullpo_retr(-1,sd);
 				npc_event(sd,"RankingSkill::OnCos",0);
+			}
+			if (skill_id == CR_SYNTHESISPOTION && (sd->oficio == 5 || sd->oficio_ex == 5)) {
+				pc_setglobalreg(sd, add_str("CarpenterExp"), sd->carpenterexp + 1);
+				nullpo_retr(-1,sd);
+				npc_event(sd,"RankingSkill::OnCar",0);
 			}
 			//Visual effects and the like.
 			switch (skill_id) {

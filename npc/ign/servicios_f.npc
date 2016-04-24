@@ -663,14 +663,14 @@ function	script	Estilista_M	{
 	if(Class == 4218)
 		setarray .@Styles[1],getbattleflag("max_cloth_color"),6,6;
 	else
-		setarray .@Styles[1],getbattleflag("max_cloth_color"),60,getbattleflag("max_hair_color");
+		setarray .@Styles[1],getbattleflag("max_cloth_color"),getbattleflag("max_hair_style"),getbattleflag("max_hair_color");
 	setarray .@Look[1],7,1,6;
 	mes "[^ff0000Kafra Employee^000000]";
 	mes "Bienvenid"+(Sex ? "o caballero":"a señorita");
 	mes "¿Qué quiere cambiar el día de hoy?";
 	set .@s, select(" ~ Color de Ropa: ~ Estilo de Pelo: ~ Color de Pelo: ~ Cambiar Ropa (^ff00003er Job^000000)");
 	if(.@s == 4) {
-		if(Class == Job_Royal_Guard || Class == Job_Royal_Guard_T || Class == Job_Guillotine_Cross || Class == Job_Guillotine_Cross_T || Class == Job_Genetic || Class == Job_Genetic_T || Class == Job_Mechanic || Class == Job_Mechanic_T) {
+		if(Class == Job_Arch_Bishop_T || Class == Job_Arch_Bishop || Class == Job_Royal_Guard || Class == Job_Royal_Guard_T || Class == Job_Guillotine_Cross || Class == Job_Guillotine_Cross_T || Class == Job_Genetic || Class == Job_Genetic_T || Class == Job_Mechanic || Class == Job_Mechanic_T) {
 			if(b_look == 0) {
 				setlook LOOK_BODY2,1;
 				set b_look,1;

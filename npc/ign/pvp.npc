@@ -69,9 +69,13 @@ getmapxy(.@m$,.@x,.@y,0);
 	end;
 OnPCDieEvent:
 getmapxy(.@m$,.@x,.@y,0);
-	if( sex ) soundeffectall "die_male.wav",0;
-		else soundeffectall "die_merchant_female.wav",0;
-	if(killerrid < 100000)
+	if( Class == 4218 )
+		soundeffectall "leaf_cat_attack.wav",0;
+	else if( sex )
+		soundeffectall "die_male.wav",0;
+	else
+		soundeffectall "die_merchant_female.wav",0;
+	if(killerrid < 10000)
 		end;
 	if(getmapflag(.@m$,mf_pvp) == 1 || getmapflag(.@m$,mf_gvg) == 1) {
 		if(!pvp_death)
@@ -229,7 +233,8 @@ OnRollBack:
 		return "0.00";
 	}
 OnPCLoginEvent:
-	if($rollbackrank == 1 && rollback_1 < 1) {
+OnPCLoadMapEvent:
+	if($rollbackrank == 1 && rollback_20160414 < 1) {
 		set craneo,1;
 		set pvp_kill,0;
 		set KillingSpree,0;
@@ -246,7 +251,7 @@ OnPCLoginEvent:
 		set Rampage,0;
 		set Ownage, 0;
 		set Nemesispvp_kill,0;
-		set rollback_1,1;
+		set rollback_20160414,1;
 		announce "[Rollback] El ranking se ha reiniciado por iniciar el nuevo mes.",bc_self,0xFF0000;
 	}
 	end;

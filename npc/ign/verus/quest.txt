@@ -1,0 +1,386 @@
+// Verus Quests
+// DanielArt www.danielart.com.mx
+
+
+//== Registro al grupo de excavación
+// Eden Group
+moc_para01,41,177,4	script	Roger::q_veru01	952,{
+	if(BaseLevel < 110) {
+		mes "[Roger]";
+		mes "¿Qué tal?";
+		mes "Estoy a cargo de buscar aspirantes para el nuevo proyecto de excavación de Juperos.";
+		next;
+		mes "[Roger]";
+		mes "Pero es todo lo que te puedo decir, ya que no tienes suficiente experiencia.";
+		close2;
+		emotion e_sry;
+		end;
+	}
+	if(checkquest(17511) == -1) {
+		mes "[Roger]";
+		mes "¿Qué tal?";
+		mes "Estoy a cargo de buscar aspirantes para el nuevo proyecto de excavación de Juperos.";
+		next;
+		mes "[Roger]";
+		mes "¿Te interesa?";
+		next;
+		if(select("Veamos de que trata","No gracias") == 2) {
+			mes "[Roger]";
+			mes "¿Temes ensuciarte de tierra?";
+			close;
+		}
+		mes "[Roger]";
+		mes "Bien, por favor entra a la segunda de las siguientes salas y busca a la Directora de Operaciones, ella te contará más sobre el proyecto y la manera de unirte.";
+		close2;
+		setquest 17511;
+		end;
+	} else if(q_veru_ex == 1) {
+		mes "[Roger]";
+		mes "Ya formas parte del grupo de excavación, felicidades.";
+		close;
+	} else {
+		mes "[Roger]";
+		mes "Bien, por favor entra a la segunda de las siguientes salas y busca a la Directora de Operaciones, ella te contará más sobre el proyecto y la manera de unirte.";
+		close;
+	}
+end;
+}
+moc_para01,134,170,3	script	Directora de Operación::q_veru02	951,{
+	cutin "arquien_n_atnad01",2;
+	if(checkquest(17512) == 1) {
+		mes "[Directora de Operación]";
+		mes "Ve con el investigador de la izquierda para que sepas donde queda el lugar.";
+		close2;
+		cutin "",255;
+		end;
+	}
+	mes "[Directora de Operación]";
+	mes "Tengo mucho trabajo, disculpa.";
+	if(checkquest(17511) == 1)
+		next;
+	else {
+		close2;
+		cutin "",255;
+		end;
+	}
+	select("Me han mandado a hablar contigo");
+	mes "[Directora de Operación]";
+	mes "Ya veo, así que estás interesado en la excavación de Juperos.";
+	next;
+	mes "[Directora de Operación]";
+	mes "Últimamente han aparecido restos de que la antigua civilización que habitó en Juperos está viva nuevamente.";
+	next;
+	mes "[Directora de Operación]";
+	mes "O algo así he escuchado, digamos que me acaban de dar el puesto. ^5533ff*heh*^000000";
+	emotion e_heh;
+	next;
+	mes "[Directora de Operación]";
+	mes "Bueno, ehem, he visto que en Juperos hay una estatua con una boca abierta que parece bastante sospechosa.";
+	next;
+	mes "[Directora de Operación]";
+	mes "Pero esa zona está a nuestro cargo, y no podrás entrar sin permiso.";
+	next;
+	mes "[Directora de Operación]";
+	mes "Pero descuida, con gusto te inscribiré en el grupo de excavadores por 100,000z","¿Qué dices";
+	next;
+	if(select("Incribirse","Carera, adios")== 2) {
+		mes "[Directora de Operación]";
+		mes "Así no llegarás a ninguna parte, adios.";
+		close2;
+		cutin "",255;
+		end;
+	}
+	if(Zeny < 100000) {
+		mes "[Directora de Operación]";
+		mes "Disculpa, pero no cumples con la cuota mínima.";
+		close2;
+		cutin "",255;
+		end;
+	}
+	Zeny -= 100000;
+	q_veru_ex = 1;
+	mes "[Directora de Operación]";
+	mes "De acuerdo, ahora estás inscrito como parte del equipo de excavación.";
+	next;
+	mes "[Directora de Operación]";
+	mes "Pero... olvidé el lugar exacto de donde se lleva la excavación.";
+	next;
+	mes "[Directora de Operación]";
+	mes "Por favor ve a la sala de la izquierda y habla con el Investigador, él te dirá donde queda.";
+	close2;
+	cutin "",255;
+	changequest 17511,17512;
+	end;
+}
+moc_para01,174,165,3	script	Investigador::q_verus03	952,{
+	if(checkquest(17512) == 1) {
+		mes "[Investigador]";
+		mes "Así que un valiente...";
+		next;
+		mes "[Investigador]";
+		mes "No te emociones, que todavía no eres un registro oficial, lo que pagas en la otra sala es para los abogados en caso de que mueras.";
+		next;
+		mes "[Investigador]";
+		mes "Si quieres convertirte en un verdadero miembro del equipo de investigación y excavación de Juperos deberás ir al lugar.";
+		next;
+		mes "[Investigador]";
+		mes "No queremos a inútiles en nuestro equipo.";
+		next;
+		mes "[Investigador]";
+		mes "Escuchame bien, te marcaré en la navegación el lugar donde debes de ir.";
+		next;
+		mes "[Investigador]";
+		mes "Recuerda que perteneces al grupo de los ^5533ffInvestigadores^000000";
+		close2;
+		navigateto "juperos_01",244,92,NAV_ALL,0;
+		changequest 17512,17513;
+		end;
+	}
+	if(checkquest(17513) == 1) {
+		mes "[Investigador]";
+		mes "Ve al lugar que te he marcado, recuerda que perteneces al grupo de los ^5533ffInvestigadores^000000.";
+		close2;
+		navigateto "juperos_01",244,92,NAV_ALL,0;
+		end;
+	}
+	mes "[Investigador]";
+	mes "El lugar es peligroso, entiéndelo...";
+	next;
+	mes "[Gerente de Edén]";
+	mes "No digas ridiculeces, la investigación debe seguir.";
+	close;
+}
+moc_para01,172,165,4	script	Gerente de Edén::q_verus04	897,{
+	cutin "heri1",2;
+	mes "[Gerente de Edén]";
+	mes "La investigación debe proseguir por el bien de la ciencia y la arqueología midgardeana.";
+	close2;
+	cutin "",255;
+	end;
+}
+moc_para01,178,167,5	script	Guardia de Edén::q_verus05	953,{
+	mes "[Guardia de Edén]";
+	mes "En estas fechas se está llevando a cabo la investigación en las ruinas de Juperos.";
+	next;
+	mes "[Guardia de Edén]";
+	mes "Si te interesa, creo que deberías de ir con la gente fuera de ésta sala.";
+	close;
+}
+
+// Verus
+verus04,181,179,5	script	Registro de Excavación::q_verus06	893,{
+	if(checkquest(17513) == 2) {
+		mes "[Registro de Excavación]";
+		mes "Suerte con tu investigación.";
+		close;
+	}
+	if(checkquest(17513) == 1) {
+		mes "[Registro de Excavación]";
+		mes "¿Hola?","Aquí es la central de expedición de Verus";
+		next;
+		mes "[Registro de Excavación]";
+		mes "Si deseas registrarte por favor dime a que grupo perteneces:";
+		next;
+		input @grupo$;
+		if(@grupo$ != "Investigadores") {
+			mes "[Registro de Excavación]";
+			mes "Lo siento, pero ese grupo no está registrado.";
+			close;
+		}
+		mes "[Registro de Excavación]";
+		mes "Excelente, así que eres un Investigador.";
+		next;
+		mes "[Registro de Excavación]";
+		mes "De acuerdo, ahora estás registrado, suerte con tu investigación.";
+		close2;
+		completequest 17513;
+		end;
+	}
+	mes "[Registro de Excavación]";
+	mes "No tienes nada que hacer aquí, fuera, es peligroso.";
+	close2;
+	emotion e_bzz;
+	end;
+}
+yuno_fild07,217,157,5	script	Encargada del Ascensor::q_verus07	831,{
+	mes "[Encargada del Ascensor]";
+	mes "Te puedo llevar directo a la zona de excavación por 1,000z.";
+	next;
+	select("Llévame");
+	if(Zeny < 1000) {
+		mes "[Encargada del Ascensor]","No tienes el Zeny suficiente.";
+		close;
+	}
+	Zeny -= 1000;
+	warp "verus04",122,216;
+	close;
+}
+
+//= Repetibles
+verus04,142,192,5	script	Escritor de Reportes::q_verus08	897,{
+	if(checkquest(17513) == 2) {
+		if(checkquest(17518,PLAYTIME) == 2 || checkquest(17518,PLAYTIME) == -1) {
+			if((checkquest(17515) == 1 || checkquest(17515) == 2) && countitem(6748) > 0) {
+				mes "[Escritor de Reportes]";
+				mes "Ve a entregar el reporte al Capitán.";
+				close2;
+				emotion e_bzz;
+				end;
+			}
+			mes "[Escritor de Reportes]";
+			mes "¿Me puedes ayudar?","Necesito entregar el reporte de investigación de hoy, pero no tengo tiempo.";
+			next;
+			mes "[Escritor de Reportes]";
+			mes "¿Lo podrías entregar por mi?";
+			next;
+			select("De acuerdo, dámelo.");
+			mes "[Escritor de Reportes]";
+			mes "Aquí tienes, dáselo al Capitán de la Expedición.";
+			getitem 6748,1;
+			if(checkquest(17518,PLAYTIME) == 2)
+				erasequest 17518;
+			setquest 17515;
+			close;
+		} else {
+			mes "[Escritor de Reportes]";
+			mes "Aún no tengo el reporte listo, vuelve después.";
+			close;
+		}
+	}
+	mes "[Escritor de Reportes]";
+	mes "¿Puedes irte?","Estoy bastante ocupado";
+	close;
+}
+verus04,145,192,4	script	Científico de Campo::q_verus09	832,{
+	if(checkquest(17513) == 2) {
+		if(checkquest(17514) == 1 && countitem(6749) > 19) {
+			mes "[Científico de Campo]";
+			mes "Excelente trabajo, tu aporte beneficiará mucho a la ciencia.";
+			next;
+			mes "[Científico de Campo]";
+			mes "Ten tu recompensa.";
+			delitem 6749,countitem(6749);
+			changequest 17514,17517;
+			getexp 750000,750000;
+			close;
+		} else {
+			if(checkquest(17517,PLAYTIME) == 2 || checkquest(17517,PLAYTIME) == -1) {
+				mes "[Científico de Campo]";
+				mes "Hemos descubierto que casi todos los robots tienen un artifacto en igualdad.";
+				next;
+				mes "[Científico de Campo]";
+				mes "Todos poseen algo llamado ^5533ffOperation Control Device^000000 que actua como el corazón del robot.";
+				next;
+				mes "[Científico de Campo]";
+				mes "Por favor ve a cazar robots arriba del centro de expedición hasta que obtengas 20 de estos objetos.";
+				next;
+				mes "[Científico de Campo]";
+				mes "Los necesitaremos para investigarlos, fabricar nuevos artefactos y armas, así que sería de mucha ayuda si nos ayudaras.";
+				next;
+				mes "[Científico de Campo]";
+				mes "Cuento contigo.";
+				if(checkquest(17517,PLAYTIME) == 2)
+					erasequest 17517;
+				setquest 17514;
+				close;
+			} else if(checkquest(17517,PLAYTIME) == 0) {
+				mes "[Científico de Campo]";
+				mes "Todavía estamos analizando las últimas piezas que trajiste con nosotros.";
+				close;
+			}
+			mes "[Científico de Campo]";
+			mes "Recuerda que ocupamos 20 Operation Control Device, no importa si traes de más, te quitaré todos. ^5533ff*heh*^000000";
+			emotion e_heh;
+			close;
+		}
+	}
+	mes "[Científico de Campo]";
+	mes "Estoy ocupado analizando algunos mecanismos de robots, vuelve en otra ocasión.";
+	close;
+}
+verus04,181,176,5	script	Capitán de Expedición::q_verus10	868,{
+	if(checkquest(17513) == 2) {
+		mes "[Capitán de Expedición]";
+		mes "¿Qué tal Investigador?","¿Cómo te puedo ayudar el día de hoy?";
+		next;
+		switch(select("Sobre la Expedición:Entregar Reporte de Investigación:Eliminación de Robots:^777777Salir^000000")) {
+			case 1:
+				mes "[Capitán de Expedición]";
+				mes "Esta expedición comenzó como propuesta del Grupo de Edén.";
+				next;
+				mes "[Capitán de Expedición]";
+				mes "Ya que se decía que existían rastros de que la civilización antigua de Juperos aún existía.";
+				next;
+				mes "[Capitán de Expedición]";
+				mes "Decidimos aventurarnos desde que se vieron extrañas señales de humo cuando unos aventureros pasaron cerca de Juperos.";
+				next;
+				mes "[Capitán de Expedición]";
+				mes "Y si bien sabes, ésta ciudad siempre ha tenido algo mágico y misterioso con las máquinas.";
+				next;
+				mes "[Capitán de Expedición]";
+				mes "Cuando llegamos habían varias humano-robots cuidando una fábrica, y no nos han dejado entrar.";
+				next;
+				mes "[Capitán de Expedición]";
+				mes "Lo único que nos decían es que protegían a la última creación de Charleston.";
+				next;
+				mes "[Capitán de Expedición]";
+				mes "Al parecer éste Charleston fue el principal creador de Robots de Juperos.";
+				next;
+				mes "[Capitán de Expedición]";
+				mes "Bueno, eso es todo.";
+				close;
+			case 2:
+				if(checkquest(17515) == 1 && countitem(6748) > 0) {
+					mes "[Capitán de Expedición]";
+					mes "Excelente trabajo, aquí tienes tu recompenza.";
+					next;
+					changequest 17515,17518;
+					getexp 100000,100000;
+					delitem 6748,countitem(6748);
+					mes "[Capitán de Expedición]";
+					mes "Vuelve pronto.";
+					close;
+				}
+				mes "[Capitán de Expedición]";
+				mes "No tienes ningún reporte en manos.","No hagas perder mi tiempo.";
+				close;
+			case 3:
+				if(checkquest(17516,HUNTING) == 2) {
+					mes "[Capitán de Expedición]";
+					mes "Buen trabajo, ahora éstos robots dejarán de estorbar en nuestra investigación.";
+					next;
+					mes "[Capitán de Expedición]";
+					mes "Ten tu recompensa.";
+					changequest 17516,17519;
+					getexp 400000,400000;
+					close;
+				} else {
+					if(checkquest(17519,PLAYTIME) == 2 || checkquest(17519,PLAYTIME) == -1) {
+						mes "[Capitán de Expedición]";
+						mes "Los robots han estado estorbado últimamente en nuestras investigaciones.";
+						next;
+						mes "[Capitán de Expedición]";
+						mes "Por favor, sal y elimina 20 monstruos de cada tipo, aquí te esperaré.";
+						if(checkquest(17519,PLAYTIME) == 2)
+							erasequest 17519;
+						setquest 17516;
+						close;
+					} else if(checkquest(17519,PLAYTIME) == 0) {
+						mes "[Capitán de Expedición]";
+						mes "Los monstruos no han estado molestando tanto, vuelve en otro momento.";
+						close;
+					}
+					mes "[Capitán de Expedición]";
+					mes "Por favor caza 20 Robots de cada tipo.";
+					close;
+				}
+			case 4:
+				mes "[Capitán de Expedición]";
+				mes "Vuelve cuando tengas algo que decirme.";
+				close;
+		}
+	}
+	mes "[Capitán de Expedición]";
+	mes "No tengo tiempo que perder con exploradores sin experiencia, ve a Paradise Group si te interesa explorar Verus.";
+	close;
+}

@@ -35,12 +35,12 @@ OnPCLoginEvent:
 		cutin "",255;
 		end;
 	}
-	if(#rec_v == 1)
-		end;
 	if(BaseLevel > 1) {
 		set #rec_v,1;
 		end;
 	}
+	if(#rec_v == 1)
+		end;
 	cutin "ep13_cheshire_h",2;
 	mes "[^cc6600Sistema de Recomendación^000000]";
 	mes "Bienvenid"+(Sex?"o ^0000ff":"a ^ff0000")+strcharinfo(0)+" a ^5533ffIGN RO^000000.";
@@ -72,7 +72,7 @@ OnPCLoginEvent:
 			mes "Hemos registrado que "+@name$+" te ha invitado al servidor, será premiado en cuanto tu subas a Nivel 150, suerte.";
 			set #rec_v,1;
 			set #rec_lv,1;
-			query_sql("INSERT INTO `reference`(invitante,invitado,status) VALUES ('"+@inv+"','"+getcharid(3)+"','2'");
+			query_sql("INSERT INTO `reference` (invitante,invitado,status) VALUES ('"+@inv+"','"+getcharid(3)+"','2')");
 			close;
 		}
 	}

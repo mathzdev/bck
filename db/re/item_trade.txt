@@ -1428,7 +1428,7 @@
 12600,507,100	// Treasure_Box_Scroll
 12607,507,100	// Lolli_Pop_Box
 //12610,475,100	//
-12622,507,100	// Boarding_Halter
+//12622,507,100	// Boarding_Halter
 12625,475,100	// Sapa_Feat_Cert_Pack
 12633,475,100	// Malang_Cat_Can
 12636,467,100	// Malang_Sp_Can

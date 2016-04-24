@@ -33,6 +33,14 @@ prontera,150,186,5	script	Ranker	10010,{
 						case 3: set @on$,"Costurero"; set @o$,"costurero"; break;
 						case 4: set @on$,"Cazador"; set @o$,"cazador"; break;
 						case 5: set @on$,"Carpintero"; set @o$,"carpintero"; break;
+						case 6:
+						case 255:
+							mes "[^A020F0Ranker^000000]";
+							mes "Vuelve cuando quieras.";
+							close2;
+							cutin "",255;
+							playbgm "prt_city";
+							end;
 					}
 					mes "^5533ff"+@on$+"^000000";
 					query_sql( "SELECT `name`,`"+@o$+"` FROM `char_rank` ORDER BY `"+@o$+"` DESC LIMIT 5",.@n$,.@c );
@@ -95,7 +103,7 @@ prontera,150,186,5	script	Ranker	10010,{
 					end;
 				case 6:
 					mes "^5533ffGremios^000000";
-					query_sql( "SELECT `name`,`points` FROM `char_rank_gld` ORDER BY `points` DESC LIMIT 5",.@n$,.@c );
+					query_sql( "SELECT `name`,`fame_rank` FROM `guild` ORDER BY `fame_rank` DESC LIMIT 5",.@n$,.@c );
 					if( getarraysize( .@n$ ) ){
 						for( set .@i,0; .@i < getarraysize( .@n$ ); set .@i,.@i + 1 )
 							mes "^777777[ "+( .@i + 1 )+". ]^000000 ^ff0000"+.@n$[.@i]+"^000000 - ^cc6600"+.@c[.@i]+" puntos.^000000";
@@ -124,7 +132,7 @@ prontera,150,186,5	script	Ranker	10010,{
 			mes "[^A020F0Ranker^000000]";
 			mes "Por favor elige el tipo de moneda y por ende a la tienda que accesarás.";
 			next;
-			switch(prompt("MvP Coins:PvP Coin:Emperium Coin:Medallas de Misión:^777777Salir^000000")) {
+			switch(prompt("MvP Coins ^5533ff(MvP)^000000:PvP Coin ^5533ff(Kills)^000000:Emperium Coin ^5533ff(WoE)^000000:Medallas de Misión ^5533ff(Cazador)^000000:^777777Salir^000000")) {
 				case 1:
 					close2; cutin "",255;
 					playbgm "prt_city";
@@ -216,7 +224,17 @@ prontera,150,186,5	script	Ranker	10010,{
 						close;
 					}
 				mes "[^A020F0Ranker^000000]";
-				mes "^5533ff"+@titulo$+"^000000";
+				mes "Ahora elige el color que deseas, deben de ser 6 carácteres en código RRGGBB.";
+				mes " ";
+				mes "Por ejemplo: ^5533ff5533FF ^FF7700FF7700 ^008800008800 ^777777777777 ^CC6600CC6600 ^FF0000FF0000 ^0000FF0000FF^000000.";
+				next;
+				input @color$;
+					if(@color$=="0") {
+						playbgm "prt_city";
+						close;
+					}
+				mes "[^A020F0Ranker^000000]";
+				mes "^"+@color$+@titulo$+"^000000";
 				next;
 				mes "[^A020F0Ranker^000000]";
 				mes "¿Deseas que ese sea tu título?";
@@ -225,6 +243,7 @@ prontera,150,186,5	script	Ranker	10010,{
 					mes "[^A020F0Ranker^000000]";
 					mes "Bien, ese será tu título a partir de hoy.";
 					set title_mvp$,@titulo$;
+					set color_mvp$,@color$;
 					set title_mvp,1;
 					close2; cutin "",255;
 					playbgm "prt_city";
@@ -263,8 +282,9 @@ function	script	RankGuild	{
 	set .@Stone,getarg(1)*5;
 	set .@Points,.@Emperium+.@Stone+getarg(3)+getarg(4);
 	set .@GID,getarg(2);
-	query_sql("SELECT `points` FROM `char_rank_gld` WHERE `id`='.@GID'"),.@pact;
-	set .@Points,.@Points + .@pact; 
-	query_sql("INSERT INTO `char_rank_gld` SET `id`='"+.@GID+"',`name`='"+strcharinfo(2)+"',`points`='.@Points'");
+	query_sql("SELECT `fame_rank` FROM `guild` WHERE `guild_id`='.@GID'"),.@pact;
+	query_sql("SELECT `fame` FROM `guild` WHERE `guild_id`='.@GID'"),.@fame;
+	set .@Points,(.@Points + .@pact + .@fame); 
+	query_sql("INSERT INTO `guild` WHERE `guild_id`='"+.@GID+"' SET `fame_rank`='.@Points'");
 	return;
 }

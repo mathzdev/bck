@@ -15,18 +15,32 @@
  * adopt(<parent_id>,<baby_id>);
  * https://rathena.org/board/topic/104014-suggestion-add-adopt-or-etc/
  */
+BUILDIN_FUNC(unitexists)
+{
+	struct block_list* bl;
+
+	bl = map_id2bl(script_getnum(st, 2));
+
+	if (!bl)
+		script_pushint(st, false);
+	else
+		script_pushint(st, true);
+
+	return SCRIPT_CMD_SUCCESS;
+}
+
 /**
  * navigateto("<map>"{,<x>,<y>,<flag>,<hide_window>,<monster_id>,<char_id>});
  */
 BUILDIN_FUNC(navigateto){
 #if PACKETVER >= 20111010
 	TBL_PC* sd;
-	const char *map;
+	const char *map_c;
 	uint16 x = 0, y = 0, monster_id = 0;
 	uint8 flag = NAV_KAFRA_AND_PLANE;
 	bool hideWindow = true;
 
-	map = script_getstr(st,2);
+	map_c = script_getstr(st,2);
 
 	if( script_hasdata(st,3) )
 		x = script_getnum(st,3);
@@ -42,7 +56,7 @@ BUILDIN_FUNC(navigateto){
 	if (!script_charid2sd(8, sd))
 		return SCRIPT_CMD_FAILURE;
 
-	clif_navigateTo(sd,map,x,y,flag,hideWindow,monster_id);
+	clif_navigateTo(sd,map_c,x,y,flag,hideWindow,monster_id);
 
 		return SCRIPT_CMD_SUCCESS;
 #else

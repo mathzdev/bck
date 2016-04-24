@@ -3,7 +3,7 @@
 // Structure of Database:
 // ID:ID:ID:ID,{ Script }
 
-20135:20136,{ bonus bAllStats,12; }
+20135:20136,{ bonus bMaxHPrate,5; bonus bMaxSPrate,5; }
 1166:2527,{ bonus2 bAddRace,RC_Dragon,5; }
 1166:2527:5467,{ bonus2 bAddRace,RC_Dragon,25; }
 1180:2527,{ bonus2 bAddRace,RC_Dragon,5; }

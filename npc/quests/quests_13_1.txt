@@ -4883,25 +4883,23 @@ spl_fild02,34,223,5	script	Small Fairy#spl	442,{
 }
 
 man_fild03,236,105,3	script	Tree Giant#man	454,{
-	if (BaseLevel > 69) {
-		if (checkquest(2159) == -1) {
-			mes "You have found something moving between dry branches.";
-			mes "It appears to be a tree at first glance, but it turns out to be a giant that is half tree and half man.";
-			next;
-			emotion e_dots;
-			mes "[Tree Giant]";
-			mes "TJDTMFJDNS CJFDI";
-			mes "TKADLFDMF QKATOS";
-			mes "EKDTLSDML DLFMADMS..";
-			next;
-			mes "The giant notices you, and looks very surprised.";
-			mes "It is saying something, but you don't understand.";
-			next;
-			mes "You should report this to the united expedition quickly.";
-			mes "Perhaps the guard captain of the expedition is the right person to report to.";
-			setquest 2159;
-			close;
-		}
+	if (checkquest(2159) < 0) {
+		mes "You have found something moving between dry branches.";
+		mes "It appears to be a tree at first glance, but it turns out to be a giant that is half tree and half man.";
+		next;
+		emotion e_dots;
+		mes "[Tree Giant]";
+		mes "TJDTMFJDNS CJFDI";
+		mes "TKADLFDMF QKATOS";
+		mes "EKDTLSDML DLFMADMS..";
+		next;
+		mes "The giant notices you, and looks very surprised.";
+		mes "It is saying something, but you don't understand.";
+		next;
+		mes "You should report this to the united expedition quickly.";
+		mes "Perhaps the guard captain of the expedition is the right person to report to.";
+		setquest 2159;
+		close;
 	}
 	emotion e_dots;
 	if (!isequipped(2782) && ep13_2_rhea < 100) {

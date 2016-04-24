@@ -129,7 +129,7 @@
 14050,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Prepara Sushi (Delay)"
 14051,79200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"La oscuridad de Glast Heim (Delay)"
 
-//Gremiales
+// Gremiales
 14052,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Ayuda a Cultivar"
 14053,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Transporta Objetos"
 14054,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Atender Clientes"
@@ -182,6 +182,18 @@
 17506,0,3498,40,0,0,0,0,0,0,0,0,0,0,0,0,0,"¡Miel gatuna!"
 17507,0,3499,40,0,0,0,0,0,0,0,0,0,0,0,0,0,"¡Ranas Dulces, nom nom!"
 17508,0,3502,20,3503,20,3504,20,0,0,0,0,0,0,0,0,0,"¡Adios Basilisk!"
-17509,0,3506,50,0,0,0,0,0,0,0,0,0,0,0,0,0,"¡La podadora gatuna!"
+17509,0,3506,100,0,0,0,0,0,0,0,0,0,0,0,0,0,"¡La podadora gatuna!"
 17510,0,3505,1,0,0,0,0,0,0,0,0,0,0,0,0,0,"¡El huevaso mayor!"
 
+// Verus
+17511,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Entrada a Verus - Directora"
+17512,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Entrada a Verus - Investigador"
+17513,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Entrada a Verus - Registro en Verus"
+// Repetibles
+17514,0,0,0,0,0,0,0,3128,6749,10000,3126,6749,10000,3154,6749,10000,"Recolectar Operation Control Device"
+17515,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Reporte de Expedición"
+17516,0,3128,20,3126,20,0,0,0,0,0,0,0,0,0,0,0,"Eliminación de Robots"
+// Delays
+17517,82800,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Recolectar Operation Control Device - Delay"
+17518,82800,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Reporte de Expedición - Delay"
+17519,82800,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"Eliminación de Robots - Delay"

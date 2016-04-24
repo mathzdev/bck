@@ -1789,7 +1789,8 @@ ACMD_FUNC(bodystyle)
 
 	// Limit body styles to certain jobs since not all of them are released yet.
 	if (!((sd->class_&MAPID_THIRDMASK) == MAPID_GUILLOTINE_CROSS || (sd->class_&MAPID_THIRDMASK) == MAPID_GENETIC
-		|| (sd->class_&MAPID_THIRDMASK) == MAPID_MECHANIC) || (sd->class_&MAPID_THIRDMASK) == MAPID_ROYAL_GUARD) {
+		|| (sd->class_&MAPID_THIRDMASK) == MAPID_MECHANIC || (sd->class_&MAPID_THIRDMASK) == MAPID_ROYAL_GUARD
+		|| (sd->class_&MAPID_THIRDMASK) == MAPID_ARCH_BISHOP)) {
 		clif_displaymessage(fd, msg_txt(sd,770));	// This job has no alternate body styles.
 		return -1;
 	}
@@ -1801,8 +1802,8 @@ ACMD_FUNC(bodystyle)
 	}
 
 	if (body_style >= MIN_BODY_STYLE && body_style <= MAX_BODY_STYLE) {
-			pc_changelook(sd, LOOK_BODY2, body_style);
-			clif_displaymessage(fd, msg_txt(sd,36)); // Appearence changed.
+		pc_changelook(sd, LOOK_BODY2, body_style);
+		clif_displaymessage(fd, msg_txt(sd,36)); // Appearence changed.
 	} else {
 		clif_displaymessage(fd, msg_txt(sd,37)); // An invalid number was specified.
 		return -1;
@@ -1894,7 +1895,6 @@ ACMD_FUNC(hair_color)
 
 /*==========================================
  * @go [city_number or city_name] - Updated by Harbin
- * Added Glemior, Lasagna and City Modified [DanielArt]
  *------------------------------------------*/
 ACMD_FUNC(go)
 {
@@ -1952,6 +1952,7 @@ ACMD_FUNC(go)
 		{ MAP_ECLAGE,      110,  39 }, // 35=Eclage
 		{ MAP_GUILDTOWN,   200, 319 }, // 36=Guild Town
 		{ MAP_LASAGNA,     169, 160 }, // 37=Lasagna
+		{ MAP_VERUS,       122, 216 }, // 38=Verus
 	};
 
 	nullpo_retr(-1, sd);
@@ -2075,6 +2076,8 @@ ACMD_FUNC(go)
 		town = 36;
 	} else if (strncmp(map_name, "lasagna", 4) == 0) {
 		town = 37;
+	} else if (strncmp(map_name, "verus04", 4) == 0) {
+		town = 38;
 	}
 
 	if (town >= 0 && town < ARRAYLENGTH(data))

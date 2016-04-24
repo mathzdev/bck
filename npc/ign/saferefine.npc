@@ -62,7 +62,6 @@ vip,70,60,3	script	Yuhra	10079,{
 	set .@refinerycnt, getequiprefinerycnt(.@part); //save refinery count
 	set .@price,500000+(300000*.@refinerycnt);
 	set .@material,35036; //Dark Mithril
-	set .@safe,90;
 
 	// If the VIP system is enabld, the prices for non-VIP players are considerably higher.
 	if (VIP_SCRIPT && !vip_status(1))
@@ -96,18 +95,17 @@ vip,70,60,3	script	Yuhra	10079,{
 			mes "No estés cambiando de equipo mientras refinas.";
 			close;
 		}
-		if(rand(100) > .@safe) {
-			mes "[Yuhra]";
-			successrefitem .@part;
-			emotion e_heh;
-			mes "El refinamiento se ha llevado a la perfección.";
-			close;
-		} else {
+		if(rand(1,10) < 2) {
 			mes "[Yuhra]";
 			mes "Al parecer algo salió mal, pero no te preocupes, no haz perdido tu objeto, sólo ha bajado su refine un valor.";
 			emotion e_sry;
 			downrefitem .@part;
 			close;
 		}
+		mes "[Yuhra]";
+		successrefitem .@part;
+		emotion e_heh;
+		mes "El refinamiento se ha llevado a la perfección.";
+		close;
 end;
 }

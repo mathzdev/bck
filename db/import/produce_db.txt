@@ -32,13 +32,13 @@
 
 //---- Carpintería ---- lvl 3 ----
 //-- Strong Wood <-- Woodcraft lv 1, 20 Normal Wood, 10 Sticky Mucus
-280,36001,3,393,1,36000,20,938,10
+280,36001,22,393,1,36000,20,938,10
 //-- Quality Wood <-- Woodcraft lv 1, 30 Normal Wood, 10 Strong Wood, 10 Sticky Mucus
-281,36002,3,393,1,36000,30,36001,10,938,10
+281,36002,22,393,1,36000,30,36001,10,938,10
 //-- Refined Wood <-- Woodcraft lv 1, 30 Normal Wood, 10 Quality Wood, 10 Desert Leather, 10 Sticky Mucus
-282,36003,3,393,1,36000,30,36002,10,36017,10,938,10
+282,36003,22,393,1,36000,30,36002,10,36017,10,938,10
 //-- Rare Wood <-- Woodcraft lv 1, 30 Refined Wood, 1 Enchanted Leather
-283,36004,3,393,1,36003,30,36018,1
+283,36004,22,393,1,36003,30,36018,1
 //-- Big Crossbow <-- Woodcraft Lv 1, Bows Guidebook, 5 Strong Wood, 20 Refined Wood, 10 Rare Wood, 5 Special Wood, 10 Stamen
 284,18110,3,393,1,36043,0,36001,5,36003,20,36004,10,36005,5,36012,10
 //-- Giant Bow <-- Woodcraft Lv 1, Bows Guidebook, 30 Strong Wood, 5 Refined Wood, 5 Rare Wood, 1 Special Wood, 10 Stamen
@@ -93,16 +93,16 @@
 308,18759,3,393,1,36046,0,36005,5,5110,1,36016,80
 
 //-- Green Surgical Gown <-- Sewing lv 1, Cloth Guidebook, 20 Special Wood, 20 Enchanted Leather, 50 Stamen, 100 Acid Bomb, 100 Bottle Grenade
-309,15044,22,393,1,36022,0,36005,20,36018,20,36012,50,7135,100,7136,100
+309,15044,22,392,1,36022,0,36005,20,36018,20,36012,50,7135,100,7136,100
 
 //-- Crimson Shoes <-- Sewing Lv 1 <-- Sewing lv 1, Master Tailor Guidebook, 10 Water of Fire, 10 Sanctified Fabric
-310,2469,22,392,1,36042,0,,18175,10,18168,10,36017,20
+310,2469,22,392,1,36042,0,18175,10,18168,10,36017,20
 //-- Crimson Orb <-- Sewing Lv 1 <-- Sewing lv 1, Master Tailor Guidebook, 10 Water of Fire, 10 Sanctified Fabric
-311,2861,22,392,1,36042,0,,18175,10,18168,10,36017,20
+311,2861,22,392,1,36042,0,18175,10,18168,10,36017,20
 //-- Crimson Robe <-- Sewing Lv 1 <-- Sewing lv 1, Master Tailor Guidebook, 10 Water of Fire, 10 Sanctified Fabric
-312,15027,22,392,1,36042,0,,18175,10,18168,10,36017,20
+312,15027,22,392,1,36042,0,18175,10,18168,10,36017,20
 //-- Sanctified Fabric<-- Sewing Lv 1 <-- Sewing lv 1, Master Tailor Guidebook, 10 Stamen, 10 Harpy Feather, 10 Peco Peco Feather
-313,18168,3,392,1,36042,0,36012,10,7101,10,7115,10
+313,18168,22,392,1,36042,0,36012,10,7101,10,7115,10
 
 //-- Crimson Spear <-- Woodcraft lv 1, Master Carpenter Guidebook, 100 Water of Fire, 30 Special Wood, 30 Enchanted Leather, 30 3carat Diamond
 314,1443,3,393,1,36043,0,18175,100,36005,30,36018,30,732,30

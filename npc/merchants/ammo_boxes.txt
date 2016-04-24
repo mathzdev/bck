@@ -21,7 +21,7 @@
 
 alberta,118,157,3	script	Magazine Dealer Kenny::mdk	4_M_01,{
 	mes "[Kenny]";
-	if (BaseJob == Job_Gunslinger) {
+	if (BaseJob == Job_Gunslinger || Class == Job_Rebellion) {
 		mes "Welcome to my Magazine Shop.";
 		mes "As you may know, large numbers";
 		mes "of bullets can be carried more";

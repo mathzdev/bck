@@ -57,7 +57,10 @@ OnCarpintero:
 	setarray .woodcutter[0],36006,36007;
 	for( @i = 0; @i < getarraysize(.woodcutter); @i++ ) {
 		if(getequipid(EQI_ACC_R) == .woodcutter[@i] || getequipid(EQI_ACC_L) == .woodcutter[@i]) {
-			produce 3;
+			if(select("Fabricar Equipo o Armas","Fabricar Madera o Materiales") == 1)
+				produce 3;
+			else
+				produce 22;
 			end;
 		}
 	}
@@ -213,7 +216,7 @@ function	script	Oficio_Check	{
 					break;
 			}
 			return 1;
-		case 12:
+		case 12: // Check Nombre de Oficio
 			switch(getarg(1)) {
 				case 1:
 					return "Minero";
@@ -227,7 +230,7 @@ function	script	Oficio_Check	{
 					return "Carpintero";
 			}
 			end;
-		case 13:
+		case 13: // Check Maestría de Oficio No Dup
 			switch (getarg(1)) {
 				case 1:
 					if( M_Oficio2 == 1 || M_Oficio3 == 1 || M_Oficio4 == 1 || M_Oficio5 == 1)

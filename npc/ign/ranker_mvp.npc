@@ -91,10 +91,14 @@ function	script	mvpd	{
 		dispbottom "Haz obtenido "+getarg(1)+"x MvP Coin, felicidades.";
 		message strcharinfo(0),"[Ranker]: Haz obtenido 1 punto en el Rank MvP.";
 		query_sql("INSERT INTO `char_rank` SET `char_id`='"+getcharid(0)+"',`name`='"+strcharinfo(0)+"',`mvp`='1' ON DUPLICATE KEY UPDATE `mvp`=`mvp`+1");
-		announce "<< [ "+ getarg(0) +" ] ha sido "+.frase$[rand(0,getarraysize(.frase$))]+" por [ "+strcharinfo(0)+" ] >>",bc_all,getarg(2);
+		if(title_mvp == 1)
+			announce "<< [ "+ getarg(0) +" ] ha sido "+.frase$[rand(0,getarraysize(.frase$))]+" por [ "+strcharinfo(0)+" ] >>",bc_all,"0x"+color_mvp$;
+		else
+			announce "<< [ "+ getarg(0) +" ] ha sido "+.frase$[rand(0,getarraysize(.frase$))]+" por [ "+strcharinfo(0)+" ] >>",bc_all,getarg(2);
+		
 		sleep2 2500;
 			if(title_mvp == 1)
-				announce "<< ["+strcharinfo(0)+"]: "+title_mvp$+" >>",bc_all,getarg(2),800,16;
+				announce "<< ["+strcharinfo(0)+"]: "+title_mvp$+" >>",bc_all,"0x"+color_mvp$,800,16;
 			else
 				message strcharinfo(0),"No cuentas con título, elígelo en el Ranker de Prontera para anunciarlo cuando mates un MvP.";
 	end;

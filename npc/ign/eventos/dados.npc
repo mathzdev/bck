@@ -1,0 +1,220 @@
+//======Name========================================
+// Dice Event
+//======Version=====================================
+// 1.2
+//======Author(s)===================================
+// Sandbox and DanielArt
+//======Comments====================================
+// 1.0 In loving memory of AstralRO
+// 1.1 Recoded & Translated to Spanish by DanielArt
+// 1.2 Code Cleaned by DanielArt
+//==================================================
+-	script	DADOS	-1,{
+OnDadosEvt:
+OnWhisperGlobal:
+	donpcevent "dados_npc::OnEnable";
+	announce "¡El Evento de Dados comenzará en 2 minutos, ve a Prontera y habla con el NPC para participar!",bc_all,0x77FF00;
+	sleep2 60000;
+	announce "¡El Evento de Dados comenzará en 1 minuto, ve a Prontera y habla con el NPC para participar!",bc_all,0x77FF00;
+	sleep2 40000;
+	announce "¡El Evento de Dados comenzará en 20 segundos!",bc_all,0x77FF00;
+	sleep2 20000;
+	announce "¡El Evento ha comenzado!",bc_all,0x77FF00;
+	donpcevent "dados_npc::OnDisable";
+	donpcevent "DiceEvent::OnDiceStart";
+	end;
+OnInit:
+	disablenpc "¡Premio!#dice";
+	end;
+}
+prontera,162,175,4	script	Evento de Dados::dados_npc	10110,{
+	mes "[^5533ffEvento de Dados^000000]";
+	mes "¿En qué te puedo ayudar?";
+	while(1) {
+		switch(select("Información sobre el evento:^5533ffParticipar^000000 ["+getmapusers("quiz_02")+"]:^777777Salir^000000")) {
+			case 1:
+				mes "[^5533ffEvento de Dados^000000]";
+				mes "Al entrar al evento, y en cuanto inicie, tendrás que elegir una de las 4 salas.";
+				next;
+				mes "[^5533ffEvento de Dados^000000]";
+				mes "Si la sala que elegiste resulta elegida en la suerte del dado, todos los usuarios dentro de esa sala sobrevivirán.";
+				next;
+				mes "[^5533ffEvento de Dados^000000]";
+				mes "Y se continuará haciendo hasta que quede un usuario en la sala.";
+				next;
+				mes "[^5533ffEvento de Dados^000000]";
+				mes "Si resultas ganador obtendrás un fabuloso premio.";
+				next;
+				break;
+			case 2:
+				mes "[^5533ffEvento de Dados^000000]";
+				mes "De acuerdo, allá vamos.";
+				close2;
+				warp "quiz_02",55,87;
+				end;
+			case 3:
+				mes "[^5533ffEvento de Dados^000000]";
+				mes "Vuelve cuando desees participar.";
+				close;
+		}
+	}
+end;
+OnEnable:
+	enablenpc strnpcinfo(3);
+	waitingroom "Evento Dados",0;
+	end;
+OnDisable:
+	delwaitingroom;
+OnInit:
+	disablenpc strnpcinfo(3);
+	end;
+}
+quiz_02,55,90,3	script	¿Atorado?#dice	779,{
+	mes "[ ¿Atorado? ]";
+	mes "¿Quieres salir del evento?";
+	select("Si, quiero salir");
+	warp "Save",0,0;
+	close;
+}
+
+function	script	F_WarpBox	{
+	switch( getarg(0) ) {
+		case 1:
+			switch ( getarg(1) ) {
+				case 1: warp "quiz_02",37,70; break;
+				case 2: warp "quiz_02",49,70; break;
+				case 3: warp "quiz_02",61,70; break;
+				case 4: warp "quiz_02",73,70; break;
+			}
+			break;
+		case 2:
+			switch ( getarg(1) ) {
+				case 1: warp "quiz_02",55,76; break;
+				case 2: warp "quiz_02",55,76; break;
+				case 3: warp "quiz_02",55,76; break;
+				case 4: warp "quiz_02",55,76; break;
+			}
+			break;
+	}
+	end;
+}
+quiz_02,37,80,3	script	Sala 1#1	111,{ callfunc "F_WarpBox",1,strnpcinfo(2); }
+quiz_02,49,80,3	script	Sala 2#2	111,{ callfunc "F_WarpBox",1,strnpcinfo(2); }
+quiz_02,61,80,3	script	Sala 3#3	111,{ callfunc "F_WarpBox",1,strnpcinfo(2); }
+quiz_02,73,80,3	script	Sala 4#4	111,{ callfunc "F_WarpBox",1,strnpcinfo(2); }
+quiz_02,37,64,3	script	Regresar#1	858,{ callfunc "F_WarpBox",2,strnpcinfo(2); }
+quiz_02,49,64,3	script	Regresar#2	858,{ callfunc "F_WarpBox",2,strnpcinfo(2); }
+quiz_02,61,64,3	script	Regresar#3	858,{ callfunc "F_WarpBox",2,strnpcinfo(2); }
+quiz_02,73,64,3	script	Regresar#4	858,{ callfunc "F_WarpBox",2,strnpcinfo(2); }
+
+
+-	script	DiceEvent	-1,{
+OnDiceStart:
+	mapannounce "quiz_02","Vamos a empezar con el evento de dados.",bc_blue;
+	sleep2 3500:
+	mapannounce "quiz_02","Las reglas son simples:",bc_blue;
+	sleep2 3500:
+	mapannounce "quiz_02","Voy a elegir un número del 1 al 4. Pero antes contaré del 5 al 0.",bc_blue;
+	sleep2 3500:
+	mapannounce "quiz_02","Lo único que tienes que hacer es elegir una de las 4 salas.",bc_blue;
+	sleep2 3500:
+	mapannounce "quiz_02","Por ejemplo, si yo elijo el número 4, todos los jugadores de las salas 1 a la 3 perderán.",bc_blue;
+	sleep2 3500:
+	mapannounce "quiz_02","Lo seguiremos haciendo hasta que quede un usuario en la sala.",bc_blue;
+	sleep2 2000;
+	mapannounce "quiz_02","Antes de continuar, asegúrate estar DENTRO DE LA SALA, si estás fuera de alguna sala serás automáticamente descalificado.",bc_blue;
+	sleep2 2000;
+	mapannounce "quiz_02","Eso es todo... ¡comencemos!",bc_blue;
+	sleep2 3000;
+	while (1) {
+		enablenpc "Regresar#1";
+		enablenpc "Regresar#2";
+		enablenpc "Regresar#3";
+		enablenpc "Regresar#4";
+		enablenpc "Sala 1#1";
+		enablenpc "Sala 2#2";
+		enablenpc "Sala 3#3";
+		enablenpc "Sala 4#4";
+		callsub S_Check;
+		if(getmapusers("quiz_02") > 1) {
+			set .@n,rand(1,4);
+			sleep2 3500:
+			mapannounce "quiz_02","De acuerdo, elegiré un número al azar del 1 al 4.",bc_blue;
+			sleep2 20000;
+			mapannounce "quiz_02","5",bc_blue;
+			sleep2 1500;
+			mapannounce "quiz_02","4",bc_blue;
+			sleep2 1500;
+			mapannounce "quiz_02","3",bc_blue;
+			sleep2 1500;
+			mapannounce "quiz_02","2",bc_blue;
+			sleep2 1500;
+			mapannounce "quiz_02","1",bc_blue;
+			disablenpc "Sala 1#1";
+			disablenpc "Sala 2#2";
+			disablenpc "Sala 3#3";
+			disablenpc "Sala 4#4";
+			disablenpc "Regresar#1";
+			disablenpc "Regresar#2";
+			disablenpc "Regresar#3";
+			disablenpc "Regresar#4";
+			areawarp "quiz_02",32,95,79,76,"prontera",150,180;
+			areawarp "quiz_02",80,85,80,76,"prontera",150,180;
+			areawarp "quiz_02",31,85,31,76,"prontera",150,180;
+			callsub S_Check;
+			set .@n,rand(1,4);
+			sleep2 1000;
+			mapannounce "quiz_02","Se acabo el tiempo,¡el número ganador es "+.@n+"!",bc_blue;
+			if(.@n == 4) {
+				areawarp "quiz_02",33,73,41,52,"prontera",150,180;
+				areawarp "quiz_02",45,73,53,52,"prontera",150,180;
+				areawarp "quiz_02",57,73,65,52,"prontera",150,180;
+			}
+			if(.@n == 3) {
+				areawarp "quiz_02",33,73,41,52,"prontera",150,180;
+				areawarp "quiz_02",45,73,53,52,"prontera",150,180;
+				areawarp "quiz_02",69,73,77,52,"prontera",150,180;
+			}
+			if(.@n == 2) {}
+				areawarp "quiz_02",33,73,41,52,"prontera",150,180;
+				areawarp "quiz_02",57,73,65,52,"prontera",150,180;
+				areawarp "quiz_02",69,73,77,52,"prontera",150,180;
+			}
+			if(.@n == 1) {
+				areawarp "quiz_02",45,73,53,52,"prontera",150,180;
+				areawarp "quiz_02",57,73,65,52,"prontera",150,180;
+				areawarp "quiz_02",69,73,77,52,"prontera",150,180;
+			}
+		}
+		callsub S_check;
+	} // While (Se repite)
+end;
+S_Check:
+	if(getmapusers("quiz_02") < 2) {
+		enablenpc "¡Premio!#dice";
+		end;
+	}
+	if(getmapusers("quiz_02") < 1) {
+		announce "¡Nadie ha ganado el Evento de Dados!",bc_all,0x77FF00;
+		disablenpc "¡Premio!#dice";
+		end;
+	}
+return;
+}
+
+quiz_02,55,84,3	script	¡Premio!#dice	10005,{
+	callfunc "F_Event",1,rand(5,10);
+	announce "¡"+strcharinfo(0)+" ha ganado el Evento de Dados!",bc_all,0x77FF00;
+	disablenpc "¡Premio!#dice";
+	warp "prontera",150,180;
+	close;
+}
+
+quiz_02	mapflag	nowarp
+quiz_02	mapflag	nowarpto
+quiz_02	mapflag	noskill
+quiz_02	mapflag	noteleport
+quiz_02	mapflag	nomemo
+quiz_02	mapflag	nosave	SavePoint
+quiz_02	mapflag	noicewall
+quiz_02	mapflag	noloot

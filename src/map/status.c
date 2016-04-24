@@ -3580,9 +3580,10 @@ int status_calc_pc_(struct map_session_data* sd, enum e_status_calc_opt opt)
 		base_status->hit += skill*2;
 #endif
 	if((skill=pc_checkskill(sd,AC_VULTURE))>0) {
-#ifndef RENEWAL
 		base_status->hit += skill;
-#endif
+		skill -= 2;
+		if(skill < 0)
+			skill = 0;
 		if(sd->status.weapon == W_BOW)
 			base_status->rhw.range += skill;
 	}
@@ -7552,7 +7553,6 @@ int status_get_sc_def(struct block_list *src, struct block_list *bl, enum sc_typ
 			tick_def2 = status->luk*10;
 			break;
 		case SC_DECREASEAGI:
-		case SC_ADORAMUS: // Arch Bishop
 			if (sd)
 				tick >>= 1; // Half duration for players.
 			sc_def = status->mdef*100;
@@ -7564,9 +7564,7 @@ int status_get_sc_def(struct block_list *src, struct block_list *bl, enum sc_typ
 			sc_def = status->agi*50;
 			break;
 		case SC_DEEPSLEEP:
-			sc_def = (sd ? sd->status.int_ : status_get_base_status(bl)->int_) * 50;
-			tick_def = 0; // Linear reduction instead
-			tick_def2 = ((sd ? sd->status.int_ : status_get_base_status(bl)->int_) + status_get_lv(bl)) * 50; // kRO balance update lists this formula
+			tick_def2 = status_get_base_status(bl)->int_ * 25 + status_get_lv(bl) * 50;
 			break;
 		case SC_NETHERWORLD:
 			// Resistance: {(Target's Base Level / 50) + (Target's Job Level / 10)} seconds
@@ -7717,7 +7715,6 @@ int status_get_sc_def(struct block_list *src, struct block_list *bl, enum sc_typ
 		case SC_ANKLE:
 		case SC_BURNING:
 		case SC_MARSHOFABYSS:
-		case SC_DEEPSLEEP:
 			tick = max(tick, 5000); // Minimum duration 5s
 			break;
 		case SC_FREEZING:
@@ -8378,7 +8375,23 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 		status_change_end(bl,SC_OFFERTORIUM,INVALID_TIMER);
 		break;
 	case SC_OFFERTORIUM:
-		status_change_end(bl,SC_MAGNIFICAT,INVALID_TIMER);
+		status_change_end(bl, SC_MAGNIFICAT, INVALID_TIMER);
+		status_change_end(bl, SC_BLIND, INVALID_TIMER);
+		status_change_end(bl, SC_CURSE, INVALID_TIMER);
+		status_change_end(bl, SC_POISON, INVALID_TIMER);
+		status_change_end(bl, SC_HALLUCINATION, INVALID_TIMER);
+		status_change_end(bl, SC_CONFUSION, INVALID_TIMER);
+		status_change_end(bl, SC_BLEEDING, INVALID_TIMER);
+		status_change_end(bl, SC_BURNING, INVALID_TIMER);
+		status_change_end(bl, SC_FREEZING, INVALID_TIMER);
+		status_change_end(bl, SC_MANDRAGORA, INVALID_TIMER);
+		status_change_end(bl, SC_PARALYSE, INVALID_TIMER);
+		status_change_end(bl, SC_PYREXIA, INVALID_TIMER);
+		status_change_end(bl, SC_DEATHHURT, INVALID_TIMER);
+		status_change_end(bl, SC_LEECHESEND, INVALID_TIMER);
+		status_change_end(bl, SC_VENOMBLEED, INVALID_TIMER);
+		status_change_end(bl, SC_TOXIN, INVALID_TIMER);
+		status_change_end(bl, SC_MAGICMUSHROOM, INVALID_TIMER);
 		break;
 	case SC_KYRIE:
 		// Cancels Assumptio
@@ -9218,7 +9231,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			if(val4 == BCT_SELF) {	// Self effect
 				val2 = tick/10000;
 				tick_time = 10000; // [GodLesZ] tick time
-				status_change_clear_buffs(bl,3); // Remove buffs/debuffs
+				status_change_clear_buffs(bl,11); // Remove buffs/debuffs
 			}
 			break;
 
@@ -12922,10 +12935,6 @@ void status_change_clear_buffs (struct block_list* bl, int type)
 			case SC_JAILED:
 			case SC_ANKLE:
 			case SC_BLADESTOP:
-			case SC_CP_WEAPON:
-			case SC_CP_SHIELD:
-			case SC_CP_ARMOR:
-			case SC_CP_HELM:
 			case SC_STRFOOD:
 			case SC_AGIFOOD:
 			case SC_VITFOOD:
@@ -13011,7 +13020,14 @@ void status_change_clear_buffs (struct block_list* bl, int type)
 			case SC_SPRITEMABLE:
 			case SC_BITESCAR:
 				continue;
-
+			// Chemical Protection is only removed by some skills
+			case SC_CP_WEAPON:
+			case SC_CP_SHIELD:
+			case SC_CP_ARMOR:
+			case SC_CP_HELM:
+				if(!(type&8))
+					continue;
+				break;
 			// Debuffs that can be removed.
 			case SC_DEEPSLEEP:
 			case SC_BURNING:

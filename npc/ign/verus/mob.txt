@@ -6,6 +6,13 @@ ver_eju,0,0,0,0	monster	Excavator Robot	3153,20,7600,3600,0,0
 ver_eju,0,0,0,0	monster	Reconociment Robot	3154,3,7600,3600,0,0
 ver_tunn,0,0,0,0	monster	Excavator Robot	3153,3,7600,3600,0,0
 ver_tunn,0,0,0,0	monster	Reconociment Robot	3154,10,7600,3600,0,0
-verus03,0,0,0,0	monster	Repair Robot	3155,40,7600,3600,0,0
-verus03,0,0,0,0	monster	Exploration Robot	3156,40,7600,3600,0,0
+verus03,0,0,0,0	monster	Kick And Kick	3128,50,7600,3600,0,0
+verus03,0,0,0,0	monster	Rock Step	3126,50,7600,3600,0,0
 ver_eju,0,0,0,0	monster	Venatu	1678,20,76000,36000,0,0
+verus02,0,0,0,0	monster	Repair Robot	3155,40,7600,3600,0,0
+verus02,0,0,0,0	monster	Exploration Robot	3156,40,7600,3600,0,0
+verus02,0,0,0,0	monster	Excavator Robot	3153,30,7600,3600,0,0
+verus01,0,0,0,0	monster	Repair Robot	3155,120,7600,3600,0,0
+verus01,0,0,0,0	monster	Exploration Robot	3156,70,7600,3600,0,0
+verus01,0,0,0,0	monster	Excavator Robot	3153,40,7600,3600,0,0
+verus01,0,0,0,0	monster	Reconociment Robot	3154,40,7600,3600,0,0

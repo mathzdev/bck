@@ -277,4 +277,4 @@ GN_HELLS_PLANT_ATK,2 // Dummy skil for Hell's Plant
 GN_ILLUSIONDOPING,2  // Illusion Doping
 
 // Kagerou/Oboro
-KO_MUCHANAGE,3   // Rapid Throw
+KO_MUCHANAGE,7   // Rapid Throw

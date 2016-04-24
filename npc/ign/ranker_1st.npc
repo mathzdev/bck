@@ -1,0 +1,22 @@
+-	script	OnPrice	-1,{
+OnPCLoginEvent:
+	if(PR_RANK_20160413 > 0)
+		end;
+	switch (getcharid(0)) {
+		case 162891: break;
+		case 162738: break;
+		case 162645: break;
+		case 162682: break;
+		case 162784: break;
+		default:
+			end;
+	}
+	mes "Felicidades, haz ganado un premio por haber quedado en primer lugar en uno de los ranking.";
+	next;
+	mes "El premio que recibas a continuación es totalmente al azar.";
+	set .@p,rand(2,4);
+	getitem (18620+.@p),1;
+	set PR_RANK_20160413,1;
+	close;
+end;
+}

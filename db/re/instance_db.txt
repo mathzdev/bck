@@ -30,3 +30,4 @@
 25,Isle of Bios,3600,1@dth1,20,93,1@dth1,1@dth2,1@dth3
 26,Geffen Magic Tournament,7200,1@gef,119,108,1@gef,1@ge_st
 27,Eclage Interior,1200,1@ecl,60,50,1@ecl
+28,Refine Room,7200,aev_fild,142,230,aev_fild

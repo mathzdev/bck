@@ -45,3 +45,15 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+1
+*.pid
+*.pid
+*.o
+3rdparty/libconfig/obj/libconfig.a
+3rdparty/libconfig/Makefile
+3rdparty/mt19937ar/Makefile
+*.o
+*.log
+config.status
+*.cmake

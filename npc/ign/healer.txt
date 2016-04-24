@@ -2,12 +2,14 @@ prontera,161,186,4	script	Healer	749,{
 if(healdelay < gettimetick(2) || healdelay == 0){
 	emotion e_hp;
 	percentheal 100,100;
+	sc_start SC_INCREASEAGI,240000,3;
+	sc_start SC_BLESSING,240000,3;
 	specialeffect2 312,1;
 	specialeffect2 363,1;
-	set healdelay, gettimetick(2) + 3;
+	set healdelay, gettimetick(2) + 5;
 	end;
 }
-	dispbottom "[Healer] Por favor espera 3 segundos antes de curarte de nuevo.";
+	dispbottom "[Healer] Por favor espera 5 segundos antes de curarte de nuevo.";
 	end;
 }
 alberta,41,252,4	duplicate(Healer)	Healer#02	749

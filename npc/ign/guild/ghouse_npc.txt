@@ -1,4 +1,4 @@
-renting1,18,23,4	itemshop	Mercader Secuestrado::m01	10018,18174:0,36024:400,36032:400,36037:400,36000:5,36010:5,36015:5,35067:8000,35065:8000,35066:8000,35046:1000,35025:100
+renting1,18,23,4	itemshop	Mercader Secuestrado::m01	10018,18174:0,36024:400,36032:400,36037:400,36000:5,36010:5,36015:5,35067:8000,35065:8000,35066:8000,28010:15000,35046:1000,35025:100
 renting1,23,23,3	duplicate(kaf_pro)	Kafra Employee#esGH01	117
 renting1,25,13,4	duplicate(Healer)	Healer#esGH01	749
 renting1,12,23,4	script	Música de Fondo::bgm_s	837,{
@@ -12,12 +12,32 @@ renting1,12,23,4	script	Música de Fondo::bgm_s	837,{
 	close;
 }
 
-rentinb15,14,23,4	itemshop	Mercader Secuestrado::m02	10018,18174:0,36024:400,36032:400,36037:400,36000:5,36010:5,36015:5,35067:8000,35065:8000,35066:8000,35046:1000,35025:100
+rentinb15,14,23,4	itemshop	Mercader Secuestrado::m02	10018,18174:0,36024:400,36032:400,36037:400,36000:5,36010:5,36015:5,35067:8000,35065:8000,35066:8000,28010:15000,35046:1000,35025:100
 rentinb15,11,23,4	duplicate(kaf_pro)	Kafra Employee#esGH02	117
 rentinb15,8,23,4	duplicate(Healer)	Healer#esGH02	749
 rentinb15,19,17,4	duplicate(bgm_s)	Música de Fondo#02	837
 
-rentinb5,14,23,4	itemshop	Mercader Secuestrado::m03	10018,18174:0,36024:400,36032:400,36037:400,36000:5,36010:5,36015:5,35067:8000,35065:8000,35066:8000,35046:1000,35025:100
+rentinb5,14,23,4	itemshop	Mercader Secuestrado::m03	10018,18174:0,36024:400,36032:400,36037:400,36000:5,36010:5,36015:5,35067:8000,35065:8000,35066:8000,28010:15000,35046:1000,35025:100
 rentinb5,11,23,4	duplicate(kaf_pro)	Kafra Employee#esGH03	117
 rentinb5,8,23,4	duplicate(Healer)	Healer#esGH03	749
 rentinb5,19,17,4	duplicate(bgm_s)	Música de Fondo#03	837
+
+renting21,18,23,4	itemshop	Mercader Secuestrado::m03	10018,18174:0,36024:400,36032:400,36037:400,36000:5,36010:5,36015:5,35067:8000,35065:8000,35066:8000,28010:15000,35046:1000,35025:100
+renting21,23,23,3	duplicate(kaf_pro)	Kafra Employee#esGH03	117
+renting21,25,13,4	duplicate(Healer)	Healer#esGH03	749
+renting21,12,23,4	duplicate(bgm_s)	Música de Fondo#03	837
+
+rentind10,21,32,5	itemshop	Mercader Secuestrado::m04	10018,18174:0,36024:400,36032:400,36037:400,36000:5,36010:5,36015:5,35067:8000,35065:8000,35066:8000,28010:15000,35046:1000,35025:100
+rentind10,19,32,5	duplicate(kaf_pro)	Kafra Employee#esGH04	117
+rentind10,17,32,5	duplicate(Healer)	Healer#esGH04	749
+rentind10,29,27,4	duplicate(bgm_s)	Música de Fondo#04	837
+
+rentind14,21,32,5	itemshop	Mercader Secuestrado::m05	10018,18174:0,36024:400,36032:400,36037:400,36000:5,36010:5,36015:5,35067:8000,35065:8000,35066:8000,28010:15000,35046:1000,35025:100
+rentind14,19,32,5	duplicate(kaf_pro)	Kafra Employee#esGH05	117
+rentind14,17,32,5	duplicate(Healer)	Healer#esGH05	749
+rentind14,29,27,4	duplicate(bgm_s)	Música de Fondo#05	837
+
+rentinc16,23,31,3	itemshop	Mercader Secuestrado::m06	10018,18174:0,36024:400,36032:400,36037:400,36000:5,36010:5,36015:5,35067:8000,35065:8000,35066:8000,28010:15000,35046:1000,35025:100
+rentinc16,23,29,3	duplicate(kaf_pro)	Kafra Employee#esGH06	117
+rentinc16,23,27,3	duplicate(Healer)	Healer#esGH06	749
+rentinc16,23,25,3	duplicate(bgm_s)	Música de Fondo#06	837

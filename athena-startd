@@ -1,0 +1,98 @@
+#!/bin/sh
+# athena starting script by rowla
+# modified by shazeya@syafi.com (NL101541)
+
+PATH=./:$PATH
+path2=$(pwd)
+
+L_SRV=login-server
+C_SRV=char-server
+M_SRV=map-server
+
+print_start() {
+#    more << EOF
+echo "Athena Starting..."
+echo "            (c) 2003 Athena Project"
+echo "              modified by shazeya@syafi.com"
+echo ""
+#echo "Debug informations will appear,"
+#echo "since this is a test release."
+#echo ""
+echo "checking..."
+#EOF
+}
+
+check_files() {
+
+    for i in ${L_SRV} ${C_SRV} ${M_SRV}
+    do
+        if [ ! -f ./$i ]; then
+            echo "$i does not exist, or can't run."
+            echo "Stop. Check your compile."
+            exit 1;
+        fi
+    done
+
+#    more << EOF
+echo "Check complete."
+echo "Looks good, a nice Athena!"
+#EOF
+}
+    
+
+case $1 in
+    'start')
+        print_start
+        check_files
+        screen -dmS -t $L_SRV ./${L_SRV}&
+        screen -dmS -t $C_SRV ./${C_SRV}&
+        screen -dmS -t $M_SRV ./${M_SRV}&
+        echo "Now Started Athena."
+;;
+
+    'startd')
+	print_start
+	check_files
+	screen -dmS -t $L_SRV ./${L_SRV}&
+	screen -dmS -t $C_SRV ./${C_SRV}&
+	screen -dmS -t $M_SRV gdb -ex run ./${M_SRV}&
+	echo "Now Started Athena in debug mode."
+;;
+
+    'start3')
+	print_start
+	check_files
+	exec ./${L_SRV}&
+	exec ./${C_SRV}&
+	exec ./${M_SRV}&
+	echo "Now Started Athena."
+;;
+
+   'start4')
+        print_start
+        check_files
+        exec ./${L_SRV}&
+        exec ./${C_SRV}&
+        echo "Now Started Athena in debug mode (for ide gdb)."
+;;
+
+    'stop')
+		login_pid=$(ls -la /proc/*/exe 2>1 | grep "$(pwd)" | grep -oe "/proc/[0-9]*/exe" | grep -oe "[0-9]*")
+		char_pid=$(ls -la /proc/*/exe 2>1 | grep "${path}char-server_sql" | grep -oe "/proc/[0-9]*/exe" | grep -oe "[0-9]*")
+		map_pid=$(ls -la /proc/*/exe 2>1 | grep "${path}map-server_sql" | grep -oe "/proc/[0-9]*/exe" | grep -oe "[0-9]*")
+        kill -INT $login_pid $char_pid $map_pid
+;;
+    'restart')
+	$0 stop
+	while [ ! -z $(ls -la /proc/*/exe 2>1 | grep "${path2}/${M_SRV}" | grep -oe "/proc/[0-9]*/exe" | grep -oe "[0-9]*") ] 
+	do
+		sleep 2s
+		echo "Map is running waiting terminating"
+				
+	done       
+        $0 start
+;;
+    *)
+        echo "Usage: athena-start { stop | restart | start | startd | start3 | start4 }"
+;;
+esac

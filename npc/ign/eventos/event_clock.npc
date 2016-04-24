@@ -11,37 +11,37 @@ OnMinute50:
 				//Busca Poring
 				donpcevent "BUSCAPO::OnBuscaPoring";
 				break;
-			case 11:
-			case 12:
+			case 2:
 				//Last-Man Standing
 				donpcevent "LASTMAN::OnLastMan";
 				break;
-			case 2:
-			case 8:
+			case 3:
 				//Emperium Break
 				donpcevent "EMP::OnEmpeBreak";
 				break;
-			case 3:
+			case 4:
 				//Pesca Alberta
 				donpcevent "PESCALBE::OnPescaAlberta";
 				break;
-			case 4:
-			case 9:
+			case 5:
 				//Guerra Explosiva
 				donpcevent "EXPLOWAR::OnExploWar";
 				break;
-			case 5:
+			case 6:
 				//Cuenta Hongos
 				donpcevent "CUENT::OnCuentaHongos";
 				break;
-			case 6:
+			case 7:
 				//Atrapa la Masa
 				donpcevent "RICEVT::OnAtrapaMasa";
 				break;
-			case 7:
-			case 10:
+			case 8:
 				//Novice vs Zombies
 				donpcevent "announce_nvz::OnNoviceZombie";
+				break;
+			case 9:
+				//Dados
+				donpcevent "DADOS::OnDadosEvt";
 				break;
 		}
 	}

@@ -3792,6 +3792,7 @@ mora,114,79,0	script	Black Shadow#ep14_muk	844,{
 					if (checkweight(6380,1) == 0) {
 						mes "While you were checking the body of the unidentified creature, your fingers touch something. You got lucky, but due to your heavy load you failed to obtain a ^0000FF Mora Coin^000000.";
 						set ep14_1_goki, ep14_1_goki+1;
+						ep14_1_muk = 6;
 						setquest 5029;
 						close2;
 						donpcevent "Black Shadow#ep14_muk::OnDisable";
@@ -3799,6 +3800,7 @@ mora,114,79,0	script	Black Shadow#ep14_muk	844,{
 					}
 					mes "While you were checking the body of the unidentified creature, your fingers touch something. Lucky. Obtained a ^0000FF Mora Coin^000000.";
 					set ep14_1_goki, ep14_1_goki+1;
+					ep14_1_muk = 6;
 					getitem 6380,1; //Mora_Coin
 					setquest 5029;
 					next;

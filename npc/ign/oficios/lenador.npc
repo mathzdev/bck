@@ -163,12 +163,12 @@ function	script	F_WoodCutting	{
 		mes "Necesito una hacha para cortar ésto.";
 		close;
 	}
-	S_continue:
+S_continue:
 	setarray .NormalWood[0],1019,6008,36000;
-	setarray .AdvancedWood[0],6787,6553,7189,36001;
-	setarray .ExpertWood[0],7222,36002,36003;
-	setarray .MasterWood[0],36004,36005,36016;
-	setarray .LegendaryWood[0],36008,36009,36016;
+	setarray .AdvancedWood[0],36001,36000,7222,1019,6008;
+	setarray .ExpertWood[0],7222,36002,36003,1019,6008;
+	setarray .MasterWood[0],36004,36005,36016,1019,6008;
+	setarray .LegendaryWood[0],36008,36009,36016,1019,6008;
 	setarray .RankLen$[0],"Aprendiz","Versado","Experto","Maestro","Legendario";
 	if(!LenLv)
 		set LenLv,0;
@@ -179,7 +179,7 @@ function	script	F_WoodCutting	{
 				set LenLv,LenLv + 1;
 				message strcharinfo(0),"¡Felicidades haz subido a Leñador "+.RankLen$[LenLv]+"!";
 			}
-			close2;return;end;
+			close2; return;
 		case 2:
 			if(LenExp < 500) {
 				mes "^777777No tengo la experiencia necesaria.^000000";
@@ -190,7 +190,7 @@ function	script	F_WoodCutting	{
 				set LenLv,LenLv + 1;
 				message strcharinfo(0),"¡Felicidades haz subido a Leñador "+.RankLen$[LenLv]+"!";
 			}
-			close2;return;end;
+			close2; return;
 		case 3:
 			if(LenExp < 2000) {
 				mes "^777777No tengo la experiencia necesaria.^000000";
@@ -201,7 +201,7 @@ function	script	F_WoodCutting	{
 				set LenLv,LenLv + 1;
 				message strcharinfo(0),"¡Felicidades haz subido a Leñador "+.RankLen$[LenLv]+"!";
 			}
-			close2;return;end;
+			close2; return;
 		case 4:
 			if(LenExp < 5000) {
 				mes "^777777No tengo la experiencia necesaria.^000000";
@@ -212,7 +212,7 @@ function	script	F_WoodCutting	{
 				set LenLv,LenLv + 1;
 				message strcharinfo(0),"¡Felicidades haz subido a Leñador "+.RankLen$[LenLv]+"!";
 			}
-			close2;return;end;
+			close2; return;
 		case 5:
 			if(LenExp < 10000) {
 				mes "^777777No tengo la experiencia necesaria.^000000";
@@ -220,7 +220,7 @@ function	script	F_WoodCutting	{
 			}
 			specialeffect2 68;
 			callsub S_WoodCut,getarg(0);
-			close2;return;end;
+			close2; return;
 	}
 	close;
 S_WoodCut:
@@ -329,56 +329,56 @@ break3:
 }
 
 // Madera Normal
-prt_fild08,182,361,4	script	Madera Normal#001	10026,{ callfunc "F_WoodCutting",1,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
-prt_fild08,196,363,4	script	Madera Normal#002	10026,{ callfunc "F_WoodCutting",1,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
-prt_fild08,219,355,4	script	Madera Normal#003	10026,{ callfunc "F_WoodCutting",1,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
-prt_fild08,207,344,4	script	Madera Normal#004	10026,{ callfunc "F_WoodCutting",1,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
-prt_fild08,145,370,4	script	Madera Normal#005	10026,{ callfunc "F_WoodCutting",1,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
-prt_fild08,135,396,4	script	Madera Normal#006	10026,{ callfunc "F_WoodCutting",1,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
-prt_fild08,134,346,4	script	Madera Normal#007	10026,{ callfunc "F_WoodCutting",1,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+prt_fild08,182,361,4	script	Madera Normal#001	10026,{ callfunc "F_WoodCutting",1,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
+prt_fild08,196,363,4	script	Madera Normal#002	10026,{ callfunc "F_WoodCutting",1,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
+prt_fild08,219,355,4	script	Madera Normal#003	10026,{ callfunc "F_WoodCutting",1,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
+prt_fild08,207,344,4	script	Madera Normal#004	10026,{ callfunc "F_WoodCutting",1,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
+prt_fild08,145,370,4	script	Madera Normal#005	10026,{ callfunc "F_WoodCutting",1,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
+prt_fild08,135,396,4	script	Madera Normal#006	10026,{ callfunc "F_WoodCutting",1,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
+prt_fild08,134,346,4	script	Madera Normal#007	10026,{ callfunc "F_WoodCutting",1,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
 
 // Madera Avanzada
-pay_fild01,314,316,4	script	Madera Avanzada#001	10026,{ callfunc "F_WoodCutting",2,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
-pay_fild01,318,335,4	script	Madera Avanzada#002	10026,{ callfunc "F_WoodCutting",2,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
-pay_fild01,310,343,4	script	Madera Avanzada#003	10026,{ callfunc "F_WoodCutting",2,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
-pay_fild01,336,273,4	script	Madera Avanzada#004	10026,{ callfunc "F_WoodCutting",2,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
-pay_fild01,357,225,4	script	Madera Avanzada#005	10026,{ callfunc "F_WoodCutting",2,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
-pay_fild01,362,228,4	script	Madera Avanzada#006	10026,{ callfunc "F_WoodCutting",2,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
-pay_fild01,367,238,4	script	Madera Avanzada#007	10026,{ callfunc "F_WoodCutting",2,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+pay_fild01,314,316,4	script	Madera Avanzada#001	10026,{ callfunc "F_WoodCutting",2,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
+pay_fild01,318,335,4	script	Madera Avanzada#002	10026,{ callfunc "F_WoodCutting",2,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
+pay_fild01,310,343,4	script	Madera Avanzada#003	10026,{ callfunc "F_WoodCutting",2,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
+pay_fild01,336,273,4	script	Madera Avanzada#004	10026,{ callfunc "F_WoodCutting",2,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
+pay_fild01,357,225,4	script	Madera Avanzada#005	10026,{ callfunc "F_WoodCutting",2,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
+pay_fild01,362,228,4	script	Madera Avanzada#006	10026,{ callfunc "F_WoodCutting",2,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
+pay_fild01,367,238,4	script	Madera Avanzada#007	10026,{ callfunc "F_WoodCutting",2,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
 
 // Madera Experta
-yuno_fild01,182,59,4	script	Madera Experta#001	10026,{ callfunc "F_WoodCutting",3,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
-yuno_fild01,183,67,4	script	Madera Experta#002	10026,{ callfunc "F_WoodCutting",3,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
-yuno_fild01,193,72,4	script	Madera Experta#003	10026,{ callfunc "F_WoodCutting",3,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
-yuno_fild01,183,77,4	script	Madera Experta#004	10026,{ callfunc "F_WoodCutting",3,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
-yuno_fild01,211,120,4	script	Madera Experta#005	10026,{ callfunc "F_WoodCutting",3,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
-yuno_fild01,211,101,4	script	Madera Experta#006	10026,{ callfunc "F_WoodCutting",3,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
-yuno_fild01,213,131,4	script	Madera Experta#007	10026,{ callfunc "F_WoodCutting",3,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
-yuno_fild01,223,140,4	script	Madera Experta#008	10026,{ callfunc "F_WoodCutting",3,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+yuno_fild01,182,59,4	script	Madera Experta#001	10026,{ callfunc "F_WoodCutting",3,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
+yuno_fild01,183,67,4	script	Madera Experta#002	10026,{ callfunc "F_WoodCutting",3,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
+yuno_fild01,193,72,4	script	Madera Experta#003	10026,{ callfunc "F_WoodCutting",3,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
+yuno_fild01,183,77,4	script	Madera Experta#004	10026,{ callfunc "F_WoodCutting",3,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
+yuno_fild01,211,120,4	script	Madera Experta#005	10026,{ callfunc "F_WoodCutting",3,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
+yuno_fild01,211,101,4	script	Madera Experta#006	10026,{ callfunc "F_WoodCutting",3,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
+yuno_fild01,213,131,4	script	Madera Experta#007	10026,{ callfunc "F_WoodCutting",3,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
+yuno_fild01,223,140,4	script	Madera Experta#008	10026,{ callfunc "F_WoodCutting",3,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
 
 // Madera Maestra
-hu_fild06,115,292,4	script	Madera Maestra#001	10026,{ callfunc "F_WoodCutting",4,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
-hu_fild06,124,296,4	script	Madera Maestra#002	10026,{ callfunc "F_WoodCutting",4,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
-hu_fild06,124,280,4	script	Madera Maestra#003	10026,{ callfunc "F_WoodCutting",4,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
-hu_fild06,117,268,4	script	Madera Maestra#004	10026,{ callfunc "F_WoodCutting",4,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
-hu_fild06,103,260,4	script	Madera Maestra#005	10026,{ callfunc "F_WoodCutting",4,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
-hu_fild06,104,269,4	script	Madera Maestra#006	10026,{ callfunc "F_WoodCutting",4,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
-hu_fild06,128,258,4	script	Madera Maestra#007	10026,{ callfunc "F_WoodCutting",4,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end;  }
+hu_fild06,115,292,4	script	Madera Maestra#001	10026,{ callfunc "F_WoodCutting",4,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
+hu_fild06,124,296,4	script	Madera Maestra#002	10026,{ callfunc "F_WoodCutting",4,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
+hu_fild06,124,280,4	script	Madera Maestra#003	10026,{ callfunc "F_WoodCutting",4,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
+hu_fild06,117,268,4	script	Madera Maestra#004	10026,{ callfunc "F_WoodCutting",4,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
+hu_fild06,103,260,4	script	Madera Maestra#005	10026,{ callfunc "F_WoodCutting",4,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
+hu_fild06,104,269,4	script	Madera Maestra#006	10026,{ callfunc "F_WoodCutting",4,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
+hu_fild06,128,258,4	script	Madera Maestra#007	10026,{ callfunc "F_WoodCutting",4,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end;  }
 
 // Madera Legendaria
-yuno_fild01,175,84,4	script	Madera Legendaria#001	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
-hu_fild06,139,244,4	script	Madera Legendaria#002	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
-mjolnir_06,246,281,4	script	Madera Legendaria#003	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
-odin_tem01,364,268,4	script	Madera Legendaria#004	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
-odin_tem01,354,257,4	script	Madera Legendaria#005	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
-odin_tem01,308,280,4	script	Madera Legendaria#006	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
-ra_fild03,190,271,4	script	Madera Legendaria#007	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
-ra_fild03,193,282,4	script	Madera Legendaria#008	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
-gef_fild09,279,195,4	script	Madera Legendaria#009	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
-gef_fild09,284,198,4	script	Madera Legendaria#010	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
-gef_fild09,273,204,4	script	Madera Legendaria#011	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
-pay_fild10,174,355,4	script	Madera Legendaria#012	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
-pay_fild10,185,335,4	script	Madera Legendaria#013	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
-pay_fild10,237,325,4	script	Madera Legendaria#014	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
-pay_fild10,208,297,4	script	Madera Legendaria#015	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: hideonnpc strnpcinfo(0); sleep2 1800000; hideoffnpc strnpcinfo(0); end; }
+yuno_fild01,175,84,4	script	Madera Legendaria#001	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end; }
+hu_fild06,139,244,4	script	Madera Legendaria#002	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end; }
+mjolnir_06,246,281,4	script	Madera Legendaria#003	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end; }
+odin_tem01,364,268,4	script	Madera Legendaria#004	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end; }
+odin_tem01,354,257,4	script	Madera Legendaria#005	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end; }
+odin_tem01,308,280,4	script	Madera Legendaria#006	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end; }
+ra_fild03,190,271,4	script	Madera Legendaria#007	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end; }
+ra_fild03,193,282,4	script	Madera Legendaria#008	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end; }
+gef_fild09,279,195,4	script	Madera Legendaria#009	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end; }
+gef_fild09,284,198,4	script	Madera Legendaria#010	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end; }
+gef_fild09,273,204,4	script	Madera Legendaria#011	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end; }
+pay_fild10,174,355,4	script	Madera Legendaria#012	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end; }
+pay_fild10,185,335,4	script	Madera Legendaria#013	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end; }
+pay_fild10,237,325,4	script	Madera Legendaria#014	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end; }
+pay_fild10,208,297,4	script	Madera Legendaria#015	10026,{ callfunc "F_WoodCutting",5,strnpcinfo(0); OnInit: disablenpc strnpcinfo(0); sleep2 1800000; enablenpc strnpcinfo(0); end; }
 

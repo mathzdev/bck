@@ -1,0 +1,90 @@
+prt_in,59,62,4	script	Refine Room	412,{
+	cutin "ins_cata_pri_n",2;
+	.@n$ = "[^3355FF Refine Room ^000000]";
+	.@party_id = getcharid(1);
+	.@p_name$ = getpartyname(.@party_id);
+	.@instance$ = "Refine Room";
+
+		if (getcharid(0) == getpartyleader(.@party_id,2)) {
+		mes .@n$;
+		mes "¿Quieres acceder a la sala de refinado?.";
+		mes "Lo haré por dos horas, pero recuerda que cuando desaparezca, todo lo hará..";
+			next;
+			switch(select("Rentar sala de refinado:Entrar a la Sala:Cancelar")) {
+			case 1:
+				if (instance_create(.@instance$) < 0) {
+					mes .@n$;
+					mes "Party Name: "+.@p_name$;
+					mes "Party Leader: "+strcharinfo(0);
+					mes "^0000ff"+.@instance$+" ^000000-";
+					mes "¡La reservación ha fallado!";
+					close2; cutin "",255; end;
+				}
+				mes .@n$;
+				mes "Habla conmigo nuevamente, la sala ha sido reservada.";
+				close2; cutin "",255; end;
+			case 2:
+				callsub L_Enter,0,1;
+			case 3:
+				mes .@n$;
+				mes "Ten un buen día.";
+				close2; cutin "",255; end;
+			}
+		}
+		if(getcharid(1) < 1) {
+			mes .@n$;
+			mes "Hola, conmigo podrás reservar una sala exclusiva para tu party.";
+			next;
+			mes .@n$;
+			mes "Para poder hacerlo necesito que tu lider de party me hable, o que tú crees una party.";
+			close2;
+			cutin "",255;
+			end;
+		}
+		mes .@n$;
+		mes "De acuerdo, estás en una party, recuerda que sólo podrás entrar si el lider de tu party ya ha hecho una reservación conmigo.";
+		next;
+		switch(select("Entrar a la sala:Cancelar")) {
+		case 1:
+			callsub L_Enter,1,1;
+		case 2:
+			mes .@n$;
+			mes "Ten un buen día.";
+			end;
+		}
+		
+L_Enter:
+	.@n$ = "[^3355FF Refine Room ^000000]";
+	switch(instance_enter("Refine Room")) {
+	case 3:
+		mes .@n$;
+		mes "No estás en una party.";
+		close2; cutin "",255; end;
+	case 2:
+		mes .@n$;
+		mes "La sala no ha sido reservada.";
+		close2; cutin "",255; end;
+	case 1:
+		mes .@n$;
+		mes "Sólo podrás entrar a la sala después de haber hecho una reservación.";
+		close2; cutin "",255; end;
+	case 0:
+		//warp instance
+		end;
+	}
+}
+//==================================================================================
+//--------|Map Flags|---------------------------------------------------------------
+//==================================================================================
+aev_fild,141,239,4	duplicate(Yuhra)	Yuhra#ins	10079
+aev_fild,137,235,4	duplicate(Suhnbi#cash)	Suhnbi#ins	85
+aev_fild,145,235,4	duplicate(Hollgrehenn)	Hollgrehenn#ins	85
+aev_fild,147,238,4	duplicate(MightyHammer)	Mighty Hammer#ins	86
+aev_fild,150,238,4	duplicate(Vestri#prt)	Vestri#ins	87
+aev_fild	mapflag	monster_noteleport
+aev_fild	mapflag	nowarpto
+aev_fild	mapflag	nomemo
+aev_fild	mapflag	noteleport
+aev_fild	mapflag	nosave	SavePoint
+aev_fild	mapflag	nopenalty
+aev_fild	mapflag	pvp	on

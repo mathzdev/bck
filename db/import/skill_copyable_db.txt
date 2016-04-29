@@ -49,4 +49,5 @@
 // CR_ACIDDEMONSTRATION,3,10
 //	Acid Demonstration can only be copied by Stalker/Trans. Shadow Chaser with Plagiarism or Reproduce.
 //	This mode simulates the previous battle config, which allowed only Trans. classes to copy Trans. skills.
-
+// Kagerou/Oboro
+KO_MUCHANAGE,3       // Rapid Throw

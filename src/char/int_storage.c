@@ -398,6 +398,7 @@ int mapif_parse_itembound_retrieve(int fd)
 	SqlStmt_Free(stmt);
 
 	char_unset_session_flag(account_id, 1);
+	mapif_itembound_ack(fd,account_id,guild_id);
 	return 0;
 }
 #endif

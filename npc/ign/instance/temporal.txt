@@ -113,7 +113,7 @@ function temporal_slot;
 		mes .n$;
 		mes "Pero ahora no necesito sólo energía, ahora necesitamos hechizos.";
 		next;
-		switch((cardscnt()-1)) {
+		switch((cardscnt(EQI_SHOES)-1)) {
 			case 0: set .@rc,1; break;
 			case 1: set .@rc,4; break;
 			case 2: set .@rc,15; break;
@@ -125,7 +125,7 @@ function temporal_slot;
 		}
 		setarray .no$[0],"er","ndo","ero","to";
 		mes .n$;
-		mes "De acuerdo, vamos a encantar el ^ff7070"+(cardscnt())+(.no$[(cardscnt()-1)])+" slot^000000 de tus botas.";
+		mes "De acuerdo, vamos a encantar el ^ff7070"+(cardscnt(EQI_SHOES))+(.no$[(cardscnt(EQI_SHOES)-1)])+" slot^000000 de tus botas.";
 		next;
 		mes .n$;
 		mes "Para hacer un encantamiento a tus botas deberás de darme "+.@rc+" ^5533FFCoagulated Spell^000000.";
@@ -135,7 +135,7 @@ function temporal_slot;
 			mes "Sin ^5533FFCoagulated Spell^000000 necesarias, no puedo hacer ningún encantamiento.";
 			close2; cutin "",255; end;
 		}
-		switch((cardscnt()-1)) {
+		switch((cardscnt(EQI_SHOES)-1)) {
 			case 0: setarray .@ench[0],4808,4832,4814,4741,4869,4752; break;
 			case 1: setarray .@ench[0],4820,4833,4813,4742,4872,4753; break;
 			case 2: setarray .@ench[0],4821,4834,4812,4861,4873,4754; break;
@@ -147,7 +147,7 @@ function temporal_slot;
 		}
 		delitem 6608,.@rc;
 		setarray .@enc[0],getequipid(EQI_SHOES),1,1,getequiprefinerycnt(EQI_SHOES),0,getequipcardid(EQI_SHOES,0),getequipcardid(EQI_SHOES,1),getequipcardid(EQI_SHOES,2),getequipcardid(EQI_SHOES,3);
-		switch((cardscnt()-1)) {
+		switch((cardscnt(EQI_SHOES)-1)) {
 			case 0:
 				mes .n$;
 				mes "Sólo para tu primer encantamiento te permitiré elegir cuál quieres, adelante.";
@@ -177,7 +177,7 @@ function temporal_slot;
 		end;
 	}
 	function	temporal_slot	{
-		if((cardscnt()-1) > 0) {
+		if((cardscnt(EQI_SHOES)-1) > 0) {
 			mes .n$;
 			mes "Lo siento pero no puedo perforar si tiene encantamientos.";
 			close2;

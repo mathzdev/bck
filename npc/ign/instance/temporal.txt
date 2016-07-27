@@ -1,14 +1,38 @@
-glast_01,0,2,0	itemshop	TEMPORAL_BOOTS	139,6607:0,2499:15
+//===== rAthena Script ======================================= 
+//= Temporal Boots NPC
+//===== By: ================================================== 
+//= DanielArt
+//===== Current Version: ===================================== 
+//= 2.3
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Based on kRO Wiki.
+//===== Additional Comments: ================================= 
+//= 1.0 First version. [DanielArt]
+//= 1.1 Added new enchants. [DanielArt]
+//= 1.2 New function to slot boots. [DanielArt]
+//= 1.3 Optimized slot func. [Cherry]
+//= 1.4 New enchants items. [DanielArt]
+//= 1.5 Minor fix update. [Ezyo]
+//= 2.0 Full Script Recoded. [DanielArt]
+//= 2.1 New Script Functions for Slot and Enchant. [DanielArt]
+//= 2.2 New Enchant System. [DanielArt]
+//= 2.3 Add new enchants for 3rd slot. [DanielArt]
+//============================================================ 
+glast_01,0,2,0	itemshop	TEMPORAL_BOOTS	139,6007:0,2499:15
 glast_01,213,269,4	script	Hugin's Butler::TemporalBoots	684,{
-cutin "sara_elder_irine1",2;
+cutin .c$,.d[0];
 disable_items;
+// ==== Scripts Functions ====
 function temporal_enchant;
 function temporal_slot;
-	set .n$,"[ ^cc6600Hugin's Butler^000000 ]";
 	for(.@i = 0; .@i < 11; .@i ++) {
-		if(countitem((22000+.@i)) > 0 || getequipid(EQI_SHOES) == (22000+.@i)) {
+		if(countitem((.d[8]+.@i)) > 0 || getequipid(EQI_SHOES) == (.d[8]+.@i)) {
 			for(.@i = 0; .@i < 5; .@i ++) {
-				if(getequipid(EQI_SHOES) == (22000+.@i)) {
+				if(getequipid(EQI_SHOES) == (.d[8]+.@i)) {
+					if(getequipcardid(EQI_SHOES,3) > 0)
+						temporal_enchant(EQI_SHOES);
 					mes .n$;
 					mes "Al objeto que haz creado puedes añadirle aún más poder.";
 					next;
@@ -22,16 +46,18 @@ function temporal_slot;
 				}
 			}
 			for(.@i = 6; .@i < 11; .@i ++) {
-				if(getequipid(EQI_SHOES) == (22000+.@i)) {
+				if(getequipid(EQI_SHOES) == (.d[8]+.@i)) {
 					mes .n$;
 					mes "Lo siento pero a tus botas no le puedo añadir magia ni encantamientos.";
-					close2; cutin "",255; end;
+					close2; cutin .c$,.d[1]; end;
 				} else {
 					mes .n$;
 					mes "Si no traes tus botas encantadas, no podré añadirle más magia.";
-					close2; cutin "",255; end;
+					close2; cutin .c$,.d[1]; end;
 				}
 			}
+			if(getequipcardid(EQI_SHOES,3) > 0)
+				temporal_enchant(EQI_SHOES);
 			mes .n$;
 			mes "Al objeto que haz creado puedes añadirle aún más poder.";
 			next;
@@ -47,54 +73,60 @@ function temporal_slot;
 	mes .n$;
 	mes "Si haz logrado pasar la pesadilla de éste lugar, entonces estás hablando con la persona correcta.";
 	next;
-	if(getequipid(EQI_SHOES) == 2499 && getequiprefinerycnt(EQI_SHOES) >= 7) {
+	if(getequipid(EQI_SHOES) == .d[9] && getequiprefinerycnt(EQI_SHOES) >= 7) {
 		mes .n$;
 		mes "Haz alcanzado un buen nivel de encantamiento.";
 		next;
 		mes .n$;
 		mes "Para poder alcanzar un mayor poder, necesito que me des ^5533ff5 Temporal Crystal^000000.";
 		next;
-		if(countitem(6607) >= 5) {
+		if(countitem(.d[6]) >= 5) {
 			mes .n$;
 			mes "Entonces, por favor dime que clase de poder buscas.";
 			next;
 			set .@s,select("Fuerza (STR):Inteligencia (INT):Agilidad (AGI):Vitalidad (VIT):Precisión (DEX):Suerte (LUK)");
-			set .@i,(22000+.@s)-1;
+			set .@i,(.d[8]+.@s)-1;
 			mes .n$;
 			mes "¿Seguro que deseas obtener ^cc6600"+getitemname(.@i)+"^000000?";
 			if(select("Obtener ^FF0000"+getitemname(.@i)+"^000000","No") == 2) {
-				close2; cutin "",255; end;
+				close2;
+				cutin .c$,.d[1];
+				end;
 			}
 			mes "De acuerdo, dame un momento.";
 			next;
-			if(getequipid(EQI_SHOES) == 2499) {
+			if(getequipid(EQI_SHOES) == .d[9]) {
 				specialeffect 60;
 				sleep2 1000;
 				specialeffect 40;
 				sleep2 1000;
 				specialeffect 154;
 				delequip EQI_SHOES;
-				delitem 6607,5;
+				delitem .d[6],5;
 				getitem .@i,1;
 				mes .n$;
 				mes "El encantamiento ha sido satisfactorio, felicidades.";
 				close2;
-				cutin "",255;
+				cutin .c$,.d[1];
 				emotion e_no1;
 				end;
 			}
 			mes .n$;
 			mes "Si te quitas las botas no puedo trabajar.";
-			close2; cutin "",255; end;
+			close2;
+			cutin .c$,.d[1];
+			end;
 		}
 		mes .n$;
 		mes "Si no cuentas con los cristales, no tengo el suficiente poder para poder hacer el encantamiento.";
-		close2; cutin "",255; end;
+		close2;
+		cutin .c$,.d[1];
+		end;
 	} else {
 		mes .n$;
 		mes "Entonces permíteme darte una oferta...";
 		close2;
-		cutin "",255;
+		cutin .c$,.d[1];
 		callshop "TEMPORAL_BOOTS",1;
 		end;
 	}
@@ -107,92 +139,163 @@ function temporal_slot;
 	mes .n$;
 	mes "Si me entregas las ^5533ffTemporal Boots^000000 a un refinamiento de ^ff0000+7^000000 o mayor, te ayudaré a alcanzar un gran poder.";
 	close2;
-	cutin "",255;
+	cutin .c$,.d[1];
 	end;
+// Encantamiento de Botas
 	function	temporal_enchant	{
 		mes .n$;
 		mes "Pero ahora no necesito sólo energía, ahora necesitamos hechizos.";
 		next;
-		switch((cardscnt(EQI_SHOES)-1)) {
-			case 0: set .@rc,1; break;
-			case 1: set .@rc,4; break;
-			case 2: set .@rc,15; break;
-			case 3: set .@rc,30; break;
+		for(.@i = 0; .@i < getarraysize(.es); .@i++) {
+			if(getequipcardid(EQI_SHOES,2) == .es[.@i]) {
+				mes .n$;
+				mes "Lo siento, pero ya no puedo añadir más encantamientos a tus botas.";
+				close2;
+				cutin .c$,.d[1];
+				emotion e_sry;
+				end;
+			}
+		}
+// == Obtención del Nivel del Enchant
+		for(.@i = 0; .@i < getarraysize(.e1); .@i++) {
+			if(getequipcardid(EQI_SHOES,3) == .e1[.@i])
+				@l = 1;
+			else if(getequipcardid(EQI_SHOES,3) == .e2[.@i])
+				@l = 2;
+			else if(getequipcardid(EQI_SHOES,3) == .e3[.@i])
+				@l = 3;
+			else if(getequipcardid(EQI_SHOES,3) == .e4[.@i])
+				@l = 4;
+			else
+				@l = 0;
+			if(@l > 0)
+				break;
+		}
+// == Obtención de la posición del array del encantamiento actual
+		.@j = .@i;
+		switch(.@l) {
+			case 0:
+				expl:
+				mes .n$;
+				mes "De acuerdo, así que añadirás el primer encantamiento a tus botas, deja te explico un poco.";
+				next;
+				mes .n$;
+				mes "Podrás elegir la fortaleza del encantamiento que quieras, y posteriormente te iré cobrando más por subir ese mismo encantamiento de nivel.";
+				next;
+				mes .n$;
+				mes "El primer encantamiento te costará ^5533ff"+.p[0]+" Coagulated Spell^000000";
+				next;
+				mes .n$;
+				mes "¿Entendiste lo que te dije?";
+				next;
+				if(select("Sí, entendí.","Repítemelo por favor") == 2)
+					goto expl;
+				mes .n$;
+				mes "Perfecto, entonces elige el encantamiento a tus botas.";
+				break;
+			case 1:
+			case 2:
+			case 3:
+				mes .n$;
+				mes "De acuerdo, al parecer quieres convertir tu ^5533ff"+getd(".e"+@l+"["+.@j+"]")+"^000000 a un ^ff8800"+getd(".e"+(@l+1)+"["+.@j+"]")+"^000000, ¿es correcto?";
+				next;
+				if(select("Es correcto.","Salir") == 2) {
+					close2;
+					cutin .c$,.d[1];
+					end;
+				}
+				mes .n$;
+				mes "Para hacer un encantamiento a tus botas deberás de darme "+.p[@l]+" ^5533FFCoagulated Spell^000000.";
+				next;
 			case 4:
 				mes .n$;
-				mes "No puedo ingresar más magia a tus botas.";
-				close2; cutin "",255; end;
+				mes "Bien, a partir de ahora el encantamiento se colocará en tu ^5533ff3er slot^000000 y será un encantamiento totalmente al azar que será muy especial.";
+				next;
+				mes .n$;
+				mes "Éste encantamiento te costará ^000000"+.p[4]+" Coagulated Spell^000000, ¿deseas realizar en encantamiento?";
+				next;
+				if(select("Encantar 3er slot","Salir") == 2) {
+					close2;
+					cutin .c$,.d[1];
+					end;
+				}
+				break;
 		}
-		setarray .no$[0],"er","ndo","ero","to";
-		mes .n$;
-		mes "De acuerdo, vamos a encantar el ^ff7070"+(cardscnt(EQI_SHOES))+(.no$[(cardscnt(EQI_SHOES)-1)])+" slot^000000 de tus botas.";
-		next;
-		mes .n$;
-		mes "Para hacer un encantamiento a tus botas deberás de darme "+.@rc+" ^5533FFCoagulated Spell^000000.";
-		next;
-		if(countitem(6608) < .@rc) {
+		if(countitem(.d[7]) < .p[@l]) {
 			mes .n$;
 			mes "Sin ^5533FFCoagulated Spell^000000 necesarias, no puedo hacer ningún encantamiento.";
-			close2; cutin "",255; end;
+			close2;
+			cutin .c$,.d[1];
+			emotion e_sry;
+			end;
 		}
-		switch((cardscnt(EQI_SHOES)-1)) {
-			case 0: setarray .@ench[0],4808,4832,4814,4741,4869,4752; break;
-			case 1: setarray .@ench[0],4820,4833,4813,4742,4872,4753; break;
-			case 2: setarray .@ench[0],4821,4834,4812,4861,4873,4754; break;
-			case 3: setarray .@ench[0],4822,4835,4826,4862,4881,4755; break;
-			case 4: mes "Error"; close2; cutin "",255; end;
-		}
-		if(select("Encantar","Salir") == 2) {
-			close2; cutin "",255; end;
-		}
-		delitem 6608,.@rc;
+		delitem .d[7],.p[@l];
 		setarray .@enc[0],getequipid(EQI_SHOES),1,1,getequiprefinerycnt(EQI_SHOES),0,getequipcardid(EQI_SHOES,0),getequipcardid(EQI_SHOES,1),getequipcardid(EQI_SHOES,2),getequipcardid(EQI_SHOES,3);
-		switch((cardscnt(EQI_SHOES)-1)) {
+		switch(@l) {
 			case 0:
-				mes .n$;
-				mes "Sólo para tu primer encantamiento te permitiré elegir cuál quieres, adelante.";
-				next;
+// == Selección de encantamiento
 				set .@a$,"";
-					for(.@i = 0; .@i < getarraysize(.@ench); .@i++){
-						set .@a$,.@a$+getitemname(.@ench[.@i]);
+					for(.@i = 0; .@i < getarraysize(.e1); .@i++){
+						set .@a$,.@a$+getitemname(.e1[.@i]);
 						set .@a$,.@a$+":";
 					}
 					set .@b,(select(.@a$))-1;
-					setarray .@enc[8],.@ench[.@b];
+					setarray .@enc[8],.e1[.@b];
 					break;
-			case 1: setarray .@enc[7],.@ench[rand(0,5)]; break;
-			case 2: setarray .@enc[6],.@ench[rand(0,5)]; break;
-			case 3: setarray .@enc[5],.@ench[rand(0,5)]; break;
-			case 4: mes "Error"; close2; cutin "",255; end;
+			case 1:
+			case 2:
+			case 3:
+// == El encantamiento anterior evoluciona.
+// * Se utiliza la misma posición del array anterior.
+				setarray .@enc[8],getd(".e"+(@l+1)+"["+.@j+"]");
+				break;
+			case 4:
+// == Encantamiento especial, random.
+				setarray .@enc[7],.es[rand(0,(getarraysize(.es)-1))];
+				break;
+		}
+		if(rand(1,100) >= .d[5]) {
+			specialeffect2 .d[3];
+			mes .n$;
+			mes "Lo siento pero el encantamiento ha fallado.";
+			next;
+			mes .n$;
+			mes "Descuida, solo se ha perdido las Coagulated que íbamos a utilizar.";
+			close2;
+			cutin .c$,.d[1];
+			emotion e_sry;
+			end;
 		}
 		delequip EQI_SHOES;
+		specialeffect2 .d[2];
 		specialeffect 154;
 		getitem2 .@enc[0],.@enc[1],.@enc[2],.@enc[3],.@enc[4],.@enc[5],.@enc[6],.@enc[7],.@enc[8];
 		mes .n$;
-		mes "Aquí tienes, gracias por el pago.";
+		mes "Felicidades, el encantamiento ha sido un éxito.";
 		close2;
 		deletearray .@enc[0],getarraysize(.@enc);
 		emotion e_thx;
-		cutin "",255;
+		cutin .c$,.d[1];
 		end;
 	}
+// Sloteo de Botas.
 	function	temporal_slot	{
-		if((cardscnt(EQI_SHOES)-1) > 0) {
+		if(getequipcardid(EQI_SHOES,3)) {
 			mes .n$;
 			mes "Lo siento pero no puedo perforar si tiene encantamientos.";
 			close2;
-			cutin "",255;
+			cutin .c$,.d[1];
 			emotion e_sry;
 			end;
 		}
 		mes .n$;
 		mes "De acuerdo, veamos...";
 		next;
-		if(countitem(6607) < 5) {
+		if(countitem(.d[6]) < 5) {
 			mes .n$;
 			mes "Para poder perforar éstas botas necesitaré ^5533ff5 Temporal Crystal^000000.";
 			close2;
-			cutin "",255;
+			cutin .c$,.d[1];
 			end;
 		}
 		mes .n$;
@@ -200,10 +303,10 @@ function temporal_slot;
 		next;
 		set .@it,0;
 		for(.@i = 0; .@i < 5; .@i ++) {
-			if(getequipid(EQI_SHOES) == (22000+.@i)) {
+			if(getequipid(EQI_SHOES) == (.d[8]+.@i)) {
 				if(select("Añadir ^FF0000Slot^000000 a mis botas","Mejor no, gracias.") == 2) {
 					close2;
-					cutin "",255;
+					cutin .c$,.d[1];
 					end;
 				}
 				mes .n$;
@@ -214,13 +317,26 @@ function temporal_slot;
 				mes ". . .";
 				sleep2 1000;
 				specialeffect 154;
-				delitem 6607,5;
-				set @it,getequipid(EQI_SHOES) + 6;
+				delitem .d[6],5;
+				if(rand(1,100) >= .d[5]) {
+					specialeffect2 .d[3];
+					mes .n$;
+					mes "Lo siento pero ha fallado abrir la ranura en tus botas.";
+					next;
+					mes .n$;
+					mes "Descuida, solo se ha perdido los Temporal Crystal que íbamos a utilizar.";
+					close2;
+					cutin .c$,.d[1];
+					emotion e_sry;
+					end;
+				}
+				specialeffect2 .d[2];
+				set @it,getequipid(EQI_SHOES) + .d[4];
 				delequip EQI_SHOES;
 				getitem @it,1;
-				mes "Todo listo, aquí tienes.";
+				mes "He abierto una ranura de manera satisfactoria a tus botas, felicidades.";
 				close2;
-				cutin "",255;
+				cutin .c$,.d[1];
 				emotion e_thx;
 				end;
 			}
@@ -228,7 +344,22 @@ function temporal_slot;
 		mes .n$;
 		mes "Por favor no te quites las botas en medio encantamiento.";
 		close2;
-		cutin "",255;
+		cutin .c$,.d[1];
 		end;
 	}
+end;
+// Configuración
+OnInit:
+// ============ ID's de los Encantamientos =============
+	setarray .e1[0],4808,4832,4814,4741,4869,4752; // 1er
+	setarray .e2[0],4820,4833,4813,4742,4872,4753; // 2do
+	setarray .e3[0],4821,4834,4812,4861,4873,4754; // 3ro
+	setarray .e4[0],4822,4835,4826,4862,4881,4755; // 4to
+	setarray .es[0],4875,4876,4877,4878,4879,4880; // Especial
+// =====================================================
+	setarray .p[0],30,65,95,140,300; // Precios de los encantamientos
+	set .n$,"[ ^cc6600Hugin's Butler^000000 ]"; // Nombre del NPC
+	set .c$,"sara_elder_irine1"; // Imagen del NPC.
+	setarray .d[0],2,255,610,611,6,90,6607,6608,22000,2499; // Valores Globales, no editar.
+	end;
 }

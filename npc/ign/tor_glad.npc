@@ -59,7 +59,7 @@ t_glad05	mapflag	nowarpto
 t_glad05	mapflag	nosave	SavePoint
 t_glad05	mapflag	noreturn
 prontera,168,172,4	script	Torneo de Gladiadores::TG1	106,{
-//=======[ ConfiguraciÛn (No tocar) ]==========
+//=======[ Configuraci√≥n (No tocar) ]==========
 	set .npc$,"[^cc0000Organizador TG^000000]";
 	setarray .torneo_name$[0],
 		"Torneo Picky (5 Rondas)",
@@ -67,27 +67,27 @@ prontera,168,172,4	script	Torneo de Gladiadores::TG1	106,{
 		"Torneo Poring (7 Rondas)",
 		"Torneo Jellopy (10 Rondas)",
 		"Torneo Ultratumba (10 Rondas)",
-		"Torneo TrÈbol (10 Rondas)",
+		"Torneo Tr√©bol (10 Rondas)",
 		"Torneo Elemental (10 Rondas)",
 		"Torneo Bronce (10 Rondas)",
 		"Torneo Plata (11 Rondas)",
 		"Torneo Oro (12 Rondas)",
 		"Torneo Mjolnir (24 Rondas)",
-		"Torneo …pico (5 Rondas)",
-		"Torneo Met·lico (8 Rondas)";
+		"Torneo √âpico (5 Rondas)",
+		"Torneo Met√°lico (8 Rondas)";
 	setarray .rangos$[1],
 		(Sex?"el":"la")+" Aficionad"+(Sex?"o":"a"),
-		(Sex?"el":"la")+" ReciÈn Iniciad"+(Sex?"o":"a"),
+		(Sex?"el":"la")+" Reci√©n Iniciad"+(Sex?"o":"a"),
 		(Sex?"el":"la")+" Espanta Bichos",
 		(Sex?"el":"la")+" Novat"+(Sex?"o":"a")+" Agresiv"+(Sex?"o":"a"),
 		(Sex?"el":"la")+" Pateador"+(Sex?"":"a")+" de Porings",
-		(Sex?"el":"la")+" EspadachÌn"+(Sex?"":"a")+" Viajer"+(Sex?"o":"a"),
-		(Sex?"el":"la")+" EspadachÌn"+(Sex?"":"a")+" Entrenad"+(Sex?"o":"a"),
+		(Sex?"el":"la")+" Espadach√≠n"+(Sex?"":"a")+" Viajer"+(Sex?"o":"a"),
+		(Sex?"el":"la")+" Espadach√≠n"+(Sex?"":"a")+" Entrenad"+(Sex?"o":"a"),
 		(Sex?"el":"la")+" Gladiador"+(Sex?"":"a")+" Iniciad"+(Sex?"o":"a"),
 		(Sex?"el":"la")+" Gladiador"+(Sex?"":"a")+" Expert"+(Sex?"o":"a"),
-		(Sex?"el":"la")+" Gladiador"+(Sex?"":"a")+" HerÛic"+(Sex?"o":"a"),
+		(Sex?"el":"la")+" Gladiador"+(Sex?"":"a")+" Her√≥ic"+(Sex?"o":"a"),
 		(Sex?"el":"la")+" Gladiador"+(Sex?"":"a")+" Legendari"+(Sex?"o":"a"),
-		(Sex?"el":"la")+" Gladiador"+(Sex?"":"a")+" …pic"+(Sex?"o":"a"),
+		(Sex?"el":"la")+" Gladiador"+(Sex?"":"a")+" √âpic"+(Sex?"o":"a"),
 		(Sex?"el":"la")+" Maestr"+(Sex?"o":"a")+" de Gladiador"+(Sex?"e":"a")+"s",
 		(SEx?"el":"la")+" Manufactor"+(Sex?"":"a")+" de Leyendas";
 	setarray .@ME$[1],
@@ -105,14 +105,14 @@ prontera,168,172,4	script	Torneo de Gladiadores::TG1	106,{
 /*
 	if(getarraysize(.@ME$) != getarraysize(.@ME_n$) || (getarraysize(.torneo_name$)-1) != getarraysize(.rangos$)) {
 		debugmes "ARRAYS ARE NOT EQUAL: .@ME$~.@ME_n$~.torneo_name$~.rangos$";
-		mes "^ff0000Ha ocurrido un error grave, menciÛnale un administrador que revise la consola^000000";
+		mes "^ff0000Ha ocurrido un error grave, menci√≥nale un administrador que revise la consola^000000";
 		close;
 	}
 */
 //===========[ Menu de GM ] ====================
 	if(getgroupid() >= 60) {
 		mes .npc$;
-		mes "øQuÈ desea?";
+		mes "¬øQu√© desea?";
 		next;
 		switch(select("Continuar:Definir Rango")) {
 			case 1:
@@ -129,12 +129,12 @@ prontera,168,172,4	script	Torneo de Gladiadores::TG1	106,{
 		set Rango,0;
 	mes .npc$;
 	mes "Bienvenid"+(Sex?"o ^0000ff":"a ^ff0000")+" "+strcharinfo(0)+"^5533ff "+.rangos$[Rango];
-	mes "^000000Me encargo de la organizaciÛn de los torneos para que valientes luchen contra numerosos monstruos.";
+	mes "^000000Me encargo de la organizaci√≥n de los torneos para que valientes luchen contra numerosos monstruos.";
 	next;
 	mes .npc$;
-	mes "Dime, øest·s interesad"+(Sex?"o":"a")+"?";
+	mes "Dime, ¬øest√°s interesad"+(Sex?"o":"a")+"?";
 	next;
-	switch (select("Participar en el Torneo:Tienda de Puntos de Gladiador:^ff0000InformaciÛn^000000:^777777Salir^000000")) {
+	switch (select("Participar en el Torneo:Tienda de Puntos de Gladiador:^ff0000Informaci√≥n^000000:^777777Salir^000000")) {
 		case 1:
 			set .@map_menu$,"";
 			for(set .@m,1; .@m <= getarraysize(.@ME$)-1; set .@m,.@m+1) {
@@ -147,14 +147,14 @@ prontera,168,172,4	script	Torneo de Gladiadores::TG1	106,{
 			set .@me,select(.@map_menu$);
 			if(getmapusers(.@ME$[.@me]) > 0) {
 				mes .npc$;
-				mes "Lo siento, pero actualmente la sala se encuentra ocupada, intenta dentro de unos minutos hasta que estÈ libre.";
+				mes "Lo siento, pero actualmente la sala se encuentra ocupada, intenta dentro de unos minutos hasta que est√© libre.";
 				close2;
 				emotion e_sry;
 				end;
 			}
 			mes .npc$;
 			mes "Excelente.";
-			mes "Dime, ødÛnde participar·s?";
+			mes "Dime, ¬ød√≥nde participar√°s?";
 			next;
 			switch(select("Torneos ^ff6060[ "+getarraysize(.torneo_name$)+" ]^000000:^777777Salir^000000")) {
 				case 1:
@@ -165,7 +165,7 @@ prontera,168,172,4	script	Torneo de Gladiadores::TG1	106,{
 					}
 					set .@torneo,select(.@menu$)-1;
 					mes .npc$;
-					mes "Est·s a punto de entrar a:";
+					mes "Est√°s a punto de entrar a:";
 					mes "^ff0000"+.torneo_name$[.@torneo]+"^000000";
 					mes " ";
 					mes "En el mapa:";
@@ -177,127 +177,128 @@ prontera,168,172,4	script	Torneo de Gladiadores::TG1	106,{
 						close;
 					}
 					mes .npc$;
-					mes "°Bien, hall· vamos!";
-					mes "Cuando entres a la sala presta atenciÛn a los anuncios, o los monstruos te tomar·n por sorpresa.";
+					mes "¬°Bien, hall√° vamos!";
+					mes "Cuando entres a la sala presta atenci√≥n a los anuncios, o los monstruos te tomar√°n por sorpresa.";
 					close2;
 					killmonsterall .@ME$[.@me];
 					warp .@ME$[.@me],49,45;
 					sleep2 1000;
-					mapannounce .@ME$[.@me],"[Organizador]: Prep·rense para el espect·culo",bc_map;
+					mapannounce .@ME$[.@me],"[Organizador]: Prep√°rense para el espect√°culo",bc_map;
 					sleep2 6000;
-					mapannounce .@ME$[.@me],"[Organizador]: El "+.torneo_name$[.@torneo]+" est· a punto de empezar",bc_map;
+					mapannounce .@ME$[.@me],"[Organizador]: El "+.torneo_name$[.@torneo]+" est√° a punto de empezar",bc_map;
 					sleep2 6000;
-					mapannounce .@ME$[.@me],"[Organizador]: Veamos quÈ clase de espect·culo nos ofrece.",bc_map;
+					mapannounce .@ME$[.@me],"[Organizador]: Veamos qu√© clase de espect√°culo nos ofrece.",bc_map;
 					sleep2 8000;
 					set tgID,0;
 					set mbt,0;
 					set rnd,0;
+					set mapa$,.@ME$[.@me];
 					set tgID,.@torneo;
 						switch(tgID) {
 							case 0:
 								set mbt,6;
 								set rnd,1;
-								callsub S_Check,rnd,"Hermanos Picky",strcharinfo(3);
-								monster strcharinfo(3),48,57,"Hermano Picky",1049,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),49,57,"Hermano Picky",1049,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),50,57,"Hermano Picky",1049,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),51,57,"Hermano Picky",1049,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),49,56,"Hermano Mayor",1050,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),50,56,"Hermano Mayor",1050,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								callsub S_Check,rnd,"Hermanos Picky",mapa$;
+								monster mapa$,48,57,"Hermano Picky",1049,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,49,57,"Hermano Picky",1049,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,50,57,"Hermano Picky",1049,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,51,57,"Hermano Picky",1049,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,49,56,"Hermano Mayor",1050,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,50,56,"Hermano Mayor",1050,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 								end;
 							case 1:
 								set mbt,3;
 								set rnd,1;
-								callsub S_Check,rnd,"Trio Mortal",strcharinfo(3);
-								monster strcharinfo(3),41,50,"Trio Mortal",1122,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),58,50,"Trio Mortal",1122,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),50,57,"Trio Mortal",1122,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								callsub S_Check,rnd,"Trio Mortal",mapa$;
+								monster mapa$,41,50,"Trio Mortal",1122,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,58,50,"Trio Mortal",1122,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,50,57,"Trio Mortal",1122,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 								end;
 							case 2:
 								set mbt,81;
 								set rnd,1;
-								callsub S_Check,rnd,"Equipo Arcoiris",strcharinfo(3);
-								monster strcharinfo(3),49,45,"Poring",1002,20,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),49,45,"Poporing",1031,20,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),49,45,"Marin",1242,20,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),49,45,"Drops",1113,20,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),49,45,"Mastering",1090,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								callsub S_Check,rnd,"Equipo Arcoiris",mapa$;
+								monster mapa$,49,45,"Poring",1002,20,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,49,45,"Poporing",1031,20,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,49,45,"Marin",1242,20,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,49,45,"Drops",1113,20,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,49,45,"Mastering",1090,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 								end;
 							case 3:
 								set mbt,10;
 								set rnd,1;
-								callsub S_Check,rnd,"Virus",strcharinfo(3);
-								monster strcharinfo(3),0,0,"Virus",1627,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								callsub S_Check,rnd,"Virus",mapa$;
+								monster mapa$,0,0,"Virus",1627,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
 								end;
 							case 4:
 								set mbt,20;
 								set rnd,1;
-								callsub S_Check,rnd,"Esqueleto Orco",strcharinfo(3);
-								monster strcharinfo(3),0,0,"Esqueleto Orco",1152,20,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								callsub S_Check,rnd,"Esqueleto Orco",mapa$;
+								monster mapa$,0,0,"Esqueleto Orco",1152,20,"TG1::OnRound"+rnd+"Torneo"+tgID;
 								end;
 							case 5:
 								set mbt,13;
 								set rnd,1;
-								callsub S_Check,rnd,"Lobos",strcharinfo(3);
-								monster strcharinfo(3),0,0,"Vagabond Wolf",1092,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),0,0,"Wolf",1013,12,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								callsub S_Check,rnd,"Lobos",mapa$;
+								monster mapa$,0,0,"Vagabond Wolf",1092,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,0,0,"Wolf",1013,12,"TG1::OnRound"+rnd+"Torneo"+tgID;
 								end;
 							case 6:
 								set mbt,10;
 								set rnd,1;
-								callsub S_Check,rnd,"Flamiferos",strcharinfo(3);
-								monster strcharinfo(3),0,0,"Blazer",1367,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),0,0,"Explosion",1383,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),0,0,"Grand Peco",1369,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),0,0,"Heater",1318,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),0,0,"Kaho",1072,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),0,0,"Magmaring",1836,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),0,0,"Marduk",1140,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),0,0,"Nine Tail",1180,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),0,0,"Pasana",1154,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),0,0,"Lava Golem",1366,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								callsub S_Check,rnd,"Flamiferos",mapa$;
+								monster mapa$,0,0,"Blazer",1367,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,0,0,"Explosion",1383,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,0,0,"Grand Peco",1369,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,0,0,"Heater",1318,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,0,0,"Kaho",1072,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,0,0,"Magmaring",1836,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,0,0,"Marduk",1140,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,0,0,"Nine Tail",1180,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,0,0,"Pasana",1154,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,0,0,"Lava Golem",1366,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 								end;
 							case 7:
 								set mbt,12;
 								set rnd,1;
-								callsub S_Check,rnd,"Whisper",strcharinfo(3);
-								monster strcharinfo(3),0,0,"Whisper",1179,12,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								callsub S_Check,rnd,"Whisper",mapa$;
+								monster mapa$,0,0,"Whisper",1179,12,"TG1::OnRound"+rnd+"Torneo"+tgID;
 								end;
 							case 8:
 								set mbt,33;
 								set rnd,1;
-								callsub S_Check,rnd,"DesÈrticos",strcharinfo(3);
-								monster strcharinfo(3),0,0,"Baby Leopard",1415,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),0,0,"Choco",1214,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),0,0,"Desert Wolf",1106,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),0,0,"Gullinbursti",1311,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),0,0,"Side Winder",1037,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),0,0,"Yoyo",1057,15,"TG1::OnRound"+rnd+"Torneo"+tgID;
-								monster strcharinfo(3),0,0,"Vagabond Wolf",1092,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								callsub S_Check,rnd,"Des√©rticos",mapa$;
+								monster mapa$,0,0,"Baby Leopard",1415,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,0,0,"Choco",1214,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,0,0,"Desert Wolf",1106,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,0,0,"Gullinbursti",1311,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,0,0,"Side Winder",1037,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,0,0,"Yoyo",1057,15,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								monster mapa$,0,0,"Vagabond Wolf",1092,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 								end;
 							case 9:
 								set mbt,15;
 								set rnd,1;
-								callsub S_Check,rnd,"Carat",strcharinfo(3);
-								monster strcharinfo(3),0,0,"Carat",1267,15,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								callsub S_Check,rnd,"Carat",mapa$;
+								monster mapa$,0,0,"Carat",1267,15,"TG1::OnRound"+rnd+"Torneo"+tgID;
 								end;
 							case 10:
 								set mbt,10;
 								set rnd,1;
-								callsub S_Check,rnd,"Dragon Fly",strcharinfo(3);
-								monster strcharinfo(3),0,0,"Dragon Fly",1091,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								callsub S_Check,rnd,"Dragon Fly",mapa$;
+								monster mapa$,0,0,"Dragon Fly",1091,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
 								end;
 							case 11:
 								set mbt,1;
 								set rnd,1;
-								callsub S_Check,rnd,"Eddga",strcharinfo(3);
-								monster strcharinfo(3),0,0,"Eddga",1115,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								callsub S_Check,rnd,"Eddga",mapa$;
+								monster mapa$,0,0,"Eddga",1115,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 								end;
 							case 12:
 								set mbt,10;
 								set rnd,1;
-								callsub S_Check,rnd,"Poring Mec·nicos",strcharinfo(3);
-								monster strcharinfo(3),0,0,"Step",3125,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
+								callsub S_Check,rnd,"Poring Mec√°nicos",mapa$;
+								monster mapa$,0,0,"Step",3125,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
 								end;
 						}
 				case 2:
@@ -309,62 +310,61 @@ prontera,168,172,4	script	Torneo de Gladiadores::TG1	106,{
 			}
 		case 2:
 			mes .npc$;
-			mes "Con los puntos de gladiador podr·s intercambiarlo por famas distintas, a continuaciÛn te lo muestro.";
+			mes "Con los puntos de gladiador podr√°s intercambiarlo por famas distintas, a continuaci√≥n te lo muestro.";
 			mes "Tienes ^ff0000"+GPoints+"^000000 Puntos de Gladiador.";
+			mes " ";
+			mes "Prop√≥n nuevos objetos a comerciar a los Game Master.";
 			next;
-			switch(select("^5533ff150 Pun. Glad.^000000 ^ff0000=>^000000 ^00880050 Event Coin^000000:^5533ff250 Pun. Glad.^000000 ^ff0000=>^000000 ^00880040 PvP Coin^000000:^5533ff300 Pun. Glad.^000000 ^ff0000=>^000000 ^0088001 Emperium Coin^000000:^5533ff100 Pun. Glad.^000000 ^ff0000=>^000000 ^0088005 MvP Coin^000000:^5533ff100 Pun. Glad.^000000 ^ff0000=>^000000 ^00880010 Event Ticket^000000")) {
-				case 1: callsub S_Exchange,150,50,675;
-				case 2: callsub S_Exchange,250,40,677;
-				case 3: callsub S_Exchange,300,1,674;
-				case 4: callsub S_Exchange,100,5,673;
-				case 5: callsub S_Exchange,100,10,7711;
+			switch(select("200 P.Glad => ^ff880020 PvP Coin^000000")) {
+				// PuntosGlad,CantidadItem,Item
+				case 1: callsub S_Exchange,250,40,677;
 			}
 		case 3:
 			while(1) {
 				mes .npc$;
-				mes "øQuÈ te gustarÌa saber o conocer sobre el ^cc6600Torneo de Gladiadores^000000?";
+				mes "¬øQu√© te gustar√≠a saber o conocer sobre el ^cc6600Torneo de Gladiadores^000000?";
 				next;
-					switch(select("InformaciÛn General:Puntos de Gladiador:Ruleta de Estados:Modos:^777777Salir^000000")) {
+					switch(select("Informaci√≥n General:Puntos de Gladiador:Ruleta de Estados:Modos:^777777Salir^000000")) {
 						case 1:
 							mes .npc$;
-							mes "En este lugar organizamos los torneos de gladiadores donde probamos tu fuerza y valentÌa en el campo de batalla.";
+							mes "En este lugar organizamos los torneos de gladiadores donde probamos tu fuerza y valent√≠a en el campo de batalla.";
 							next;
 							mes .npc$;
-							mes "En cada etapa deber·s de enfrentar a uno o varios monstruos que su misiÛn principal es hacerte perder, deber·s de hacer uso de tus habilidades para eliminarles a todos.";
+							mes "En cada etapa deber√°s de enfrentar a uno o varios monstruos que su misi√≥n principal es hacerte perder, deber√°s de hacer uso de tus habilidades para eliminarles a todos.";
 							next;
 							mes .npc$;
-							mes "Dependiendo del nivel de dificultad el n˙mero de etapas incrementa y se har· m·s dificil pasar cada torneo.";
+							mes "Dependiendo del nivel de dificultad el n√∫mero de etapas incrementa y se har√° m√°s dificil pasar cada torneo.";
 							break;
 						case 2:
 							mes .npc$;
-							mes "…stos puntos los obtendr·s al completar cada torneo, pero sÛlo te ser·n ˙tiles aquÌ.";
+							mes "√âstos puntos los obtendr√°s al completar cada torneo, pero s√≥lo te ser√°n √∫tiles aqu√≠.";
 							next;
 							mes .npc$;
-							mes "Dependiendo de la cantidad de puntos que tengas podr·s intercambiarlo por distintos objetos.";
+							mes "Dependiendo de la cantidad de puntos que tengas podr√°s intercambiarlo por distintos objetos.";
 							next;
 							mes .npc$;
-							mes "Al completar cada torneo tu ^5533ffRango de Gladiador^000000 incrementar·, Èsto te permitir· acceder a torneos mejores y m·s difÌciles donde podr·s ganar a˙n m·s puntos de los que ganabas en torneos anteriores.";
+							mes "Al completar cada torneo tu ^5533ffRango de Gladiador^000000 incrementar√°, √©sto te permitir√° acceder a torneos mejores y m√°s dif√≠ciles donde podr√°s ganar a√∫n m√°s puntos de los que ganabas en torneos anteriores.";
 							break;
 						case 3:
 							mes .npc$;
-							mes "Cada vez que termines una batalla en la ^0000CCArena de Gladiadores^000000, se activar· la ^0000CCRuleta de Estados^000000.";
+							mes "Cada vez que termines una batalla en la ^0000CCArena de Gladiadores^000000, se activar√° la ^0000CCRuleta de Estados^000000.";
 							next;
 							mes .npc$;
-							mes "Esto aÒadir· una posibilidad de recibir un estado beneficioso, como por ejemplo: BendiciÛn, Aumentar Agilidad, Resistir... y muchas m·s.";
+							mes "Esto a√±adir√° una posibilidad de recibir un estado beneficioso, como por ejemplo: Bendici√≥n, Aumentar Agilidad, Resistir... y muchas m√°s.";
 							next;
 							mes .npc$;
-							mes "Adem·s de eso al activarse la ^0000CCRuleta de Estados^000000 tambiÈn te curaras un 20% de tu HP y SP m·ximo independientemente de lo que salga en la ruleta.";
+							mes "Adem√°s de eso al activarse la ^0000CCRuleta de Estados^000000 tambi√©n te curaras un 20% de tu HP y SP m√°ximo independientemente de lo que salga en la ruleta.";
 							break;
 						case 4:
 							mes .npc$;
-							mes "Adem·s de los torneos tambiÈn podr·s participar en algunos eventos especiales llamados ^0000CCModos^000000, las reglas de cada uno sÛn diferentes entre si.";
+							mes "Adem√°s de los torneos tambi√©n podr√°s participar en algunos eventos especiales llamados ^0000CCModos^000000, las reglas de cada uno s√≥n diferentes entre si.";
 							next;
 							mes .npc$;
-							mes "A diferencia de los torneos aqui no aumentar·s tu ^0000CCRango de Gladiador^000000 y solo podr·s obtener m·s ^0000CCModos^000000 aumentando tu ^0000CCRango de Gladiador^000000.";
+							mes "A diferencia de los torneos aqui no aumentar√°s tu ^0000CCRango de Gladiador^000000 y solo podr√°s obtener m√°s ^0000CCModos^000000 aumentando tu ^0000CCRango de Gladiador^000000.";
 							break;
 						case 5:
 							mes .npc$;
-							mes "Vuelve cuando desees m·s ayuda o volver a repasar estos contenidos.";
+							mes "Vuelve cuando desees m√°s ayuda o volver a repasar estos contenidos.";
 							close2;
 							emotion e_no1;
 							end;
@@ -386,11 +386,11 @@ OnRound1Torneo0:
 		callsub S_Ruleta;
 		set mbt,4;
 		set rnd,2;
-		callsub S_Check,rnd,"Familia Hormiga",strcharinfo(3);
-		monster strcharinfo(3),48,57,"Hormiga Andre",1095,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),51,57,"Hormiga Deniro",1105,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),51,60,"Hormiga Andre",1160,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),48,60,"Hormiga Vitata",1176,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Familia Hormiga",mapa$;
+		monster mapa$,48,57,"Hormiga Andre",1095,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,51,57,"Hormiga Deniro",1105,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,51,60,"Hormiga Andre",1160,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,48,60,"Hormiga Vitata",1176,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 	end;
 OnRound2Torneo0:
@@ -399,12 +399,12 @@ OnRound2Torneo0:
 		callsub S_Ruleta;
 		set rnd,3;
 		set mbt,5;
-		callsub S_Check,rnd,"Espias",strcharinfo(3);
-		monster strcharinfo(3),58,60,"Espia",1119,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),41,60,"Espia",1119,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),41,42,"Espia",1119,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),58,42,"Espia",1119,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),50,55,"Espia",1119,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Espias",mapa$;
+		monster mapa$,58,60,"Espia",1119,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,41,60,"Espia",1119,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,41,42,"Espia",1119,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,58,42,"Espia",1119,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,50,55,"Espia",1119,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 	end;
 OnRound3Torneo0:
@@ -413,12 +413,12 @@ OnRound3Torneo0:
 		callsub S_Ruleta;
 		set rnd,4;
 		set mbt,5;
-		callsub S_Check,rnd,"Familia Peco Peco",strcharinfo(3);
-		monster strcharinfo(3),44,55,"Familia Peco Peco",1019,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),55,55,"Familia Peco Peco",1019,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),55,44,"Familia Peco Peco",1019,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),44,44,"Familia Peco Peco",1019,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),50,50,"Familia Peco Peco",1019,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Familia Peco Peco",mapa$;
+		monster mapa$,44,55,"Familia Peco Peco",1019,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,55,55,"Familia Peco Peco",1019,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,55,44,"Familia Peco Peco",1019,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,44,44,"Familia Peco Peco",1019,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,50,50,"Familia Peco Peco",1019,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 	end;
 OnRound4Torneo0:
@@ -427,15 +427,15 @@ OnRound4Torneo0:
 		callsub S_Ruleta;
 		set rnd,5;
 		set mbt,2;
-		callsub S_Check,rnd,"Munak & Bongun",strcharinfo(3);
-		monster strcharinfo(3),48,57,"Munak",1026,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),55,55,"Bongun",1188,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Munak & Bongun",mapa$;
+		monster mapa$,48,57,"Munak",1026,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,55,55,"Bongun",1188,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 	end;
 OnRound5Torneo0:
 	set mbt,mbt - 1;
 	if( mbt < 1 ) {
-		callsub S_Points,2,strcharinfo(3),1,545,50;
+		callsub S_Points,2,mapa$,1,545,50;
 		sc_end SC_ALL;
 		warp "prontera",162,170;
 	}
@@ -447,10 +447,10 @@ OnRound1Torneo1:
 		callsub S_Ruleta;
 		set rnd,2;
 		set mbt,3;
-		callsub S_Check,rnd,"Arqueros Goblin",strcharinfo(3);
-		monster strcharinfo(3),49,58,"Arquero Goblin",1258,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),50,58,"Arquero Goblin",1258,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),49,38,"Arquero Goblin",1258,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Arqueros Goblin",mapa$;
+		monster mapa$,49,58,"Arquero Goblin",1258,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,50,58,"Arquero Goblin",1258,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,49,38,"Arquero Goblin",1258,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 		end;
 	}
 end;
@@ -460,11 +460,11 @@ OnRound2Torneo1:
 		callsub S_Ruleta;
 		set rnd,3;
 		set mbt,4;
-		callsub S_Check,rnd,"Maquinaria Goblin",strcharinfo(3);
-		monster strcharinfo(3),60,41,"Rotar Zairo",1392,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),60,60,"Rotar Zairo",1392,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),41,60,"Rotar Zairo",1392,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),40,41,"Rotar Zairo",1392,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Maquinaria Goblin",mapa$;
+		monster mapa$,60,41,"Rotar Zairo",1392,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,60,60,"Rotar Zairo",1392,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,41,60,"Rotar Zairo",1392,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,40,41,"Rotar Zairo",1392,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 		end;
 	}
 end;
@@ -474,19 +474,19 @@ OnRound3Torneo1:
 		callsub S_Ruleta;
 		set rnd,4;
 		set mbt,12;
-		callsub S_Check,rnd,"Ladrones Goblin",strcharinfo(3);
-		monster strcharinfo(3),58,51,"LadrÛn Goblin",1122,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),58,49,"LadrÛn Goblin",1122,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),50,41,"LadrÛn Goblin",1123,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),49,41,"LadrÛn Goblin",1123,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),41,49,"LadrÛn Goblin",1124,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),41,50,"LadrÛn Goblin",1124,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),49,57,"LadrÛn Goblin",1125,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),50,57,"LadrÛn Goblin",1125,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),69,62,"Rotar Zairo",1392,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),67,35,"Rotar Zairo",1392,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),36,32,"Rotar Zairo",1392,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),32,67,"Rotar Zairo",1392,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Ladrones Goblin",mapa$;
+		monster mapa$,58,51,"Ladr√≥n Goblin",1122,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,58,49,"Ladr√≥n Goblin",1122,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,50,41,"Ladr√≥n Goblin",1123,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,49,41,"Ladr√≥n Goblin",1123,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,41,49,"Ladr√≥n Goblin",1124,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,41,50,"Ladr√≥n Goblin",1124,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,49,57,"Ladr√≥n Goblin",1125,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,50,57,"Ladr√≥n Goblin",1125,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,69,62,"Rotar Zairo",1392,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,67,35,"Rotar Zairo",1392,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,36,32,"Rotar Zairo",1392,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,32,67,"Rotar Zairo",1392,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 		end;
 	}
 end;
@@ -496,17 +496,17 @@ OnRound4Torneo1:
 		callsub S_Ruleta;
 		set rnd,5;
 		set mbt,4;
-		callsub S_Check,rnd,"Estampida Goblin",strcharinfo(3);
-		monster strcharinfo(3),43,58,"Goblin",1126,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),56,58,"Goblin",1126,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),58,43,"Goblin",1126,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),41,43,"Goblin",1126,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Estampida Goblin",mapa$;
+		monster mapa$,43,58,"Goblin",1126,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,56,58,"Goblin",1126,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,58,43,"Goblin",1126,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,41,43,"Goblin",1126,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound5Torneo1:
 	set mbt,mbt - 1;
 	if( mbt < 1 ) {
-		callsub S_Points,5,strcharinfo(3),2,545,50;
+		callsub S_Points,5,mapa$,2,545,50;
 		sc_end SC_ALL;
 		warp "prontera",162,170;
 	}
@@ -518,9 +518,9 @@ OnRound1Torneo2:
 		callsub S_Ruleta;
 		set rnd,2;
 		set mbt,28;
-		callsub S_Check,rnd,"øPorings ExtraÒos?",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Drops",1113,25,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Poring ExtraÒo",1142,3,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"¬øPorings Extra√±os?",mapa$;
+		monster mapa$,0,0,"Drops",1113,25,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Poring Extra√±o",1142,3,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound2Torneo2:
@@ -529,8 +529,8 @@ OnRound2Torneo2:
 		callsub S_Ruleta;
 		set rnd,3;
 		set mbt,12;
-		callsub S_Check,rnd,"Porings RobÛticos",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Metaling",1613,12,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Porings Rob√≥ticos",mapa$;
+		monster mapa$,0,0,"Metaling",1613,12,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound3Torneo2:
@@ -539,8 +539,8 @@ OnRound3Torneo2:
 		callsub S_Ruleta;
 		set rnd,4;
 		set mbt,8;
-		callsub S_Check,rnd,"Porings Rocosos",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Stapo",1784,8,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Porings Rocosos",mapa$;
+		monster mapa$,0,0,"Stapo",1784,8,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound4Torneo2:
@@ -549,8 +549,8 @@ OnRound4Torneo2:
 		callsub S_Ruleta;
 		set rnd,5;
 		set mbt,9;
-		callsub S_Check,rnd,"Porings FlamÌferos",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Magmaring",1836,9,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Porings Flam√≠feros",mapa$;
+		monster mapa$,0,0,"Magmaring",1836,9,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound5Torneo2:
@@ -559,8 +559,8 @@ OnRound5Torneo2:
 		callsub S_Ruleta;
 		set rnd,6;
 		set mbt,12;
-		callsub S_Check,rnd,"Familia Mastering",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Mastering",1090,12,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Familia Mastering",mapa$;
+		monster mapa$,0,0,"Mastering",1090,12,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound6Torneo2:
@@ -569,14 +569,14 @@ OnRound6Torneo2:
 		callsub S_Ruleta;
 		set rnd,7;
 		set mbt,1;
-		callsub S_Check,rnd,"Angeling",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Angeling",1096,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Angeling",mapa$;
+		monster mapa$,0,0,"Angeling",1096,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound7Torneo2:
 	set mbt,mbt - 1;
 	if( mbt < 1 ) {
-		callsub S_Points,10,strcharinfo(3),3,607,1;
+		callsub S_Points,10,mapa$,3,607,1;
 		sc_end SC_ALL;
 		warp "prontera",162,170;
 	}
@@ -588,10 +588,10 @@ OnRound1Torneo3:
 		callsub S_Ruleta;
 		set rnd,2;
 		set mbt,3;
-		callsub S_Check,rnd,"Luchadores Wootan",strcharinfo(3);
-		monster strcharinfo(3),50,53,"Wootan Fighter",1499,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),57,50,"Wootan Shooter",1498,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),42,50,"Wootan Shooter",1498,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Luchadores Wootan",mapa$;
+		monster mapa$,50,53,"Wootan Fighter",1499,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,57,50,"Wootan Shooter",1498,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,42,50,"Wootan Shooter",1498,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound2Torneo3:
@@ -600,9 +600,9 @@ OnRound2Torneo3:
 		callsub S_Ruleta;
 		set rnd,3;
 		set mbt,2;
-		callsub S_Check,rnd,"Lude & Quve",strcharinfo(3);
-		monster strcharinfo(3),46,53,"Lude",1509,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),53,53,"Quve",1508,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Lude & Quve",mapa$;
+		monster mapa$,46,53,"Lude",1509,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,53,53,"Quve",1508,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound3Torneo3:
@@ -611,10 +611,10 @@ OnRound3Torneo3:
 		callsub S_Ruleta;
 		set rnd,4;
 		set mbt,3;
-		callsub S_Check,rnd,"Monos Saltarinos",strcharinfo(3);
-		monster strcharinfo(3),56,50,"Choco",1214,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),44,50,"Choco",1214,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),50,40,"Choco",1214,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Monos Saltarinos",mapa$;
+		monster mapa$,56,50,"Choco",1214,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,44,50,"Choco",1214,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,50,40,"Choco",1214,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound4Torneo3:
@@ -623,11 +623,11 @@ OnRound4Torneo3:
 		callsub S_Ruleta;
 		set rnd,5;
 		set mbt,40;
-		callsub S_Check,rnd,"La Plaga",strcharinfo(3);
-		monster strcharinfo(3),64,51,"Plaga",1054,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),48,64,"Plaga",1054,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),35,51,"Plaga",1054,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),48,35,"Plaga",1054,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"La Plaga",mapa$;
+		monster mapa$,64,51,"Plaga",1054,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,48,64,"Plaga",1054,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,35,51,"Plaga",1054,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,48,35,"Plaga",1054,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound5Torneo3:
@@ -636,11 +636,11 @@ OnRound5Torneo3:
 		callsub S_Ruleta;
 		set rnd,6;
 		set mbt,40;
-		callsub S_Check,rnd,"La Plaga",strcharinfo(3);
-		monster strcharinfo(3),64,51,"Plaga",1054,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),48,64,"Plaga",1054,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),35,51,"Plaga",1054,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),48,35,"Plaga",1054,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"La Plaga",mapa$;
+		monster mapa$,64,51,"Plaga",1054,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,48,64,"Plaga",1054,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,35,51,"Plaga",1054,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,48,35,"Plaga",1054,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound6Torneo3:
@@ -649,10 +649,10 @@ OnRound6Torneo3:
 		callsub S_Ruleta;
 		set rnd,7;
 		set mbt,3;
-		callsub S_Check,rnd,"Trio Elegante",strcharinfo(3);
-		monster strcharinfo(3),50,57,"Jakk",1130,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),49,57,"Jakk",1130,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),51,57,"Jakk",1130,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Trio Elegante",mapa$;
+		monster mapa$,50,57,"Jakk",1130,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,49,57,"Jakk",1130,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,51,57,"Jakk",1130,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound7Torneo3:
@@ -661,13 +661,13 @@ OnRound7Torneo3:
 		callsub S_Ruleta;
 		set rnd,8;
 		set mbt,6;
-		callsub S_Check,rnd,"PelotÛn de Fusilamiento",strcharinfo(3);
-		monster strcharinfo(3),57,51,"Cruiser",1248,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),57,50,"Cruiser",1248,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),57,49,"Cruiser",1248,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),42,49,"Cruiser",1248,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),42,50,"Cruiser",1248,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),42,51,"Cruiser",1248,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Pelot√≥n de Fusilamiento",mapa$;
+		monster mapa$,57,51,"Cruiser",1248,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,57,50,"Cruiser",1248,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,57,49,"Cruiser",1248,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,42,49,"Cruiser",1248,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,42,50,"Cruiser",1248,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,42,51,"Cruiser",1248,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound8Torneo3:
@@ -676,19 +676,19 @@ OnRound8Torneo3:
 		callsub S_Ruleta;
 		set rnd,9;
 		set mbt,12;
-		callsub S_Check,rnd,"Piratas",strcharinfo(3);
-		monster strcharinfo(3),53,58,"Pirate Skeleton",1071,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),52,58,"Pirate Skeleton",1071,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),51,58,"Pirate Skeleton",1071,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),50,58,"Pirate Skeleton",1071,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),49,58,"Pirate Skeleton",1071,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),48,58,"Pirate Skeleton",1071,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),47,58,"Pirate Skeleton",1071,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),46,58,"Pirate Skeleton",1071,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),42,60,"Archer Skeleton",1016,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),58,60,"Archer Skeleton",1016,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),58,41,"Archer Skeleton",1016,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),40,41,"Archer Skeleton",1016,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Piratas",mapa$;
+		monster mapa$,53,58,"Pirate Skeleton",1071,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,52,58,"Pirate Skeleton",1071,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,51,58,"Pirate Skeleton",1071,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,50,58,"Pirate Skeleton",1071,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,49,58,"Pirate Skeleton",1071,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,48,58,"Pirate Skeleton",1071,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,47,58,"Pirate Skeleton",1071,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,46,58,"Pirate Skeleton",1071,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,42,60,"Archer Skeleton",1016,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,58,60,"Archer Skeleton",1016,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,58,41,"Archer Skeleton",1016,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,40,41,"Archer Skeleton",1016,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound9Torneo3:
@@ -697,9 +697,9 @@ OnRound9Torneo3:
 		callsub S_Ruleta;
 		set rnd,10;
 		set mbt,10;
-		callsub S_Check,rnd,"Li Me Dancing Ryang",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Li Me Mang Ryang",1517,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Dancing Dragon",1514,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Li Me Dancing Ryang",mapa$;
+		monster mapa$,0,0,"Li Me Mang Ryang",1517,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Dancing Dragon",1514,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound10Torneo3:
@@ -708,22 +708,22 @@ OnRound10Torneo3:
 		callsub S_Ruleta;
 		set rnd,11;
 		set mbt,9;
-		callsub S_Check,rnd,"Esclavos",strcharinfo(3);
-		monster strcharinfo(3),50,58,"Zerom",1178,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),49,58,"Zerom",1178,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),48,58,"Zerom",1178,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),51,58,"Zerom",1178,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),51,57,"Requiem",1164,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),50,57,"Requiem",1164,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),49,57,"Requiem",1164,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),51,60,"Marduk",1140,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),49,60,"Marduk",1140,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Esclavos",mapa$;
+		monster mapa$,50,58,"Zerom",1178,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,49,58,"Zerom",1178,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,48,58,"Zerom",1178,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,51,58,"Zerom",1178,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,51,57,"Requiem",1164,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,50,57,"Requiem",1164,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,49,57,"Requiem",1164,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,51,60,"Marduk",1140,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,49,60,"Marduk",1140,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound11Torneo3:
 	set mbt,mbt - 1;
 	if( mbt < 1 ) {
-		callsub S_Points,17,strcharinfo(3),4,607,1;
+		callsub S_Points,17,mapa$,4,607,1;
 		sc_end SC_ALL;
 		warp "prontera",162,170;
 	}
@@ -735,11 +735,11 @@ OnRound1Torneo4:
 		callsub S_Ruleta;
 		set rnd,2;
 		set mbt,4;
-		callsub S_Check,rnd,"EspÌritu Cham·n",strcharinfo(3);
-		monster strcharinfo(3),55,52,"EspÌritu Cham·n",1263,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),52,45,"EspÌritu Cham·n",1263,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),48,47,"EspÌritu Cham·n",1263,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),44,51,"EspÌritu Cham·n",1263,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Esp√≠ritu Cham√°n",mapa$;
+		monster mapa$,55,52,"Esp√≠ritu Cham√°n",1263,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,52,45,"Esp√≠ritu Cham√°n",1263,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,48,47,"Esp√≠ritu Cham√°n",1263,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,44,51,"Esp√≠ritu Cham√°n",1263,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound2Torneo4:
@@ -748,9 +748,9 @@ OnRound2Torneo4:
 		callsub S_Ruleta;
 		set rnd,3;
 		set mbt,16;
-		callsub S_Check,rnd,"Fantasmas",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Ghoul",1036,15,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Evil Druid",1117,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Fantasmas",mapa$;
+		monster mapa$,0,0,"Ghoul",1036,15,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Evil Druid",1117,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound3Torneo4:
@@ -759,10 +759,10 @@ OnRound3Torneo4:
 		callsub S_Ruleta;
 		set rnd,4;
 		set mbt,6;
-		callsub S_Check,rnd,"MuÒecas",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Munak",1026,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Bongun",1188,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Hyegun",1512,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Mu√±ecas",mapa$;
+		monster mapa$,0,0,"Munak",1026,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Bongun",1188,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Hyegun",1512,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound4Torneo4:
@@ -771,9 +771,9 @@ OnRound4Torneo4:
 		callsub S_Ruleta;
 		set rnd,5;
 		set mbt,16;
-		callsub S_Check,rnd,"Muertos Vivientes",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Wraith",1192,6,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Zombie",1015,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Muertos Vivientes",mapa$;
+		monster mapa$,0,0,"Wraith",1192,6,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Zombie",1015,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound5Torneo4:
@@ -782,9 +782,9 @@ OnRound5Torneo4:
 		callsub S_Ruleta;
 		set rnd,6;
 		set mbt,11;
-		callsub S_Check,rnd,"Guardianes del Inframundo",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Dullahan",1504,4,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Quve",1508,7,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Guardianes del Inframundo",mapa$;
+		monster mapa$,0,0,"Dullahan",1504,4,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Quve",1508,7,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound6Torneo4:
@@ -793,9 +793,9 @@ OnRound6Torneo4:
 		callsub S_Ruleta;
 		set rnd,7;
 		set mbt,11;
-		callsub S_Check,rnd,"Guerreros Infernales",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Khatlitzburg",1132,4,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Soldier Skeleton",1028,7,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Guerreros Infernales",mapa$;
+		monster mapa$,0,0,"Khatlitzburg",1132,4,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Soldier Skeleton",1028,7,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound7Torneo4:
@@ -804,9 +804,9 @@ OnRound7Torneo4:
 		callsub S_Ruleta;
 		set rnd,8;
 		set mbt,11;
-		callsub S_Check,rnd,"Momias",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Ancient Mummy",1297,3,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Mummy",1041,8,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Momias",mapa$;
+		monster mapa$,0,0,"Ancient Mummy",1297,3,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Mummy",1041,8,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound8Torneo4:
@@ -815,9 +815,9 @@ OnRound8Torneo4:
 		callsub S_Ruleta;
 		set rnd,9;
 		set mbt,3;
-		callsub S_Check,rnd,"Prisioneros",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Zombie Prisoner",1197,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),46,66,"Skeleton Prisoner",1196,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Prisioneros",mapa$;
+		monster mapa$,0,0,"Zombie Prisoner",1197,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,46,66,"Skeleton Prisoner",1196,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound9Torneo4:
@@ -826,15 +826,15 @@ OnRound9Torneo4:
 		callsub S_Ruleta;
 		set rnd,10;
 		set mbt,9;
-		callsub S_Check,rnd,"Zombies",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Zombie",1015,8,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),50,61,"Zombie Slaughter",1864,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Zombies",mapa$;
+		monster mapa$,0,0,"Zombie",1015,8,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,50,61,"Zombie Slaughter",1864,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound10Torneo4:
 	set mbt,mbt - 1;
 	if( mbt < 1 ) {
-		callsub S_Points,25,strcharinfo(3),5,607,1;
+		callsub S_Points,25,mapa$,5,607,1;
 		sc_end SC_ALL;
 		warp "prontera",162,170;
 	}
@@ -846,12 +846,12 @@ OnRound1Torneo5:
 		callsub S_Ruleta;
 		set rnd,2;
 		set mbt,25;
-		callsub S_Check,rnd,"Familia de Orcos",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Familia Orca",1686,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Familia Orca",1213,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Familia Orca",1023,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Familia Orca",1273,7,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Familia Orca",1189,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Familia de Orcos",mapa$;
+		monster mapa$,0,0,"Familia Orca",1686,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Familia Orca",1213,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Familia Orca",1023,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Familia Orca",1273,7,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Familia Orca",1189,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound2Torneo5:
@@ -860,8 +860,8 @@ OnRound2Torneo5:
 		callsub S_Ruleta;
 		set rnd,3;
 		set mbt,3;
-		monster strcharinfo(3),50,58,"Strouf",1065,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),57,50,"Merman",1264,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,50,58,"Strouf",1065,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,57,50,"Merman",1264,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound3Torneo5:
@@ -870,9 +870,9 @@ OnRound3Torneo5:
 		callsub S_Ruleta;
 		set rnd,4;
 		set mbt,15;
-		callsub S_Check,rnd,"Mantis Asesinas",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Killer Mantis",1294,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Mantis",1139,14,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Mantis Asesinas",mapa$;
+		monster mapa$,0,0,"Killer Mantis",1294,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Mantis",1139,14,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound4Torneo5:
@@ -881,9 +881,9 @@ OnRound4Torneo5:
 		callsub S_Ruleta;
 		set rnd,5;
 		set mbt,15;
-		callsub S_Check,rnd,"AraÒas",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Giant Spider",1304,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Argos",1100,14,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Ara√±as",mapa$;
+		monster mapa$,0,0,"Giant Spider",1304,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Argos",1100,14,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound5Torneo5:
@@ -892,8 +892,8 @@ OnRound5Torneo5:
 		callsub S_Ruleta;
 		set rnd,6;
 		set mbt,20;
-		callsub S_Check,rnd,"Pest",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Pest",1256,20,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Pest",mapa$;
+		monster mapa$,0,0,"Pest",1256,20,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound6Torneo5:
@@ -902,11 +902,11 @@ OnRound6Torneo5:
 		callsub S_Ruleta;
 		set rnd,7;
 		set mbt,8;
-		callsub S_Check,rnd,"Plasma",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Plasma",1693,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Plasma",1694,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Plasma",1695,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Plasma",1696,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Plasma",mapa$;
+		monster mapa$,0,0,"Plasma",1693,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Plasma",1694,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Plasma",1695,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Plasma",1696,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound7Torneo5:
@@ -915,9 +915,9 @@ OnRound7Torneo5:
 		callsub S_Ruleta;
 		set rnd,8;
 		set mbt,20;
-		callsub S_Check,rnd,"Peleadores",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Greatest General",1277,16,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Wootan Fighter",1499,4,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Peleadores",mapa$;
+		monster mapa$,0,0,"Greatest General",1277,16,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Wootan Fighter",1499,4,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound8Torneo5:
@@ -926,11 +926,11 @@ OnRound8Torneo5:
 		callsub S_Ruleta;
 		set rnd,9;
 		set mbt,4;
-		callsub S_Check,rnd,"Tortugas",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Solider",1316,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Permeter",1314,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Heater",1318,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Freezer",1319,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Tortugas",mapa$;
+		monster mapa$,0,0,"Solider",1316,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Permeter",1314,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Heater",1318,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Freezer",1319,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound9Torneo5:
@@ -939,15 +939,15 @@ OnRound9Torneo5:
 		callsub S_Ruleta;
 		set rnd,10;
 		set mbt,5;
-		callsub S_Check,rnd,"Fantasmas",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Wraith Dead",1291,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Whisper",1179,4,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Fantasmas",mapa$;
+		monster mapa$,0,0,"Wraith Dead",1291,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Whisper",1179,4,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound10Torneo5:
 	set mbt,mbt -1;
 	if( mbt < 1 ) {
-		callsub S_Points,34,strcharinfo(3),6,607,1;
+		callsub S_Points,34,mapa$,6,607,1;
 		sc_end SC_ALL;
 		warp "prontera",162,170;
 	}
@@ -959,8 +959,8 @@ OnRound1Torneo6:
 		callsub S_Ruleta;
 		set rnd,2;
 		set mbt,1;
-		callsub S_Check,rnd,"Lider FlamÌfero",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Mutant Dragon",1262,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Lider Flam√≠fero",mapa$;
+		monster mapa$,0,0,"Mutant Dragon",1262,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound2Torneo6:
@@ -969,17 +969,17 @@ OnRound2Torneo6:
 		callsub S_Ruleta;
 		set rnd,3;
 		set mbt,10;
-		callsub S_Check,rnd,"Marinos",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Anolian",1206,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Freezer",1319,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Seal",1317,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Garm Baby",1515,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Marse",1144,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Merman",1264,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Obeaune",1044,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Siroma",1776,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Strouf",1065,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Swordfish",1069,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Marinos",mapa$;
+		monster mapa$,0,0,"Anolian",1206,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Freezer",1319,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Seal",1317,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Garm Baby",1515,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Marse",1144,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Merman",1264,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Obeaune",1044,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Siroma",1776,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Strouf",1065,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Swordfish",1069,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound3Torneo6:
@@ -988,8 +988,8 @@ OnRound3Torneo6:
 		callsub S_Ruleta;
 		set rnd,4;
 		set mbt,1;
-		callsub S_Check,rnd,"Lider Marino",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Ice Titan",1777,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Lider Marino",mapa$;
+		monster mapa$,0,0,"Ice Titan",1777,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound4Torneo6:
@@ -998,16 +998,16 @@ OnRound4Torneo6:
 		callsub S_Ruleta;
 		set rnd,5;
 		set mbt,9;
-		callsub S_Check,rnd,"Viento",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Breeze",1692,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Dancing Dragon",1514,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Dragon Tail",1321,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Hill Wind",1629,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Hill Wind",1680,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Joker",1131,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Wind Ghost",1263,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Beholder",1633,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Bloody Butterfly",1408,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Viento",mapa$;
+		monster mapa$,0,0,"Breeze",1692,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Dancing Dragon",1514,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Dragon Tail",1321,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Hill Wind",1629,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Hill Wind",1680,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Joker",1131,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Wind Ghost",1263,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Beholder",1633,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Bloody Butterfly",1408,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound5Torneo6:
@@ -1016,8 +1016,8 @@ OnRound5Torneo6:
 		callsub S_Ruleta;
 		set rnd,6;
 		set mbt,1;
-		callsub S_Check,rnd,"Lider Viento",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Galion",1783,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Lider Viento",mapa$;
+		monster mapa$,0,0,"Galion",1783,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound6Torneo6:
@@ -1026,17 +1026,17 @@ OnRound6Torneo6:
 		callsub S_Ruleta;
 		set rnd,7;
 		set mbt,10;
-		callsub S_Check,rnd,"Terrestres",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Driller",1380,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Dryad",1493,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Galapago",1391,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Green Iguana",1687,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Increase Soil",1516,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Knocker",1838,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Obsidian",1615,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Pitman",1616,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Sleeper",1386,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Solider",1316,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Terrestres",mapa$;
+		monster mapa$,0,0,"Driller",1380,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Dryad",1493,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Galapago",1391,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Green Iguana",1687,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Increase Soil",1516,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Knocker",1838,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Obsidian",1615,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Pitman",1616,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Sleeper",1386,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Solider",1316,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound7Torneo6:
@@ -1045,8 +1045,8 @@ OnRound7Torneo6:
 		callsub S_Ruleta;
 		set rnd,8;
 		set mbt,1;
-		callsub S_Check,rnd,"Lider Terrestre",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Gullinbursti",1311,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Lider Terrestre",mapa$;
+		monster mapa$,0,0,"Gullinbursti",1311,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound8Torneo6:
@@ -1055,17 +1055,17 @@ OnRound8Torneo6:
 		callsub S_Ruleta;
 		set rnd,9;
 		set mbt,10;
-		callsub S_Check,rnd,"Tenebrosos",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Baphomet Jr",1101,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Dark Frame",1260,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Deviruchi",1109,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Dokebi",1110,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Gibbet",1503,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Hylozoist",1510,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Isis",1029,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Matyr",1146,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Requiem",1164,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Zipper Bear",1417,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Tenebrosos",mapa$;
+		monster mapa$,0,0,"Baphomet Jr",1101,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Dark Frame",1260,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Deviruchi",1109,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Dokebi",1110,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Gibbet",1503,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Hylozoist",1510,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Isis",1029,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Matyr",1146,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Requiem",1164,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Zipper Bear",1417,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound9Torneo6:
@@ -1074,14 +1074,14 @@ OnRound9Torneo6:
 		callsub S_Ruleta;
 		set rnd,10;
 		set mbt,1;
-		callsub S_Check,rnd,"Lider Tenebroso",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Abysmal Knight",1219,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Lider Tenebroso",mapa$;
+		monster mapa$,0,0,"Abysmal Knight",1219,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound10Torneo6:
 	set mbt,mbt -1;
 	if( mbt < 1 ) {
-		callsub S_Points,41,strcharinfo(3),7,607,1;
+		callsub S_Points,41,mapa$,7,607,1;
 		setarray @prem[1],12118,12119,12120,12121;
 		getitem @prem[rand(1,4)],2;
 		sc_end SC_ALL;
@@ -1095,12 +1095,12 @@ OnRound1Torneo7:
 		callsub S_Ruleta;
 		set rnd,2;
 		set mbt,29;
-		callsub S_Check,rnd,"Orcos",strcharinfo(3);
-		monster strcharinfo(3),0,0,"High Orc",1213,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Orc Archer",1473,3,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Orc Baby",1686,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Orc Lady",1452,8,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Orc Warrior",1023,12,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Orcos",mapa$;
+		monster mapa$,0,0,"High Orc",1213,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Orc Archer",1473,3,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Orc Baby",1686,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Orc Lady",1452,8,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Orc Warrior",1023,12,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound2Torneo7:
@@ -1109,9 +1109,9 @@ OnRound2Torneo7:
 		callsub S_Ruleta;
 		set rnd,3;
 		set mbt,12;
-		callsub S_Check,rnd,"Antiguos",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Zerom",1178,9,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Anubis",1098,3,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Antiguos",mapa$;
+		monster mapa$,0,0,"Zerom",1178,9,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Anubis",1098,3,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound3Torneo7:
@@ -1120,9 +1120,9 @@ OnRound3Torneo7:
 		callsub S_Ruleta;
 		set rnd,4;
 		set mbt,12;
-		callsub S_Check,rnd,"Anfibios",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Thara Frog",1034,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Assaulter",1315,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Anfibios",mapa$;
+		monster mapa$,0,0,"Thara Frog",1034,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Assaulter",1315,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound4Torneo7:
@@ -1131,8 +1131,8 @@ OnRound4Torneo7:
 		callsub S_Ruleta;
 		set rnd,5;
 		set mbt,8;
-		callsub S_Check,rnd,"Anolians",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Anolian",1206,8,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Anolians",mapa$;
+		monster mapa$,0,0,"Anolian",1206,8,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound5Torneo7:
@@ -1141,8 +1141,8 @@ OnRound5Torneo7:
 		callsub S_Ruleta;
 		set rnd,6;
 		set mbt,3;
-		callsub S_Check,rnd,"Titanes",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Ice Titan",1777,3,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Titanes",mapa$;
+		monster mapa$,0,0,"Ice Titan",1777,3,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound6Torneo7:
@@ -1151,10 +1151,10 @@ OnRound6Torneo7:
 		callsub S_Ruleta;
 		set rnd,7;
 		set mbt,1;
-		callsub S_Check,rnd,"Sanguinarios",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Agav",1769,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Echio",1770,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Isilla",1772,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Sanguinarios",mapa$;
+		monster mapa$,0,0,"Agav",1769,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Echio",1770,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Isilla",1772,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound7Torneo7:
@@ -1163,10 +1163,10 @@ OnRound7Torneo7:
 		callsub S_Ruleta;
 		set rnd,8;
 		set mbt,12;
-		callsub S_Check,rnd,"Robots",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Alicel",1735,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Alliot",1736,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Mini Robot",1614,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Robots",mapa$;
+		monster mapa$,0,0,"Alicel",1735,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Alliot",1736,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Mini Robot",1614,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound8Torneo7:
@@ -1175,10 +1175,10 @@ OnRound8Torneo7:
 		callsub S_Ruleta;
 		set rnd,9;
 		set mbt,17;
-		callsub S_Check,rnd,"Sanguinarios",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Bloody Knight",1268,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Bloody Murderer",1507,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Drainliar",1111,15,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Sanguinarios",mapa$;
+		monster mapa$,0,0,"Bloody Knight",1268,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Bloody Murderer",1507,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Drainliar",1111,15,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound9Torneo7:
@@ -1187,18 +1187,18 @@ OnRound9Torneo7:
 		callsub S_Ruleta;
 		set rnd,10;
 		set mbt,10;
-		callsub S_Check,rnd,"Dragones",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Deleter",1385,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Dragon Egg",1721,4,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Ferus",1714,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Acidus",1713,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Acidus",1716,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Dragones",mapa$;
+		monster mapa$,0,0,"Deleter",1385,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Dragon Egg",1721,4,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Ferus",1714,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Acidus",1713,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Acidus",1716,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound10Torneo7:
 	set mbt,mbt -1;
 	if( mbt < 1 ) {
-		callsub S_Points,50,strcharinfo(3),8,607,1;
+		callsub S_Points,50,mapa$,8,607,1;
 		sc_end SC_ALL;
 		warp "prontera",162,170;
 	}
@@ -1210,14 +1210,14 @@ OnRound1Torneo8:
 		callsub S_Ruleta;
 		set rnd,2;
 		set mbt,33;
-		callsub S_Check,rnd,"Los Malvados",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Baby Leopard",1415,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Choco",1214,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Desert Wolf",1106,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Gullinbursti",1311,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Side Winder",1037,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Yoyo",1057,15,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Vagabond Wolf",1092,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Los Malvados",mapa$;
+		monster mapa$,0,0,"Baby Leopard",1415,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Choco",1214,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Desert Wolf",1106,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Gullinbursti",1311,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Side Winder",1037,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Yoyo",1057,15,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Vagabond Wolf",1092,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound2Torneo8:
@@ -1226,9 +1226,9 @@ OnRound2Torneo8:
 		callsub S_Ruleta;
 		set rnd,3;
 		set mbt,21;
-		callsub S_Check,rnd,"Gusanos Hambrientos",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Argiope",1099,20,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Ancient Worm",1567,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Gusanos Hambrientos",mapa$;
+		monster mapa$,0,0,"Argiope",1099,20,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Ancient Worm",1567,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound3Torneo8:
@@ -1237,8 +1237,8 @@ OnRound3Torneo8:
 		callsub S_Ruleta;
 		set rnd,4;
 		set mbt,20;
-		callsub S_Check,rnd,"Seals",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Seal",1317,20,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Seals",mapa$;
+		monster mapa$,0,0,"Seal",1317,20,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound4Torneo8:
@@ -1247,9 +1247,9 @@ OnRound4Torneo8:
 		callsub S_Ruleta;
 		set rnd,5;
 		set mbt,14;
-		callsub S_Check,rnd,"Gremlins",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Hodremlin",1773,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Gremlin",1632,12,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Gremlins",mapa$;
+		monster mapa$,0,0,"Hodremlin",1773,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Gremlin",1632,12,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound5Torneo8:
@@ -1258,10 +1258,10 @@ OnRound5Torneo8:
 		callsub S_Ruleta;
 		set rnd,6;
 		set mbt,10;
-		callsub S_Check,rnd,"Hieludos",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Ice Titan",1777,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Garm Baby",1515,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Freezer",1319,6,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Hieludos",mapa$;
+		monster mapa$,0,0,"Ice Titan",1777,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Garm Baby",1515,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Freezer",1319,6,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound6Torneo8:
@@ -1270,8 +1270,8 @@ OnRound6Torneo8:
 		callsub S_Ruleta;
 		set rnd,7;
 		set mbt,25;
-		callsub S_Check,rnd,"Grand Peco",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Grand Peco",1369,25,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Grand Peco",mapa$;
+		monster mapa$,0,0,"Grand Peco",1369,25,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound7Torneo8:
@@ -1280,10 +1280,10 @@ OnRound7Torneo8:
 		callsub S_Ruleta;
 		set rnd,8;
 		set mbt,12;
-		callsub S_Check,rnd,"Angeles y Demonios",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Incubus",1374,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Succubus",1370,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Fake Angel",1371,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Angeles y Demonios",mapa$;
+		monster mapa$,0,0,"Incubus",1374,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Succubus",1370,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Fake Angel",1371,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound8Torneo8:
@@ -1292,9 +1292,9 @@ OnRound8Torneo8:
 		callsub S_Ruleta;
 		set rnd,9;
 		set mbt,6;
-		callsub S_Check,rnd,"Prueba TecnolÛgica",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Venatu",1678,4,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Apocalypse",1365,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Prueba Tecnol√≥gica",mapa$;
+		monster mapa$,0,0,"Venatu",1678,4,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Apocalypse",1365,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound9Torneo8:
@@ -1303,9 +1303,9 @@ OnRound9Torneo8:
 		callsub S_Ruleta;
 		set rnd,10;
 		set mbt,9;
-		callsub S_Check,rnd,"Raydrics",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Raydric",1163,6,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Raydric Archer",1276,3,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Raydrics",mapa$;
+		monster mapa$,0,0,"Raydric",1163,6,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Raydric Archer",1276,3,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound10Torneo8:
@@ -1314,8 +1314,8 @@ OnRound10Torneo8:
 		callsub S_Ruleta;
 		set rnd,11;
 		set mbt,3;
-		callsub S_Check,rnd,"Shinobi",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Shinobi",1401,3,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Shinobi",mapa$;
+		monster mapa$,0,0,"Shinobi",1401,3,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound11Torneo8:
@@ -1324,15 +1324,15 @@ OnRound11Torneo8:
 		callsub S_Ruleta;
 		set rnd,12;
 		set mbt,3;
-		callsub S_Check,rnd,"Experimentos",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Errende Ebecee",1655,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Gemini-S58",1681,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Experimentos",mapa$;
+		monster mapa$,0,0,"Errende Ebecee",1655,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Gemini-S58",1681,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound12Torneo8:
 	set mbt,mbt -1;
 	if( mbt < 1 ) {
-		callsub S_Points,58,strcharinfo(3),9,607,1;
+		callsub S_Points,58,mapa$,9,607,1;
 		getitem 985,rand(1,7);
 		sc_end SC_ALL;
 		warp "prontera",162,170;
@@ -1345,8 +1345,8 @@ OnRound1Torneo9:
 		callsub S_Ruleta;
 		set rnd,2;
 		set mbt,6;
-		callsub S_Check,rnd,"Antiguos",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Anubis",1098,6,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Antiguos",mapa$;
+		monster mapa$,0,0,"Anubis",1098,6,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound2Torneo9:
@@ -1355,8 +1355,8 @@ OnRound2Torneo9:
 		callsub S_Ruleta;
 		set rnd,3;
 		set mbt,5;
-		callsub S_Check,rnd,"Leib Olmai",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Leib Olmai",1306,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Leib Olmai",mapa$;
+		monster mapa$,0,0,"Leib Olmai",1306,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound3Torneo9:
@@ -1365,10 +1365,10 @@ OnRound3Torneo9:
 		callsub S_Ruleta;
 		set rnd,4;
 		set mbt,19;
-		callsub S_Check,rnd,"Fantasmas",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Loli Ruri",1505,4,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Hylozoist",1510,6,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Horong",1129,9,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Fantasmas",mapa$;
+		monster mapa$,0,0,"Loli Ruri",1505,4,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Hylozoist",1510,6,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Horong",1129,9,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound4Torneo9:
@@ -1377,9 +1377,9 @@ OnRound4Torneo9:
 		callsub S_Ruleta;
 		set rnd,5;
 		set mbt,13;
-		callsub S_Check,rnd,"MitolÛgicas",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Medusa",1148,7,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Isis",1029,6,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Mitol√≥gicas",mapa$;
+		monster mapa$,0,0,"Medusa",1148,7,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Isis",1029,6,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound5Torneo9:
@@ -1388,8 +1388,8 @@ OnRound5Torneo9:
 		callsub S_Ruleta;
 		set rnd,6;
 		set mbt,20;
-		callsub S_Check,rnd,"Bandidos",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Pasana",1154,20,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Bandidos",mapa$;
+		monster mapa$,0,0,"Pasana",1154,20,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound6Torneo9:
@@ -1398,10 +1398,10 @@ OnRound6Torneo9:
 		callsub S_Ruleta;
 		set rnd,7;
 		set mbt,9;
-		callsub S_Check,rnd,"Ejecutores",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Phendark",1202,3,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Rybio",1201,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Injustice",1257,4,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Ejecutores",mapa$;
+		monster mapa$,0,0,"Phendark",1202,3,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Rybio",1201,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Injustice",1257,4,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound7Torneo9:
@@ -1410,9 +1410,9 @@ OnRound7Torneo9:
 		callsub S_Ruleta;
 		set rnd,8;
 		set mbt,16;
-		callsub S_Check,rnd,"Veneno Puro",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Venomous",1621,12,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Sting",1207,4,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Veneno Puro",mapa$;
+		monster mapa$,0,0,"Venomous",1621,12,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Sting",1207,4,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound8Torneo9:
@@ -1421,11 +1421,11 @@ OnRound8Torneo9:
 		callsub S_Ruleta;
 		set rnd,9;
 		set mbt,12;
-		callsub S_Check,rnd,"LÌderes",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Goblin",1125,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Goblin Leader",1539,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Kobold",1546,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Kobold Leader",1296,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"L√≠deres",mapa$;
+		monster mapa$,0,0,"Goblin",1125,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Goblin Leader",1539,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Kobold",1546,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Kobold Leader",1296,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound9Torneo9:
@@ -1434,13 +1434,13 @@ OnRound9Torneo9:
 		callsub S_Ruleta;
 		set rnd,10;
 		set mbt,6;
-		callsub S_Check,rnd,"Experimentos",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Armeyer Dinze",1654,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Errende Ebecee",1655,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Kavach Icarus",1656,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Laurell Weinder",1657,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Wickebine Tres",1653,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Egnigem Cenia",1652,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Experimentos",mapa$;
+		monster mapa$,0,0,"Armeyer Dinze",1654,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Errende Ebecee",1655,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Kavach Icarus",1656,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Laurell Weinder",1657,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Wickebine Tres",1653,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Egnigem Cenia",1652,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound10Torneo9:
@@ -1449,10 +1449,10 @@ OnRound10Torneo9:
 		callsub S_Ruleta;
 		set rnd,11;
 		set mbt,16;
-		callsub S_Check,rnd,"Espectros",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Ghostring",1120,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Giant Whisper",1186,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Whisper",1179,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Espectros",mapa$;
+		monster mapa$,0,0,"Ghostring",1120,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Giant Whisper",1186,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Whisper",1179,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound11Torneo9:
@@ -1461,18 +1461,18 @@ OnRound11Torneo9:
 		callsub S_Ruleta;
 		set rnd,12;
 		set mbt,41;
-		callsub S_Check,rnd,"Majestad Hormiga",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Andre",1095,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Deniro",1105,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Piere",1160,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Vitata",1176,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Maya Purple",1289,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Majestad Hormiga",mapa$;
+		monster mapa$,0,0,"Andre",1095,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Deniro",1105,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Piere",1160,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Vitata",1176,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Maya Purple",1289,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound12Torneo9:
 	set mbt,mbt -1;
 	if( mbt < 1 ) {
-		callsub S_Points,64,strcharinfo(3),10,607,1;
+		callsub S_Points,64,mapa$,10,607,1;
 		getitem 603,rand(1,5);
 		sc_end SC_ALL;
 		warp "prontera",162,170;
@@ -1485,8 +1485,8 @@ OnRound1Torneo10:
 		callsub S_Ruleta;
 		set rnd,2;
 		set mbt,13;
-		callsub S_Check,rnd,"Plaga de Ranas",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Toad",1089,13,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Plaga de Ranas",mapa$;
+		monster mapa$,0,0,"Toad",1089,13,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound2Torneo10:
@@ -1495,9 +1495,9 @@ OnRound2Torneo10:
 		callsub S_Ruleta;
 		set rnd,3;
 		set mbt,35;
-		callsub S_Check,rnd,"Gokoblin",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Goblin",1122,20,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Kobold",1133,15,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Gokoblin",mapa$;
+		monster mapa$,0,0,"Goblin",1122,20,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Kobold",1133,15,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound3Torneo10:
@@ -1506,8 +1506,8 @@ OnRound3Torneo10:
 		callsub S_Ruleta;
 		set rnd,4;
 		set mbt,25;
-		callsub S_Check,rnd,"Clan Fantasmal",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Whisper",1179,25,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Clan Fantasmal",mapa$;
+		monster mapa$,0,0,"Whisper",1179,25,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound4Torneo10:
@@ -1516,10 +1516,10 @@ OnRound4Torneo10:
 		callsub S_Ruleta;
 		set rnd,5;
 		set mbt,21;
-		callsub S_Check,rnd,"Feria Ambulante",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Carat",1267,7,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Chepet",1250,7,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Myst Case",1249,7,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Feria Ambulante",mapa$;
+		monster mapa$,0,0,"Carat",1267,7,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Chepet",1250,7,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Myst Case",1249,7,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound5Torneo10:
@@ -1528,8 +1528,8 @@ OnRound5Torneo10:
 		callsub S_Ruleta;
 		set rnd,6;
 		set mbt,45;
-		callsub S_Check,rnd,"Sasquatch",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Sasquatch",1243,45,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Sasquatch",mapa$;
+		monster mapa$,0,0,"Sasquatch",1243,45,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound6Torneo10:
@@ -1538,11 +1538,11 @@ OnRound6Torneo10:
 		callsub S_Ruleta;
 		set rnd,7;
 		set mbt,8;
-		callsub S_Check,rnd,"BichomanÌa",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Creamy Fear",1293,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Ancient Worm",1305,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Giant Spider",1304,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Giant Hornet",1303,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Bichoman√≠a",mapa$;
+		monster mapa$,0,0,"Creamy Fear",1293,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Ancient Worm",1305,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Giant Spider",1304,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Giant Hornet",1303,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound7Torneo10:
@@ -1551,10 +1551,10 @@ OnRound7Torneo10:
 		callsub S_Ruleta;
 		set rnd,8;
 		set mbt,16;
-		callsub S_Check,rnd,"Venenosos",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Sting",1207,4,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Noxious",1620,6,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Venomous",1621,6,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Venenosos",mapa$;
+		monster mapa$,0,0,"Sting",1207,4,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Noxious",1620,6,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Venomous",1621,6,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound8Torneo10:
@@ -1563,8 +1563,8 @@ OnRound8Torneo10:
 		callsub S_Ruleta;
 		set rnd,9;
 		set mbt,12;
-		callsub S_Check,rnd,"Cocodrilos",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Anolian",1206,12,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Cocodrilos",mapa$;
+		monster mapa$,0,0,"Anolian",1206,12,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound9Torneo10:
@@ -1573,10 +1573,10 @@ OnRound9Torneo10:
 		callsub S_Ruleta;
 		set rnd,10;
 		set mbt,15;
-		callsub S_Check,rnd,"Secta Sagrada",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Agav",1769,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Echio",1770,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Isilla",1772,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Secta Sagrada",mapa$;
+		monster mapa$,0,0,"Agav",1769,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Echio",1770,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Isilla",1772,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound10Torneo10:
@@ -1585,9 +1585,9 @@ OnRound10Torneo10:
 		callsub S_Ruleta;
 		set rnd,11;
 		set mbt,14;
-		callsub S_Check,rnd,"Zombies Malditos",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Zombie Master",1298,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Ghoul",1036,12,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Zombies Malditos",mapa$;
+		monster mapa$,0,0,"Zombie Master",1298,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Ghoul",1036,12,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound11Torneo10:
@@ -1596,13 +1596,13 @@ OnRound11Torneo10:
 		callsub S_Ruleta;
 		set rnd,12;
 		set mbt,10;
-		callsub S_Check,rnd,"Halloween",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Gibbet",1503,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Disguise",1506,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Loli Ruri",1505,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Quve",1508,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Lude",1509,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Bloody Murderer",1507,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Halloween",mapa$;
+		monster mapa$,0,0,"Gibbet",1503,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Disguise",1506,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Loli Ruri",1505,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Quve",1508,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Lude",1509,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Bloody Murderer",1507,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound12Torneo10:
@@ -1611,9 +1611,9 @@ OnRound12Torneo10:
 		callsub S_Ruleta;
 		set rnd,13;
 		set mbt,2;
-		callsub S_Check,rnd,"Angeles y Demonios",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Angeling",1096,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Deviling",1582,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Angeles y Demonios",mapa$;
+		monster mapa$,0,0,"Angeling",1096,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Deviling",1582,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound13Torneo10:
@@ -1622,8 +1622,8 @@ OnRound13Torneo10:
 		callsub S_Ruleta;
 		set rnd,14;
 		set mbt,3;
-		callsub S_Check,rnd,"Apocalypse",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Apocalypse",1365,3,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Apocalypse",mapa$;
+		monster mapa$,0,0,"Apocalypse",1365,3,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound14Torneo10:
@@ -1632,10 +1632,10 @@ OnRound14Torneo10:
 		callsub S_Ruleta;
 		set rnd,15;
 		set mbt,3;
-		callsub S_Check,rnd,"Guerreros Infernales",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Dullahan",1504,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Bloody Knight",1268,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Bloody Murderer",1507,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Guerreros Infernales",mapa$;
+		monster mapa$,0,0,"Dullahan",1504,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Bloody Knight",1268,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Bloody Murderer",1507,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound15Torneo10:
@@ -1644,9 +1644,9 @@ OnRound15Torneo10:
 		callsub S_Ruleta;
 		set rnd,16;
 		set mbt,12;
-		callsub S_Check,rnd,"Cofres Sorpresa",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Ancient Mimic",1699,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Mimic",1191,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Cofres Sorpresa",mapa$;
+		monster mapa$,0,0,"Ancient Mimic",1699,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Mimic",1191,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound16Torneo10:
@@ -1655,8 +1655,8 @@ OnRound16Torneo10:
 		callsub S_Ruleta;
 		set rnd,17;
 		set mbt,2;
-		callsub S_Check,rnd,"Alicel",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Alicel",1735,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Alicel",mapa$;
+		monster mapa$,0,0,"Alicel",1735,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound17Torneo10:
@@ -1665,8 +1665,8 @@ OnRound17Torneo10:
 		callsub S_Ruleta;
 		set rnd,18;
 		set mbt,16;
-		callsub S_Check,rnd,"Raydric",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Raydric",1163,16,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Raydric",mapa$;
+		monster mapa$,0,0,"Raydric",1163,16,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound18Torneo10:
@@ -1675,10 +1675,10 @@ OnRound18Torneo10:
 		callsub S_Ruleta;
 		set rnd,19;
 		set mbt,18;
-		callsub S_Check,rnd,"Espectros",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Wraith Dead",1291,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Wraith",1192,6,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Whisper",1179,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Espectros",mapa$;
+		monster mapa$,0,0,"Wraith Dead",1291,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Wraith",1192,6,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Whisper",1179,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound19Torneo10:
@@ -1687,9 +1687,9 @@ OnRound19Torneo10:
 		callsub S_Ruleta;
 		set rnd,20;
 		set mbt,14;
-		callsub S_Check,rnd,"Yetis Regordetes",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Snowier",1775,4,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Siroma",1776,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Yetis Regordetes",mapa$;
+		monster mapa$,0,0,"Snowier",1775,4,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Siroma",1776,10,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound20Torneo10:
@@ -1698,10 +1698,10 @@ OnRound20Torneo10:
 		callsub S_Ruleta;
 		set rnd,21;
 		set mbt,3;
-		callsub S_Check,rnd,"Angeles, Demonios y Fantasmas",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Angeling",1096,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Deviling",1582,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Ghostring",1120,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Angeles, Demonios y Fantasmas",mapa$;
+		monster mapa$,0,0,"Angeling",1096,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Deviling",1582,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Ghostring",1120,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound21Torneo10:
@@ -1710,9 +1710,9 @@ OnRound21Torneo10:
 		callsub S_Ruleta;
 		set rnd,22;
 		set mbt,2;
-		callsub S_Check,rnd,"Pareja Siniestra",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Skogul",1752,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Frus",1753,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Pareja Siniestra",mapa$;
+		monster mapa$,0,0,"Skogul",1752,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Frus",1753,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound22Torneo10:
@@ -1721,10 +1721,10 @@ OnRound22Torneo10:
 		callsub S_Ruleta;
 		set rnd,23;
 		set mbt,6;
-		callsub S_Check,rnd,"Espadas Legendarias",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Mysteltainn",1203,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Ogretooth",1204,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Executioner",1205,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Espadas Legendarias",mapa$;
+		monster mapa$,0,0,"Mysteltainn",1203,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Ogretooth",1204,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Executioner",1205,2,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound23Torneo10:
@@ -1733,15 +1733,15 @@ OnRound23Torneo10:
 		callsub S_Ruleta;
 		set rnd,24;
 		set mbt,21;
-		callsub S_Check,rnd,"Phreeoni",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Phreeoni",1159,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
-		monster strcharinfo(3),0,0,"Hode",1127,20,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Phreeoni",mapa$;
+		monster mapa$,0,0,"Phreeoni",1159,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Hode",1127,20,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound24Torneo10:
 	set mbt,mbt -1;
 	if( mbt < 1 ) {
-		callsub S_Points,80,strcharinfo(3),11,607,5;
+		callsub S_Points,80,mapa$,11,607,5;
 		sc_end SC_ALL;
 		warp "prontera",162,170;
 	}
@@ -1753,8 +1753,8 @@ OnRound1Torneo11:
 		callsub S_Ruleta;
 		set rnd,2;
 		set mbt,1;
-		callsub S_Check,rnd,"Garm",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Garm",1252,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Garm",mapa$;
+		monster mapa$,0,0,"Garm",1252,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound2Torneo11:
@@ -1763,8 +1763,8 @@ OnRound2Torneo11:
 		callsub S_Ruleta;
 		set rnd,3;
 		set mbt,1;
-		callsub S_Check,rnd,"Atroce",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Atroce",1785,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Atroce",mapa$;
+		monster mapa$,0,0,"Atroce",1785,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound3Torneo11:
@@ -1773,8 +1773,8 @@ OnRound3Torneo11:
 		callsub S_Ruleta;
 		set rnd,4;
 		set mbt,1;
-		callsub S_Check,rnd,"Stormy Knight",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Stormy Knight",2212,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Stormy Knight",mapa$;
+		monster mapa$,0,0,"Stormy Knight",2212,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound4Torneo11:
@@ -1783,14 +1783,14 @@ OnRound4Torneo11:
 		callsub S_Ruleta;
 		set rnd,5;
 		set mbt,1;
-		callsub S_Check,rnd,"Phreeoni",strcharinfo(3);
-		monster strcharinfo(3),0,0,"Phreeoni",1159,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		callsub S_Check,rnd,"Phreeoni",mapa$;
+		monster mapa$,0,0,"Phreeoni",1159,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound5Torneo11:
 	set mbt,mbt -1;
 	if( mbt < 1 ) {
-		callsub S_Points,120,strcharinfo(3),12,607,5;
+		callsub S_Points,120,mapa$,12,607,5;
 		sc_end SC_ALL;
 		warp "prontera",162,170;
 	}
@@ -1802,7 +1802,7 @@ OnRound1Torneo12:
 		set rnd,2;
 		set mbt,5;
 		callsub S_Check,rnd,"Rock Step",strcharinfo(0);
-		monster strcharinfo(3),0,0,"Rock Step",3126,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Rock Step",3126,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound2Torneo12:
@@ -1812,7 +1812,7 @@ OnRound2Torneo12:
 		set rnd,3;
 		set mbt,5;
 		callsub S_Check,rnd,"Kick And Kick",strcharinfo(0);
-		monster strcharinfo(3),0,0,"Kick and Kick",3128,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Kick and Kick",3128,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound3Torneo12:
@@ -1822,7 +1822,7 @@ OnRound3Torneo12:
 		set rnd,4;
 		set mbt,5;
 		callsub S_Check,rnd,"Excavation Robot",strcharinfo(0);
-		monster strcharinfo(3),0,0,"Excavation Robot",3153,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Excavation Robot",3153,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound4Torneo12:
@@ -1832,7 +1832,7 @@ OnRound4Torneo12:
 		set rnd,5;
 		set mbt,5;
 		callsub S_Check,rnd,"Buscadores",strcharinfo(0);
-		monster strcharinfo(3),0,0,"Reconociment Robot",3154,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Reconociment Robot",3154,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound5Torneo12:
@@ -1842,7 +1842,7 @@ OnRound5Torneo12:
 		set rnd,6;
 		set mbt,5;
 		callsub S_Check,rnd,"Reparadores",strcharinfo(0);
-		monster strcharinfo(3),0,0,"Repair Robot",3155,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Repair Robot",3155,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound6Torneo12:
@@ -1852,7 +1852,7 @@ OnRound6Torneo12:
 		set rnd,7;
 		set mbt,5;
 		callsub S_Check,rnd,"Exploradores",strcharinfo(0);
-		monster strcharinfo(3),0,0,"Exploration Robot",3156,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Exploration Robot",3156,5,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound7Torneo12:
@@ -1862,13 +1862,13 @@ OnRound7Torneo12:
 		set rnd,8;
 		set mbt,1;
 		callsub S_Check,rnd,"El Gran Constructor",strcharinfo(0);
-		monster strcharinfo(3),0,0,"Vesper",1685,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
+		monster mapa$,0,0,"Vesper",1685,1,"TG1::OnRound"+rnd+"Torneo"+tgID;
 	}
 end;
 OnRound8Torneo12:
 	set mbt,mbt -1;
 	if( mbt < 1 ) {
-		callsub S_Points,150,strcharinfo(3),12,607,5;
+		callsub S_Points,150,mapa$,12,607,5;
 		sc_end SC_ALL;
 		warp "prontera",162,170;
 	}
@@ -1876,9 +1876,9 @@ end;
 
 //=====[ Funciones Globales ]======
 S_Check: //,rnd,"Mob Name",MapID;
-	if(strcharinfo(3) == "t_glad01" || strcharinfo(3) == "t_glad02" || strcharinfo(3) == "t_glad03" || strcharinfo(3) == "t_glad04" || strcharinfo(3) == "t_glad05") {
+	if(mapa$ == "t_glad01" || mapa$ == "t_glad02" || mapa$ == "t_glad03" || mapa$ == "t_glad04" || mapa$ == "t_glad05") {
 		if(getmapusers(getarg(2)) > 1) {
-			mapannounce getarg(2),"Lo sentimos pero sÛlo puede haber un concursante por sala.",bc_map;
+			mapannounce getarg(2),"Lo sentimos pero s√≥lo puede haber un concursante por sala.",bc_map;
 			sleep2 3000;
 			warp "prontera",162,170;
 			end;
@@ -1890,7 +1890,7 @@ S_Check: //,rnd,"Mob Name",MapID;
 	dispbottom "Torneo de Gladiadores cancelado por salir del mapa.";
 	end;
 S_Points:
-	if(strcharinfo(3) == "t_glad01" || strcharinfo(3) == "t_glad02" || strcharinfo(3) == "t_glad03" || strcharinfo(3) == "t_glad04" || strcharinfo(3) == "t_glad05") {
+	if(mapa$ == "t_glad01" || mapa$ == "t_glad02" || mapa$ == "t_glad03" || mapa$ == "t_glad04" || mapa$ == "t_glad05") {
 		soundeffect "complete.wav",0;
 		mapannounce getarg(1),"[Organizador]: Has completado satisfactoriamente el "+.torneo_name$[tgID],bc_map;
 		set GPoints,GPoints + getarg(0);
@@ -1902,7 +1902,7 @@ S_Points:
 			}
 		if(Rango < getarg(2)) {
 			set Rango,getarg(2);
-			dispbottom "°Tu rango como Gladiador ha aumentado!";
+			dispbottom "¬°Tu rango como Gladiador ha aumentado!";
 			sleep2 1000;
 			soundeffect "lady_tanee_attack.wav",0;
 			dispbottom "Nuevo Rango: "+.rangos$[Rango];
@@ -1910,16 +1910,16 @@ S_Points:
 			mapannounce "arena_room","[Organizador]: "+strcharinfo(0)+" ha conseguido el rango de "+.rangos$[Rango],bc_map;
 		}
 	}
-	dispbottom "Monstruo inv·lido.";
+	dispbottom "Monstruo inv√°lido.";
 	return;
 S_Ruleta:
-		setarray .@felic$[0],"Perfecto","Excelente","Eres "+(Sex?"el":"la")+" mejor","Asombroso","Alucinante","IncreÌble","Oh Poring";
-		mapannounce strcharinfo(3),"[Organizador]: °"+.@felic$[rand(0,getarraysize(.@felic$))]+"! pasas a la siguiente ronda.",bc_map;
+		setarray .@felic$[0],"Perfecto","Excelente","Eres "+(Sex?"el":"la")+" mejor","Asombroso","Alucinante","Incre√≠ble","Oh Poring";
+		mapannounce mapa$,"[Organizador]: ¬°"+.@felic$[rand(0,getarraysize(.@felic$))]+"! pasas a la siguiente ronda.",bc_map;
 		sleep2 1000;
-		mapannounce strcharinfo(3),"La siguiente ronda comenzar· dentro de poco, prep·rate.",bc_map;
+		mapannounce mapa$,"La siguiente ronda comenzar√° dentro de poco, prep√°rate.",bc_map;
 		soundeffect "megalith_die.wav",0;
 		sleep2 700;
-		dispbottom "°°RecuperaciÛn de HP y SP 20%!!";
+		dispbottom "¬°¬°Recuperaci√≥n de HP y SP 20%!!";
 		percentheal 20,20;
 		soundeffect "gemini_attack.wav",0;
 		soundeffect "gemini_attack.wav",0;
@@ -1968,7 +1968,7 @@ S_Ruleta:
 			case 39: dispbottom "Nuevo Estado: Kaahi.";sc_start SC_KAAHI,900000,3;skilleffect 463,3; break;
 			case 40: dispbottom "Nuevo Estado: Sight.";sc_start SC_SIGHT,900000,1;skilleffect 10,1; break;
 			case 41:
-				dispbottom "Especial: ExplosiÛn Frutal.";
+				dispbottom "Especial: Explosi√≥n Frutal.";
 				makeitem 512,rand(1,5),getarg(0),rand(44,55),rand(45,55);
 				makeitem 513,rand(1,5),getarg(0),rand(44,55),rand(45,55);
 				makeitem 684,rand(1,5),getarg(0),rand(44,55),rand(45,55);

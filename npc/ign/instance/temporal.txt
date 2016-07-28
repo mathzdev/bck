@@ -3,7 +3,7 @@
 //===== By: ================================================== 
 //= DanielArt
 //===== Current Version: ===================================== 
-//= 2.3
+//= 2.4
 //===== Compatible With: ===================================== 
 //= rAthena Project
 //===== Description: ========================================= 
@@ -19,8 +19,9 @@
 //= 2.1 New Script Functions for Slot and Enchant. [DanielArt]
 //= 2.2 New Enchant System. [DanielArt]
 //= 2.3 Add new enchants for 3rd slot. [DanielArt]
+//= 2.4 Fixed bug: Sloted boots can be enchanted. [DanielArt]
 //============================================================ 
-glast_01,0,2,0	itemshop	TEMPORAL_BOOTS	139,6007:0,2499:15
+glast_01,0,2,0	itemshop	TEMPORAL_BOOTS	139,6607:0,2499:50
 glast_01,213,269,4	script	Hugin's Butler::TemporalBoots	684,{
 cutin .c$,.d[0];
 disable_items;
@@ -49,38 +50,35 @@ function temporal_slot;
 				if(getequipid(EQI_SHOES) == (.d[8]+.@i)) {
 					mes .n$;
 					mes "Lo siento pero a tus botas no le puedo añadir magia ni encantamientos.";
-					close2; cutin .c$,.d[1]; end;
+					close2;
+					cutin .c$,.d[1];
+					end;
 				} else {
 					mes .n$;
 					mes "Si no traes tus botas encantadas, no podré añadirle más magia.";
-					close2; cutin .c$,.d[1]; end;
-				}
+					close2;
+					cutin .c$,.d[1];
+					end;
+				} 
 			}
-			if(getequipcardid(EQI_SHOES,3) > 0)
-				temporal_enchant(EQI_SHOES);
 			mes .n$;
-			mes "Al objeto que haz creado puedes añadirle aún más poder.";
-			next;
-			mes .n$;
-			mes "El poder se lo puedes añadir en forma de cartas, o con energía mágica de mi parte.";
-			next;
-			if(select("Añadir ^FF7070Slot^0000 a las botas","Añadir ^5533ffEncantamientos^000000 a las botas") == 1)
-				temporal_slot(EQI_SHOES);
-			else
-				temporal_enchant(EQI_SHOES);
+			mes "Lo siento, pero si abriste una ranura en tus botas, no puedes encantarlas.";
+			close2;
+			cutin .c$,.d[1];
+			end;
 		}
 	}
 	mes .n$;
 	mes "Si haz logrado pasar la pesadilla de éste lugar, entonces estás hablando con la persona correcta.";
 	next;
-	if(getequipid(EQI_SHOES) == .d[9] && getequiprefinerycnt(EQI_SHOES) >= 7) {
+	if(getequipid(EQI_SHOES) == .d[9] && getequiprefinerycnt(EQI_SHOES) >= .d[10]) {
 		mes .n$;
 		mes "Haz alcanzado un buen nivel de encantamiento.";
 		next;
 		mes .n$;
-		mes "Para poder alcanzar un mayor poder, necesito que me des ^5533ff5 Temporal Crystal^000000.";
+		mes "Para poder alcanzar un mayor poder, necesito que me des ^5533ff"+.d[12]+" Temporal Crystal^000000.";
 		next;
-		if(countitem(.d[6]) >= 5) {
+		if(countitem(.d[6]) >= .d[12]) {
 			mes .n$;
 			mes "Entonces, por favor dime que clase de poder buscas.";
 			next;
@@ -102,7 +100,7 @@ function temporal_slot;
 				sleep2 1000;
 				specialeffect 154;
 				delequip EQI_SHOES;
-				delitem .d[6],5;
+				delitem .d[6],.d[12];
 				getitem .@i,1;
 				mes .n$;
 				mes "El encantamiento ha sido satisfactorio, felicidades.";
@@ -124,7 +122,7 @@ function temporal_slot;
 		end;
 	} else {
 		mes .n$;
-		mes "Entonces permíteme darte una oferta...";
+		mes "Entonces permíteme darte una oferta, si logras refinar éstas botas a ^5533ff"+.d[10]+"^000000, te permitiré obtener un gran poder.";
 		close2;
 		cutin .c$,.d[1];
 		callshop "TEMPORAL_BOOTS",1;
@@ -137,7 +135,7 @@ function temporal_slot;
 	mes "He estudiado las maldiciones de éste lugar por décadas, y por fin averigué cómo incrementar el valor de éste artefacto.";
 	next;
 	mes .n$;
-	mes "Si me entregas las ^5533ffTemporal Boots^000000 a un refinamiento de ^ff0000+7^000000 o mayor, te ayudaré a alcanzar un gran poder.";
+	mes "Si me entregas las ^5533ffTemporal Boots^000000 a un refinamiento de ^ff0000"+.d[10]+"^000000 o mayor, te ayudaré a alcanzar un gran poder.";
 	close2;
 	cutin .c$,.d[1];
 	end;
@@ -207,6 +205,7 @@ function temporal_slot;
 				mes .n$;
 				mes "Para hacer un encantamiento a tus botas deberás de darme "+.p[@l]+" ^5533FFCoagulated Spell^000000.";
 				next;
+				break;
 			case 4:
 				mes .n$;
 				mes "Bien, a partir de ahora el encantamiento se colocará en tu ^5533ff3er slot^000000 y será un encantamiento totalmente al azar que será muy especial.";
@@ -289,11 +288,11 @@ function temporal_slot;
 			end;
 		}
 		mes .n$;
-		mes "De acuerdo, veamos...";
+		mes "Para poder perforar éstas botas necesitaré ^5533ff"+.d[11]+" Temporal Crystal^000000";
 		next;
-		if(countitem(.d[6]) < 5) {
+		if(countitem(.d[6]) < .d[11]) {
 			mes .n$;
-			mes "Para poder perforar éstas botas necesitaré ^5533ff5 Temporal Crystal^000000.";
+			mes "No tienes los Temporal Crystal suficientes.";
 			close2;
 			cutin .c$,.d[1];
 			end;
@@ -317,7 +316,7 @@ function temporal_slot;
 				mes ". . .";
 				sleep2 1000;
 				specialeffect 154;
-				delitem .d[6],5;
+				delitem .d[6],.d[11];
 				if(rand(1,100) >= .d[5]) {
 					specialeffect2 .d[3];
 					mes .n$;
@@ -357,9 +356,10 @@ OnInit:
 	setarray .e4[0],4822,4835,4826,4862,4881,4755; // 4to
 	setarray .es[0],4875,4876,4877,4878,4879,4880; // Especial
 // =====================================================
-	setarray .p[0],30,65,95,140,300; // Precios de los encantamientos
+	setarray .p[0],10,30,50,75,200; // Precios de los encantamientos
 	set .n$,"[ ^cc6600Hugin's Butler^000000 ]"; // Nombre del NPC
 	set .c$,"sara_elder_irine1"; // Imagen del NPC.
-	setarray .d[0],2,255,610,611,6,90,6607,6608,22000,2499; // Valores Globales, no editar.
+// Valores Globales, no editar.
+	setarray .d[0],2,255,610,611,6,90,6607,6608,22000,2499,5,100,50;
 	end;
 }

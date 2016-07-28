@@ -1914,7 +1914,7 @@ S_Points:
 	return;
 S_Ruleta:
 		setarray .@felic$[0],"Perfecto","Excelente","Eres "+(Sex?"el":"la")+" mejor","Asombroso","Alucinante","Increíble","Oh Poring";
-		mapannounce mapa$,"[Organizador]: ¡"+.@felic$[rand(0,getarraysize(.@felic$))]+"! pasas a la siguiente ronda.",bc_map;
+		mapannounce mapa$,"[Organizador]: ¡"+.@felic$[rand(0,getarraysize(.@felic$)-1)]+"! pasas a la siguiente ronda.",bc_map;
 		sleep2 1000;
 		mapannounce mapa$,"La siguiente ronda comenzará dentro de poco, prepárate.",bc_map;
 		soundeffect "megalith_die.wav",0;

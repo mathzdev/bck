@@ -1907,11 +1907,12 @@ S_Points:
 			soundeffect "lady_tanee_attack.wav",0;
 			dispbottom "Nuevo Rango: "+.rangos$[Rango];
 			sleep2 1000;
-			mapannounce "arena_room","[Organizador]: "+strcharinfo(0)+" ha conseguido el rango de "+.rangos$[Rango],bc_map;
+			mapannounce mapa$,"[Organizador]: "+strcharinfo(0)+" ha conseguido el rango de "+.rangos$[Rango],bc_map;
 		}
+		return,
 	}
 	dispbottom "Monstruo inválido.";
-	return;
+	end;
 S_Ruleta:
 		setarray .@felic$[0],"Perfecto","Excelente","Eres "+(Sex?"el":"la")+" mejor","Asombroso","Alucinante","Increíble","Oh Poring";
 		mapannounce mapa$,"[Organizador]: ¡"+.@felic$[rand(0,getarraysize(.@felic$)-1)]+"! pasas a la siguiente ronda.",bc_map;
